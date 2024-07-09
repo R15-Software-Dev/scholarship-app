@@ -18,10 +18,56 @@ export class FormSection extends LitElement {
   accessor id: string = "";
 
   @query("form")
-  _formElement;
+  accessor _formElement: HTMLFormElement;
 
-  private disableForm(): void {
-    const questions = 
+  private disableForm(event: SubmitEvent): void {
+    const questions = this._formElement.querySelectorAll("form-question");
+
+    questions.forEach(question => {
+      question.setAttribute('disabled', "true");
+    });
+  }
+
+  private enableForm(): void {
+    const questions = this._formElement.querySelectorAll("form-question");
+
+    questions.forEach(question => {
+      question.removeAttribute('disabled');
+    });
+  }
+
+  private handleForm(event: SubmitEvent): void {
+    event.preventDefault();
+
+    // Build the object that will send the data to the server.
+    const formData = new FormData();
+    formData.append('formId', this._formElement.id);
+
+    // Get the questions from the form.
+    const customQuestions = this._formElement.querySelectorAll("form-question");
+
+    let send = true;
+    /* for (let i = 0; i < customQuestions.length; i++) {
+      const question = customQuestions[i];
+      const input = question.inputElement;
+      if (!input.reportValidity()) send = false;
+      formData.append(input.name, input.value);
+    } */
+
+    // Assuming there are no errors, send data to Google's backend.
+    if (send) {
+      this.disableForm(event);
+      /* google.script.run  // For now, ignore this error because google.script.run doesn't exist within node right now.
+        .withSuccessHandler(() => {
+          console.log("SUCCESS");
+          this.enableForm();
+        })
+        .withFailureHandler(() => {
+          console.log("FAILED");
+          this.enableForm();
+        })
+        .processForm(JSON.stringify(Object.fromEntries(formData))); */
+    }
   }
 
   protected render(): HTMLTemplateResult {
@@ -32,7 +78,7 @@ export class FormSection extends LitElement {
         <hr>
         <form id="form" name="${this.name}">
           <slot></slot>
-          <action-button type="submit" @click=${this.disableForm}>Submit</action-button>
+          <action-button type="submit" @click=${this.disableForm} @submit=${this.handleForm}>Submit</action-button>
         </form>
       </div>
     `;
