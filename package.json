@@ -1,0 +1,21 @@
+{
+  "name": "scholarship-app",
+  "version": "1.0.0",
+  "description": "Region 15 Scholarship Application templates.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "npm run build && http-server ./dist"
+  },
+  "author": "Lucas Vas",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "lit": "^3.1.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.3",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
