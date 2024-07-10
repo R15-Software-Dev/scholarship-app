@@ -52,6 +52,7 @@ export class FormSection extends LitElement {
 
   private handleForm(event: SubmitEvent): void {
     event.preventDefault();
+    console.log("Attempting to submit form.");
 
     // Build the object that will send the data to the server.
     const formData = new FormData();
@@ -64,6 +65,7 @@ export class FormSection extends LitElement {
     for (let i = 0; i < customQuestions.length; i++) {
       const question: FormQuestion = customQuestions[i];
       const input: string = question.getInput;
+      console.log(`Found user input: ${input}`);
       // if (!input.reportValidity()) send = false;
       formData.append(question.name, input);
     } 
@@ -94,9 +96,9 @@ export class FormSection extends LitElement {
         <!-- Create a box that contains our form. -->
         <h1>${this.header}</h1>
         <hr>
-        <form id="form" name="${this.name}">
+        <form id="form" name="${this.name}" @submit=${this.handleForm}>
           <slot></slot>
-          <action-button type="submit" @click=${this.disableForm} @submit=${this.handleForm}>Submit</action-button>
+          <action-button type="submit" form="form">Submit</action-button>
         </form>
       </div>
     `;

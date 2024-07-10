@@ -38,6 +38,9 @@ export class ActionButton extends LitElement {
   @property({type: String})
   accessor type: string = "";
 
+  @property({type: String})
+  accessor form: string = "";
+
   createRipple(event: MouseEvent): void {
     // Credit for this code goes to Bret Cameron on css-tricks.com,
     // with some tweaks made for Typescript functionality.
@@ -60,7 +63,7 @@ export class ActionButton extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <button class="button" type="${this.type}" @click=${this.createRipple}>
+      <button class="button" type="${this.type}" @click=${this.createRipple} form=${this.form}>
         <slot></slot>
       </button>
     `;

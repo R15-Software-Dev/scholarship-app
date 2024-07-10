@@ -72,6 +72,7 @@ export class OutlinedTextField extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div class="container">
+        <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
         <input type="text" placeholder=" " @change=${this.handleChange}/>
         <label>${this.placeholder}</label>
       </div>
