@@ -3,18 +3,20 @@ import { customElement, property } from "lit/decorators.js";
 
 @customElement("action-button")
 export class ActionButton extends LitElement {
-
   static styles?: CSSResultGroup = css`
     .button {
+      position: relative;
       outline: 0px;
       border: 0px;
       border-radius: 6px;
-      padding: 1rem 2rem;
-      background-color: red;
-      font-size: 1.5rem;
+      padding: 10px 25px;
+      background-color: var(--theme-primary-color);
+      font-size: 15pt;
       overflow: hidden;
       color: #fff;
       box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+      transition: background 400ms;
+      cursor: pointer;
     }
 
     span.ripple {

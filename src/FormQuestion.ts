@@ -4,9 +4,7 @@ import { query } from "lit/decorators/query.js";
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
-  static styles?: CSSResultGroup = css``;
-
-
+  
   @property({type: String})
   accessor type: string = "";
 
@@ -32,6 +30,8 @@ export class FormQuestion extends LitElement {
   private accessor _input: LitElement;
   
   protected render(): HTMLTemplateResult {
-    return html``;
+    // This element MUST be used within a FormSection or HTMLFormElement.
+    return html`
+          `;
   }
 }
