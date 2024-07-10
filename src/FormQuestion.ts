@@ -1,9 +1,17 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { query } from "lit/decorators/query.js";
+import { OutlinedTextField } from "./OutlinedTextField";
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
+  static styles: CSSResultGroup = css`
+    div {
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+    }
+  `;
   
   @property({type: String})
   accessor type: string = "";
@@ -27,11 +35,19 @@ export class FormQuestion extends LitElement {
   accessor disabled: boolean = false;
 
   @query("outlined-text-field")
-  private accessor _input: LitElement;
+  private accessor _input: OutlinedTextField;
+
+  get getInput() {
+    return this._input.text;
+  }
   
   protected render(): HTMLTemplateResult {
     // This element MUST be used within a FormSection or HTMLFormElement.
     return html`
-          `;
+      <div>
+        <label for=${this.name}><h3><slot></slot></h3></label>
+        <outlined-text-field placeholder=${this.label}></outlined-text-field>
+      </div>
+    `;
   }
 }

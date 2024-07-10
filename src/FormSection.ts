@@ -1,11 +1,25 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { query } from "lit/decorators/query.js";
+import { FormQuestion } from "./FormQuestion";
 
 @customElement("form-section")
 export class FormSection extends LitElement {
   static styles?: CSSResultGroup = css`
-    .container {}
+    div {
+      border-radius: 7px;
+      background-color: white;
+      box-shadow: 0 0 6px rgb(173, 170, 179);
+      padding: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 800px;
+    }
+
+    h1 {
+      margin: 10px;
+      margin-top: 15px;
+    }
   `;
 
   @property({type: String})
@@ -17,7 +31,7 @@ export class FormSection extends LitElement {
   @property({type: String})
   accessor id: string = "";
 
-  @query("form")
+  @query("#form")
   accessor _formElement: HTMLFormElement;
 
   private disableForm(event: SubmitEvent): void {
@@ -44,20 +58,24 @@ export class FormSection extends LitElement {
     formData.append('formId', this._formElement.id);
 
     // Get the questions from the form.
-    const customQuestions = this._formElement.querySelectorAll("form-question");
+    const customQuestions: FormQuestion[] = Array.from(this._formElement.querySelectorAll("form-question"));
 
     let send = true;
-    /* for (let i = 0; i < customQuestions.length; i++) {
-      const question = customQuestions[i];
-      const input = question.inputElement;
-      if (!input.reportValidity()) send = false;
-      formData.append(input.name, input.value);
-    } */
+    for (let i = 0; i < customQuestions.length; i++) {
+      const question: FormQuestion = customQuestions[i];
+      const input: string = question.getInput;
+      // if (!input.reportValidity()) send = false;
+      formData.append(question.name, input);
+    } 
 
     // Assuming there are no errors, send data to Google's backend.
     if (send) {
       this.disableForm(event);
-      /* google.script.run  // For now, ignore this error because google.script.run doesn't exist within node right now.
+
+      // We need to ignore this line due to the fact that this is only available in the
+      // Apps Script webapp runtime. It will not compile if we don't ignore it.
+      // @ts-ignore
+      google.script.run
         .withSuccessHandler(() => {
           console.log("SUCCESS");
           this.enableForm();
@@ -66,7 +84,7 @@ export class FormSection extends LitElement {
           console.log("FAILED");
           this.enableForm();
         })
-        .processForm(JSON.stringify(Object.fromEntries(formData))); */
+        .processForm(JSON.stringify(Object.fromEntries(formData)));
     }
   }
 
