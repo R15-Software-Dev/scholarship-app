@@ -1,0 +1,33 @@
+:root {
+  font-family: "Roboto", sans-serif;
+}
+
+@property --theme-primary-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: red;
+}
+
+@property --theme-secondary-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: dark red;
+}
+
+@property --theme-warning-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: yellow;
+}
+
+@property --theme-foreground-text-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
+
+@property --theme-background-text-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: gray;
+}
