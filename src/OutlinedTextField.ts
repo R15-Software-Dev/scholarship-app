@@ -67,25 +67,21 @@ export class OutlinedTextField extends LitElement {
 
   @property({type: String}) accessor placeholder: string = "";
   @property({type: String}) accessor width: string = "300px";
-  @property({type: String}) accessor text: string = "";
   @property({type: String}) accessor suffixText: string = "";
   @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
   @property({type: Boolean, reflect: true}) accessor required: boolean = false;
   @property({type: String}) accessor type: string = "text";
+  @property({type: String}) accessor value: string = "";
   @property({type: String}) accessor name: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
-
-  get value() {
-    return this._input.value;
-  }
 
   constructor() {
     super();
   }
 
-  private handleChange(event: Event): void {
-    this.text = (event.currentTarget as HTMLInputElement).value;
+  private _handleChange(event: Event): void {
+    this.value = (event.target as HTMLInputElement).value;
   }
 
   protected render(): HTMLTemplateResult {
@@ -96,7 +92,7 @@ export class OutlinedTextField extends LitElement {
           ?disabled="${this.disabled}"
           ?required="${this.required}"
           name=${this.name}
-          @change=${this.handleChange}/>
+          @change=${this._handleChange}/>
         <label>${this.placeholder}</label>
       </div>
     `; 

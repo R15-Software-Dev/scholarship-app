@@ -1,6 +1,6 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { query } from "lit/decorators/query.js";
+import { customElement, property, queryAssignedElements, query } from "lit/decorators.js";
+// import { query } from "lit/decorators/query.js";
 import { FormQuestion } from "./FormQuestion";
 
 @customElement("form-section")
@@ -27,9 +27,11 @@ export class FormSection extends LitElement {
   @property({type: String}) accessor id: string = "";
 
   @query("form") accessor _formElement: HTMLFormElement;
+  @queryAssignedElements({selector: "form-question", flatten: true})
+    accessor _questions: FormQuestion[];
 
   private disableForm(): void {
-    const questions = this._formElement.querySelectorAll("form-question");
+    const questions = this._questions;
 
     questions.forEach(question => {
       question.setAttribute('disabled', "true");
@@ -37,7 +39,7 @@ export class FormSection extends LitElement {
   }
 
   private enableForm(): void {
-    const questions = this._formElement.querySelectorAll("form-question");
+    const questions = this._questions;
 
     questions.forEach(question => {
       question.removeAttribute('disabled');
@@ -53,16 +55,21 @@ export class FormSection extends LitElement {
     formData.append('formId', this._formElement.id);
 
     // Get the questions from the form.
-    const customQuestions: FormQuestion[] = Array.from(this._formElement.querySelectorAll("form-question"));
+    const customQuestions = this._questions;
 
     let send = true;
+    console.log(customQuestions);
+    console.log(`Got ${customQuestions.length} questions, printing values.`);
     for (let i = 0; i < customQuestions.length; i++) {
-      const question: FormQuestion = customQuestions[i];
-      const input: string = question.getInput;
-      console.log(`Found user input: ${input}`);
+      const question = customQuestions[i];
+      console.log(`Found user input control: ${question}`);
+      console.log(`Assumed value: ${question.value}`);
+      console.log(`Question ID: ${question.name}`);
       // if (!input.reportValidity()) send = false;
-      formData.append(question.name, input);
+      formData.append(question.name, question.value);
     } 
+
+    console.log(`Built FormData object: ${JSON.stringify(Object.fromEntries(formData))}`);
 
     // Assuming there are no errors, send data to Google's backend.
     if (send) {
@@ -71,23 +78,18 @@ export class FormSection extends LitElement {
       // We need to ignore this line due to the fact that this is only available in the
       // Apps Script webapp runtime. It will not compile if we don't ignore it.
       // @ts-ignore
-      google.script.run
-        .withSuccessHandler(() => {
-          console.log("SUCCESS");
-          this.enableForm();
-        })
-        .withFailureHandler(() => {
-          console.log("FAILED");
-          this.enableForm();
-        })
-        .processForm(JSON.stringify(Object.fromEntries(formData)));
+      // google.script.run
+      //   .withSuccessHandler(() => {
+      //     console.log("SUCCESS");
+      //     this.enableForm();
+      //   })
+      //   .withFailureHandler(() => {
+      //     console.log("FAILED");
+      //     this.enableForm();
+      //   })
+      //   .processForm(JSON.stringify(Object.fromEntries(formData)));
     }
   }
-
-  // private _handleButton(event: Event) {
-  //   console.log("This is a test!");
-  //   this._formElement.requestSubmit();
-  // }
 
   protected render(): HTMLTemplateResult {
     return html`

@@ -20,7 +20,7 @@ export class FormQuestion extends LitElement {
   @property({type: String}) accessor label: string = "";
   @property({type: String}) accessor domain: string = "";
   @property({type: Boolean}) accessor disabled: boolean = false;
-  @property({type: String}) accessor value: string = "";
+  // @property({type: String}) accessor value: string = "";
   @property({type: ElementInternals}) accessor internals: ElementInternals;
 
   @query("outlined-text-field") private accessor _input: OutlinedTextField;
@@ -30,13 +30,14 @@ export class FormQuestion extends LitElement {
     this.internals = this.attachInternals();
   }
 
-  get getInput() {
-    return this._input.text;
-  }
-
-  private _handleInput(event: InputEvent) {
-    this.value = (event.target as OutlinedTextField).value;
-    this.internals.setFormValue(this.value);
+  // private _handleInput(event: Event) {
+  //   console.log(event.target);
+  //   this.value = (event.target as OutlinedTextField).value;
+  //   this.internals.setFormValue(this.value);
+  // }
+ 
+  get value() {
+    return this._input.value;
   }
 
   protected render(): HTMLTemplateResult {
@@ -52,7 +53,6 @@ export class FormQuestion extends LitElement {
           suffixText=${this.domain}
           type=${this.type}
           id=${this.id}
-          @change=${this._handleInput}
         ></outlined-text-field>
       </div>
     `;
