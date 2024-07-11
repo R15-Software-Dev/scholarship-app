@@ -1,18 +1,10 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { query } from "lit/decorators/query.js";
 
 
 @customElement("outlined-text-field")
 export class OutlinedTextField extends LitElement {
-  @property({type: String})
-  accessor placeholder: string = "";
-
-  @property({type: String})
-  accessor width: string = "300px";
-
-  @property({type: String})
-  accessor text: string = "";
-
   // Input height was 44px
   static styles?: CSSResultGroup = css`
     .container {
@@ -20,9 +12,16 @@ export class OutlinedTextField extends LitElement {
       border: 2px solid;
       border-radius: 8px;
       border-color: var(--theme-primary-color);
+      background-color: transparent;
       margin-top: 6px;
       height: 48px;
       position: relative;
+      transition: border-color 400ms ease,
+        background-color 400ms ease;
+      &:has(input:disabled) {
+        border-color: black;
+        background-color: lightgray;
+      }
     }
 
     input {
@@ -46,8 +45,8 @@ export class OutlinedTextField extends LitElement {
       pointer-events: none;
       left: 15px;
       top: 13px;
-      transition: 0.1s ease all;
-      background-color: white;
+      transition: all 0.1s ease;
+      background-color: transparent;
       padding-right: 0.3em;
       padding-left: 0.3em;
       display: flex;
@@ -58,12 +57,32 @@ export class OutlinedTextField extends LitElement {
       top: -7px;
       font-size: 11pt;
       font-color: gray;
+      background-color: white;
     }
 
     input:required {
       box-shadow: none;
     }
   `;
+
+  @property({type: String}) accessor placeholder: string = "";
+  @property({type: String}) accessor width: string = "300px";
+  @property({type: String}) accessor text: string = "";
+  @property({type: String}) accessor suffixText: string = "";
+  @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
+  @property({type: Boolean, reflect: true}) accessor required: boolean = false;
+  @property({type: String}) accessor type: string = "text";
+  @property({type: String}) accessor name: string = "";
+
+  @query("input") private accessor _input: HTMLInputElement;
+
+  get value() {
+    return this._input.value;
+  }
+
+  constructor() {
+    super();
+  }
 
   private handleChange(event: Event): void {
     this.text = (event.currentTarget as HTMLInputElement).value;
@@ -73,7 +92,11 @@ export class OutlinedTextField extends LitElement {
     return html`
       <div class="container">
         <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
-        <input type="text" placeholder=" " @change=${this.handleChange}/>
+        <input type=${this.type} placeholder=" "
+          ?disabled="${this.disabled}"
+          ?required="${this.required}"
+          name=${this.name}
+          @change=${this.handleChange}/>
         <label>${this.placeholder}</label>
       </div>
     `; 

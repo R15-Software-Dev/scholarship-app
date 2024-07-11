@@ -1,5 +1,6 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { query } from "lit/decorators/query.js";
 
 @customElement("action-button")
 export class ActionButton extends LitElement {
@@ -35,11 +36,11 @@ export class ActionButton extends LitElement {
     }
   `; 
 
-  @property({type: String})
-  accessor type: string = "";
+  @property({type: String}) accessor type: string = "";
+  @property({type: String}) accessor form: string = "";
+  @property({type: ElementInternals}) accessor internals: ElementInternals;
 
-  @property({type: String})
-  accessor form: string = "";
+  @query("button") private accessor _buttonElement: HTMLButtonElement;
 
   createRipple(event: MouseEvent): void {
     // Credit for this code goes to Bret Cameron on css-tricks.com,
@@ -59,6 +60,25 @@ export class ActionButton extends LitElement {
     if (ripple) ripple.remove();
 
     button.appendChild(circle);
+  }
+
+  private handleClick(event: MouseEvent): void {
+    this.createRipple(event);
+    
+    if (this.type === "submit") {
+      // Attempt to submit the associated form.
+      // Otherwise, this event will be handled by user specified functions.
+      this.internals.form.requestSubmit();
+    }
+  }
+
+  static get formAssociated() {
+    return true;
+  }
+
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
   }
 
   protected render(): HTMLTemplateResult {

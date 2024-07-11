@@ -22,19 +22,13 @@ export class FormSection extends LitElement {
     }
   `;
 
-  @property({type: String})
-  accessor header: string = "";
+  @property({type: String}) accessor header: string = "";
+  @property({type: String}) accessor name: string = "";
+  @property({type: String}) accessor id: string = "";
 
-  @property({type: String})
-  accessor name: string = "";
+  @query("form") accessor _formElement: HTMLFormElement;
 
-  @property({type: String})
-  accessor id: string = "";
-
-  @query("#form")
-  accessor _formElement: HTMLFormElement;
-
-  private disableForm(event: SubmitEvent): void {
+  private disableForm(): void {
     const questions = this._formElement.querySelectorAll("form-question");
 
     questions.forEach(question => {
@@ -72,7 +66,7 @@ export class FormSection extends LitElement {
 
     // Assuming there are no errors, send data to Google's backend.
     if (send) {
-      this.disableForm(event);
+      this.disableForm();
 
       // We need to ignore this line due to the fact that this is only available in the
       // Apps Script webapp runtime. It will not compile if we don't ignore it.
@@ -90,15 +84,20 @@ export class FormSection extends LitElement {
     }
   }
 
+  private _handleButton(event: Event) {
+    console.log("This is a test!");
+    this._formElement.requestSubmit();
+  }
+
   protected render(): HTMLTemplateResult {
     return html`
       <div>
         <!-- Create a box that contains our form. -->
         <h1>${this.header}</h1>
         <hr>
-        <form id="form" name="${this.name}" @submit=${this.handleForm}>
+        <form id="formIdHere" name="${this.name}" @submit="${this.handleForm}">
           <slot></slot>
-          <action-button type="submit" form="form">Submit</action-button>
+          <action-button type="submit" form="formIdHere" @click=${this._handleButton}>Submit</action-button>
         </form>
       </div>
     `;
