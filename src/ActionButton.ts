@@ -83,7 +83,7 @@ export class ActionButton extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <button class="button" type="${this.type}" @click=${this.createRipple} form=${this.form}>
+      <button class="button" type="${this.type}" @click=${this.handleClick} form=${this.form}>
         <slot></slot>
       </button>
     `;

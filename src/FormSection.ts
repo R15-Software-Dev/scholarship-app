@@ -84,10 +84,10 @@ export class FormSection extends LitElement {
     }
   }
 
-  private _handleButton(event: Event) {
-    console.log("This is a test!");
-    this._formElement.requestSubmit();
-  }
+  // private _handleButton(event: Event) {
+  //   console.log("This is a test!");
+  //   this._formElement.requestSubmit();
+  // }
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -97,7 +97,7 @@ export class FormSection extends LitElement {
         <hr>
         <form id="formIdHere" name="${this.name}" @submit="${this.handleForm}">
           <slot></slot>
-          <action-button type="submit" form="formIdHere" @click=${this._handleButton}>Submit</action-button>
+          <action-button type="submit" form="formIdHere">Submit</action-button>
         </form>
       </div>
     `;
