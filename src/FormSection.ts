@@ -78,16 +78,16 @@ export class FormSection extends LitElement {
       // We need to ignore this line due to the fact that this is only available in the
       // Apps Script webapp runtime. It will not compile if we don't ignore it.
       // @ts-ignore
-      // google.script.run
-      //   .withSuccessHandler(() => {
-      //     console.log("SUCCESS");
-      //     this.enableForm();
-      //   })
-      //   .withFailureHandler(() => {
-      //     console.log("FAILED");
-      //     this.enableForm();
-      //   })
-      //   .processForm(JSON.stringify(Object.fromEntries(formData)));
+      google.script.run
+        .withSuccessHandler(() => {
+          console.log("SUCCESS");
+          this.enableForm();
+        })
+        .withFailureHandler(() => {
+          console.log("FAILED");
+          this.enableForm();
+        })
+        .processForm(JSON.stringify(Object.fromEntries(formData)));
     }
   }
 
