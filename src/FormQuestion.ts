@@ -50,7 +50,7 @@ export class FormQuestion extends LitElement {
           ?disabled=${this.disabled}
           ?required=${this.required}
           name=${this.name}
-          suffixText=${this.domain}
+          suffix-text=${this.domain}
           type=${this.type}
           id=${this.id}
         ></outlined-text-field>

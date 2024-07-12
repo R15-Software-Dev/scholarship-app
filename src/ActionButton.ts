@@ -36,7 +36,7 @@ export class ActionButton extends LitElement {
     }
   `; 
 
-  @property({type: String}) accessor type: string = "";
+  @property({type: String}) accessor type: string = "button";
   @property({type: String}) accessor form: string = "";
   @property({type: ElementInternals}) accessor internals: ElementInternals;
 

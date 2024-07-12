@@ -67,7 +67,7 @@ export class OutlinedTextField extends LitElement {
 
   @property({type: String}) accessor placeholder: string = "";
   @property({type: String}) accessor width: string = "300px";
-  @property({type: String}) accessor suffixText: string = "";
+  @property({type: String, attribute: "suffix-text"}) accessor suffixText: string = "";
   @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
   @property({type: Boolean, reflect: true}) accessor required: boolean = false;
   @property({type: String}) accessor type: string = "text";

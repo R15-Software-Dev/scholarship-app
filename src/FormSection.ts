@@ -20,6 +20,10 @@ export class FormSection extends LitElement {
       margin: 10px;
       margin-top: 15px;
     }
+
+    action-button {
+      margin: 10px;
+    }
   `;
 
   @property({type: String}) accessor header: string = "";
@@ -81,13 +85,13 @@ export class FormSection extends LitElement {
       google.script.run
         .withSuccessHandler(() => {
           console.log("SUCCESS");
-          this.enableForm();
         })
         .withFailureHandler(() => {
           console.log("FAILED");
-          this.enableForm();
         })
         .processForm(JSON.stringify(Object.fromEntries(formData)));
+
+      this.enableForm();
     }
   }
 
