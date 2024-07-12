@@ -10,6 +10,7 @@ export class FormQuestion extends LitElement {
       flex-direction: column;
       margin: 10px;
       margin-bottom: 30px;
+      backrgound-color: inherit;
     }
   `;
   
@@ -64,7 +65,7 @@ export class FormSection extends LitElement {
   static styles?: CSSResultGroup = css`
     div {
       border-radius: 7px;
-      background-color: white;
+      background-color: inherit;
       box-shadow: 0 0 6px rgb(173, 170, 179);
       padding: 20px;
       margin-left: auto;

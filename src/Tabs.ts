@@ -1,5 +1,6 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property, queryAssignedElements } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 import { createRipple, rippleCSS } from "./Ripple";
 
 // This element should render a bar that contains our TabElements.
@@ -9,12 +10,12 @@ import { createRipple, rippleCSS } from "./Ripple";
 @customElement('tab-bar')
 export class TabBar extends LitElement {
   static styles?: CSSResultGroup = css`
-    slot[name=tab]::slotted(*) .active {
-
+    slot[name=tab]::slotted("tab"):disabled {
+      
     }
 
     slot[name=panel]::slotted(*) .active {
-
+      
     }
   `;
 
@@ -44,7 +45,11 @@ export class Tab extends LitElement {
       transition: background-color 400ms ease;
       user-select: none;
       &:hover {
-        background-color: #ddd;
+        background-color: lightgray;
+      }
+      &.disabled {
+        background-color: gray;
+        pointer-events: none;
       }
     }
 
@@ -52,13 +57,14 @@ export class Tab extends LitElement {
   `;
 
   @property({type: String, attribute: "panel-id"}) accessor panelId: string = "";
+  @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
   private readonly _internals = this.attachInternals;
 
   protected render(): HTMLTemplateResult {
     return html`
       <!-- This is essentially a customized button. -->
       <div
-        class="button"
+        class="${classMap({button: true, disabled: this.disabled})}"
         role="tab"
         @click=${this._handleClick}>
         <!-- Define where text and/or icons will appear. -->
