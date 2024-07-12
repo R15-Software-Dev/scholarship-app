@@ -68,7 +68,6 @@ export class Tab extends LitElement {
         role="tab"
         @click=${this._handleClick}>
         <!-- Define where text and/or icons will appear. -->
-        <p>This is testing text.</p>
         <slot name="icon"></slot>
         <slot>
           <!-- This is where our label content will go. -->
