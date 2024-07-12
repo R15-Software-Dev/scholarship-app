@@ -67,7 +67,8 @@ export class ActionButton extends LitElement {
     
     if (this.type === "submit") {
       // Attempt to submit the associated form.
-      // Otherwise, this event will be handled by user specified functions.
+      // Otherwise, this event will be handled by user specified functions
+      // externally.
       this.internals.form.requestSubmit();
     }
   }
