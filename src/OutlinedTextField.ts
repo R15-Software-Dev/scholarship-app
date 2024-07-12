@@ -1,6 +1,5 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { query } from "lit/decorators/query.js";
+import { customElement, property, query } from "lit/decorators.js";
 
 
 @customElement("outlined-text-field")
