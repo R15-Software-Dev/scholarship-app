@@ -28,6 +28,6 @@ jobs:
         npx webpack
     - name: Add, commit, and push code
       run: |
-        git add dist
+        git add -f dist
         git commit -m "GitHub npm and webpack workflow."
         git push
