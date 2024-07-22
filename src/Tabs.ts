@@ -1,5 +1,5 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, queryAssignedElements } from "lit/decorators.js";
+import { customElement, property, query, queryAll, queryAssignedElements } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { createRipple, rippleCSS } from "./Ripple";
 
@@ -9,33 +9,91 @@ import { createRipple, rippleCSS } from "./Ripple";
 
 @customElement('tab-bar')
 export class TabBar extends LitElement {
-  static styles?: CSSResultGroup = css`
-    slot[name=tab]::slotted("tab"):disabled {
-      
-    }
 
-    slot[name=panel]::slotted(*) .active {
-      
+  static styles?: CSSResultGroup = css`
+    slot {
+      display: flex;
+      flex-direction: row;
     }
   `;
 
-  @property({type: String}) accessor test: string = "";
+  @query('slot') accessor slotElement!: HTMLSlotElement | null;
+  @queryAssignedElements({selector: "c-tab", flatten: true}) accessor _tabs: Array<Tab>;
 
-  @queryAssignedElements({selector: "tab"}) private accessor tabs: Tab[];
+  get activeTab() {
+    return this._tabs.find((tab) => !tab.disabled) ?? null;
+  }
+  set activeTab(tab: Tab | null) {
+    if (tab) {
+      this.activateTab(tab);
+    }
+  }
+
+  @property({type: Number, attribute: 'active-tab-index'})
+  get activeTabIndex(): number {
+    // There is currently a bug with this.
+    // TODO Fix this in the future.
+    // return this._tabs.findIndex((tab) => !tab.disabled);
+    return -1;
+  }
+  set activeTabIndex(index: number) {
+    const activateTabAtIndex = () => {
+      const tab = this._tabs[index];
+      if (tab) this.activateTab(tab);
+    }
+
+    if (!this.slotElement) {
+      this.updateComplete.then(activateTabAtIndex);
+      return;
+    }
+
+    activateTabAtIndex();
+  }
+
+  private get focusedTab() {
+    return this._tabs.find((tab) => tab.matches(':focus-within'));
+  }
 
   protected render(): HTMLTemplateResult {
     return html`
       <div>
-        <!-- We must be able to query and get events from the elements within the -->
-        <!-- shadow DOM. This will allow us to show the correct TabPanel elements. -->
-        <slot name="tab"></slot>
-        <slot name="panel"></slot>
+        <slot @click=${this.handleClick}></slot>
       </div>
     `;
   }
+
+  private async handleClick(event: Event) {
+    console.log("Found click event!");
+    const tab = event.target as Tab;
+    // Allow event to bubble to other recievers
+    await 0;
+
+    if (event.defaultPrevented || tab.active) {
+      return;
+    }
+
+    this.activateTab(tab);
+  }
+
+  activateTab(tab: Tab) {
+    const {_tabs} = this;
+    if (!_tabs.includes(tab)) {
+      return;
+    }
+
+    for (const tabElement of _tabs) {
+      tabElement.active = (tabElement === tab);
+    }
+
+    // This event is interpreted at the TabBar sending a change event.
+    // The button should also send one, however this is the one that we should be listening for.
+    this.dispatchEvent(
+      new Event('change', {bubbles: true, cancelable: true})
+    );
+  }
 }
 
-@customElement("custom-tab")
+@customElement("c-tab")
 export class Tab extends LitElement {
   static styles?: CSSResultGroup = css`
     .button {
@@ -44,12 +102,18 @@ export class Tab extends LitElement {
       overflow: hidden;
       transition: background-color 400ms ease;
       user-select: none;
+      text-align: center;
+      padding: 5px;
       &:hover {
         background-color: lightgray;
       }
       &.disabled {
         background-color: gray;
         pointer-events: none;
+      }
+      &.active {
+        background-color: lightgray;
+        border-bottom: solid thick var(--theme-primary-color);
       }
     }
 
@@ -58,13 +122,14 @@ export class Tab extends LitElement {
 
   @property({type: String, attribute: "panel-id"}) accessor panelId: string = "";
   @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
+  @property({type: Boolean, reflect: true}) accessor active: boolean = false;
   private readonly _internals = this.attachInternals;
 
   protected render(): HTMLTemplateResult {
     return html`
       <!-- This is essentially a customized button. -->
       <div
-        class="${classMap({button: true, disabled: this.disabled})}"
+        class="${classMap({button: true, disabled: this.disabled, active: this.active})}"
         role="tab"
         @click=${this._handleClick}>
         <!-- Define where text and/or icons will appear. -->
