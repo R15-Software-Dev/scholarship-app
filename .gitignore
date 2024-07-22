@@ -129,4 +129,4 @@ out
 .pnp.*
 
 # Webpack build directory
-dist/
+dist/bundle/
