@@ -2,12 +2,22 @@
 <html>
 
   <head>
-    <script src="../dist/bundle.js" type="module"></script>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include JQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script src="./bundles/customElements.bundle.js" type="module"></script>
+    <script src="./bundles/scripts.bundle.js"></script>
   </head>
 
   <body>
-    <!-- Stuff here. -->
-    <custom-button></custom-button>
+    <tab-bar>
+      <c-tab active>Testing Tab!</c-tab>
+      <c-tab>Inactive Tab</c-tab>
+      <c-tab disabled>Disabled Tab</c-tab>
+    </tab-bar>
   </body>
 
 </html>

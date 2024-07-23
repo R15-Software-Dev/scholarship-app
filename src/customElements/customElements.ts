@@ -20,7 +20,7 @@ declare global {
     "form-section": FormSection,
     "form-question": FormQuestion,
     "outlined-text-field": OutlinedTextField,
-    "custom-tab": Tab,
+    "c-tab": Tab,
     "tab-bar": TabBar
   }
 }
