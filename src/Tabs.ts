@@ -1,5 +1,5 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, query, queryAll, queryAssignedElements } from "lit/decorators.js";
+import { customElement, property, query, queryAssignedElements } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { createRipple, rippleCSS } from "./Ripple";
 
@@ -21,7 +21,7 @@ export class TabBar extends LitElement {
   @queryAssignedElements({selector: "c-tab", flatten: true}) accessor _tabs: Array<Tab>;
 
   get activeTab() {
-    return this._tabs.find((tab) => !tab.disabled) ?? null;
+    return this._tabs.find((tab) => tab.active) ?? null;
   }
   set activeTab(tab: Tab | null) {
     if (tab) {
@@ -77,7 +77,8 @@ export class TabBar extends LitElement {
 
   activateTab(tab: Tab) {
     const {_tabs} = this;
-    if (!_tabs.includes(tab)) {
+    if (!_tabs.includes(tab) || tab.disabled) {
+      // This ignores the request if the tab is not a child of the TabBar.
       return;
     }
 
