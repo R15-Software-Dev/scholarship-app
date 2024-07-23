@@ -32,9 +32,7 @@ export class TabBar extends LitElement {
   @property({type: Number, attribute: 'active-tab-index'})
   get activeTabIndex(): number {
     // There is currently a bug with this.
-    // TODO Fix this in the future.
-    // return this._tabs.findIndex((tab) => !tab.disabled);
-    return -1;
+    return this._tabs.findIndex((tab) => tab.active);
   }
   set activeTabIndex(index: number) {
     const activateTabAtIndex = () => {
