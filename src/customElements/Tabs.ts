@@ -11,6 +11,10 @@ import { createRipple, rippleCSS } from "./Ripple";
 export class TabBar extends LitElement {
 
   static styles?: CSSResultGroup = css`
+    div {
+      margin-bottom: 20px;
+    }
+
     slot {
       display: flex;
       flex-direction: row;
@@ -103,16 +107,22 @@ export class Tab extends LitElement {
       user-select: none;
       text-align: center;
       padding: 5px;
+      z-index: 0;
+
       &:hover {
         background-color: lightgray;
       }
+
       &.disabled {
         background-color: gray;
         pointer-events: none;
       }
+
       &.active {
         background-color: lightgray;
         border-bottom: solid thick var(--theme-primary-color);
+        box-shadow: 0 0 6px rgb(173, 170, 179);
+        z-index: 1;
       }
     }
 
