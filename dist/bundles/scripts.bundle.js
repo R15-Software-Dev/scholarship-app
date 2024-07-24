@@ -1,1 +1,0 @@
-(()=>{"use strict";$((function(){$("tab-bar").on("change",(t=>{const e=document.querySelector("tab-bar").activeTabIndex;console.log(`Currently active tab: ${e}`)}))}))})();

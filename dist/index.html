@@ -17,29 +17,35 @@
 
   <body>
     <tab-bar>
-      <c-tab active>Personal Information</c-tab>
-      <c-tab>Academic Honors</c-tab>
+      <c-tab active panel-id="personalInfoPanel">Personal Information</c-tab>
+      <c-tab panel-id="academicInfoPanel">Academic Honors</c-tab>
     </tab-bar>
+    
+    <div class="tab-panel" id="personalInfoPanel">
+      <form-section
+        header="Personal Information"
+        name="personalInfo"
+        id="personalInfoForm">
+        <form-question
+          label="Enter your first name"
+          name="s_firstName"
+          type="text"
+          id="s_firstNameInput">
+          Student's First Name
+        </form-question>
+        <form-question
+          name="s_lastName"
+          type="text"
+          id="s_lastNameInput"
+          label="Enter your last name">
+          Student's last name
+        </form-question>
+      </form-section>
+    </div>
 
-    <form-section
-      header="Personal Information"
-      name="personalInfo"
-      id="personalInfoForm">
-      <form-question
-        label="Enter your first name"
-        name="s_firstName"
-        type="text"
-        id="s_firstNameInput">
-        Student's First Name
-      </form-question>
-      <form-question
-        name="s_lastName"
-        type="text"
-        id="s_lastNameInput"
-        label="Enter your last name">
-        Student's last name
-      </form-question>
-    </form-section>
+    <div class="tab-panel" id="academicInfoPanel">
+      <p> Some stuff here. </p>
+    </div>
   </body>
 
 </html>

@@ -2,6 +2,14 @@
   font-family: 'Roboto', sans-serif;
 }
 
+.tab-panel {
+  display: none;
+
+  &.shown {
+    display: block;
+  }
+}
+
 @property --theme-primary-color {
   syntax: "<color>";
   inherits: false;
