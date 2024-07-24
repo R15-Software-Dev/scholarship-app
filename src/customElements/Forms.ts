@@ -31,12 +31,6 @@ export class FormQuestion extends LitElement {
     this.internals = this.attachInternals();
   }
 
-  // private _handleInput(event: Event) {
-  //   console.log(event.target);
-  //   this.value = (event.target as OutlinedTextField).value;
-  //   this.internals.setFormValue(this.value);
-  // }
- 
   get value() {
     return this._input.value;
   }
@@ -158,7 +152,7 @@ export class FormSection extends LitElement {
         <!-- Create a box that contains our form. -->
         <h1>${this.header}</h1>
         <hr>
-        <form id="formIdHere" name="${this.name}" @submit="${this.handleForm}">
+        <form id=${this.id} name=${this.name} @submit=${this.handleForm}>
           <slot></slot>
           <action-button type="submit" form="formIdHere">Submit</action-button>
         </form>
