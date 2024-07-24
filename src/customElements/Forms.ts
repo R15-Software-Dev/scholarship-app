@@ -129,20 +129,30 @@ export class FormSection extends LitElement {
     // Assuming there are no errors, send data to Google's backend.
     if (send) {
       this.disableForm();
+      
+      try {
+        // Anytime the google backend is referenced, Typescript throws compilation errors.
+        // This is because in its current state, "google" is not defined. This is only available
+        // within the Apps Script environment. Ignore these lines for now.
+        // @ts-ignore
+        if (typeof google === 'undefined') throw new Error("This script is being run outside of the Google scripting environment.");
 
-      // We need to ignore this line due to the fact that this is only available in the
-      // Apps Script webapp runtime. It will not compile if we don't ignore it.
-      // @ts-ignore
-      google.script.run
-        .withSuccessHandler(() => {
-          console.log("SUCCESS");
-        })
-        .withFailureHandler(() => {
-          console.log("FAILED");
-        })
-        .processForm(JSON.stringify(Object.fromEntries(formData)));
-
-      this.enableForm();
+        // @ts-ignore
+        google.script.run
+          .withSuccessHandler(() => {
+            console.log("SUCCESS");
+          })
+          .withFailureHandler(() => {
+            console.log("FAILED");
+          })
+          .processForm(JSON.stringify(Object.fromEntries(formData)));
+      } catch (e) {
+        // Right now, this will only happen when the script is run outside of the
+        // Apps Script environment, which provides the "google" keyword.
+        console.log(e);
+      } finally {
+        this.enableForm();
+      }
     }
   }
 
@@ -154,7 +164,7 @@ export class FormSection extends LitElement {
         <hr>
         <form id=${this.id} name=${this.name} @submit=${this.handleForm}>
           <slot></slot>
-          <action-button type="submit" form="formIdHere">Submit</action-button>
+          <action-button type="submit" form=${this.id}>Submit</action-button>
         </form>
       </div>
     `;

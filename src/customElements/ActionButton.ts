@@ -27,8 +27,6 @@ export class ActionButton extends LitElement {
   @property({type: String}) accessor form: string = "";
   @property({type: ElementInternals}) accessor internals: ElementInternals;
 
-  @query("button") private accessor _buttonElement: HTMLButtonElement;
-
   private handleClick(event: MouseEvent): void {
     createRipple(event);
     
