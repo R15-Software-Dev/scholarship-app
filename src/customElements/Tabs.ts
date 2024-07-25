@@ -99,8 +99,28 @@ export class TabBar extends LitElement {
 @customElement("c-tab")
 export class Tab extends LitElement {
   static styles?: CSSResultGroup = css`
+    .container {
+      &::after {
+        content: '';
+        width: 0;
+        height: 3px;
+        margin: auto;
+        display: block;
+        background: transparent;
+        transition: width 150ms ease, background-color 150ms ease;
+      }
+      &.active::after {
+        width: 100%;
+        background: var(--theme-primary-color);
+      }
+
+      &.disabled {
+        display: none;
+      }
+    }
+
     .button {
-      width: 100px;
+      width: auto;
       position: relative;
       overflow: hidden;
       transition: background-color 400ms ease;
@@ -108,21 +128,11 @@ export class Tab extends LitElement {
       text-align: center;
       padding: 5px;
       z-index: 0;
+      border-radius: 4px;
+      margin: 0 2px 5px 2px;
 
       &:hover {
-        background-color: lightgray;
-      }
-
-      &.disabled {
-        background-color: gray;
-        pointer-events: none;
-      }
-
-      &.active {
-        background-color: lightgray;
-        border-bottom: solid thick var(--theme-primary-color);
-        box-shadow: 0 0 6px rgb(173, 170, 179);
-        z-index: 1;
+        background-color: #e9e9e9;
       }
     }
 
@@ -137,16 +147,18 @@ export class Tab extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <!-- This is essentially a customized button. -->
-      <div
-        class="${classMap({button: true, disabled: this.disabled, active: this.active})}"
-        role="tab"
-        @click=${this._handleClick}>
-        <!-- Define where text and/or icons will appear. -->
-        <slot name="icon"></slot>
-        <slot>
-          <!-- This is where our label content will go. -->
-          <!-- Material Design has @slotchange here, but I don't know what that's for. -->
-        </slot>
+      <div class="${classMap({container: true, active: this.active, disabled: this.disabled})}">
+        <div
+          class="button"
+          role="tab"
+          @click=${this._handleClick}>
+          <!-- Define where text and/or icons will appear. -->
+          <slot name="icon"></slot>
+          <slot>
+            <!-- This is where our label content will go. -->
+            <!-- Material Design has @slotchange here, but I don't know what that's for. -->
+          </slot>
+        </div>
       </div>
     `;
   }
