@@ -8,6 +8,7 @@ export class OutlinedTextField extends LitElement {
   static styles?: CSSResultGroup = css`
     .container {
       display: flex;
+      flex-direction: row;
       border: 2px solid;
       border-radius: 8px;
       border-color: var(--theme-primary-color);
@@ -62,11 +63,19 @@ export class OutlinedTextField extends LitElement {
     input:required {
       box-shadow: none;
     }
+
+    span .prefix {
+      height: auto;
+      width: auto;
+
+    }
   `;
 
   @property({type: String}) accessor placeholder: string = "";
   @property({type: String}) accessor width: string = "300px";
   @property({type: String, attribute: "suffix-text"}) accessor suffixText: string = "";
+  @property({type: String, attribute: "prefix-text"}) accessor prefixText: string = "";
+  @property({type: String}) accessor pattern: string = "";
   @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
   @property({type: Boolean, reflect: true}) accessor required: boolean = false;
   @property({type: String}) accessor type: string = "text";
@@ -86,14 +95,25 @@ export class OutlinedTextField extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div class="container">
+        ${this.renderPrefix()}
         <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
         <input type=${this.type} placeholder=" "
-          ?disabled="${this.disabled}"
-          ?required="${this.required}"
+          ?disabled=${this.disabled}
+          ?required=${this.required}
           name=${this.name}
+          pattern=${this.pattern}
           @change=${this._handleChange}/>
+        ${this.renderSuffix()}
         <label>${this.placeholder}</label>
       </div>
     `; 
+  }
+
+  private renderPrefix(): HTMLTemplateResult {
+    return html`<span class="prefix">${this.prefixText}</span>`;
+  }
+
+  private renderSuffix(): HTMLTemplateResult {
+    return html`<span class="suffix">${this.suffixText}</span>`;
   }
 }

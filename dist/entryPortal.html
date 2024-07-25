@@ -49,6 +49,7 @@
         label="Enter an amount"
         name="sclshpMaxAmount"
         type="number"
+        prefix-text="$"
         id="sclshpMaxAmountInput">
         Scholarship Total Amount
       </form-question>
@@ -57,8 +58,17 @@
         label="Enter a phone number"
         name="sclshpPhoneNumber"
         type="tel"
+        pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
         id="sclshpPhoneNumberInput">
         Contact Phone Number
+      </form-question>
+      <form-question
+        label="Enter an email"
+        name="sclshpContactEmail"
+        type="email"
+        suffix-text="@gmail.com"
+        id="sclshpContactEmailInput">
+        Contact Email Address
       </form-question>
     </form-section>
   </body>
