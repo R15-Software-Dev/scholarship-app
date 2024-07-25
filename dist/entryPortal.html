@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script src="./bundles/customElements.bundle.js" type="module"></script>
+    <script src="./bundles/scripts.bundle.js"></script>
+  </head>
+
+  <body>
+
+    <!--
+      Create a general framework for this application's data entry.
+      We don't know what's actually on the form as of right now.
+      At the very least, we do need to include a way to see and select
+      any of the already entered scholarships.
+    -->
+
+    <!-- <tab-bar> -->
+    <!--   <c-tab active panel-id="selectPanel"></c-tab> -->
+    <!-- </tab-bar> -->
+
+    <form-section
+      header="Scholarship Information"
+      name="scholarshipInfo"
+      id="scholarshipAdminInfoForm">
+      <form-question
+        label="Enter a title"
+        name="sclshpTitle"
+        type="text"
+        id="sclshpTitleInput">
+        Scholarship Title
+      </form-question>
+      <form-question
+        label="Enter a name"
+        name="sclshpSponsorName"
+        type="text"
+        id="sclshpSponsorNameInput">
+        Scholarship Organization/Sponsor
+      </form-question>
+      <form-question
+        label="Enter an amount"
+        name="sclshpMaxAmount"
+        type="number"
+        id="sclshpMaxAmountInput">
+        Scholarship Total Amount
+      </form-question>
+      <!-- TODO Create a regex match field for input elements. -->
+      <form-question
+        label="Enter a phone number"
+        name="sclshpPhoneNumber"
+        type="tel"
+        id="sclshpPhoneNumberInput">
+        Contact Phone Number
+      </form-question>
+    </form-section>
+  </body>
+</html>
