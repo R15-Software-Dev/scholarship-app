@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: codebuild-test-build-github-${{ github.run_id }}-${{ github.run_attempt }}
 
     strategy:
       matrix:
