@@ -1,6 +1,6 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-
+import { classMap } from "lit/directives/class-map.js";
 
 @customElement("outlined-text-field")
 export class OutlinedTextField extends LitElement {
@@ -8,6 +8,7 @@ export class OutlinedTextField extends LitElement {
   static styles?: CSSResultGroup = css`
     .container {
       display: flex;
+      flex-direction: row;
       border: 2px solid;
       border-radius: 8px;
       border-color: var(--theme-primary-color);
@@ -15,7 +16,8 @@ export class OutlinedTextField extends LitElement {
       margin-top: 6px;
       height: 48px;
       position: relative;
-      transition: border-color 400ms ease,
+      transition:
+        border-color 400ms ease,
         background-color 400ms ease;
       &:has(input:disabled) {
         border-color: black;
@@ -29,9 +31,10 @@ export class OutlinedTextField extends LitElement {
       border: none;
       padding: 2px 15px;
       color: #696158;
-      padding-right: 15px;
-      padding-left: 15px;
       border-radius: 8px;
+      &.hasPrefix {
+        padding-left: 5px;
+      }
       &:focus {
         outline: none;
       }
@@ -52,28 +55,84 @@ export class OutlinedTextField extends LitElement {
       justify-content: center;
     }
 
-    input:focus ~ label, input:not(:placeholder-shown) ~ label {
+    input:required {
+      box-shadow: none;
+    }
+
+    .prefix {
+      height: auto;
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      margin-left: 15px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &.hidden {
+        display: none;
+      }
+
+      &:has(+ input:not(:placeholder-shown)),
+      &:has(+ input:focus) {
+        opacity: 1;
+      }
+    }
+
+    .suffix {
+      height: auto;
+      width: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      margin-right: 15px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    input:focus ~ label,
+    input:not(:placeholder-shown) ~ label {
       top: -7px;
       font-size: 11pt;
       font-color: gray;
       background-color: white;
     }
 
-    input:required {
-      box-shadow: none;
+    input:not(:placeholder-shown) ~ .suffix,
+    input:focus ~ .suffix {
+      opacity: 1;
     }
   `;
 
-  @property({type: String}) accessor placeholder: string = "";
-  @property({type: String}) accessor width: string = "300px";
-  @property({type: String, attribute: "suffix-text"}) accessor suffixText: string = "";
-  @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
-  @property({type: Boolean, reflect: true}) accessor required: boolean = false;
-  @property({type: String}) accessor type: string = "text";
-  @property({type: String}) accessor value: string = "";
-  @property({type: String}) accessor name: string = "";
+  @property({ type: String })
+  accessor placeholder: string = "";
+  @property({ type: String })
+  accessor width: string = "300px";
+  @property({ type: String, attribute: "suffix-text" })
+  accessor suffixText: string = "";
+  @property({ type: String, attribute: "prefix-text" })
+  accessor prefixText: string = "";
+  @property({ type: String })
+  accessor pattern: string = "";
+  @property({ type: Boolean, reflect: true })
+  accessor disabled: boolean = false;
+  @property({ type: Boolean, reflect: true })
+  accessor required: boolean = false;
+  @property({ type: String })
+  accessor type: string = "text";
+  @property({ type: String })
+  accessor value: string = "";
+  @property({ type: String })
+  accessor name: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
+  @query(".prefix") private accessor _prefix: HTMLSpanElement;
+
+  get hasPrefix(): boolean {
+    return this.prefixText !== "";
+  }
 
   constructor() {
     super();
@@ -86,14 +145,32 @@ export class OutlinedTextField extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div class="container">
+        ${this.renderPrefix()}
         <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
-        <input type=${this.type} placeholder=" "
-          ?disabled="${this.disabled}"
-          ?required="${this.required}"
+        <input
+          class=${classMap({ hasPrefix: this.hasPrefix })}
+          type=${this.type}
+          placeholder=" "
+          ?disabled=${this.disabled}
+          ?required=${this.required}
           name=${this.name}
-          @change=${this._handleChange}/>
+          pattern=${this.pattern}
+          @change=${this._handleChange}
+        />
+        ${this.renderSuffix()}
         <label>${this.placeholder}</label>
       </div>
-    `; 
+    `;
+  }
+
+  private renderPrefix(): HTMLTemplateResult {
+    return html`<span
+      class=${classMap({ prefix: true, hidden: !this.hasPrefix })}
+      ><p>${this.prefixText}</p></span
+    >`;
+  }
+
+  private renderSuffix(): HTMLTemplateResult {
+    return html`<span class="suffix"><p>${this.suffixText}</p></span>`;
   }
 }

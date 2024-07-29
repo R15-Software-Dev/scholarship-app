@@ -19,8 +19,9 @@ export class FormQuestion extends LitElement {
   @property({type: String}) accessor id: string = "";
   @property({type: Boolean}) accessor required: boolean = false;
   @property({type: String}) accessor label: string = "";
-  @property({type: String}) accessor domain: string = "";
   @property({type: Boolean}) accessor disabled: boolean = false;
+  @property({type: String, attribute: "suffix-text"}) accessor suffixText = "";
+  @property({type: String, attribute: "prefix-text"}) accessor prefixText = "";
   // @property({type: String}) accessor value: string = "";
   @property({type: ElementInternals}) accessor internals: ElementInternals;
 
@@ -45,7 +46,8 @@ export class FormQuestion extends LitElement {
           ?disabled=${this.disabled}
           ?required=${this.required}
           name=${this.name}
-          suffix-text=${this.domain}
+          suffix-text="${this.suffixText}"
+          prefix-text="${this.prefixText}"
           type=${this.type}
           id=${this.id}
         ></outlined-text-field>
