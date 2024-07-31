@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script src="./bundles/customElements.bundle.js" type="module"></script>
+    <script src="./bundles/scripts.bundle.js"></script>
+  </head>
+
+  <body>
+    <!--
+      This is just a demo of AWS as a suggested platform.
+      It will simply show how APIs, website access, and data storage will work. 
+    -->
+
+    <form-section
+      header="Scholarship Demo"
+      name="scholarshipDemo"
+      id="scholarshipDemoForm"
+      action="https://qngitit3sb.execute-api.us-east-1.amazonaws.com/demo/tableWrite"
+      method="POST">
+      <form-question
+        label="Short answer text"
+        name="firstName"
+        type="text"
+        id="demoFirstNameInput">
+        Demo's First Name
+      </form-question>
+      <form-question
+        label="Short answer text"
+        name="lastName"
+        type="text"
+        id="demoLastNameInput">
+        Demo's Last Name
+      </form-question>
+      <form-question
+        label="Enter a valid email"
+        name="email"
+        type="text"
+        id="demoEmailInput">
+        Demo's Email Address
+      </form-question>
+    </form-section>
+  </body>
+</html>
