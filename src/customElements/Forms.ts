@@ -82,6 +82,8 @@ export class FormSection extends LitElement {
   @property({type: String}) accessor header: string = "";
   @property({type: String}) accessor name: string = "";
   @property({type: String}) accessor id: string = "";
+  @property({type: String}) accessor action: string = "";
+  @property({type: String}) accessor method: string = "";
 
   @query("form") accessor _formElement: HTMLFormElement;
   @queryAssignedElements({selector: "form-question", flatten: true})
@@ -158,13 +160,51 @@ export class FormSection extends LitElement {
     }
   }
 
+  handleFormAws(event: SubmitEvent): void {
+    event.preventDefault();
+    this.disableForm();
+
+    // Build the FormData to send to the API.
+    const formData = new FormData();
+
+    this._questions.forEach((question) => {
+      console.log(`Adding question ${question.name} with value ${question.value} to response.`);
+      formData.set(question.name, question.value);
+    });
+    
+    for (let key of formData.entries()) {
+      console.log(`${key[0]}, ${key[1]}`);
+    }
+
+    console.log(JSON.stringify(formData.entries()));
+    
+    fetch(this.action, {
+      method: this.method,
+      body: formData
+    })
+    .then(response => response.json)
+    .then(data => {
+        console.log("Success: " + data);
+      })
+    .catch(error => {
+        console.error("Error: " + error);
+      });
+
+    this.enableForm();
+  }
+
   protected render(): HTMLTemplateResult {
     return html`
       <div>
         <!-- Create a box that contains our form. -->
         <h1>${this.header}</h1>
         <hr>
-        <form id=${this.id} name=${this.name} @submit=${this.handleForm}>
+        <form 
+          id=${this.id}
+          name=${this.name}
+          action=${this.action}
+          method=${this.method}
+          @submit=${this.handleFormAws}>
           <slot></slot>
           <action-button type="submit" form=${this.id}>Submit</action-button>
         </form>
