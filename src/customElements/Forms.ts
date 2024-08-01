@@ -165,22 +165,16 @@ export class FormSection extends LitElement {
     this.disableForm();
 
     // Build the FormData to send to the API.
-    const formData = new FormData();
+    const formData = new FormData(); 
 
     this._questions.forEach((question) => {
       console.log(`Adding question ${question.name} with value ${question.value} to response.`);
       formData.set(question.name, question.value);
     });
     
-    for (let key of formData.entries()) {
-      console.log(`${key[0]}, ${key[1]}`);
-    }
-
-    console.log(JSON.stringify(formData.entries()));
-    
     fetch(this.action, {
       method: this.method,
-      body: formData
+      body: JSON.stringify(Object.fromEntries(formData.entries()))
     })
     .then(response => response.json)
     .then(data => {
