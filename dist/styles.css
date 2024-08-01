@@ -6,7 +6,7 @@
   display: none;
 
   &.shown {
-    display: block;
+    display: flex;
   }
 }
 

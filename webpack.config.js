@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   entry: {
     customElements: "./src/customElements/customElements.ts",
-    scripts: "./src/scripts/scripts.ts"
+    scripts: "./src/scripts/scripts.js"
   },
   mode: "production",
   module: {
