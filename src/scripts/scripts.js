@@ -1,5 +1,3 @@
-import * as jose from "jose";
-
 $(function() {
   // Show the correct first tab panel, based on what was marked as the
   // default active tab
