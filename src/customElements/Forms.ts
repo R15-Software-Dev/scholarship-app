@@ -1,5 +1,5 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, queryAssignedElements, query } from "lit/decorators.js";
+import { customElement, property, queryAssignedElements, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { OutlinedTextField } from "./OutlinedTextField";
 
@@ -92,6 +92,7 @@ export class FormSection extends LitElement {
 
     span {
       display: none;
+      font-size: x-large;
       &.shown {
         display: block;
       }
@@ -103,7 +104,7 @@ export class FormSection extends LitElement {
   @property({type: String}) accessor id: string = "";
   @property({type: String}) accessor action: string = "";
   @property({type: String}) accessor method: string = "";
-  @property({type: Boolean}) accessor showCheck: boolean = false;
+  @state() protected accessor _checkShown: boolean = false;
 
   @query("form") accessor _formElement: HTMLFormElement;
   @queryAssignedElements({selector: "form-question", flatten: true})
@@ -200,9 +201,10 @@ export class FormSection extends LitElement {
     .then(data => {
         console.log("Success: " + data);
         alert("Form submitted successfully.");
+        this._checkShown = true;
       })
     .catch(error => {
-        console.error("Error: " + error);
+        console.error(`An error occurred: ${error}`);
         alert("Form submission failed.");
       });
 
@@ -224,7 +226,7 @@ export class FormSection extends LitElement {
           <slot></slot>
           <div class="buttoncontainer">
             <action-button type="submit" form=${this.id}>Submit</action-button>
-            <span class=${classMap({ shown: this.showCheck })}>&#10003;</span>
+            <span class=${classMap({ shown: this._checkShown })}>&#10003;</span>
           </div>
         </form>
       </div>
