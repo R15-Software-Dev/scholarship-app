@@ -1,5 +1,6 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, queryAssignedElements, query } from "lit/decorators.js";
+import { customElement, property, queryAssignedElements, query, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 import { OutlinedTextField } from "./OutlinedTextField";
 
 @customElement("form-question")
@@ -60,13 +61,24 @@ export class FormQuestion extends LitElement {
 export class FormSection extends LitElement {
   static styles?: CSSResultGroup = css`
     div {
-      border-radius: 7px;
-      background-color: inherit;
-      box-shadow: 0 0 6px rgb(173, 170, 179);
-      padding: 20px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 800px;
+      &.container {
+        border-radius: 7px;
+        background-color: inherit;
+        box-shadow: 0 0 6px rgb(173, 170, 179);
+        padding: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 800px;
+      }
+
+      &.buttoncontainer {
+        width: auto;
+        border-radius: 0;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+      }
     }
 
     h1 {
@@ -77,6 +89,14 @@ export class FormSection extends LitElement {
     action-button {
       margin: 10px;
     }
+
+    span {
+      display: none;
+      font-size: x-large;
+      &.shown {
+        display: block;
+      }
+    }
   `;
 
   @property({type: String}) accessor header: string = "";
@@ -84,6 +104,7 @@ export class FormSection extends LitElement {
   @property({type: String}) accessor id: string = "";
   @property({type: String}) accessor action: string = "";
   @property({type: String}) accessor method: string = "";
+  @state() protected accessor _checkShown: boolean = false;
 
   @query("form") accessor _formElement: HTMLFormElement;
   @queryAssignedElements({selector: "form-question", flatten: true})
@@ -180,9 +201,10 @@ export class FormSection extends LitElement {
     .then(data => {
         console.log("Success: " + data);
         alert("Form submitted successfully.");
+        this._checkShown = true;
       })
     .catch(error => {
-        console.error("Error: " + error);
+        console.error(`An error occurred: ${error}`);
         alert("Form submission failed.");
       });
 
@@ -191,7 +213,7 @@ export class FormSection extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div>
+      <div class="container">
         <!-- Create a box that contains our form. -->
         <h1>${this.header}</h1>
         <hr>
@@ -202,7 +224,10 @@ export class FormSection extends LitElement {
           method=${this.method}
           @submit=${this.handleFormAws}>
           <slot></slot>
-          <action-button type="submit" form=${this.id}>Submit</action-button>
+          <div class="buttoncontainer">
+            <action-button type="submit" form=${this.id}>Submit</action-button>
+            <span class=${classMap({ shown: this._checkShown })}>&#10003;</span>
+          </div>
         </form>
       </div>
     `;
