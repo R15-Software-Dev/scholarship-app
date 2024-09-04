@@ -15,3 +15,9 @@
   inherits: false;
   initial-value: #0b6623;
 }
+
+@property --theme-error-color {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: red;
+}
