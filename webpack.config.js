@@ -1,8 +1,17 @@
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: {
-    customElements: "./src/customElements/customElements.ts",
+    customElements: {
+      import: [
+        "./src/customElements/ActionButton.ts",
+        "./src/customElements/Forms.ts",
+        "./src/customElements/OutlinedTextField.ts",
+        "./src/customElements/Ripple.ts",
+        "./src/customElements/Tabs.ts"
+      ]
+    },
     scripts: {
       import: "./src/scripts/scripts.js",
       library: {
@@ -23,6 +32,18 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            unused: false,
+          }
+        }
+      })
+    ]
   },
   output: {
     filename: "[name].bundle.js",
