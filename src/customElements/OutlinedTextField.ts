@@ -128,7 +128,9 @@ export class OutlinedTextField extends LitElement {
   accessor name: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
+  @query("label") private accessor _label: HTMLLabelElement;
   @query(".prefix") private accessor _prefix: HTMLSpanElement;
+  @query(".suffix") private accessor _suffix: HTMLSpanElement;
 
   get hasPrefix(): boolean {
     return this.prefixText !== "";
@@ -136,6 +138,18 @@ export class OutlinedTextField extends LitElement {
 
   constructor() {
     super();
+  }
+
+  public checkValidity(): boolean {
+    // This should check whether the information present here is actually
+    // valid. Should change colors and add an error message if not.
+    // This really will just call the checkValidity method on the
+    // input element, which should do the work for us.
+
+    // If this element has its placeholder shown, then it is not valid unless
+    // it is not a required question.
+    // This accounts for the space character as a placeholder.
+    return this._input.checkValidity();
   }
 
   private _handleChange(event: Event): void {

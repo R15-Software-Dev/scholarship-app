@@ -33,6 +33,10 @@ export class FormQuestion extends LitElement {
     this.internals = this.attachInternals();
   }
 
+  checkValidity(): boolean {
+    return this._input.checkValidity();
+  }
+
   get value() {
     return this._input.value;
   }
@@ -185,11 +189,19 @@ export class FormSection extends LitElement {
     event.preventDefault();
     this.disableForm();
 
+    // First check if values are valid by calling checkValidity on
+    // all the form's inputs.
+    this._questions.forEach(question => {
+      // Check validity of questions.
+      if (!question.checkValidity()) {
+        console.log(`Question ${question.name} is not valid.`);
+      }
+    })
+
     // Build the FormData to send to the API.
     const formData = new FormData(); 
 
     this._questions.forEach((question) => {
-      console.log(`Adding question ${question.name} with value ${question.value} to response.`);
       formData.set(question.name, question.value);
     });
     
@@ -200,12 +212,10 @@ export class FormSection extends LitElement {
     .then(response => response.json)
     .then(data => {
         console.log("Success: " + data);
-        alert("Form submitted successfully.");
         this._checkShown = true;
       })
     .catch(error => {
         console.error(`An error occurred: ${error}`);
-        alert("Form submission failed.");
       });
 
     this.enableForm();
