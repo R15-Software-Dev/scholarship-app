@@ -3,7 +3,15 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: {
-    customElements: "./src/customElements/customElements.ts",
+    customElements: {
+      import: [
+        "./src/customElements/ActionButton.ts",
+        "./src/customElements/Forms.ts",
+        "./src/customElements/OutlinedTextField.ts",
+        "./src/customElements/Ripple.ts",
+        "./src/customElements/Tabs.ts"
+      ]
+    },
     scripts: {
       import: "./src/scripts/scripts.js",
       library: {
