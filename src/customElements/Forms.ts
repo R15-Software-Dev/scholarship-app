@@ -191,12 +191,19 @@ export class FormSection extends LitElement {
 
     // First check if values are valid by calling checkValidity on
     // all the form's inputs.
+    let submittable = true;
     this._questions.forEach(question => {
       // Check validity of questions.
       if (!question.checkValidity()) {
         console.log(`Question ${question.name} is not valid.`);
+        submittable = false;
       }
-    })
+    });
+    
+    // If the form has invalid responses, do not submit the form and display
+    // the error prompts underneath all the questions.
+    if (!submittable)
+      return;
 
     // Build the FormData to send to the API.
     const formData = new FormData(); 

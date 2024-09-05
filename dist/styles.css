@@ -19,5 +19,5 @@
 @property --theme-error-color {
   syntax: "<color>";
   inherits: false;
-  initial-value: red;
+  initial-value: #ff0000;
 }

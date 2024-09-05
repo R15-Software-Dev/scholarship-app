@@ -24,7 +24,7 @@ export class OutlinedTextField extends LitElement {
         border-color: black;
         background-color: lightgray;
       }
-      &.error {
+      &.errors {
         border-color: var(--theme-error-color);
       }
     }
@@ -37,16 +37,12 @@ export class OutlinedTextField extends LitElement {
       padding-left: 8px;
       
       & span {
-        text-color: var(--theme-error-color);
+        color: var(--theme-error-color);
       }
 
       &.shown {
         display: block;
       }
-    }
-
-    span .error {
-      text-color: var(--theme-error-color);
     }
 
     input {
@@ -147,7 +143,7 @@ export class OutlinedTextField extends LitElement {
   @query(".prefix") private accessor _prefix: HTMLSpanElement;
   @query(".suffix") private accessor _suffix: HTMLSpanElement;
 
-  @state() protected accessor _errorVisible: boolean = true;
+  @state() protected accessor _errorVisible: boolean = false;
 
   get hasPrefix(): boolean {
     return this.prefixText !== "";
@@ -155,6 +151,19 @@ export class OutlinedTextField extends LitElement {
 
   constructor() {
     super();
+
+    // We can add this here because focus is not automatically set to this
+    // element on the page. It will show the error state of the element
+    // only after the focus on it is lost.
+    this.addEventListener('focusout', () => {
+      console.log("Focus was lost.");
+      // Check validity
+      if (!this.checkValidity()) {
+        this.hideErrors();
+      } else {
+        this.showErrors();
+      }
+    });
   }
 
   public checkValidity(): boolean {
@@ -170,10 +179,12 @@ export class OutlinedTextField extends LitElement {
   }
 
   showErrors(): void {
+    console.log("showing error");
     this._errorVisible = true;
   }
 
   hideErrors(): void {
+    console.log("hiding error");
     this._errorVisible = false;
   }
 
@@ -184,7 +195,7 @@ export class OutlinedTextField extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div>
-        <div class="input-container">
+        <div class="input-container ${classMap({errors: this._errorVisible})}">
           ${this.renderPrefix()}
           <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
           <input
