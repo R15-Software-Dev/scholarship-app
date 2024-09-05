@@ -1,12 +1,13 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 @customElement("outlined-text-field")
 export class OutlinedTextField extends LitElement {
   // Input height was 44px
   static styles?: CSSResultGroup = css`
-    .container {
+    .input-container {
       display: flex;
       flex-direction: row;
       border: 2px solid;
@@ -22,6 +23,25 @@ export class OutlinedTextField extends LitElement {
       &:has(input:disabled) {
         border-color: black;
         background-color: lightgray;
+      }
+      &.errors {
+        border-color: var(--theme-error-color);
+      }
+    }
+
+    div .error {
+      display: none;
+      height: auto;
+      width: auto;
+      padding: 5px;
+      padding-left: 8px;
+      
+      & span {
+        color: var(--theme-error-color);
+      }
+
+      &.shown {
+        display: block;
       }
     }
 
@@ -106,31 +126,24 @@ export class OutlinedTextField extends LitElement {
     }
   `;
 
-  @property({ type: String })
-  accessor placeholder: string = "";
-  @property({ type: String })
-  accessor width: string = "300px";
-  @property({ type: String, attribute: "suffix-text" })
-  accessor suffixText: string = "";
-  @property({ type: String, attribute: "prefix-text" })
-  accessor prefixText: string = "";
-  @property({ type: String })
-  accessor pattern: string = "";
-  @property({ type: Boolean, reflect: true })
-  accessor disabled: boolean = false;
-  @property({ type: Boolean, reflect: true })
-  accessor required: boolean = false;
-  @property({ type: String })
-  accessor type: string = "text";
-  @property({ type: String })
-  accessor value: string = "";
-  @property({ type: String })
-  accessor name: string = "";
+  @property({ type: String }) accessor placeholder: string = "";
+  @property({ type: String }) accessor width: string = "300px";
+  @property({ type: String, attribute: "suffix-text" }) accessor suffixText: string = "";
+  @property({ type: String, attribute: "prefix-text" }) accessor prefixText: string = "";
+  @property({ type: String }) accessor pattern: string = "";
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
+  @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
+  @property({ type: String }) accessor type: string = "text";
+  @property({ type: String }) accessor value: string = "";
+  @property({ type: String }) accessor name: string = "";
+  @property({ type: String, attribute: "error-text" }) accessor errorText: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
   @query("label") private accessor _label: HTMLLabelElement;
   @query(".prefix") private accessor _prefix: HTMLSpanElement;
   @query(".suffix") private accessor _suffix: HTMLSpanElement;
+
+  @state() protected accessor _errorVisible: boolean = false;
 
   get hasPrefix(): boolean {
     return this.prefixText !== "";
@@ -138,6 +151,19 @@ export class OutlinedTextField extends LitElement {
 
   constructor() {
     super();
+
+    // We can add this here because focus is not automatically set to this
+    // element on the page. It will show the error state of the element
+    // only after the focus on it is lost.
+    this.addEventListener('focusout', () => {
+      console.log("Focus was lost.");
+      // Check validity
+      if (!this.checkValidity()) {
+        this.hideErrors();
+      } else {
+        this.showErrors();
+      }
+    });
   }
 
   public checkValidity(): boolean {
@@ -152,27 +178,42 @@ export class OutlinedTextField extends LitElement {
     return this._input.checkValidity();
   }
 
+  showErrors(): void {
+    console.log("showing error");
+    this._errorVisible = true;
+  }
+
+  hideErrors(): void {
+    console.log("hiding error");
+    this._errorVisible = false;
+  }
+
   private _handleChange(event: Event): void {
     this.value = (event.target as HTMLInputElement).value;
   }
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container">
-        ${this.renderPrefix()}
-        <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
-        <input
-          class=${classMap({ hasPrefix: this.hasPrefix })}
-          type=${this.type}
-          placeholder=" "
-          ?disabled=${this.disabled}
-          ?required=${this.required}
-          name=${this.name}
-          pattern=${this.pattern}
-          @change=${this._handleChange}
-        />
-        ${this.renderSuffix()}
-        <label>${this.placeholder}</label>
+      <div>
+        <div class="input-container ${classMap({errors: this._errorVisible})}">
+          ${this.renderPrefix()}
+          <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
+          <input
+            class=${classMap({ hasPrefix: this.hasPrefix })}
+            type=${this.type}
+            placeholder=" "
+            ?disabled=${this.disabled}
+            ?required=${this.required}
+            name=${this.name}
+            pattern=${this.pattern}
+            @change=${this._handleChange}
+          />
+          ${this.renderSuffix()}
+          <label>${this.placeholder}</label>
+        </div>
+        <div class=${classMap({error: true, shown: this._errorVisible})}>
+          <span>This is a test</span>
+        </div>
       </div>
     `;
   }
