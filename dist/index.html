@@ -23,7 +23,7 @@
       <!-- panel-id should match the id of the tab-panel div exactly -->
       <c-tab active panel-id="personalInfoPanel">Personal Information</c-tab>
       <c-tab panel-id="academicInfoPanel">Academic Honors</c-tab>
-      <c-tab disabled>Testing Tab</c-tab>
+      <c-tab panel-id="testingPanel">Testing Tab</c-tab>
     </tab-bar>
     
     <!-- Every tab panel div needs the tab-panel css class and an ID. -->
@@ -76,6 +76,10 @@
           Student's Highest Recorded SAT Math Score
         </form-question>
       </form-section>
+    </div>
+
+    <div class="tab-panel" id="testingPanel">
+      <multi-entry></multi-entry>
     </div>
   </body>
 
