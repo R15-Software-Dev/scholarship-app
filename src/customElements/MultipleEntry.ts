@@ -6,6 +6,7 @@ import {
   HTMLTemplateResult,
 } from "lit-element";
 import { customElement, property, query } from "lit-element/decorators.js";
+import { ModalWindow } from "./modalWindow";
 
 type FormEntry = {
   baseElement: CustomEntry;
@@ -21,10 +22,15 @@ export class MultiEntry extends LitElement {
   accessor required: boolean = false;
   @property({ type: {} }) private accessor _entries: Array<FormEntry> = [];
   @query('slot[name="entries"]') private accessor _entriesSlot: HTMLSlotElement;
+  @query("modal-window") private accessor _modalWindow: ModalWindow;
 
   protected render(): HTMLTemplateResult {
     return html`
       <!-- Button allows user to add an entry -->
+      <modal-window>
+        <label for="entry">Add an entry:</label>
+        <input type="text" id="entry" name="entry" />
+      </modal-window>
       <div class="container">
         <p>Start entry element:</p>
         <slot name="entries"></slot>
@@ -34,8 +40,8 @@ export class MultiEntry extends LitElement {
   }
 
   addEntry(): void {
-    // TODO This will need to open a modal window in order
-    // to get the information required for the new element.
+    // Open the modal window.
+    this._modalWindow.showModal();
 
     // Create an entry HTMLElement
     const entry = document.createElement("entry");
