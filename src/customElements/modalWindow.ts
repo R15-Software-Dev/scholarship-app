@@ -58,54 +58,86 @@ export class modalWindow extends LitElement {
     font-size: 20px;
     }
     `;
+    @property({type: Boolean}) accessor _modalVisible: boolean = false;
 
-    @query('#modal-container') modalContainer!: HTMLElement;
-    @query('#open') openButton!: HTMLElement;
-    @query('#cancel') cancelButton!: HTMLElement;
-    @query('#save') saveButton!: HTMLElement;
+    @query('#modal-container') _modalContainer!: HTMLDivElement;
+    @query('#open') _openButton!: HTMLButtonElement;
+    @query('#cancel') _cancelButton!: HTMLButtonElement;
+    @query('#save') _saveButton!: HTMLButtonElement;
+    //@query('form-question') private accessor
+    //private int _year : C# underscore means private variable
+    //accessor automatically creates _formQuestions 
+    //make modalVisible a property to alter
 
     protected render(): HTMLTemplateResult {
         return html`
-        <button id="open">
+        <button id="open" @click="${this.showModal}">
             Add+
         </button>
-
-        <div class="modal-container" id="modal-container">
+        
+        <div class="modal-container ${classMap({show: this._modalVisible})}"  id="modal-container">
             <div class="modal">
-                <p>
-                    Information section
-                </p>
-                <button id="cancel">
+                <form>
+                    <slot name="header"> </slot>
+
+                    <slot name="content"> </slot>
+                </form>
+                <button id="cancel" @click="${this.cancelEvent}>
                     Cancel
                 </button>
-                <button id="save">
+                <button id="save" @click="${this.saveEvent}">
                     Save
                 </button>
             </div>
         </div>
     `;
     }
-        
-    Update() {
-        this.openButton.addEventListener('click', () => {
-            this.showModal();
-          });
+    // Get and show the information from the modal window
+    // Save button: create a method as part of the modal window. Allow us to have a return value on one of the functions. That function will be called from MultipleEntry element, modal.getInformation. 
+    // getInformation() { showModal(); waits until the form submits, when the form submits, hide the modal and return all the data as a JSON (retyrn {dataAsJson}) object return something: }
+    // use @submit function
 
-        this.cancelButton.addEventListener('click', () => {
-            this.hideModal();
-          });
-          
-        this.saveButton.addEventListener('click', () => {
-            this.hideModal();
-        });
-    
-    }
-
+    //convert into class map
     showModal() {
-        this.modalContainer.classList.add("show");
+        this._modalVisible = true;
     }
 
     hideModal() {
-        this.modalContainer.classList.remove("show");
+        this._modalVisible = false;
+    }
+
+    // Clears any entries made in the modal
+    cancelEvent(){
+        const form = this.shadowRoot?.querySelector('form') as HTMLFormElement;
+        form.reset();
+        this.hideModal(); // Hides modal after resetting form
+    }
+    
+    // Method will be triggered upon clicking the 'Save' button
+    saveEvent(event: Event){
+       
+        event.preventDefault(); // Prevents any default form submissions
+
+        const data = this.getInformation();
+        console.log(data); // DEBUGGING
+
+        this.hideModal(); // Hide modal after saving
+
+    }
+
+
+    // Collects form data and returns it as JSON
+    getInformation() {
+
+        const form = this.shadowRoot?.querySelector('form') as HTMLFormElement; // Selects form element
+
+        const formData = new FormData(form); // Collects all input fields within the form
+        const dataObject: Record<string, string> = {}; // Ensures that keys (names of form fields) and values (form data values) are strings
+
+        formData.forEach((value, key) => {
+            dataObject[key] = value.toString(); // Convert values in form to strings
+        });
+
+        return JSON.stringify(dataObject); // Returns data as JSON string
     }
 }
