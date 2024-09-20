@@ -9,8 +9,10 @@ import { customElement, property, query } from "lit-element/decorators.js";
 import { ModalWindow } from "./modalWindow";
 
 type FormEntry = {
+  // Base element for the entry - is passed by reference, so we can modify it
   baseElement: CustomEntry;
-  // This must be an any, because we can't predict the object that will be passed.
+  // Contains pertinent data for the entry
+  // This must be an any, because we can't predict the object that will be passed
   entryData: any;
 };
 
@@ -20,34 +22,42 @@ export class MultiEntry extends LitElement {
 
   @property({ type: Boolean, reflect: true })
   accessor required: boolean = false;
-  @property({ type: {} }) private accessor _entries: Array<FormEntry> = [];
-  @query('slot[name="entries"]') private accessor _entriesSlot: HTMLSlotElement;
-  @query("modal-window") private accessor _modalWindow: ModalWindow;
+  @property({ type: {} })
+  private accessor _entries!: Array<FormEntry>;
+  @query('slot[name="entries"]')
+  private accessor _entriesSlot!: HTMLSlotElement;
+  @query("modal-window")
+  private accessor _modalWindow!: ModalWindow;
 
   protected render(): HTMLTemplateResult {
     return html`
       <!-- Button allows user to add an entry -->
-      <modal-window>
-        <label for="entry" slot="content">Add an entry:</label>
-        <input type="text" id="entry" name="entry" slot="content" />
+      <modal-window @submit=${this.addEntry}>
+        <!-- These slots reflect the modal window slots -->
+        <!-- TODO Is there a more efficient way of doing this? -->
+        <slot name="modalHeader" slot="header"></slot>
+        <slot name="modalQuestions" slot="content"></slot>
       </modal-window>
       <div class="container">
         <p>Start entry element:</p>
         <slot name="entries"></slot>
-        <action-button @click=${this._modalWindow.showModal}>Add</action-button>
+        <action-button @click=${this.showModal}>Add</action-button>
       </div>
     `;
   }
 
-  addEntry(entryData: any): void {
-    // Create an entry HTMLElement
-    const entry = document.createElement("entry") as CustomEntry;
+  private showModal() {
+    this._modalWindow.showModal();
+  }
 
-    // Make a new FormEntry object and store in array.
-    // TODO Make this object not a testing object.
+  private addEntry(event: CustomEvent): void {
+    // Create an entry HTMLElement
+    const entry = document.createElement("custom-entry") as CustomEntry;
+
+    // Make a new FormEntry object and store in the array.
     const entryObject: FormEntry = {
       baseElement: entry,
-      entryData: entryData,
+      entryData: event.detail,
     };
     this._entries.push(entryObject);
 
@@ -82,7 +92,7 @@ export class CustomEntry extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div class="container">
-        <slot name="info">
+        <slot>
           <!-- Any display information about this entry goes here. -->
         </slot>
       </div>
