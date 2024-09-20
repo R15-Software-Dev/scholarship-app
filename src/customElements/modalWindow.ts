@@ -1,8 +1,8 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, property, query, queryAll, queryAssignedElements, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
-@customElement("modal")
+@customElement("modal-window")
 export class modalWindow extends LitElement {
     static styles: CSSResultGroup = css`
     *{
@@ -64,10 +64,9 @@ export class modalWindow extends LitElement {
     @query('#open') _openButton!: HTMLButtonElement;
     @query('#cancel') _cancelButton!: HTMLButtonElement;
     @query('#save') _saveButton!: HTMLButtonElement;
-    //@query('form-question') private accessor
-    //private int _year : C# underscore means private variable
-    //accessor automatically creates _formQuestions 
-    //make modalVisible a property to alter
+    @query('form') _form!: HTMLFormElement;
+    //Array of inputs, Assigned Elements gets elements in slots
+    @queryAssignedElements({selector: "input", flatten: true, slot:"content"}) accessor _inputs!: HTMLInputElement[]; 
 
     protected render(): HTMLTemplateResult {
         return html`
@@ -82,22 +81,17 @@ export class modalWindow extends LitElement {
 
                     <slot name="content"> </slot>
                 </form>
-                <button id="cancel" @click="${this.cancelEvent}>
+                <button id="cancel" @click=${this.cancelEvent}>
                     Cancel
                 </button>
-                <button id="save" @click="${this.saveEvent}">
+                <button id="save" @click=${this.saveEvent}>
                     Save
                 </button>
             </div>
         </div>
     `;
     }
-    // Get and show the information from the modal window
-    // Save button: create a method as part of the modal window. Allow us to have a return value on one of the functions. That function will be called from MultipleEntry element, modal.getInformation. 
-    // getInformation() { showModal(); waits until the form submits, when the form submits, hide the modal and return all the data as a JSON (retyrn {dataAsJson}) object return something: }
-    // use @submit function
 
-    //convert into class map
     showModal() {
         this._modalVisible = true;
     }
@@ -108,8 +102,11 @@ export class modalWindow extends LitElement {
 
     // Clears any entries made in the modal
     cancelEvent(){
-        const form = this.shadowRoot?.querySelector('form') as HTMLFormElement;
-        form.reset();
+        const form = this._form;
+        // Goes through each slot and replaces with empty string
+        this._inputs.forEach((input) => {
+            input.value = "";
+        });
         this.hideModal(); // Hides modal after resetting form
     }
     
@@ -129,15 +126,14 @@ export class modalWindow extends LitElement {
     // Collects form data and returns it as JSON
     getInformation() {
 
-        const form = this.shadowRoot?.querySelector('form') as HTMLFormElement; // Selects form element
+        const form = this._form; // Selects form element
 
         const formData = new FormData(form); // Collects all input fields within the form
-        const dataObject: Record<string, string> = {}; // Ensures that keys (names of form fields) and values (form data values) are strings
-
-        formData.forEach((value, key) => {
-            dataObject[key] = value.toString(); // Convert values in form to strings
+        // Loop collecting data
+        this._inputs.forEach((input) => {
+            formData.set(input.name, input.value); // Add input information to formData
         });
-
-        return JSON.stringify(dataObject); // Returns data as JSON string
+        
+        return JSON.stringify(Object.fromEntries(formData.entries())); // Returns data as JSON string
     }
 }
