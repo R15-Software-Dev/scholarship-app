@@ -9,7 +9,8 @@ module.exports = {
         "./src/customElements/Forms.ts",
         "./src/customElements/OutlinedTextField.ts",
         "./src/customElements/Ripple.ts",
-        "./src/customElements/Tabs.ts"
+        "./src/customElements/Tabs.ts",
+        "./src/customElements/modalWindow.ts"
       ]
     },
     scripts: {
