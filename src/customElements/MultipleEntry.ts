@@ -28,33 +28,26 @@ export class MultiEntry extends LitElement {
     return html`
       <!-- Button allows user to add an entry -->
       <modal-window>
-        <label for="entry">Add an entry:</label>
-        <input type="text" id="entry" name="entry" />
+        <label for="entry" slot="content">Add an entry:</label>
+        <input type="text" id="entry" name="entry" slot="content" />
       </modal-window>
       <div class="container">
         <p>Start entry element:</p>
         <slot name="entries"></slot>
-        <action-button @click=${this.addEntry}>Add</action-button>
+        <action-button @click=${this._modalWindow.showModal}>Add</action-button>
       </div>
     `;
   }
 
-  addEntry(): void {
-    // Open the modal window.
-    this._modalWindow.showModal();
-
+  addEntry(entryData: any): void {
     // Create an entry HTMLElement
-    const entry = document.createElement("entry");
+    const entry = document.createElement("entry") as CustomEntry;
 
     // Make a new FormEntry object and store in array.
     // TODO Make this object not a testing object.
     const entryObject: FormEntry = {
-      baseElement: entry as CustomEntry,
-      entryData: {
-        thing: "hello",
-        otherThing: "hello again",
-        thingCount: this._entries.length,
-      },
+      baseElement: entry,
+      entryData: entryData,
     };
     this._entries.push(entryObject);
 
@@ -82,6 +75,7 @@ export class CustomEntry extends LitElement {
     slot {
       display: flex;
       flex-direction: row;
+      gap: 10px;
     }
   `;
 
