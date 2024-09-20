@@ -104,7 +104,6 @@ export class ModalWindow extends LitElement {
 
   // Clears any entries made in the modal
   cancelEvent() {
-    const form = this._form;
     // Goes through each slot and replaces with empty string
     this._inputs.forEach((input) => {
       input.value = "";
@@ -118,7 +117,6 @@ export class ModalWindow extends LitElement {
 
     // Collects form data
     const data = this.getInformation();
-    // console.log(data); // DEBUGGING
 
     // Hide modal
     this.hideModal();
@@ -131,9 +129,7 @@ export class ModalWindow extends LitElement {
 
   // Collects form data and returns it as JSON
   getInformation() {
-    const form = this._form; // Selects form element
-
-    const formData = new FormData(form); // Collects all input fields within the form
+    const formData = new FormData(); // Collects all input fields within the form
     // Loop collecting data
     this._inputs.forEach((input) => {
       formData.set(input.name, input.value); // Add input information to formData
