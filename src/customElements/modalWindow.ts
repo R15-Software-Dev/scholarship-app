@@ -83,13 +83,12 @@ export class ModalWindow extends LitElement {
         id="modal-container"
       >
         <div class="modal">
-          <form>
+          <form @submit=${this.saveEvent}>
             <slot name="header"> </slot>
-
             <slot name="content"> </slot>
+            <button id="cancel" @click=${this.cancelEvent}>Cancel</button>
+            <button id="save" type="submit">Save</button>
           </form>
-          <button id="cancel" @click=${this.cancelEvent}>Cancel</button>
-          <button id="save" @click=${this.saveEvent}>Save</button>
         </div>
       </div>
     `;
@@ -114,13 +113,20 @@ export class ModalWindow extends LitElement {
   }
 
   // Method will be triggered upon clicking the 'Save' button
-  saveEvent(event: Event) {
+  saveEvent(event: SubmitEvent) {
     event.preventDefault(); // Prevents any default form submissions
 
+    // Collects form data
     const data = this.getInformation();
-    console.log(data); // DEBUGGING
+    // console.log(data); // DEBUGGING
 
-    this.hideModal(); // Hide modal after saving
+    // Hide modal
+    this.hideModal();
+
+    // Add data to event, then allow the event to bubble
+    this.dispatchEvent(
+      new CustomEvent("submit", { detail: data, bubbles: true }),
+    );
   }
 
   // Collects form data and returns it as JSON
