@@ -2,12 +2,12 @@
 
 Uses Lit, Typescript, and webpack to create a working scholarship web application for Region 15 Schools.
 
-This code is currently only the front end code, anything on the backend should be confidential and must be
-developed in-house, as it may contain personal information about the students and their parents.
+This repository is all of the frontend code, which contains anything needed to show a webpage and send API requests
+to the backend, which is hosted on AWS.
 
 
 # Enabled workflows
 
-GitHub Actions allows me to build using npm/webpack and add these files to the repository.
+GitHub Actions allows us to build using npm/webpack and add these files to the repository.
 
 It is also a *required* check for pull requests.
