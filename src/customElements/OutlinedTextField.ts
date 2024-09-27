@@ -35,7 +35,7 @@ export class OutlinedTextField extends LitElement {
       width: auto;
       padding: 5px;
       padding-left: 8px;
-      
+
       & span {
         color: var(--theme-error-color);
       }
@@ -128,15 +128,22 @@ export class OutlinedTextField extends LitElement {
 
   @property({ type: String }) accessor placeholder: string = "";
   @property({ type: String }) accessor width: string = "300px";
-  @property({ type: String, attribute: "suffix-text" }) accessor suffixText: string = "";
-  @property({ type: String, attribute: "prefix-text" }) accessor prefixText: string = "";
+  @property({ type: String, attribute: "suffix-text" })
+  accessor suffixText: string = "";
+  @property({ type: String, attribute: "prefix-text" })
+  accessor prefixText: string = "";
   @property({ type: String }) accessor pattern: string = "";
-  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
-  @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean =
+    false;
+  @property({ type: Boolean, reflect: true }) accessor required: boolean =
+    false;
   @property({ type: String }) accessor type: string = "text";
   @property({ type: String }) accessor value: string = "";
   @property({ type: String }) accessor name: string = "";
-  @property({ type: String, attribute: "error-text" }) accessor errorText: string = "";
+  @property({ type: String, attribute: "error-text" })
+  accessor errorText: string = "";
+
+  private _errorText: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
   @query("label") private accessor _label: HTMLLabelElement;
@@ -155,7 +162,7 @@ export class OutlinedTextField extends LitElement {
     // We can add this here because focus is not automatically set to this
     // element on the page. It will show the error state of the element
     // only after the focus on it is lost.
-    this.addEventListener('focusout', () => {
+    this.addEventListener("focusout", () => {
       console.log("Focus was lost.");
       // Check validity
       if (!this.checkValidity()) {
@@ -178,8 +185,14 @@ export class OutlinedTextField extends LitElement {
     return this._input.checkValidity();
   }
 
+  showErrorString(msg: string): void {
+    this._errorText = msg;
+    this._errorVisible = true;
+  }
+
   showErrors(): void {
     console.log("showing error");
+    this._errorText = this.errorText;
     this._errorVisible = true;
   }
 
@@ -195,7 +208,9 @@ export class OutlinedTextField extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div>
-        <div class="input-container ${classMap({errors: this._errorVisible})}">
+        <div
+          class="input-container ${classMap({ errors: this._errorVisible })}"
+        >
           ${this.renderPrefix()}
           <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
           <input
@@ -211,8 +226,8 @@ export class OutlinedTextField extends LitElement {
           ${this.renderSuffix()}
           <label>${this.placeholder}</label>
         </div>
-        <div class=${classMap({error: true, shown: this._errorVisible})}>
-          <span>This is a test</span>
+        <div class=${classMap({ error: true, shown: this._errorVisible })}>
+          <span>${this._errorText}</span>
         </div>
       </div>
     `;
