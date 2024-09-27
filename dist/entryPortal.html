@@ -11,7 +11,7 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
     <script src="./bundles/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/scripts.bundle.js"></script>
+    <script src="./bundles/entryPortal.bundle.js"></script>
   </head>
 
 
@@ -39,55 +39,56 @@
         name="scholarshipInfo"
         id="scholarshipAdminInfoForm">
 
-        <form-question
-          label="Enter a title"
-          name="sclshpTitle"
-          type="text"
-          id="sclshpTitleInput"
-          required>
-          Scholarship Title
-        </form-question>
+            <form-question
+            label="Enter a title"
+            name="sclshpTitle"
+            type="text"
+            id="sclshpTitleInput"
+            required>
+            Scholarship Title
+            </form-question>
 
-        <form-question
-          label="Enter a name"
-          name="sclshpSponsorName"
-          type="text"
-          id="sclshpSponsorNameInput"
-          required>
-          Scholarship Organization/Sponsor
-        </form-question>
+            <form-question
+            label="Enter a name"
+            name="sclshpSponsorName"
+            type="text"
+            id="sclshpSponsorNameInput"
+            required>
+            Scholarship Organization/Sponsor
+            </form-question>
 
-        <form-question
-          label="Enter a number"
-          name="sclshpAwardsTotal"
-          type="number"
-          id="sclshpAwardsTotalInput"
-          required>
-          Number of Awards
-        </form-question>
+            <form-question
+            label="Enter a number"
+            name="sclshpAwardsTotal"
+            type="number"
+            id="sclshpAwardsTotalInput"
+            required>
+            Number of Awards
+            </form-question>
 
-        <form-question
-          label="Enter an amount"
-          name="sclshpAmountEach"
-          type="number"
-          prefix-text="$"
-          id="sclshpAmountEachInput"
-          required>
-          Amount of each scholarship
-        </form-question>
+            <form-question
+            label="Enter an amount"
+            name="sclshpAmountEach"
+            type="number"
+            prefix-text="$"
+            id="sclshpAmountEachInput"
+            required>
+            Amount of each scholarship
+            </form-question>
 
-        <form-question
-          label="Enter an amount"
-          name="sclshpTotalAmount"
-          type="number"
-          prefix-text="$"
-          id="sclshpTotalAmountInput"
-          required>
-          Total amount of scholarships
-        </form-question>
+            <form-question
+            label="Enter an amount"
+            name="sclshpTotalAmount"
+            type="number"
+            prefix-text="$"
+            id="sclshpTotalAmountInput"
+            required>
+            Total amount of scholarships
+            </form-question>
 
         <!-- TODO Create a regex match field for input elements. -->
-      </div>form-section>
+        </form-section>
+      </div>
     </div>
 
     <!--Contact Information-->
@@ -235,7 +236,7 @@
             <option value="WI">Wisconsin</option>
             <option value="WY">Wyoming</option>
           </select>
-        </form-quesiton>
+        </form-question>
 
       </form-section>
 

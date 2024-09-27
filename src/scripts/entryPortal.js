@@ -3,7 +3,7 @@ $(function () {
   $(`#${activeTab.panelId}`).show();
 
   $("tab-bar").on("change", () => {
-    const tabBar = docment.querySelector("tab-bar");
+    const tabBar = document.querySelector("tab-bar");
     const panelId = tabBar.activeTab.panelId;
 
     // Hide all panels, then show the correct one.
@@ -12,17 +12,21 @@ $(function () {
   });
 
   // Listen for change event on email input
-  $("sclshpConfirmEmailInput").on("focuslost", function () {
-    const email = this.value;
-    const compEmail = $("sclshpContactEmailInput").value;
+  $("#sclshpConfirmEmailInput").on("focusout", function () {
+    console.log("Checking emails");
+    const emailInput = document.querySelector(
+      "#sclshpContactEmailInput",
+    )._input;
+    const compEmailInput = document.querySelector(
+      "#sclshpConfirmEmailInput",
+    )._input;
 
-    if (email !== compEmail) {
-      $("sclshpContactEmailInput").showError("Emails do not match.");
-      this.showError("Emails do not match.");
+    if (emailInput.value !== compEmailInput.value) {
+      console.log("Emails do not match, showing error.");
+      compEmailInput.showErrorString("Emails do not match.");
     } else {
       // Clear errors.
-      $("sclshpContactEmailInput").hideErrors();
-      this.hideErrors();
+      compEmailInput.hideErrors();
     }
   });
 });
