@@ -134,3 +134,4 @@ dist/bundles/
 dist/bundles/*
 dist/bundles/scripts.bundle.js
 dist/bundles/customElements.bundle.js
+dist/bundles/customElements.bundle.js.LICENSE.txt
