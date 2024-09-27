@@ -23,11 +23,17 @@ export class MultiEntry extends LitElement {
   @property({ type: Boolean, reflect: true })
   accessor required: boolean = false;
   @property({ type: {} })
-  private accessor _entries!: Array<FormEntry>;
+  private accessor _entries: Array<FormEntry>;
   @query('slot[name="entries"]')
   private accessor _entriesSlot!: HTMLSlotElement;
   @query("modal-window")
   private accessor _modalWindow!: ModalWindow;
+
+  constructor() {
+    // Initialize the entries array
+    super();
+    this._entries = [];
+  }
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -35,8 +41,12 @@ export class MultiEntry extends LitElement {
       <modal-window @submit=${this.addEntry}>
         <!-- These slots reflect the modal window slots -->
         <!-- TODO Is there a more efficient way of doing this? -->
-        <slot name="modalHeader" slot="header"></slot>
-        <slot name="modalQuestions" slot="content"></slot>
+        <slot name="modalHeader" slot="header">
+          <!-- This slot will contain the header for the modal -->
+        </slot>
+        <slot name="modalQuestions" slot="content">
+          <!-- This slot will contain the questions for the modal -->
+        </slot>
       </modal-window>
       <div class="container">
         <p>Start entry element:</p>
@@ -62,8 +72,9 @@ export class MultiEntry extends LitElement {
     this._entries.push(entryObject);
 
     // Give the new element some content.
+    // How can this use an unknown object to display information?
     const entryContent = document.createElement("p");
-    entryContent.textContent = "Testing info!";
+    entryContent.textContent = JSON.stringify(event.detail);
     entry.appendChild(entryContent);
 
     // Add the element to the DOM.

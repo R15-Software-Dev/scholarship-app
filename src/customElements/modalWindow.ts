@@ -135,6 +135,6 @@ export class ModalWindow extends LitElement {
       formData.set(input.name, input.value); // Add input information to formData
     });
 
-    return JSON.stringify(Object.fromEntries(formData.entries())); // Returns data as JSON string
+    return Object.fromEntries(formData.entries()); // Returns data as object
   }
 }

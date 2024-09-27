@@ -1,86 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+    <head>
+        <!-- Add stylesheet from dist/bundles/styles.css -->
+        <link rel="stylesheet" href="styles.css" />
+        <!-- Add Google's Roboto font styles -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Include JQuery -->
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"
+        ></script>
+        <!-- Add custom elements and scripts from project -->
+        <script src="./bundles/customElements.bundle.js" type="module"></script>
+        <script src="./bundles/scripts.bundle.js"></script>
+    </head>
 
-  <head>
-    <!-- Add stylesheet from dist/bundles/styles.css -->
-    <link rel="stylesheet" href="styles.css">
-    <!-- Add Google's Roboto font styles -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <!-- Include JQuery -->
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
-    <!-- Add custom elements and scripts from project -->
-    <script src="./bundles/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/scripts.bundle.js"></script>
-  </head>
+    <body>
+        <tab-bar>
+            <!-- panel-id should match the id of the tab-panel div exactly -->
+            <c-tab active panel-id="personalInfoPanel"
+                >Personal Information</c-tab
+            >
+            <c-tab panel-id="academicInfoPanel">Academic Honors</c-tab>
+            <c-tab panel-id="testingPanel">Testing Tab</c-tab>
+        </tab-bar>
 
-  <body>
-    <tab-bar>
-      <!-- panel-id should match the id of the tab-panel div exactly -->
-      <c-tab active panel-id="personalInfoPanel">Personal Information</c-tab>
-      <c-tab panel-id="academicInfoPanel">Academic Honors</c-tab>
-      <c-tab panel-id="testingPanel">Testing Tab</c-tab>
-    </tab-bar>
-    
-    <!-- Every tab panel div needs the tab-panel css class and an ID. -->
-    <div class="tab-panel" id="personalInfoPanel">
-      <form-section
-        header="Personal Information"
-        name="personalInfo"
-        id="personalInfoForm">
-        <form-question
-          label="Enter your first name"
-          name="s_firstName"
-          type="text"
-          id="s_firstNameInput">
-          Student's First Name
-        </form-question>
-        <form-question
-          name="s_lastName"
-          type="text"
-          id="s_lastNameInput"
-          label="Enter your last name">
-          Student's last name
-        </form-question>
-      </form-section>
-    </div>
+        <!-- Every tab panel div needs the tab-panel css class and an ID. -->
+        <div class="tab-panel" id="personalInfoPanel">
+            <form-section
+                header="Personal Information"
+                name="personalInfo"
+                id="personalInfoForm"
+            >
+                <form-question
+                    label="Enter your first name"
+                    name="s_firstName"
+                    type="text"
+                    id="s_firstNameInput"
+                >
+                    Student's First Name
+                </form-question>
+                <form-question
+                    name="s_lastName"
+                    type="text"
+                    id="s_lastNameInput"
+                    label="Enter your last name"
+                >
+                    Student's last name
+                </form-question>
+            </form-section>
+        </div>
 
-    <div class="tab-panel" id="academicInfoPanel">
-      <form-section
-        header="Academic Information"
-        name="academicInfo"
-        id="academicInfoForm">
-        <form-question
-          label="Input a number"
-          name="gpa"
-          type="text"
-          id="gpaInput">
-          Student's Current GPA
-        </form-question>
-        <form-question
-          label="Input a number"
-          name="satReading"
-          type="text"
-          id="satReadingInput">
-          Student's Highest Recorded SAT Reading Score
-        </form-question>
-        <form-question
-          label="Input a number"
-          name="satMath"
-          type="text"
-          id="satMathInput">
-          Student's Highest Recorded SAT Math Score
-        </form-question>
-      </form-section>
-    </div>
+        <div class="tab-panel" id="academicInfoPanel">
+            <form-section
+                header="Academic Information"
+                name="academicInfo"
+                id="academicInfoForm"
+            >
+                <form-question
+                    label="Input a number"
+                    name="gpa"
+                    type="text"
+                    id="gpaInput"
+                >
+                    Student's Current GPA
+                </form-question>
+                <form-question
+                    label="Input a number"
+                    name="satReading"
+                    type="text"
+                    id="satReadingInput"
+                >
+                    Student's Highest Recorded SAT Reading Score
+                </form-question>
+                <form-question
+                    label="Input a number"
+                    name="satMath"
+                    type="text"
+                    id="satMathInput"
+                >
+                    Student's Highest Recorded SAT Math Score
+                </form-question>
+            </form-section>
+        </div>
 
-    <div class="tab-panel" id="testingPanel">
-      <multi-entry></multi-entry>
-    </div>
-  </body>
-
+        <div class="tab-panel" id="testingPanel">
+            <multi-entry>
+                <input
+                    type="text"
+                    name="test1"
+                    id="test1"
+                    slot="modalQuestions"
+                />
+            </multi-entry>
+        </div>
+    </body>
 </html>
