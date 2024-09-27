@@ -14,7 +14,7 @@
     <script src="./bundles/scripts.bundle.js"></script>
   </head>
 
-  <body>
+  
 
     <!--
       Create a general framework for this application's data entry.
@@ -22,54 +22,500 @@
       At the very least, we do need to include a way to see and select
       any of the already entered scholarships.
     -->
+      
+<body>
 
-    <!-- <tab-bar> -->
-    <!--   <c-tab active panel-id="selectPanel"></c-tab> -->
-    <!-- </tab-bar> -->
+    <tab-bar>
+    <c-tab active panel-id="scholarshipInformationPanel">Scholarship Information</c-tab>
+    <c-tab panel-id="contactInformationPanel">Contact Information</c-tab>
+    <c-tab panel-id="eligibilityFactorsPanel">Eligibility Factors</c-tab>
+    <c-tab panel-id="studentRequirementsPanel">Student Requirements</c-tab>
+    </tab-bar>
 
-    <form-section
-      header="Scholarship Information"
-      name="scholarshipInfo"
-      id="scholarshipAdminInfoForm">
-      <form-question
-        label="Enter a title"
-        name="sclshpTitle"
-        type="text"
-        id="sclshpTitleInput">
-        Scholarship Title
-      </form-question>
-      <form-question
-        label="Enter a name"
-        name="sclshpSponsorName"
-        type="text"
-        id="sclshpSponsorNameInput">
-        Scholarship Organization/Sponsor
-      </form-question>
-      <form-question
-        label="Enter an amount"
-        name="sclshpMaxAmount"
-        type="number"
-        prefix-text="$"
-        id="sclshpMaxAmountInput">
-        Scholarship Total Amount
-      </form-question>
-      <!-- TODO Create a regex match field for input elements. -->
-      <form-question
-        label="Enter a phone number"
-        name="sclshpPhoneNumber"
-        type="tel"
-        pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
-        id="sclshpPhoneNumberInput">
-        Contact Phone Number
-      </form-question>
-      <form-question
-        label="Enter an email"
-        name="sclshpContactEmail"
-        type="email"
-        suffix-text="@gmail.com"
-        id="sclshpContactEmailInput">
-        Contact Email Address
-      </form-question>
-    </form-section>
+    <!--Scholarship Information-->
+    <div class="tab-panel" id="scholarshipInformationPanel">
+      <form-section
+        header="Scholarship Information"
+        name="scholarshipInfo"
+        id="scholarshipAdminInfoForm">
+
+        <form-question
+          label="Enter a title"
+          name="sclshpTitle"
+          type="text"
+          id="sclshpTitleInput"
+          required>
+          Scholarship Title
+        </form-question>
+
+        <form-question
+          label="Enter a name"
+          name="sclshpSponsorName"
+          type="text"
+          id="sclshpSponsorNameInput"
+          required>
+          Scholarship Organization/Sponsor
+        </form-question>
+
+        <form-question
+          label="Enter a number"
+          name="sclshpAwardsTotal"
+          type="number"
+          id="sclshpAwardsTotalInput"
+          required>
+          Number of Awards
+        </form-question>
+
+        <form-question
+          label="Enter an amount"
+          name="sclshpAmountEach"
+          type="number"
+          prefix-text="$"
+          id="sclshpAmountEachInput"
+          required>
+          Amount of each scholarship
+        </form-question>
+
+        <form-question
+          label="Enter an amount"
+          name="sclshpTotalAmount"
+          type="number"
+          prefix-text="$"
+          id="sclshpTotalAmountInput"
+          required>
+          Total amount of scholarships
+        </form-question>
+
+        <!-- TODO Create a regex match field for input elements. -->
+      </form-section>
+    </div>
+
+    <!--Contact Information-->
+    <div class="tab-panel" id="contactInformationPanel">
+      <form-section
+        header="Contact Information"
+        name="contactInfo"
+        id="contactAdminInfoForm">
+        <form-question
+          label="Enter your name"
+          name="contactName"
+          type="text"
+          id="contactNameInput"
+          required>
+          Contact Name
+        </form-question>
+
+        <form-question
+          label="Enter a phone number"
+          name="sclshpPhoneNumber"
+          type="tel"
+          pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
+          id="sclshpPhoneNumberInput"
+          required>
+          Business Phone Number
+        </form-question>
+
+        <!--Optional?-->
+        <form-question
+          label="Enter a phone number"
+          name="sclshpPhoneNumber"
+          type="tel"
+          pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
+          id="sclshpPhoneNumberInput">
+          Home Phone Number
+        </form-question>
+
+        <!--Optional?-->
+        <form-question
+          label="Enter a phone number"
+          name="sclshpPhoneNumber"
+          type="tel"
+          pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
+          id="sclshpPhoneNumberInput">
+          Cell Phone Number
+        </form-question>
+
+        <form-question
+          label="Enter an email"
+          name="sclshpContactEmail"
+          type="email"
+          suffix-text="@gmail.com"
+          id="sclshpContactEmailInput"
+          required>
+          Contact Email Address
+        </form-question>
+
+        <!--Test for same email-->
+        <form-question
+          label="Enter an email"
+          name="sclshpConfirmEmail"
+          type="email"
+          suffix-text="@gmail.com"
+          id="sclshpConfirmEmailInput"
+          required>
+          Confirm Email Address
+        </form-question>
+
+        <form-question
+          label="Enter an address"
+          name="sponserAddress"
+          type="text"
+          id="sponsorAddressInput"
+          required>
+          Street address
+        </form-question>
+
+        <form-question
+          label="Enter zip code"
+          name="sponsorZipCode"
+          type="number"
+          id="sponsorZipCodeInput"
+          required>
+          Zip Code
+        </form-question>
+        
+        <!--Re-style dropdown-->
+        <form-quesiton
+          label="State"
+          name="sponsorState"
+          id="sponsorStateSelection"
+          required
+          >
+          Select state
+          <select>
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA">California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="DC">District Of Columbia</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+          </select>
+        </form-quesiton>
+
+      </form-section>
+
+    </div>
+    <!--Eligibility Factors-->
+    <div class="tab-panel" id="eligibilityFactorsPanel">
+      <form-section
+        header="Eligibility Factors"
+        name="eligibilityFactors"
+        id="eligibilityFactorsForm">
+
+        <!--Style radio buttons-->
+        <form
+          name="studentResidence"
+          id="studentResidenceOption"
+          required>
+          Student residency requirement?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+        <br>
+
+        <form
+          name="scholarshipNonPHS"
+          id="scholarshipNonPHSOption"
+          required>
+          Is the scholarship available to non-PHS students?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+        <br>
+
+        <form
+          name="studyRequirement"
+          id="studyRequirementOption"
+          required>
+          Area of study requirement?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+        <br>
+
+        <form
+          name="financialRequirement"
+          id="financialRequirementOption"
+          required>
+          Is financial need a requirement?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+        <br>
+
+        <!-- Resize & reformat textbox -->
+        <form
+          name="eligibilityOther"
+          id="eligibilityOtherInput">
+          Other eligibility factors please list.
+          <br> 
+          <textarea></textarea>
+        </form>
+
+      </form-section>
+    </div>
+    
+    <!--Student Requirements-->
+    <div class="tab-panel" id="studentRequirementsPanel">
+      <form-section
+        header="Student Requirements"
+        name="studentRequirementInfo"
+        id="studentRequirementInfoForm">
+
+        <form
+          name="studentAidRequirement"
+          id="studentAidRequirementOption"
+          required>
+          Do you requrie a copy of the student aid report?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+
+        <br>
+
+        <form
+          name="studentInterview"
+          id="studentInterviewRequirement"
+          required>
+          Will there be student interviews?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+
+        <br>
+
+        <form-question
+          label="Enter a name"
+          name="recipientSelection"
+          type="text"
+          id="recipientSelectionInput"
+          required>
+          Who will make the selection of the recipient?
+        </form-question>
+
+        <form
+          name="transcriptRequirement"
+          id="transcriptRequirementOption"
+          required>
+          Do you require a transcript?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+
+        <br>
+
+        <form
+          name="awardTo"
+          id="awardToOption"
+          required>
+          Will the award be made to the student or the college?
+          <div>
+            <label for="student">Student</label>
+            <input type="radio" name="option" id="student">
+          </div>
+          <div>
+            <label for="college">College</label>
+            <input type="radio" name="option" id="college">
+          </div>
+        </form>
+
+        <br>
+
+        <form
+          name="essayRequirment"
+          id="essayRequirmentOption">
+          Is there an essay requirement?
+          <div>
+            <label for="yes">Yes</label>
+            <input type="radio" name="option" id="yes">
+          </div>
+          <div>
+            <label for="no">No</label>
+            <input type="radio" name="option" id="no">
+          </div>
+        </form>
+
+        <br>
+
+        <!--Modal window with checkboxes for essay prompts-->
+        <form
+          name="essayPrompt"
+          id="essayPromptSelection">
+          If yes, please make sure the correct one(s) is selected below…
+          <div>
+            <input type="checkbox" name="prompt" id="cb1">
+              El. Write an essay describing why you have chosen your present major/career direction. 
+              Include any abilities, interests, experiences, employment, clubs you have had that have affected your direction. 
+              (If you are undecided, indicate why.) For FCCLA Schol-indicate how FCCLA helped you in your HS career.
+          <br>
+            <input type="checkbox" name="prompt" id="cb2">
+              E2. Write an essay describing how you feel you have personally contributed to Pomperaug High School.
+          <br>
+            <input type="checkbox" name="prompt" id="cb3">
+              E3. Write an essay in completion of this sentence: The continuation of my education will benefit mankind because...
+          <br>
+            <input type="checkbox" name="prompt" id="cb4">
+              E4. Discuss a person who, or an event that, has had a significant impact on you. 
+              Tell how it influenced your thinking and/or actions.
+          <br>
+            <input type="checkbox" name="prompt" id="cb5">
+              E5. Why is community service important? How has it personally affected you and your goals, and what role 
+              do you hope to play in it in the future? (For Middlebury Volunteer Fire Dept. Scholarship please list any 
+              community service you have personally accomplished.)
+          <br>
+            <input type="checkbox" name="prompt" id="cb6">
+              E6. Discuss anything of importance to you that would help us to better understand you. This might include 
+              aspects of your abilities, interests, experiences, community service and aspirations.
+          <br>
+            <input type="checkbox" name="prompt" id="cb7">
+              E7. How has being a member of Panther Aquatic Club impacted your high school swimming career? If you are in college, 
+              how has it impacted your college swimming experience.
+          <br>
+            <input type="checkbox" name="prompt" id="cb8">
+              E8. If you had a child who demonstrated some aptitude for swimming as well as a love for 
+              it-would you encourage them to swim competitively and why?
+          <br>
+            <input type="checkbox" name="prompt" id="cb9">
+              E9. How has participation in sports been beneficial to your personal, academic and emotional growth? 
+              Include the influence of the organization. (For Pomperaug Pop Warner Scholarship please change sports to football 
+              or cheer. For PHS Softball Scholarships change sports to Softball). (For Pomperaug Grid Iron Change sport to PHS Football)
+          <br>
+            <input type="checkbox" name="prompt" id="cb10">
+              E10. What does furthering your education mean to you?
+          <br>
+            <input type="checkbox" name="prompt" id="cb11">
+              E11. Why are youth sports an important part of community?
+          <br>
+            <input type="checkbox" name="prompt" id="cb12">
+              E12. Write a one page essay expressing your involvement with UCC Southbury and how it has affected your life. 
+              Explain in what ways your UCC participation has been meaningful to you. (Please use the attached UCC Addendum)            
+          <br>
+            <input type="checkbox" name="prompt" id="cb13">
+              E13. Why is sportsmanship an important part of sports? Provide examples of your own sportsmanship qualities.
+          <br>
+            <input type="checkbox" name="prompt" id="cb14">
+              E14. Describe the challenge you faced and tell how you were able to address and overcome it.
+          <br>
+            <input type="checkbox" name="prompt" id="cb15">
+              E15. What soccer means to me? 250 Word Maximum (Please use the attached Southbury Soccer Addendum)
+          <br>
+            <input type="checkbox" name="prompt" id="cb16">
+              E16. How have you given generously of your time, treasure, and/or talents to improve the lives of others?
+          <br>
+            <input type="checkbox" name="prompt" id="cb17">
+              E17. How has the Southbury Public Library influenced you? (Must Include Library Card #)
+          <br>
+            <input type="checkbox" name="prompt" id="cb18"> 
+              E18. Write a personal statement that demonstrates how you have given generously of your time, treasure, and/or 
+              talents to improve the lives of others.           
+          <br>
+            <input type="checkbox" name="prompt" id="cb19">
+              E19. A Mason is taught to be of good character, to be a good citizen, to give back to the community and to help 
+              the less fortuate. What have you done during your high school career to emulate these characteristics?
+          <br>
+            <input type="checkbox" name="prompt" id="cb20">
+              E20. How have you contributed to the PHS Field Hockey team and what lessons have you learned from Field Hockey that
+              you will use in the future.
+          <br>
+            <input type="checkbox" name="prompt" id="cb21">
+              E21. (200 words or less) on how veterans and or the ideals they stand for have influenced your life during your four years of high school.
+          <br>
+            <input type="checkbox" name="prompt" id="cb22">
+              E22. This year has been a focus on recognizing diversity and fostering attitudes of tolerance and acceptance. In relation to this ideal, tell us something about your experience at Pomperaug High School (in or out of school) that has challenged you to grow, and how this impacts you moving on after high school.
+
+          </div>
+        </form>
+      
+      </form-section>
+
+    </div>
+    
   </body>
 </html>
