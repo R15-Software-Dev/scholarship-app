@@ -164,6 +164,7 @@ export class OutlinedTextField extends LitElement {
     // element and then show the error message if it is not valid.
     this.addEventListener("focusout", () => {
       // Check validity
+      // For some reason checkValidity() returns false
       if (!this.checkValidity()) {
         // We don't want to hide the error if it is a custom error.
         if (this._isCustomError) return;
@@ -184,7 +185,7 @@ export class OutlinedTextField extends LitElement {
     // If this element has its placeholder shown, then it is not valid unless
     // it is not a required question.
     // This accounts for the space character as a placeholder.
-    console.log(`Input is valid: ${this._input.checkValidity()}`);
+    console.log(`Input is ${this._input.checkValidity()}`);
     return this._input.checkValidity();
   }
 
