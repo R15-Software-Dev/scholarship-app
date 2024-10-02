@@ -143,6 +143,7 @@ export class OutlinedTextField extends LitElement {
   @property({ type: String, attribute: "error-text" })
   accessor errorText: string = "";
 
+  private _isCustomError: boolean = false;
   private _errorText: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
@@ -159,15 +160,16 @@ export class OutlinedTextField extends LitElement {
   constructor() {
     super();
 
-    // We can add this here because focus is not automatically set to this
-    // element on the page. It will show the error state of the element
-    // only after the focus on it is lost.
+    // Add this error checking here - will check the validity of the input
+    // element and then show the error message if it is not valid.
     this.addEventListener("focusout", () => {
-      console.log("Focus was lost.");
       // Check validity
       if (!this.checkValidity()) {
+        // We don't want to hide the error if it is a custom error.
+        if (this._isCustomError) return;
         this.hideErrors();
       } else {
+        // We don't want to hide the error if it is a custom error.
         this.showErrors();
       }
     });
@@ -182,12 +184,14 @@ export class OutlinedTextField extends LitElement {
     // If this element has its placeholder shown, then it is not valid unless
     // it is not a required question.
     // This accounts for the space character as a placeholder.
+    console.log(`Input is valid: ${this._input.checkValidity()}`);
     return this._input.checkValidity();
   }
 
   showErrorString(msg: string): void {
     this._errorText = msg;
     this._errorVisible = true;
+    this._isCustomError = true;
   }
 
   showErrors(): void {
