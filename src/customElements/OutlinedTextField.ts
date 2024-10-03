@@ -1,4 +1,11 @@
-import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
+import {
+  LitElement,
+  html,
+  css,
+  nothing,
+  CSSResultGroup,
+  HTMLTemplateResult,
+} from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
@@ -143,7 +150,7 @@ export class OutlinedTextField extends LitElement {
   @property({ type: String, attribute: "error-text" })
   accessor errorText: string = "";
 
-  private _isCustomError: boolean = false;
+  private _isInvalid: boolean = false;
   private _errorText: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
@@ -159,21 +166,6 @@ export class OutlinedTextField extends LitElement {
 
   constructor() {
     super();
-
-    // Add this error checking here - will check the validity of the input
-    // element and then show the error message if it is not valid.
-    this.addEventListener("focusout", () => {
-      // Check validity
-      // For some reason checkValidity() returns false
-      if (!this.checkValidity()) {
-        // We don't want to hide the error if it is a custom error.
-        if (this._isCustomError) return;
-        this.hideErrors();
-      } else {
-        // We don't want to hide the error if it is a custom error.
-        this.showErrors();
-      }
-    });
   }
 
   public checkValidity(): boolean {
@@ -182,17 +174,21 @@ export class OutlinedTextField extends LitElement {
     // This really will just call the checkValidity method on the
     // input element, which should do the work for us.
 
-    // If this element has its placeholder shown, then it is not valid unless
-    // it is not a required question.
-    // This accounts for the space character as a placeholder.
-    console.log(`Input is ${this._input.checkValidity()}`);
+    // There is a case where we will return the value of _isValid, which
+    // is an override for the input's validity.
+    if (this._isInvalid) {
+      console.debug("Custom error displayed: Not checking actual validity");
+      return false;
+    }
     return this._input.checkValidity();
   }
 
+  // Should we use this method, we are responsible for resetting the
+  // error state. It will block automatic error checking.
   showErrorString(msg: string): void {
     this._errorText = msg;
     this._errorVisible = true;
-    this._isCustomError = true;
+    this._isInvalid = true;
   }
 
   showErrors(): void {
@@ -204,6 +200,7 @@ export class OutlinedTextField extends LitElement {
   hideErrors(): void {
     console.log("hiding error");
     this._errorVisible = false;
+    this._isInvalid = false;
   }
 
   private _handleChange(event: Event): void {
@@ -225,7 +222,7 @@ export class OutlinedTextField extends LitElement {
             ?disabled=${this.disabled}
             ?required=${this.required}
             name=${this.name}
-            pattern=${this.pattern}
+            pattern=${this.pattern || nothing}
             @change=${this._handleChange}
           />
           ${this.renderSuffix()}
