@@ -11,10 +11,10 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
     <script src="./bundles/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/scripts.bundle.js"></script>
+    <script src="./bundles/entryPortal.bundle.js"></script>
   </head>
 
-  
+
 
     <!--
       Create a general framework for this application's data entry.
@@ -22,7 +22,7 @@
       At the very least, we do need to include a way to see and select
       any of the already entered scholarships.
     -->
-      
+
 <body>
 
     <tab-bar>
@@ -39,55 +39,56 @@
         name="scholarshipInfo"
         id="scholarshipAdminInfoForm">
 
-        <form-question
-          label="Enter a title"
-          name="sclshpTitle"
-          type="text"
-          id="sclshpTitleInput"
-          required>
-          Scholarship Title
-        </form-question>
+            <form-question
+            label="Enter a title"
+            name="sclshpTitle"
+            type="text"
+            id="sclshpTitleInput"
+            required>
+            Scholarship Title
+            </form-question>
 
-        <form-question
-          label="Enter a name"
-          name="sclshpSponsorName"
-          type="text"
-          id="sclshpSponsorNameInput"
-          required>
-          Scholarship Organization/Sponsor
-        </form-question>
+            <form-question
+            label="Enter a name"
+            name="sclshpSponsorName"
+            type="text"
+            id="sclshpSponsorNameInput"
+            required>
+            Scholarship Organization/Sponsor
+            </form-question>
 
-        <form-question
-          label="Enter a number"
-          name="sclshpAwardsTotal"
-          type="number"
-          id="sclshpAwardsTotalInput"
-          required>
-          Number of Awards
-        </form-question>
+            <form-question
+            label="Enter a number"
+            name="sclshpAwardsTotal"
+            type="number"
+            id="sclshpAwardsTotalInput"
+            required>
+            Number of Awards
+            </form-question>
 
-        <form-question
-          label="Enter an amount"
-          name="sclshpAmountEach"
-          type="number"
-          prefix-text="$"
-          id="sclshpAmountEachInput"
-          required>
-          Amount of each scholarship
-        </form-question>
+            <form-question
+            label="Enter an amount"
+            name="sclshpAmountEach"
+            type="number"
+            prefix-text="$"
+            id="sclshpAmountEachInput"
+            required>
+            Amount of each scholarship
+            </form-question>
 
-        <form-question
-          label="Enter an amount"
-          name="sclshpTotalAmount"
-          type="number"
-          prefix-text="$"
-          id="sclshpTotalAmountInput"
-          required>
-          Total amount of scholarships
-        </form-question>
+            <form-question
+            label="Enter an amount"
+            name="sclshpTotalAmount"
+            type="number"
+            prefix-text="$"
+            id="sclshpTotalAmountInput"
+            required>
+            Total amount of scholarships
+            </form-question>
 
         <!-- TODO Create a regex match field for input elements. -->
-      </form-section>
+        </form-section>
+      </div>
     </div>
 
     <!--Contact Information-->
@@ -173,7 +174,7 @@
           required>
           Zip Code
         </form-question>
-        
+
         <!--Re-style dropdown-->
         <form-quesiton
           label="State"
@@ -235,7 +236,7 @@
             <option value="WI">Wisconsin</option>
             <option value="WY">Wyoming</option>
           </select>
-        </form-quesiton>
+        </form-question>
 
       </form-section>
 
@@ -317,13 +318,13 @@
           name="eligibilityOther"
           id="eligibilityOtherInput">
           Other eligibility factors please list.
-          <br> 
+          <br>
           <textarea></textarea>
         </form>
 
       </form-section>
     </div>
-    
+
     <!--Student Requirements-->
     <div class="tab-panel" id="studentRequirementsPanel">
       <form-section
@@ -431,8 +432,8 @@
           If yes, please make sure the correct one(s) is selected below…
           <div>
             <input type="checkbox" name="prompt" id="cb1">
-              El. Write an essay describing why you have chosen your present major/career direction. 
-              Include any abilities, interests, experiences, employment, clubs you have had that have affected your direction. 
+              El. Write an essay describing why you have chosen your present major/career direction.
+              Include any abilities, interests, experiences, employment, clubs you have had that have affected your direction.
               (If you are undecided, indicate why.) For FCCLA Schol-indicate how FCCLA helped you in your HS career.
           <br>
             <input type="checkbox" name="prompt" id="cb2">
@@ -442,29 +443,29 @@
               E3. Write an essay in completion of this sentence: The continuation of my education will benefit mankind because...
           <br>
             <input type="checkbox" name="prompt" id="cb4">
-              E4. Discuss a person who, or an event that, has had a significant impact on you. 
+              E4. Discuss a person who, or an event that, has had a significant impact on you.
               Tell how it influenced your thinking and/or actions.
           <br>
             <input type="checkbox" name="prompt" id="cb5">
-              E5. Why is community service important? How has it personally affected you and your goals, and what role 
-              do you hope to play in it in the future? (For Middlebury Volunteer Fire Dept. Scholarship please list any 
+              E5. Why is community service important? How has it personally affected you and your goals, and what role
+              do you hope to play in it in the future? (For Middlebury Volunteer Fire Dept. Scholarship please list any
               community service you have personally accomplished.)
           <br>
             <input type="checkbox" name="prompt" id="cb6">
-              E6. Discuss anything of importance to you that would help us to better understand you. This might include 
+              E6. Discuss anything of importance to you that would help us to better understand you. This might include
               aspects of your abilities, interests, experiences, community service and aspirations.
           <br>
             <input type="checkbox" name="prompt" id="cb7">
-              E7. How has being a member of Panther Aquatic Club impacted your high school swimming career? If you are in college, 
+              E7. How has being a member of Panther Aquatic Club impacted your high school swimming career? If you are in college,
               how has it impacted your college swimming experience.
           <br>
             <input type="checkbox" name="prompt" id="cb8">
-              E8. If you had a child who demonstrated some aptitude for swimming as well as a love for 
+              E8. If you had a child who demonstrated some aptitude for swimming as well as a love for
               it-would you encourage them to swim competitively and why?
           <br>
             <input type="checkbox" name="prompt" id="cb9">
-              E9. How has participation in sports been beneficial to your personal, academic and emotional growth? 
-              Include the influence of the organization. (For Pomperaug Pop Warner Scholarship please change sports to football 
+              E9. How has participation in sports been beneficial to your personal, academic and emotional growth?
+              Include the influence of the organization. (For Pomperaug Pop Warner Scholarship please change sports to football
               or cheer. For PHS Softball Scholarships change sports to Softball). (For Pomperaug Grid Iron Change sport to PHS Football)
           <br>
             <input type="checkbox" name="prompt" id="cb10">
@@ -474,8 +475,8 @@
               E11. Why are youth sports an important part of community?
           <br>
             <input type="checkbox" name="prompt" id="cb12">
-              E12. Write a one page essay expressing your involvement with UCC Southbury and how it has affected your life. 
-              Explain in what ways your UCC participation has been meaningful to you. (Please use the attached UCC Addendum)            
+              E12. Write a one page essay expressing your involvement with UCC Southbury and how it has affected your life.
+              Explain in what ways your UCC participation has been meaningful to you. (Please use the attached UCC Addendum)
           <br>
             <input type="checkbox" name="prompt" id="cb13">
               E13. Why is sportsmanship an important part of sports? Provide examples of your own sportsmanship qualities.
@@ -492,12 +493,12 @@
             <input type="checkbox" name="prompt" id="cb17">
               E17. How has the Southbury Public Library influenced you? (Must Include Library Card #)
           <br>
-            <input type="checkbox" name="prompt" id="cb18"> 
-              E18. Write a personal statement that demonstrates how you have given generously of your time, treasure, and/or 
-              talents to improve the lives of others.           
+            <input type="checkbox" name="prompt" id="cb18">
+              E18. Write a personal statement that demonstrates how you have given generously of your time, treasure, and/or
+              talents to improve the lives of others.
           <br>
             <input type="checkbox" name="prompt" id="cb19">
-              E19. A Mason is taught to be of good character, to be a good citizen, to give back to the community and to help 
+              E19. A Mason is taught to be of good character, to be a good citizen, to give back to the community and to help
               the less fortuate. What have you done during your high school career to emulate these characteristics?
           <br>
             <input type="checkbox" name="prompt" id="cb20">
@@ -512,10 +513,10 @@
 
           </div>
         </form>
-      
+
       </form-section>
 
     </div>
-    
+
   </body>
 </html>

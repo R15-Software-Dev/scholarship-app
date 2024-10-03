@@ -14,8 +14,15 @@ module.exports = {
         "./src/customElements/modalWindow.ts",
       ],
     },
-    scripts: {
-      import: "./src/scripts/scripts.js",
+    index: {
+      import: "./src/scripts/index.js",
+      library: {
+        name: "Lib",
+        type: "var",
+      },
+    },
+    entryPortal: {
+      import: "./src/scripts/entryPortal.js",
       library: {
         name: "Lib",
         type: "var",

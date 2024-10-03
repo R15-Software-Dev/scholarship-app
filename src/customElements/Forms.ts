@@ -1,5 +1,11 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, queryAssignedElements, query, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  queryAssignedElements,
+  query,
+  state,
+} from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { OutlinedTextField } from "./OutlinedTextField";
 
@@ -14,17 +20,19 @@ export class FormQuestion extends LitElement {
       backrgound-color: inherit;
     }
   `;
-  
-  @property({type: String}) accessor type: string = "";
-  @property({type: String}) accessor name: string = "";
-  @property({type: String}) accessor id: string = "";
-  @property({type: Boolean}) accessor required: boolean = false;
-  @property({type: String}) accessor label: string = "";
-  @property({type: Boolean}) accessor disabled: boolean = false;
-  @property({type: String, attribute: "suffix-text"}) accessor suffixText = "";
-  @property({type: String, attribute: "prefix-text"}) accessor prefixText = "";
+
+  @property({ type: String }) accessor type: string = "";
+  @property({ type: String }) accessor name: string = "";
+  @property({ type: String }) accessor id: string = "";
+  @property({ type: Boolean }) accessor required: boolean = false;
+  @property({ type: String }) accessor label: string = "";
+  @property({ type: Boolean }) accessor disabled: boolean = false;
+  @property({ type: String, attribute: "suffix-text" }) accessor suffixText =
+    "";
+  @property({ type: String, attribute: "prefix-text" }) accessor prefixText =
+    "";
   // @property({type: String}) accessor value: string = "";
-  @property({type: ElementInternals}) accessor internals: ElementInternals;
+  @property({ type: ElementInternals }) accessor internals: ElementInternals;
 
   @query("outlined-text-field") private accessor _input: OutlinedTextField;
 
@@ -37,6 +45,10 @@ export class FormQuestion extends LitElement {
     return this._input.checkValidity();
   }
 
+  set value(newValue: string) {
+    this._input.value = newValue;
+  }
+
   get value() {
     return this._input.value;
   }
@@ -45,7 +57,9 @@ export class FormQuestion extends LitElement {
     // This element MUST be used within a FormSection or HTMLFormElement.
     return html`
       <div>
-        <label for=${this.name}><h3><slot></slot></h3></label>
+        <label for=${this.name}
+          ><h3><slot></slot></h3
+        ></label>
         <outlined-text-field
           placeholder=${this.label}
           ?disabled=${this.disabled}
@@ -103,30 +117,30 @@ export class FormSection extends LitElement {
     }
   `;
 
-  @property({type: String}) accessor header: string = "";
-  @property({type: String}) accessor name: string = "";
-  @property({type: String}) accessor id: string = "";
-  @property({type: String}) accessor action: string = "";
-  @property({type: String}) accessor method: string = "";
+  @property({ type: String }) accessor header: string = "";
+  @property({ type: String }) accessor name: string = "";
+  @property({ type: String }) accessor id: string = "";
+  @property({ type: String }) accessor action: string = "";
+  @property({ type: String }) accessor method: string = "";
   @state() protected accessor _checkShown: boolean = false;
 
   @query("form") accessor _formElement: HTMLFormElement;
-  @queryAssignedElements({selector: "form-question", flatten: true})
-    accessor _questions: FormQuestion[];
+  @queryAssignedElements({ selector: "form-question", flatten: true })
+  accessor _questions: FormQuestion[];
 
   private disableForm(): void {
     const questions = this._questions;
 
-    questions.forEach(question => {
-      question.setAttribute('disabled', "true");
+    questions.forEach((question) => {
+      question.setAttribute("disabled", "true");
     });
   }
 
   private enableForm(): void {
     const questions = this._questions;
 
-    questions.forEach(question => {
-      question.removeAttribute('disabled');
+    questions.forEach((question) => {
+      question.removeAttribute("disabled");
     });
   }
 
@@ -136,7 +150,7 @@ export class FormSection extends LitElement {
 
     // Build the object that will send the data to the server.
     const formData = new FormData();
-    formData.append('formId', this._formElement.id);
+    formData.append("formId", this._formElement.id);
 
     // Get the questions from the form.
     const customQuestions = this._questions;
@@ -151,20 +165,25 @@ export class FormSection extends LitElement {
       console.log(`Question ID: ${question.name}`);
       // if (!input.reportValidity()) send = false;
       formData.append(question.name, question.value);
-    } 
+    }
 
-    console.log(`Built FormData object: ${JSON.stringify(Object.fromEntries(formData))}`);
+    console.log(
+      `Built FormData object: ${JSON.stringify(Object.fromEntries(formData))}`,
+    );
 
     // Assuming there are no errors, send data to Google's backend.
     if (send) {
       this.disableForm();
-      
+
       try {
         // Anytime the google backend is referenced, Typescript throws compilation errors.
         // This is because in its current state, "google" is not defined. This is only available
         // within the Apps Script environment. Ignore these lines for now.
         // @ts-ignore
-        if (typeof google === 'undefined') throw new Error("This script is being run outside of the Google scripting environment.");
+        if (typeof google === "undefined")
+          throw new Error(
+            "This script is being run outside of the Google scripting environment.",
+          );
 
         // @ts-ignore
         google.script.run
@@ -192,36 +211,35 @@ export class FormSection extends LitElement {
     // First check if values are valid by calling checkValidity on
     // all the form's inputs.
     let submittable = true;
-    this._questions.forEach(question => {
+    this._questions.forEach((question) => {
       // Check validity of questions.
       if (!question.checkValidity()) {
         console.log(`Question ${question.name} is not valid.`);
         submittable = false;
       }
     });
-    
+
     // If the form has invalid responses, do not submit the form and display
     // the error prompts underneath all the questions.
-    if (!submittable)
-      return;
+    if (!submittable) return;
 
     // Build the FormData to send to the API.
-    const formData = new FormData(); 
+    const formData = new FormData();
 
     this._questions.forEach((question) => {
       formData.set(question.name, question.value);
     });
-    
+
     fetch(this.action, {
       method: this.method,
-      body: JSON.stringify(Object.fromEntries(formData.entries()))
+      body: JSON.stringify(Object.fromEntries(formData.entries())),
     })
-    .then(response => response.json)
-    .then(data => {
+      .then((response) => response.json)
+      .then((data) => {
         console.log("Success: " + data);
         this._checkShown = true;
       })
-    .catch(error => {
+      .catch((error) => {
         console.error(`An error occurred: ${error}`);
       });
 
@@ -233,13 +251,14 @@ export class FormSection extends LitElement {
       <div class="container">
         <!-- Create a box that contains our form. -->
         <h1>${this.header}</h1>
-        <hr>
-        <form 
+        <hr />
+        <form
           id=${this.id}
           name=${this.name}
           action=${this.action}
           method=${this.method}
-          @submit=${this.handleFormAws}>
+          @submit=${this.handleFormAws}
+        >
           <slot></slot>
           <div class="buttoncontainer">
             <action-button type="submit" form=${this.id}>Submit</action-button>

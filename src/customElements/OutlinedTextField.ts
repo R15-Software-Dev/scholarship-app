@@ -1,4 +1,11 @@
-import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
+import {
+  LitElement,
+  html,
+  css,
+  nothing,
+  CSSResultGroup,
+  HTMLTemplateResult,
+} from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
@@ -35,7 +42,7 @@ export class OutlinedTextField extends LitElement {
       width: auto;
       padding: 5px;
       padding-left: 8px;
-      
+
       & span {
         color: var(--theme-error-color);
       }
@@ -128,15 +135,23 @@ export class OutlinedTextField extends LitElement {
 
   @property({ type: String }) accessor placeholder: string = "";
   @property({ type: String }) accessor width: string = "300px";
-  @property({ type: String, attribute: "suffix-text" }) accessor suffixText: string = "";
-  @property({ type: String, attribute: "prefix-text" }) accessor prefixText: string = "";
+  @property({ type: String, attribute: "suffix-text" })
+  accessor suffixText: string = "";
+  @property({ type: String, attribute: "prefix-text" })
+  accessor prefixText: string = "";
   @property({ type: String }) accessor pattern: string = "";
-  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
-  @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean =
+    false;
+  @property({ type: Boolean, reflect: true }) accessor required: boolean =
+    false;
   @property({ type: String }) accessor type: string = "text";
   @property({ type: String }) accessor value: string = "";
   @property({ type: String }) accessor name: string = "";
-  @property({ type: String, attribute: "error-text" }) accessor errorText: string = "";
+  @property({ type: String, attribute: "error-text" })
+  accessor errorText: string = "";
+
+  private _isInvalid: boolean = false;
+  private _errorText: string = "";
 
   @query("input") private accessor _input: HTMLInputElement;
   @query("label") private accessor _label: HTMLLabelElement;
@@ -151,19 +166,6 @@ export class OutlinedTextField extends LitElement {
 
   constructor() {
     super();
-
-    // We can add this here because focus is not automatically set to this
-    // element on the page. It will show the error state of the element
-    // only after the focus on it is lost.
-    this.addEventListener('focusout', () => {
-      console.log("Focus was lost.");
-      // Check validity
-      if (!this.checkValidity()) {
-        this.hideErrors();
-      } else {
-        this.showErrors();
-      }
-    });
   }
 
   public checkValidity(): boolean {
@@ -172,20 +174,33 @@ export class OutlinedTextField extends LitElement {
     // This really will just call the checkValidity method on the
     // input element, which should do the work for us.
 
-    // If this element has its placeholder shown, then it is not valid unless
-    // it is not a required question.
-    // This accounts for the space character as a placeholder.
+    // There is a case where we will return the value of _isValid, which
+    // is an override for the input's validity.
+    if (this._isInvalid) {
+      console.debug("Custom error displayed: Not checking actual validity");
+      return false;
+    }
     return this._input.checkValidity();
+  }
+
+  // Should we use this method, we are responsible for resetting the
+  // error state. It will block automatic error checking.
+  showErrorString(msg: string): void {
+    this._errorText = msg;
+    this._errorVisible = true;
+    this._isInvalid = true;
   }
 
   showErrors(): void {
     console.log("showing error");
+    this._errorText = this.errorText;
     this._errorVisible = true;
   }
 
   hideErrors(): void {
     console.log("hiding error");
     this._errorVisible = false;
+    this._isInvalid = false;
   }
 
   private _handleChange(event: Event): void {
@@ -195,7 +210,9 @@ export class OutlinedTextField extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div>
-        <div class="input-container ${classMap({errors: this._errorVisible})}">
+        <div
+          class="input-container ${classMap({ errors: this._errorVisible })}"
+        >
           ${this.renderPrefix()}
           <!-- There is a space character as a placeholder, which is slightly hacky, but works with the css :placeholder-shown -->
           <input
@@ -205,14 +222,14 @@ export class OutlinedTextField extends LitElement {
             ?disabled=${this.disabled}
             ?required=${this.required}
             name=${this.name}
-            pattern=${this.pattern}
+            pattern=${this.pattern || nothing}
             @change=${this._handleChange}
           />
           ${this.renderSuffix()}
           <label>${this.placeholder}</label>
         </div>
-        <div class=${classMap({error: true, shown: this._errorVisible})}>
-          <span>This is a test</span>
+        <div class=${classMap({ error: true, shown: this._errorVisible })}>
+          <span>${this._errorText}</span>
         </div>
       </div>
     `;
