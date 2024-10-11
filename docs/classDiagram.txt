@@ -1,0 +1,199 @@
+@startuml
+class "**HTML Document**" as Document
+
+interface InputElement extends LitElement {
+  +required: boolean
+  +disabled: boolean
+  +getValue(): string
+  +checkValidity(): boolean
+}
+
+interface LitElement {
+  -styles: CSSResultGroup
+  +render(): HTMLTemplateResult
+}
+
+class TabBar extends LitElement {
+  .. Events ..
+  onchange
+  --
+  -_tabs: CustomTab[]
+  -activeTab: CustomTab
+  -activeTabIndex: number
+  --
+  -handleClick(Event): void
+  +activateTab(CustomTab): void
+}
+
+class CustomTab extends LitElement {
+  .. Events ..
+  onclick
+  --
+  +panelId: string
+  +active: boolean
+  +disabled: boolean
+  --
+  -_handleClick(MouseEvent): void
+}
+
+class TabPanel extends LitElement {
+}
+
+class FormSection extends LitElement {
+  .. Events ..
+  onsubmit
+  .. Slots ..
+  default
+  --
+  +header: string
+  +name: string
+  +id: string
+  +action: string
+  +method: string
+  -_formElement: HTMLFormElement
+  -_questions: FormQuestion[]
+  --
+  +disableForm(): void
+  +enableForm(): void
+  -handleForm(SubmitEvent): void
+}
+
+class FormQuestion extends LitElement {
+  .. Slots ..
+  default
+  --
+  +type: string
+  +name: string
+  +id: string
+  +label: string
+  -_internals: ElementInternals
+  -_input: InputElement
+  --
+  +checkValidity(): boolean
+}
+
+class MultiEntry extends InputElement {
+  -_entries: EntryField[]
+  -_entriesSlot: HTMLSlotElement
+  -_modalWindow: ModalWindow
+  --
+  -showModal(): void
+  -addEntry(): void
+}
+
+class ModalWindow extends LitElement {
+  .. Events ..
+  onsubmit
+  --
+  -_modalVisible: boolean
+  -_modalContainer: HTMLDivElement
+  -_cancelButton: ActionButton
+  -_saveButton: ActionButton
+  -_form: HTMLFormElement
+  -_inputs: InputElement[]
+  --
+  +showModal(): void
+  +hideModal(): void
+  +cancel(): void
+  +submit(): void
+  +getInformation(): Object
+}
+
+class EntryField extends LitElement {
+  .. Event ..
+  onclick
+}
+
+class ActionButton extends LitElement {
+  .. Event ..
+  onclick
+  --
+  +type: string
+}
+
+class SelectDropdown extends InputElement {
+  .. Event ..
+  onchange
+}
+
+class SelectOption extends LitElement {
+  .. Event ..
+  onclick
+  --
+  +selected: boolean
+}
+
+class CheckboxElement extends InputElement {
+  .. Event ..
+  onchange
+  --
+  +checkType: string
+  --
+  -isCheckbox(): boolean
+}
+
+class CheckboxOption extends LitElement {
+  .. Event ..
+  onclick
+  --
+  +checked: boolean
+}
+
+abstract class TextField extends InputElement {
+  .. Event ..
+  onchange
+  focusout
+  --
+  +placeholder: string
+  +width: string
+  +type: string
+  +value: string
+  +name: string
+  +errorText: string
+  +maxLength: number
+  -_input: HTMLInputElement
+  -_label: HTMLLabelElement
+  -_errorVisible: boolean
+  -_hasPrefix: boolean
+  --
+  +showErrorString(): void
+  +showErrors(): void
+  +hideErrors(): void
+  -_handleChange(Event): void
+}
+
+class TextArea extends TextField {
+  +rows: number
+  +wrap: string
+}
+
+class OutlinedTextField extends TextField {
+  +pattern: string
+  +suffixText: string
+  +prefixText: string
+  -_prefix: HTMLSpanElement
+  -_suffix: HTMLSpanElement
+  --
+  -_renderPrefix(): void
+  -_renderSuffix(): void
+}
+
+Document "1" *-- "1" TabBar
+Document "1" *-- "1..*" TabPanel
+
+TabBar "1" *-- "1..*" CustomTab
+
+TabPanel "1" *-- "1" FormSection
+FormSection "1" *-- "1..*" FormQuestion
+FormQuestion "1" *-- "1" InputElement
+CheckboxElement "1" *-- "1..*" CheckboxOption
+SelectDropdown "1" *-- "1..*" SelectOption
+MultiEntry "1" *-- "1..*" EntryField
+
+ActionButton "1" --* "1" MultiEntry
+ActionButton "1" --* "1" FormSection
+ActionButton "2" --* "1" ModalWindow
+
+ModalWindow "1" --* "1" MultiEntry
+ModalWindow "1" --* "1" FormSection
+@enduml
