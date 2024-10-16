@@ -7,6 +7,7 @@ import {
 } from "lit-element";
 import { customElement, property, query } from "lit-element/decorators.js";
 import { ModalWindow } from "./modalWindow";
+import { InputElement } from "./InputElement";
 
 type FormEntry = {
   // Base element for the entry - is passed by reference, so we can modify it
@@ -17,9 +18,13 @@ type FormEntry = {
 };
 
 @customElement("multi-entry")
-export class MultiEntry extends LitElement {
+export class MultiEntry extends LitElement implements InputElement {
   static styles?: CSSResultGroup = css``;
 
+  @property({ type: Boolean, reflect: true })
+  accessor disabled: boolean = false;
+  @property({ type: String, reflect: true })
+  accessor name: string = "";
   @property({ type: Boolean, reflect: true })
   accessor required: boolean = false;
   @property({ type: {} })
@@ -28,6 +33,24 @@ export class MultiEntry extends LitElement {
   private accessor _entriesSlot!: HTMLSlotElement;
   @query("modal-window")
   private accessor _modalWindow!: ModalWindow;
+
+  getValue(): string {
+    // Converts values into a string and returns it.
+    return this._entries.map((entry) => entry.entryData).toString();
+  }
+
+  checkValidity(): boolean {
+    // Currently a prototype, will need to be updated.
+    if (this.required && this._entries.length === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  displayError(): void {
+    // TODO Implement this function
+  }
 
   constructor() {
     // Initialize the entries array

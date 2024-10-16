@@ -1,6 +1,6 @@
 import { LitElement } from "lit";
 
-export interface InputElement extends LitElement {
+export interface InputElement {
   required: boolean;
   disabled: boolean;
 
