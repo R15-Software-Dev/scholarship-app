@@ -5,7 +5,12 @@ import {
   CSSResultGroup,
   HTMLTemplateResult,
 } from "lit-element";
-import { customElement, property, query, queryAssignedElements } from "lit-element/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAssignedElements,
+} from "lit-element/decorators.js";
 import { ModalWindow } from "./modalWindow";
 import { InputElement } from "./InputElement";
 
@@ -13,7 +18,7 @@ import { InputElement } from "./InputElement";
 export class Dropdown extends LitElement implements InputElement {
   static styles: CSSResultGroup = css`
     :host {
-      font-family: 'Roboto', sans-serif;
+      font-family: "Roboto", sans-serif;
     }
 
     .select-container {
@@ -26,7 +31,9 @@ export class Dropdown extends LitElement implements InputElement {
       margin-top: 6px;
       height: 48px;
       position: relative;
-      transition: border-color 400ms ease, background-color 400ms ease;
+      transition:
+        border-color 400ms ease,
+        background-color 400ms ease;
     }
 
     select {
@@ -73,14 +80,13 @@ export class Dropdown extends LitElement implements InputElement {
     }
   `;
 
-
   @property({ type: Boolean, reflect: true }) required: boolean = false;
   @property({ type: Boolean, reflect: true }) disabled: boolean = false; // Added disabled property
   @property({ type: String }) value: string = ""; // Single value for each dropdown element
-  
 
-  @query('select') selectElement!: HTMLSelectElement;
-  @queryAssignedElements({selector: "option", flatten: true}) accessor _options = Array<HTMLElement>;
+  @query("select") accessor _selectElement!: HTMLSelectElement;
+  @queryAssignedElements({ selector: "option", flatten: true })
+  accessor _options = Array<HTMLElement>();
 
   constructor() {
     super();
@@ -99,12 +105,11 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   handleSlotChange(event: Event) {
-    let elements: HTMLElement[] = new this._options;
-    console.log(elements, this._options);
-    elements.map((element: HTMLOptionElement) => {
-      this.selectElement.appendChild(element);
+    this._options.map((element: HTMLOptionElement) => {
+      // Add each element to the select element.
+      console.log(`Transferring ownership of html element`);
+      this._selectElement.appendChild(element);
     });
-   
   }
 
   getValue(): string {
@@ -112,12 +117,12 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   checkValidity(): boolean {
-    return this.required ? this.value !== '' : true;
+    return this.required ? this.value !== "" : true;
   }
 
   displayError(): void {
     if (!this.checkValidity()) {
-      this.classList.add('errors');
+      this.classList.add("errors");
     }
   }
 }
