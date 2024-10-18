@@ -1,5 +1,10 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, query, queryAssignedElements } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAssignedElements,
+} from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { createRipple, rippleCSS } from "./Ripple";
 
@@ -7,9 +12,8 @@ import { createRipple, rippleCSS } from "./Ripple";
 // It will create a space where we can detect changes to our tabs, and show the correct TabPanel
 // when needed. It will also handle disabled tabs.
 
-@customElement('tab-bar')
+@customElement("tab-bar")
 export class TabBar extends LitElement {
-
   static styles?: CSSResultGroup = css`
     div {
       margin-bottom: 20px;
@@ -21,8 +25,9 @@ export class TabBar extends LitElement {
     }
   `;
 
-  @query('slot') accessor slotElement!: HTMLSlotElement | null;
-  @queryAssignedElements({selector: "c-tab", flatten: true}) accessor _tabs: Array<Tab>;
+  @query("slot") accessor slotElement!: HTMLSlotElement | null;
+  @queryAssignedElements({ selector: "c-tab", flatten: true })
+  accessor _tabs: Array<Tab>;
 
   get activeTab() {
     return this._tabs.find((tab) => tab.active) ?? null;
@@ -33,7 +38,7 @@ export class TabBar extends LitElement {
     }
   }
 
-  @property({type: Number, attribute: 'active-tab-index'})
+  @property({ type: Number, attribute: "active-tab-index" })
   get activeTabIndex(): number {
     // There is currently a bug with this.
     return this._tabs.findIndex((tab) => tab.active);
@@ -42,7 +47,7 @@ export class TabBar extends LitElement {
     const activateTabAtIndex = () => {
       const tab = this._tabs[index];
       if (tab) this.activateTab(tab);
-    }
+    };
 
     if (!this.slotElement) {
       this.updateComplete.then(activateTabAtIndex);
@@ -53,7 +58,7 @@ export class TabBar extends LitElement {
   }
 
   private get focusedTab() {
-    return this._tabs.find((tab) => tab.matches(':focus-within'));
+    return this._tabs.find((tab) => tab.matches(":focus-within"));
   }
 
   protected render(): HTMLTemplateResult {
@@ -64,7 +69,7 @@ export class TabBar extends LitElement {
     `;
   }
 
-  private async handleClick(event: Event) {
+  private async handleClick(event: MouseEvent) {
     console.log("Found click event!");
     const tab = event.target as Tab;
     // Allow event to bubble to other recievers
@@ -78,20 +83,20 @@ export class TabBar extends LitElement {
   }
 
   activateTab(tab: Tab) {
-    const {_tabs} = this;
+    const { _tabs } = this;
     if (!_tabs.includes(tab) || tab.disabled) {
       // This ignores the request if the tab is not a child of the TabBar.
       return;
     }
 
     for (const tabElement of _tabs) {
-      tabElement.active = (tabElement === tab);
+      tabElement.active = tabElement === tab;
     }
 
     // This event is interpreted at the TabBar sending a change event.
     // The button should also send one, however this is the one that we should be listening for.
     this.dispatchEvent(
-      new Event('change', {bubbles: true, cancelable: true})
+      new Event("change", { bubbles: true, cancelable: true }),
     );
   }
 }
@@ -101,13 +106,15 @@ export class Tab extends LitElement {
   static styles?: CSSResultGroup = css`
     .container {
       &::after {
-        content: '';
+        content: "";
         width: 0;
         height: 3px;
         margin: auto;
         display: block;
         background: transparent;
-        transition: width 150ms ease, background-color 150ms ease;
+        transition:
+          width 150ms ease,
+          background-color 150ms ease;
       }
       &.active::after {
         width: 100%;
@@ -139,19 +146,24 @@ export class Tab extends LitElement {
     ${rippleCSS}
   `;
 
-  @property({type: String, attribute: "panel-id"}) accessor panelId: string = "";
-  @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
-  @property({type: Boolean, reflect: true}) accessor active: boolean = false;
+  @property({ type: String, attribute: "panel-id" }) accessor panelId: string =
+    "";
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean =
+    false;
+  @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
   private readonly _internals = this.attachInternals;
 
   protected render(): HTMLTemplateResult {
     return html`
       <!-- This is essentially a customized button. -->
-      <div class="${classMap({container: true, active: this.active, disabled: this.disabled})}">
-        <div
-          class="button"
-          role="tab"
-          @click=${this._handleClick}>
+      <div
+        class="${classMap({
+          container: true,
+          active: this.active,
+          disabled: this.disabled,
+        })}"
+      >
+        <div class="button" role="tab" @click=${this._handleClick}>
           <!-- Define where text and/or icons will appear. -->
           <slot name="icon"></slot>
           <slot>
@@ -171,4 +183,3 @@ export class Tab extends LitElement {
     createRipple(event);
   }
 }
-
