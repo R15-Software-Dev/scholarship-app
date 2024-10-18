@@ -1,8 +1,16 @@
-import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import {
+  LitElement,
+  html,
+  css,
+  CSSResultGroup,
+  HTMLTemplateResult,
+} from "lit-element";
+import { customElement, property, query, queryAssignedElements } from "lit-element/decorators.js";
+import { ModalWindow } from "./modalWindow";
+import { InputElement } from "./InputElement";
 
 @customElement("drop-down")
-export class Dropdown extends LitElement {
+export class Dropdown extends LitElement implements InputElement {
   static styles: CSSResultGroup = css`
     :host {
       font-family: 'Roboto', sans-serif;
@@ -18,9 +26,7 @@ export class Dropdown extends LitElement {
       margin-top: 6px;
       height: 48px;
       position: relative;
-      transition:
-        border-color 400ms ease,
-        background-color 400ms ease;
+      transition: border-color 400ms ease, background-color 400ms ease;
     }
 
     select {
@@ -68,19 +74,50 @@ export class Dropdown extends LitElement {
   `;
 
 
+  @property({ type: Boolean, reflect: true }) required: boolean = false;
+  @property({ type: Boolean, reflect: true }) disabled: boolean = false; // Added disabled property
+  @property({ type: String }) value: string = ""; // Single value for each dropdown element
+  
 
-  protected render(): HTMLTemplateResult {
+  @query('select') selectElement!: HTMLSelectElement;
+  @queryAssignedElements({selector: "option", flatten: true}) accessor _options = Array<HTMLElement>;
+
+  constructor() {
+    super();
+  }
+
+  // Render the dropdown with a single value
+  render() {
     return html`
       <div class="select-container">
-        <span class="prefix">▼</span>
         <select>
+          <option value="" disabled selected>Select a state</option>
         </select>
-        <span class="suffix"></span>
+        <slot @slotchange="${this.handleSlotChange}"></slot>
       </div>
     `;
   }
 
-  public getValue(){
-    
+  handleSlotChange(event: Event) {
+    let elements: HTMLElement[] = new this._options;
+    console.log(elements, this._options);
+    elements.map((element: HTMLOptionElement) => {
+      this.selectElement.appendChild(element);
+    });
+   
+  }
+
+  getValue(): string {
+    return this.value;
+  }
+
+  checkValidity(): boolean {
+    return this.required ? this.value !== '' : true;
+  }
+
+  displayError(): void {
+    if (!this.checkValidity()) {
+      this.classList.add('errors');
+    }
   }
 }
