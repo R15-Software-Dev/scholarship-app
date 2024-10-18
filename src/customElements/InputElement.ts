@@ -1,5 +1,3 @@
-import { LitElement } from "lit";
-
 export interface InputElement {
   required: boolean;
   disabled: boolean;
