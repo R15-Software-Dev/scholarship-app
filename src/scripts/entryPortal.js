@@ -1,14 +1,14 @@
 $(function () {
   const activeTab = document.querySelector("tab-bar").activeTab;
-  $(`#${activeTab.panelId}`).show();
+  $(`#${activeTab.panelId}`).attr("active", true);
 
   $("tab-bar").on("change", () => {
     const tabBar = document.querySelector("tab-bar");
     const panelId = tabBar.activeTab.panelId;
 
     // Hide all panels, then show the correct one.
-    $(".tab-panel").hide();
-    $(`#${panelId}`).show();
+    $("tab-panel").removeAttr("active");
+    $(`#${panelId}`).attr("active", true);
   });
 
   // Listen for change event on email input
