@@ -1,32 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html>
   <head>
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    <meta name="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta
+      name="Cross-Origin-Opener-Policy"
+      content="same-origin-allow-popups"
+    />
 
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <script src="./bundles/customElements.bundle.js" type="module"></script>
     <!-- Google Signin Scripts -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="./bundles/scripts.bundle.js" defer></script>
+    <script src="./bundles/index.bundle.js" defer></script>
     <script>
       async function handleTokenResponse(response) {
         // Send the response to our API
-        const tokenResponse = await fetch("https://qngitit3sb.execute-api.us-east-1.amazonaws.com/demo/sign-in", {
-          method: "POST",
-          body: JSON.stringify({ token: response })
-        });
+
+          "https://qngitit3sb.execute-api.us-east-1.amazonaws.com/demo/sign-in",
+          {
+            method: "POST",
+            body: JSON.stringify({ token: response }),
+          },
+        );
 
         const body = await tokenResponse.json();
-        document.querySelector("#loginLabel").innerHTML = `Response: ${body.Message}`;
+        document.querySelector("#loginLabel").innerHTML =
+          `Response: ${body.Message}`;
         console.log(body);
       }
     </script>
@@ -35,27 +46,29 @@
   <body>
     <!--
       This is just a demo of AWS as a suggested platform.
-      It will simply show how APIs, website access, and data storage will work. 
+      It will simply show how APIs, website access, and data storage will work.
     -->
 
     <!-- This code adds the SSO button. -->
     <div id="signin-container">
-      <div id="g_id_onload"
+      <div
+        id="g_id_onload"
         data-client_id="817432784177-0b190flgk60cntjpdesjebbea3meq10k.apps.googleusercontent.com"
         data-context="signin"
         data-ux_mode="popup"
         data-callback="handleTokenResponse"
-        kdata-auto_prompt="false">
-      </div>
+        kdata-auto_prompt="false"
+      ></div>
 
-      <div class="g_id_signin"
+      <div
+        class="g_id_signin"
         data-type="standard"
         data-shape="rectangular"
         data-theme="outline"
         data-text="signin_with"
         data-size="large"
-        data-logo_alignment="left">
-      </div>
+        data-logo_alignment="left"
+      ></div>
       <p id="loginLabel"></p>
     </div>
 
@@ -64,40 +77,46 @@
       <c-tab panel-id="scanPanel">View Entries</c-tab>
     </tab-bar>
 
-    <div class="tab-panel" id="entryPanel">
+    <tab-panel id="entryPanel">
       <form-section
         header="Scholarship Demo"
         name="scholarshipDemo"
         id="scholarshipDemoForm"
         action="https://qngitit3sb.execute-api.us-east-1.amazonaws.com/demo/tableWrite"
-        method="POST">
+        method="POST"
+      >
         <form-question
           label="Short answer text"
           name="firstName"
           type="text"
-          id="demoFirstNameInput">
+          id="demoFirstNameInput"
+        >
           Demo's First Name
         </form-question>
         <form-question
           label="Short answer text"
           name="lastName"
           type="text"
-          id="demoLastNameInput">
+          id="demoLastNameInput"
+        >
           Demo's Last Name
         </form-question>
         <form-question
           label="Enter a valid email"
           name="email"
           type="text"
-          id="demoEmailInput">
+          id="demoEmailInput"
+        >
           Demo's Email Address
         </form-question>
       </form-section>
-    </div>
+    </tab-panel>
 
-    <div class="tab-panel" id="scanPanel">
-      <action-button id="listButton" type="button" style="margin:auto;">List All Users</action-button>
+    <tab-panel id="scanPanel">
+      <action-button id="listButton" type="button" style="margin: auto"
+        >List All Users</action-button
+      >
       <div id="scanContent"></div>
-    </div>
+    </tab-panel>
   </body>
 </html>

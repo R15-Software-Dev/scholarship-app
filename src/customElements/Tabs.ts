@@ -145,7 +145,6 @@ export class Tab extends LitElement {
 
     ${rippleCSS}
   `;
-
   @property({ type: String, attribute: "panel-id" }) accessor panelId: string =
     "";
   @property({ type: Boolean, reflect: true }) accessor disabled: boolean =
@@ -181,5 +180,31 @@ export class Tab extends LitElement {
     event.stopPropagation();
     this.click();
     createRipple(event);
+  }
+}
+
+@customElement("tab-panel")
+export class TabPanel extends LitElement {
+  static styles?: CSSResultGroup = css`
+    div {
+      display: none;
+
+      &.active {
+        display: block;
+      }
+    }
+  `;
+
+  // This element is simply designed to hold content that is associated with a Tab.
+  // It will be shown when the Tab is active.
+
+  @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
+
+  protected render(): HTMLTemplateResult {
+    return html`
+      <div class="${classMap({ active: this.active })}">
+        <slot></slot>
+      </div>
+    `;
   }
 }
