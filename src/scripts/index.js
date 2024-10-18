@@ -2,7 +2,6 @@ $(function () {
   // Show the correct first tab panel, based on what was marked as the
   // default active tab
   const activeTab = document.querySelector("tab-bar").activeTab;
-  console.log(`Attempting to show panel with id ${activeTab.panelId}`);
   $(`#${activeTab.panelId}`).attr("active", true);
 
   $("tab-bar").on("change", () => {
