@@ -149,7 +149,7 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   getValue(): string {
-    return this.value;
+    return this._selectElement.value;
   }
 
   checkValidity(): boolean {
