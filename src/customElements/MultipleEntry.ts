@@ -48,7 +48,11 @@ export class MultiEntry extends LitElement implements InputElement {
     }
   }
 
-  displayError(): void {
+  displayError(message: string): void {
+    // TODO Implement this function
+  }
+
+  clearError(): void {
     // TODO Implement this function
   }
 
