@@ -99,7 +99,7 @@ export class Dropdown extends LitElement implements InputElement {
   render() {
     return html`
       <div class="select-container">
-        <select @change=${this.handleSelectChange}>
+        <select>
           <option value="" disabled selected>Select a state</option>
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
@@ -115,24 +115,18 @@ export class Dropdown extends LitElement implements InputElement {
     });
   }
 
-  handleSelectChange(event: Event) {
-    this.value = this._selectElement.value;
-
-    // Make sure that this element knows it has been changed.
-    // This is important for the form to know that the element has been changed,
-    // and is used in checkValidity() to determine if the element is valid.
-    // This also works because the user cannot change the value of the select element
-    // back to the default value.
-    this._hasChanged = true;
-  }
-
   getValue(): string {
     return this.value;
   }
 
   checkValidity(): boolean {
-    // return this.required ? this.value !== "" : true;
-    return this._selectElement.checkValidity();
+    // Check if the value is empty and the element is required
+    if (this.required && !this.disabled) {
+      if (this.value !== "") return true;
+      else return false;
+    }
+    // Default to true if the element is not required and is enabled
+    else return true;
   }
 
   displayError(): void {
