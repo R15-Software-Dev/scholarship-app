@@ -88,20 +88,18 @@ export class Dropdown extends LitElement implements InputElement {
       opacity: 1;
     }
 
-    .shown {
-      display: block;
+    .hidden {
+      display: none;
     }
 
     div .error {
       color: var(--theme-error-color);
       font-size: 10pt;
       margin: 0;
-      display: none;
     }
 
     p {
       &.error {
-        display: block;
         color: var(--theme-error-color);
       }
     }
@@ -136,7 +134,7 @@ export class Dropdown extends LitElement implements InputElement {
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
       </div>
-      <div id="error-message" class=${classMap({ error: true, shown: this._showError })}>
+      <div id="error-message" class=${classMap({ error: true, hidden: !this._showError })}>
         <p class="error">${this._errorMessage}</p>
       </div>
     `;
@@ -165,13 +163,15 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   displayError(): void {
-    console.log("attempting to show error");
     // Set the error message to the default message if it is empty
     // Otherwise, use the custom message
-    if (this._errorMessage === "") {
+    if (this._errorMessage === "")
       this._errorMessage = this.errorMessage;
-    }
 
     this._showError = true;
+  }
+
+  clearError(): void {
+    this._showError = false;
   }
 }
