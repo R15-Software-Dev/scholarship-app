@@ -6,5 +6,6 @@ export interface InputElement {
 
   getValue(): string;
   checkValidity(): boolean;
-  displayError(): void;
+  displayError(message: string): void;
+  clearError(): void;
 }
