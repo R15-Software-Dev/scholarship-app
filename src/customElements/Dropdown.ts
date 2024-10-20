@@ -8,6 +8,7 @@ import {
 import {
   customElement,
   property,
+  state,
   query,
   queryAssignedElements,
 } from "lit-element/decorators.js";
@@ -84,6 +85,8 @@ export class Dropdown extends LitElement implements InputElement {
   @property({ type: Boolean, reflect: true }) disabled: boolean = false; // Added disabled property
   @property({ type: String }) value: string = ""; // Single value for each dropdown element
 
+  @state() _hasChanged: boolean = false;
+
   @query("select") accessor _selectElement!: HTMLSelectElement;
   @queryAssignedElements({ selector: "option", flatten: true })
   accessor _options = Array<HTMLElement>();
@@ -96,7 +99,7 @@ export class Dropdown extends LitElement implements InputElement {
   render() {
     return html`
       <div class="select-container">
-        <select>
+        <select @change=${this.handleSelectChange}>
           <option value="" disabled selected>Select a state</option>
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
@@ -112,17 +115,32 @@ export class Dropdown extends LitElement implements InputElement {
     });
   }
 
+  handleSelectChange(event: Event) {
+    this.value = this._selectElement.value;
+
+    // Make sure that this element knows it has been changed.
+    // This is important for the form to know that the element has been changed,
+    // and is used in checkValidity() to determine if the element is valid.
+    // This also works because the user cannot change the value of the select element
+    // back to the default value.
+    this._hasChanged = true;
+  }
+
   getValue(): string {
     return this.value;
   }
 
   checkValidity(): boolean {
-    return this.required ? this.value !== "" : true;
+    // return this.required ? this.value !== "" : true;
+    return this._selectElement.checkValidity();
   }
 
   displayError(): void {
-    if (!this.checkValidity()) {
-      this.classList.add("errors");
-    }
+    // if (!this.checkValidity()) {
+    //   this.classList.add("errors");
+    // }
+
+    // Display an element with the error message
+    // this.shadowRoot.querySelector('#error-message')?.classList.remove('hidden');
   }
 }
