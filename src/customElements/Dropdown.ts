@@ -14,6 +14,7 @@ import {
 } from "lit-element/decorators.js";
 import { ModalWindow } from "./modalWindow";
 import { InputElement } from "./InputElement";
+import { classMap } from "lit/directives/class-map.js";
 
 @customElement("drop-down")
 export class Dropdown extends LitElement implements InputElement {
@@ -35,6 +36,13 @@ export class Dropdown extends LitElement implements InputElement {
       transition:
         border-color 400ms ease,
         background-color 400ms ease;
+
+      &.error {
+        border-color: var(--theme-error-color);
+        transition:
+          border-color 400ms ease,
+          background-color 400ms ease;
+      }
     }
 
     select {
@@ -79,13 +87,34 @@ export class Dropdown extends LitElement implements InputElement {
       margin-right: 15px;
       opacity: 1;
     }
+
+    .shown {
+      display: block;
+    }
+
+    div .error {
+      color: var(--theme-error-color);
+      font-size: 10pt;
+      margin: 0;
+      display: none;
+    }
+
+    p {
+      &.error {
+        display: block;
+        color: var(--theme-error-color);
+      }
+    }
   `;
 
   @property({ type: Boolean, reflect: true }) required: boolean = false;
   @property({ type: Boolean, reflect: true }) disabled: boolean = false; // Added disabled property
   @property({ type: String }) value: string = ""; // Single value for each dropdown element
+  @property({ type: String, attribute: "error-message" }) accessor errorMessage: string = ""; // Public version, used to set the default error message
 
-  @state() _hasChanged: boolean = false;
+  @state() accessor _hasChanged: boolean = false;
+  @state() accessor _showError: boolean = false;
+  @state() accessor _errorMessage: string = ""; // private version, used in scripting for custom messages.
 
   @query("select") accessor _selectElement!: HTMLSelectElement;
   @queryAssignedElements({ selector: "option", flatten: true })
@@ -93,16 +122,22 @@ export class Dropdown extends LitElement implements InputElement {
 
   constructor() {
     super();
+
+    // Set the default error message
+    this._errorMessage = this.errorMessage;
   }
 
   // Render the dropdown with a single value
   render() {
     return html`
-      <div class="select-container">
+      <div class="select-container ${classMap({ error: this._showError })}">
         <select>
           <option value="" disabled selected>Select a state</option>
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
+      </div>
+      <div id="error-message" class=${classMap({ error: true, shown: this._showError })}>
+        <p class="error">${this._errorMessage}</p>
       </div>
     `;
   }
@@ -130,11 +165,13 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   displayError(): void {
-    // if (!this.checkValidity()) {
-    //   this.classList.add("errors");
-    // }
+    console.log("attempting to show error");
+    // Set the error message to the default message if it is empty
+    // Otherwise, use the custom message
+    if (this._errorMessage === "") {
+      this._errorMessage = this.errorMessage;
+    }
 
-    // Display an element with the error message
-    // this.shadowRoot.querySelector('#error-message')?.classList.remove('hidden');
+    this._showError = true;
   }
 }
