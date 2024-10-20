@@ -163,11 +163,13 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   displayError(): void {
-    // Set the error message to the default message if it is empty
-    // Otherwise, use the custom message
-    if (this._errorMessage === "")
-      this._errorMessage = this.errorMessage;
+    // Set the error message to the default message
+    this._errorMessage = this.errorMessage;
+    this._showError = true;
+  }
 
+  displayCustomError(message: string): void {
+    this._errorMessage = message;
     this._showError = true;
   }
 
