@@ -162,18 +162,21 @@ export class Dropdown extends LitElement implements InputElement {
     else return true;
   }
 
-  displayError(): void {
-    // Set the error message to the default message
-    this._errorMessage = this.errorMessage;
-    this._showError = true;
-  }
+  displayError(message: string): void {
+    // If message is empty, display the default error message.
+    // Otherwise, display the custom message.
+    if (message === "" || !message) this._errorMessage = this.errorMessage;
+    else this._errorMessage = message;
 
-  displayCustomError(message: string): void {
-    this._errorMessage = message;
+    // Display the message
     this._showError = true;
   }
 
   clearError(): void {
+    // Hide the error message
     this._showError = false;
+
+    // Reset the error message to the default.
+    this._errorMessage = this.errorMessage;
   }
 }
