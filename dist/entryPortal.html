@@ -30,7 +30,18 @@
     <c-tab panel-id="contactInformationPanel">Contact Information</c-tab>
     <c-tab panel-id="eligibilityFactorsPanel">Eligibility Factors</c-tab>
     <c-tab panel-id="studentRequirementsPanel">Student Requirements</c-tab>
+    <c-tab panel-id="testPanel">TEST</c-tab>
     </tab-bar>
+
+    <tab-panel id="testPanel">
+      <form-section
+        header="Testing Page">
+        <drop-down error-message="hello">
+          <option value="AZ"> Arizona </option>
+          <option value="CT"> Connecticut </option>
+        </drop-down>
+      </form-section>
+    </tab-panel>
 
     <!--Scholarship Information-->
     <tab-panel id="scholarshipInformationPanel">
@@ -39,57 +50,54 @@
         name="scholarshipInfo"
         id="scholarshipAdminInfoForm">
 
-            <form-question
-            label="Enter a title"
-            name="sclshpTitle"
-            type="text"
-            id="sclshpTitleInput"
-            required>
-            Scholarship Title
-            </form-question>
+        <form-question
+        label="Enter a title"
+        name="sclshpTitle"
+        type="text"
+        id="sclshpTitleInput"
+        required>
+        Scholarship Title
+        </form-question>
 
-            <form-question
-            label="Enter a name"
-            name="sclshpSponsorName"
-            type="text"
-            id="sclshpSponsorNameInput"
-            required>
-            Scholarship Organization/Sponsor
-            </form-question>
+        <form-question
+        label="Enter a name"
+        name="sclshpSponsorName"
+        type="text"
+        id="sclshpSponsorNameInput"
+        required>
+        Scholarship Organization/Sponsor
+        </form-question>
 
-            <form-question
-            label="Enter a number"
-            name="sclshpAwardsTotal"
-            type="number"
-            id="sclshpAwardsTotalInput"
-            required>
-            Number of Awards
-            </form-question>
+        <form-question
+        label="Enter a number"
+        name="sclshpAwardsTotal"
+        type="number"
+        id="sclshpAwardsTotalInput"
+        required>
+        Number of Awards
+        </form-question>
 
-            <form-question
-            label="Enter an amount"
-            name="sclshpAmountEach"
-            type="number"
-            prefix-text="$"
-            id="sclshpAmountEachInput"
-            required>
-            Amount of each scholarship
-            </form-question>
+        <form-question
+        label="Enter an amount"
+        name="sclshpAmountEach"
+        type="number"
+        prefix-text="$"
+        id="sclshpAmountEachInput"
+        required>
+        Amount of each scholarship
+        </form-question>
 
-            <form-question
-            label="Enter an amount"
-            name="sclshpTotalAmount"
-            type="number"
-            prefix-text="$"
-            id="sclshpTotalAmountInput"
-            required>
-            Total amount of scholarships
-            </form-question>
-
-        <!-- TODO Create a regex match field for input elements. -->
-        </form-section>
-      </tab-panel>
-    </div>
+        <form-question
+        label="Enter an amount"
+        name="sclshpTotalAmount"
+        type="number"
+        prefix-text="$"
+        id="sclshpTotalAmountInput"
+        required>
+        Total amount of scholarships
+        </form-question>
+      </form-section>
+    </tab-panel>
 
     <!--Contact Information-->
     <tab-panel id="contactInformationPanel">
