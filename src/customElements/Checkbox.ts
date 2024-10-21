@@ -154,7 +154,7 @@ import {
   @property({ type: String, reflect: true }) accessor name: string = "";
   @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
 
-  @property({ type: String }) type: 'checkbox' | 'radio';
+  @property({ type: String }) accessor type: 'checkbox' | 'radio';
   @property({ type: String }) selectedOption: string = ''; // Keep track of selected option
   @property({ type: Boolean, reflect: true}) accessor checked: boolean = false;
 
@@ -179,8 +179,6 @@ import {
             </label>
          `}
          
-            
-    
     `
   }
  
