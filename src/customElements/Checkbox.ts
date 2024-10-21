@@ -148,9 +148,63 @@ import {
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
     }
+    `
 
-    
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;    
+  @property({ type: String, reflect: true }) accessor name: string = "";
+  @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
+
+  @property({ type: String }) type: 'checkbox' | 'radio';
+  @property({ type: String }) selectedOption: string = ''; // Keep track of selected option
+  @property({ type: Boolean, reflect: true}) accessor checked: boolean = false;
+
+
+  protected render(): HTMLTemplateResult{
+    return html `
+      ${this.type === 'checkbox'
+        ? html`
+            <label class="checkbox">
+              <slot> </slot>
+              <input type="checkbox" @click=${this.getCheckedStatus}>
+              ?checked="${this.selectedOption}
+              <span class="checkmark"></span>
+            </label>
+             `
+         :html `
+            <label class="radio"> 
+              <slot> </slot>
+              <input type="radio"
+              ?checked="${this.selectedOption}">
+              <span class="checkdot"></span>
+            </label>
+         `}
+         
+            
     
     `
+  }
+ 
+getCheckedStatus(){
+  if (this.checked) {
+      return "checked";
+  }
+  else {
+      return "unchecked";
+  }
+
+}
+
+  getValue(): string {
+    //placeholder 
+    return this.selectedOption;
+  }
+  checkValidity(): boolean {
+    //placeholder
+    return this.required;
+  }
+  displayError(): void{
+  }
+
+
 
   }
