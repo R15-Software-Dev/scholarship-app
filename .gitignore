@@ -135,3 +135,5 @@ dist/bundles/*
 dist/bundles/scripts.bundle.js
 dist/bundles/customElements.bundle.js
 dist/bundles/customElements.bundle.js.LICENSE.txt
+
+docs/plantuml-1.2024.7.jar
