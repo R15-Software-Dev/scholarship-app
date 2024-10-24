@@ -35,14 +35,25 @@
 
     <div class="tab-panel" id="test">
       <form-section>
-        <check-box name="option" type="radio">
-          yes
+        <!--Radio button test-->
+        <check-box inputType="radio" 
+          radioOptions=
+            '["Yes",
+              "No",
+              "Maybe"]'>
         </check-box>
-        <check-box name="option" type="radio">
-          no
+        <br>
+        <!--checkbox test-->
+        <check-box inputType="checkbox" 
+          checkboxOptions='[
+            "Option 1",
+            "Option 2",
+            "Option 3",
+            "Option 4"]'>
         </check-box>
       </form-section>
     </div>
+    
     <!--Scholarship InfAormation-->
     <div class="tab-panel" id="scholarshipInformationPanel">
       <form-section

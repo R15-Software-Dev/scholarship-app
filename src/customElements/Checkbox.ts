@@ -154,47 +154,108 @@ import {
   @property({ type: String, reflect: true }) accessor name: string = "";
   @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
 
-  @property({ type: String }) accessor type: 'checkbox' | 'radio';
-  @property({ type: String }) selectedOption: string = ''; // Keep track of selected option
-  @property({ type: Boolean, reflect: true}) accessor checked: boolean = false;
+  @property({ type: String }) accessor inputType: string = "checkbox"; //default type is checkbox if undefined
+
+  @property({ type: String }) selectedRadio: string = ''; // Keep track of selected radio option
+  @property({ type: String }) radioOptions: string = '[]'; // Receive the radio button options as a JSON string
+  
+  @property({ type: String }) selectedCheckbox: string[] = []; // Keep track of selected checkbox options
+  @property({ type: String }) checkboxOptions: string = '[]'; // Receive the checkbox options as a JSON string
 
 
-  protected render(): HTMLTemplateResult{
-    return html `
-      ${this.type === 'checkbox'
-        ? html`
-            <label class="checkbox">
-              <slot> </slot>
-              <input type="checkbox" @click=${this.getCheckedStatus}>
-              ?checked="${this.selectedOption}
-              <span class="checkmark"></span>
-            </label>
-             `
-         :html `
-            <label class="radio"> 
-              <slot> </slot>
-              <input type="radio"
-              ?checked="${this.selectedOption}">
-              <span class="checkdot"></span>
-            </label>
-         `}
-         
-    `
-  }
- 
-getCheckedStatus(){
-  if (this.checked) {
-      return "checked";
-  }
-  else {
-      return "unchecked";
+  // Method to render checkbox options
+  private renderCheckbox(): HTMLTemplateResult {
+    const optionsArray = JSON.parse(this.checkboxOptions); // Parse the JSON string to array
+    return html`
+      <div>
+        ${optionsArray.map(
+          (option: string) => html`
+              <label class="checkbox">
+                  ${option}
+                     <input
+                        type="checkbox"
+                        name="checkbox-group"
+                        value="${option}"
+                        ?checked="${this.selectedCheckbox.includes(option)}"
+                        @change="${this.checkboxSelect}"
+                      />
+                    <span class="checkmark"></span>
+                </label>
+                `
+                    )}
+                </div>
+            `;
   }
 
+
+  // Method to render radio button
+  private renderRadio(): HTMLTemplateResult {
+    const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
+    return html`
+      <div>
+        ${optionsArray.map(
+          (option: string) => html`
+              <label class="radio">
+                  ${option}
+                     <input
+                        type="radio"
+                        name="radio-group"
+                        value="${option}"
+                        ?checked="${this.selectedRadio === option}"
+                        @change="${this.radioChange}"
+                      />
+                    <span class="checkdot"></span>
+                </label>
+                `
+                    )}
+                </div>
+            `;
+  }
+
+
+  // Main render method to choose between rendering a checkbox or a radio button
+  protected render(): HTMLTemplateResult {
+    if (this.inputType === "checkbox") {
+      return this.renderCheckbox();
+    } else if (this.inputType === "radio") {
+      return this.renderRadio();
+    } else {
+      // Handle invalid input
+      return html`<p>Invalid input type. Please specify 'checkbox' or 'radio'.</p>`;
+    }
+  }
+
+
+// Event listener to determine which radio button is clicked
+private radioChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  this.selectedRadio = target.value;
+  // For testing
+  console.log(this.selectedRadio);
+
+  this.dispatchEvent(new CustomEvent('change', { detail: { value: this.selectedRadio } }));
 }
+
+
+// Event listener for which checkboxes are clicked
+private checkboxSelect(event: Event) {
+  const checkboxes = this.shadowRoot?.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+  // Reset selectedOptions array
+  this.selectedCheckbox = [];
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      // If the checkbox is checked, add its value to the selectedOptions array
+      this.selectedCheckbox.push(checkbox.value);
+    }
+  });
+  // For testing
+  console.log(this.selectedCheckbox);
+  }
+
 
   getValue(): string {
     //placeholder 
-    return this.selectedOption;
+    return this.name;
   }
   checkValidity(): boolean {
     //placeholder
@@ -202,7 +263,5 @@ getCheckedStatus(){
   }
   displayError(): void{
   }
-
-
-
-  }
+  
+}
