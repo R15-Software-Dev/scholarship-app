@@ -1,0 +1,47 @@
+@startuml
+
+participant Website as "Website"
+participant APIGateway as "API Gateway"
+participant Lambda as "Lambda"
+participant DynamoDB as "DynamoDB"
+
+Website -> APIGateway: POST /api/form-data
+activate Website
+activate APIGateway
+note left: Happens upon successful login
+APIGateway -> Lambda: Pass request
+activate Lambda
+Lambda -> DynamoDB: Query for user progress
+activate DynamoDB
+note right: Find the total progress of the user through the application
+DynamoDB --> Lambda: Return user progress
+deactivate DynamoDB
+Lambda --> APIGateway: Return user progress
+deactivate Lambda
+APIGateway --> Website: Return user progress
+deactivate APIGateway
+Website -> Website: Process data
+
+alt User has not started
+  Website -> Website: Redirect to start page
+else User has started
+  Website -> APIGateway: POST /api/user-progress
+  activate APIGateway
+  APIGateway -> Lambda: Pass request
+  activate Lambda
+  Lambda -> DynamoDB: Find user's progress
+  activate DynamoDB
+  DynamoDB --> Lambda: Return user's progress
+  deactivate DynamoDB
+  Lambda --> APIGateway: Return user's progress
+  deactivate Lambda
+  APIGateway --> Website: Return user's progress
+  deactivate APIGateway
+  Website -> Website: Process data
+  Website -> Website: Fill in fields with user's progress
+  Website -> Website: Redirect to user's progress page
+end
+
+deactivate Website
+
+@enduml

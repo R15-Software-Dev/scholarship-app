@@ -1,0 +1,42 @@
+@startuml
+
+actor User
+participant Website as "Website"
+participant APIGateway as "API Gateway"
+participant Lambda as "Lambda"
+participant DynamoDB as "DynamoDB"
+
+activate User
+User -> Website: Type username
+activate Website
+User -> Website: Type password
+User -> Website: Click login button
+Website -> Website: Hash password
+Website -> APIGateway: Send login request
+activate APIGateway
+APIGateway -> Lambda: Passthrough request
+activate Lambda
+Lambda -> DynamoDB: Query user info
+activate DynamoDB
+DynamoDB --> Lambda: Return user info
+deactivate DynamoDB
+Lambda -> Lambda: Compare hashed password
+Lambda --> APIGateway: Return user info
+deactivate Lambda
+APIGateway --> Website: Passthrough response
+deactivate APIGateway
+
+alt User/Password correct
+
+Website --> User: Redirect to application
+
+else User/Password incorrect
+
+Website --> User: Show error message
+
+end
+
+deactivate Website
+deactivate User
+
+@enduml
