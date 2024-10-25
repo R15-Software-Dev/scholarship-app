@@ -55,7 +55,7 @@ export class TextField extends LitElement implements InputElement {
     this._errorVisible = true;
   }
 
-  hideError() {
+  clearError() {
     this._errorVisible = false;
   }
 }
