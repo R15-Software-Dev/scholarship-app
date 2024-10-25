@@ -13,52 +13,11 @@ import {
   state
 } from "lit/decorators.js";
 import { InputElement } from "./InputElement";
+import { classMap } from "lit/directives/class-map.js";
+
+type FieldTypes = "text" | "password" | "email" | "tel" | "number";
 
 abstract class TextField extends LitElement implements InputElement {
-  static styles?: CSSResultGroup = css``; // No styles for now
-
-  @property({ type: String }) accessor label = "";
-  @property({ type: String }) accessor placeholder = "";
-  @property({ type: Number }) accessor width = 200;  // Update this default as needed
-  @property({ type: String }) accessor type = "text";  // This is the default type
-  @property({ type: String }) accessor value = "";
-  @property({ type: String }) accessor name = "";
-  @property({ type: String }) accessor errorText = "";
-  @property({ type: Number }) accessor maxLength = 0;  // If 0, then no max length
-  @state() accessor _errorVisible: boolean = false;
-  @state() accessor _hasPrefix: boolean = false;
-
-  @query('input') private _input: HTMLInputElement;
-  @query('label') private _label: HTMLLabelElement;
-
-  //#region From InputElement
-  @property({ type: Boolean }) accessor disabled = false;
-  @property({ type: Boolean }) accessor required = false;
-
-  getValue(): string {
-    return this.value;
-  }
-
-  checkValidity(): boolean {
-    return this._input.checkValidity();
-  }
-  //#endregion
-
-  displayError(message: string): void {
-    // Shows the default error message
-    if (message || message !== "")
-      this.errorText = message;
-
-    this._errorVisible = true;
-  }
-
-  clearError() {
-    this._errorVisible = false;
-  }
-}
-
-@customElement("outlined-text-field")
-export class OutlinedTextField extends TextField {
   static styles = css`
     .container {
       display: flex;
@@ -179,44 +138,114 @@ export class OutlinedTextField extends TextField {
     }
   `;
 
+  @property({ type: String }) accessor label = "";
+  @property({ type: String }) accessor placeholder = "";
+  @property({ type: Number }) accessor width = 200;  // Update this default as needed
+  @property({ type: String }) accessor type: FieldTypes = "text";  // This is the default type
+  @property({ type: String }) accessor value = "";
+  @property({ type: String }) accessor name = "";
+  @property({ type: String, attribute: "error-text" }) accessor errorText = "";
+  @property({ type: Number }) accessor maxLength = 0;  // If 0, then no max length
+  @state() accessor _errorVisible: boolean = false;
+
+  @query('input') accessor _input: HTMLInputElement;
+  @query('label') accessor _label: HTMLLabelElement;
+
+  //#region From InputElement
+  @property({ type: Boolean }) accessor disabled = false;
+  @property({ type: Boolean }) accessor required = false;
+
+  getValue(): string {
+    return this.value;
+  }
+
+  checkValidity(): boolean {
+    return this._input.checkValidity();
+  }
+  //#endregion
+
+  displayError(message: string): void {
+    // Shows the default error message
+    if (message || message !== "")
+      this.errorText = message;
+
+    this._errorVisible = true;
+  }
+
+  clearError() {
+    this._errorVisible = false;
+  }
+}
+
+@customElement("outlined-text-field")
+export class OutlinedTextField extends TextField {
+
   @property({ type: String }) accessor pattern = "";  // Pattern for validation
-  @property({ type: String }) accessor prefix = "";
-  @property({ type: String }) accessor suffix = "";
+  @property({ type: String, attribute: "prefix-text"}) accessor prefixText = "";
+  @property({ type: String, attribute: "suffix-text"}) accessor suffixText = "";
 
   @query(".prefix") private _prefix: HTMLSpanElement;
   @query(".suffix") private _suffix: HTMLSpanElement;
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container">
-        <div>
+      <div>
+        <div class="container">
           ${this._renderPrefix()}
           <input
-            type="${this.type}"
+            class=${classMap({ hasPrefix: this._hasPrefix })}
+            type=${this.type}
             placeholder=" "
-            value="${this.value}"
-            name="${this.name}"
-            pattern="${this.pattern || nothing}"
-            ?disabled="${this.disabled}"
-            ?required="${this.required}"
-            maxlength="${this.maxLength}"
+            name=${this.name}
+            pattern=${this.pattern || nothing}
+            ?disabled=${this.disabled}
+            ?required=${this.required}
+            maxlength=${this.maxLength || nothing}
+            @input=${this.handleInput}
           />
-          <label>${this.placeholder}</label>
           ${this._renderSuffix()}
+          <label>${this.placeholder}</label>
         </div>
       </div>
     `;
   }
 
+  get _hasPrefix(): boolean {
+    if (this.prefixText === "" || !this.prefixText) return false;
+    return true;
+  }
+
+  get _hasSuffix(): boolean {
+    if (this.suffixText === "" || !this.suffixText) return false;
+    return true;
+  }
+
+  private handleInput(e: InputEvent) {
+    if (this.type === "number" && isNaN(Number(e.data))) {
+      this._input.value = this.value;  // Ensure value is not changed
+      return;
+    }
+    this.value = this._input.value;
+  }
+
   private _renderPrefix(): HTMLTemplateResult {
+    if (!this._hasPrefix)
+      return html``;
+
     return html`
-      <span class="prefix">${this.prefix}</span>
+      <span class=${classMap({ prefix: true, hidden: !this._hasPrefix })}>
+        <p>${this.prefixText}</p>
+      </span>
     `;
   }
 
   private _renderSuffix(): HTMLTemplateResult {
+    if (!this._hasSuffix) return html``;
+
     return html`
-      <span class="suffix">${this.suffix}</span>
+      <span class=${classMap({ suffix: true, hidden: !this._hasSuffix })}>
+        <p>${this.suffixText}</p>
+      </span>
     `;
   }
 }
