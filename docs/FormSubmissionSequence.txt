@@ -1,0 +1,42 @@
+@startuml
+
+actor User
+participant Website
+participant APIGateway as "API Gateway"
+participant Lambda
+participant DynamoDB
+
+User -> Website: Input information
+activate User
+activate Website
+User -> Website: Click submit
+Website -> APIGateway: POST /api/submit-form
+activate APIGateway
+APIGateway -> Lambda: Passthrough data
+activate Lambda
+Lambda -> Lambda: Find submitted form
+Lambda -> DynamoDB: Create/update submission entry
+activate DynamoDB
+DynamoDB --> Lambda: Return status
+deactivate DynamoDB
+Lambda --> APIGateway: Return status
+deactivate Lambda
+APIGateway --> Website: Return status
+deactivate APIGateway
+Website -> Website: Process data
+alt Submission failed
+  Website --> User: Request retry
+else Submission successful
+  Website --> User: Display success mark
+  Website -> Website: Check if next tab available
+  alt Tab available
+    Website -> Website: Redirect to next tab
+  else Tab unavailable
+    Website -> Website: Redirect to finished page
+    note right: This is debatable.
+  end
+end
+deactivate Website
+deactivate User
+
+@enduml
