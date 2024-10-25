@@ -14,7 +14,7 @@ import {
 } from "lit/decorators.js";
 import { InputElement } from "./InputElement";
 
-export class TextField extends LitElement implements InputElement {
+export abstract class TextField extends LitElement implements InputElement {
   static styles?: CSSResultGroup = css``; // No styles for now
 
   @property({ type: String }) accessor label = "";
