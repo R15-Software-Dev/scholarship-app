@@ -289,7 +289,7 @@ export class OutlinedTextField extends TextField {
 
 @customElement("text-area")
 export class TextArea extends TextField {
-  @property({ type: String }) accessor rows = "4";
+  @property({ type: String }) accessor rows = "2";
   @property({ type: String }) accessor wrap = "soft";
 
   @query("textarea") private accessor _textarea: HTMLTextAreaElement;
