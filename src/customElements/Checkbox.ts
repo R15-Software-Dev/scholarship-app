@@ -162,6 +162,10 @@ import {
   @property({ type: String }) selectedCheckbox: string[] = []; // Keep track of selected checkbox options
   @property({ type: String }) checkboxOptions: string = '[]'; // Receive the checkbox options as a JSON string
 
+  @property({ type: String }) otherCheckbox: string = ''; // Checkbox with text field for custom response
+
+  @property({ type: String }) otherRadio: String = ''; // Radio button with text field for custom response
+
 
   // Method to render checkbox options
   private renderCheckbox(): HTMLTemplateResult {
@@ -187,6 +191,41 @@ import {
             `;
   }
 
+  //Method for checkbox with textbox option
+  private renderCheckboxOther(): HTMLTemplateResult {
+    const optionsArray = JSON.parse(this.checkboxOptions); // Parse the JSON string to array
+    return html`
+      <div>
+        ${optionsArray.map(
+          (option: string) => html`
+              <label class="checkbox">
+                  ${option}
+                     <input
+                        type="checkbox"
+                        name="checkboxgroup"
+                        value="${option}"
+                        ?checked="${this.selectedCheckbox.includes(option)}"
+                        @change="${this.checkboxSelect}"
+                      />
+                    <span class="checkmark"></span>
+                </label>
+                `
+                    )}
+        <label class="checkbox">
+            <input 
+              type="checkbox" 
+              name="checkboxgroup" 
+              ?checked="${this.otherCheckbox}"/>
+                <outlined-text-field 
+                  name="checkboxgroup" 
+                  placeholder="Enter text here">
+                </outlined-text-field>
+          <span class="checkmark"></span>
+        </label>
+
+      </div>
+    `
+  }
 
   // Method to render radio button
   private renderRadio(): HTMLTemplateResult {
@@ -199,7 +238,7 @@ import {
                   ${option}
                      <input
                         type="radio"
-                        name="radio-group"
+                        name="radiobutton"
                         value="${option}"
                         ?checked="${this.selectedRadio === option}"
                         @change="${this.radioChange}"
@@ -212,14 +251,65 @@ import {
             `;
   }
 
+  //Method for radio button with textbox option
+  private renderRadioOther(): HTMLTemplateResult {
+    const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
+    return html`
+
+      <div>
+      ${optionsArray.map(
+          (option: string) => html`
+              <label class="radio">
+                  ${option}
+                     <input
+                        type="radio"
+                        name="radiogroup"
+                        value="${option}"
+                        ?checked="${this.selectedRadio === option}"
+                        @change="${this.radioChange}"
+                      />
+                    <span class="checkdot"></span>
+                </label>
+                `
+                    )}
+
+            <label class="radio">
+            <input
+              type="radio"
+              name="radiogroup"
+              value="${this.getValue}
+              ?checked="${this.selectedRadio }"
+              @change="${this.radioChange}" 
+            />
+              <outlined-text-field 
+                name="radiogroup" 
+                placeholder="Enter text here">
+              </outlined-text-field>
+                
+          <span class="checkdot"></span>
+        </label>
+
+      </div> 
+    `
+  }
+
+
 
   // Main render method to choose between rendering a checkbox or a radio button
   protected render(): HTMLTemplateResult {
     if (this.inputType === "checkbox") {
       return this.renderCheckbox();
-    } else if (this.inputType === "radio") {
+    } 
+      else if (this.inputType === "radio") {
       return this.renderRadio();
-    } else {
+    } 
+      else if (this.inputType === "checkbox-text"){
+      return this.renderCheckboxOther();
+    }
+    else if (this.inputType === "radio-text"){
+      return this.renderRadioOther();
+    }
+      else {
       // Handle invalid input
       return html`<p>Invalid input type. Please specify 'checkbox' or 'radio'.</p>`;
     }
@@ -261,7 +351,11 @@ private checkboxSelect(event: Event) {
     //placeholder
     return this.required;
   }
-  displayError(): void{
+  displayError(message: string): void{
+
+  }
+  clearError(): void{
+
   }
   
 }

@@ -33,7 +33,7 @@
     <c-tab panel-id="test">test</c-tab>
     </tab-bar>
 
-    <div class="tab-panel" id="test">
+    <tab-panel id="test">
       <form-section>
         <!--Radio button test-->
         <check-box inputType="radio" 
@@ -42,6 +42,7 @@
               "No",
               "Maybe"]'>
         </check-box>
+
         <br>
         <!--checkbox test-->
         <check-box inputType="checkbox" 
@@ -51,11 +52,20 @@
             "Option 3",
             "Option 4"]'>
         </check-box>
+          
+        <br>
+        <check-box inputType="radio-text"
+          radioOptions=
+          '["Yes",
+            "No",
+            "Maybe"]'>
+        </check-box>
+
       </form-section>
-    </div>
+    </tab-panel>
     
     <!--Scholarship InfAormation-->
-    <div class="tab-panel" id="scholarshipInformationPanel">
+    <tab-panel id="scholarshipInformationPanel">
 
       <form-section
         header="Scholarship Information"
