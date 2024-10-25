@@ -7,7 +7,7 @@ module.exports = {
       import: [
         "./src/customElements/ActionButton.ts",
         "./src/customElements/Forms.ts",
-        "./src/customElements/OutlinedTextField.ts",
+        "./src/customElements/TextField.ts",
         "./src/customElements/Ripple.ts",
         "./src/customElements/Tabs.ts",
         "./src/customElements/MultipleEntry.ts",
