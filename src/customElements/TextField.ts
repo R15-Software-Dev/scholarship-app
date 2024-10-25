@@ -32,12 +32,15 @@ abstract class TextField extends LitElement implements InputElement {
       transition:
         border-color 400ms ease,
         background-color 400ms ease;
-      &:has(input:disabled) {
+      &:has(input:disabled), :has(textarea:disabled) {
         border-color: black;
         background-color: lightgray;
       }
       &.errors {
         border-color: var(--theme-error-color);
+      }
+      &.textarea {
+        height: auto;
       }
     }
 
@@ -57,7 +60,28 @@ abstract class TextField extends LitElement implements InputElement {
       }
     }
 
+    textarea {
+      font-family: inherit;
+      z-index: 1;
+      font-size: 11pt;
+      flex-grow: 1;
+      border: none;
+      padding: 2px 15px;
+      padding-top: 15px;
+      color: #696158;
+      border-radius: 8px;
+      resize: none;
+      &:focus {
+        outline: none;
+      }
+      &:required {
+        box-shadow: none;
+      }
+    }
+
     input {
+      font-family: inherit;
+      z-index: 1;
       font-size: 11pt;
       flex-grow: 1;
       border: none;
@@ -69,6 +93,9 @@ abstract class TextField extends LitElement implements InputElement {
       }
       &:focus {
         outline: none;
+      }
+      &:required {
+        box-shadow: none;
       }
     }
 
@@ -85,10 +112,7 @@ abstract class TextField extends LitElement implements InputElement {
       padding-left: 0.3em;
       display: flex;
       justify-content: center;
-    }
-
-    input:required {
-      box-shadow: none;
+      z-index: 2;
     }
 
     .prefix {
@@ -136,6 +160,14 @@ abstract class TextField extends LitElement implements InputElement {
     input:focus ~ .suffix {
       opacity: 1;
     }
+
+    textarea:focus ~ label,
+    textarea:not(:placeholder-shown) ~ label {
+      top: -7px;
+      font-size: 11pt;
+      font-color: gray;
+      background-color: white;
+    }
   `;
 
   @property({ type: String }) accessor label = "";
@@ -148,7 +180,6 @@ abstract class TextField extends LitElement implements InputElement {
   @property({ type: Number }) accessor maxLength = 0;  // If 0, then no max length
   @state() accessor _errorVisible: boolean = false;
 
-  @query('input') accessor _input: HTMLInputElement;
   @query('label') accessor _label: HTMLLabelElement;
 
   //#region From InputElement
@@ -159,8 +190,9 @@ abstract class TextField extends LitElement implements InputElement {
     return this.value;
   }
 
+  /// Must be implemented per subclass
   checkValidity(): boolean {
-    return this._input.checkValidity();
+    return true;
   }
   //#endregion
 
@@ -184,8 +216,9 @@ export class OutlinedTextField extends TextField {
   @property({ type: String, attribute: "prefix-text"}) accessor prefixText = "";
   @property({ type: String, attribute: "suffix-text"}) accessor suffixText = "";
 
-  @query(".prefix") private _prefix: HTMLSpanElement;
-  @query(".suffix") private _suffix: HTMLSpanElement;
+  @query("input") private accessor _input: HTMLInputElement;
+  @query(".prefix") private accessor _prefix: HTMLSpanElement;
+  @query(".suffix") private accessor _suffix: HTMLSpanElement;
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -248,6 +281,10 @@ export class OutlinedTextField extends TextField {
       </span>
     `;
   }
+
+  public override checkValidity(): boolean {
+    return this._input.checkValidity();
+  }
 }
 
 @customElement("text-area")
@@ -259,24 +296,26 @@ export class TextArea extends TextField {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div>
-        <div class="container">
-          <textarea
-            placeholder=" "
-            name=${this.name}
-            rows=${this.rows}
-            wrap=${this.wrap}
-            ?disabled=${this.disabled}
-            ?required=${this.required}
-            maxlength=${this.maxLength || nothing}
-          ></textarea>
-          <label>${this.placeholder}</label>
-        </div>
+      <div class="container textarea">
+        <textarea
+          placeholder=" "
+          name=${this.name}
+          rows=${this.rows}
+          wrap=${this.wrap}
+          ?disabled=${this.disabled}
+          ?required=${this.required}
+          maxlength=${this.maxLength || nothing}
+        ></textarea>
+        <label>${this.placeholder}</label>
       </div>
     `;
   }
 
   public override getValue(): string {
     return this._textarea.value;
+  }
+
+  public override checkValidity(): boolean {
+    return this._textarea.checkValidity();
   }
 }
