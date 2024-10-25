@@ -41,6 +41,7 @@ abstract class TextField extends LitElement implements InputElement {
       }
       &.textarea {
         height: auto;
+        transition: height 0.2s ease;;
       }
     }
 
@@ -68,9 +69,13 @@ abstract class TextField extends LitElement implements InputElement {
       border: none;
       padding: 2px 15px;
       padding-top: 15px;
+      padding-bottom: 0;
       color: #696158;
       border-radius: 8px;
       resize: none;
+      line-height: 25px;
+      transition:
+        height 0.2s ease;
       &:focus {
         outline: none;
       }
@@ -289,7 +294,7 @@ export class OutlinedTextField extends TextField {
 
 @customElement("text-area")
 export class TextArea extends TextField {
-  @property({ type: String }) accessor rows = "2";
+  @property({ type: Number }) accessor rows = 2;
   @property({ type: String }) accessor wrap = "soft";
 
   @query("textarea") private accessor _textarea: HTMLTextAreaElement;
@@ -305,10 +310,19 @@ export class TextArea extends TextField {
           ?disabled=${this.disabled}
           ?required=${this.required}
           maxlength=${this.maxLength || nothing}
+          @input=${this._handleInput}
         ></textarea>
         <label>${this.placeholder}</label>
       </div>
     `;
+  }
+
+  private _handleInput(e: InputEvent): void {
+    this.value = this._textarea.value;
+
+    // Enable auto-resizing of the textarea
+    this._textarea.style.height = "auto";
+    this._textarea.style.height = this._textarea.scrollHeight + "px";
   }
 
   public override getValue(): string {
