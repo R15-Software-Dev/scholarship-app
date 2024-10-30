@@ -57,19 +57,12 @@ export class FormQuestion extends LitElement {
     // This element MUST be used within a FormSection or HTMLFormElement.
     return html`
       <div>
-        <label for=${this.name}
-          ><h3><slot></slot></h3
-        ></label>
-        <outlined-text-field
-          placeholder=${this.label}
-          ?disabled=${this.disabled}
-          ?required=${this.required}
-          name=${this.name}
-          suffix-text="${this.suffixText}"
-          prefix-text="${this.prefixText}"
-          type=${this.type}
-          id=${this.id}
-        ></outlined-text-field>
+        <label for=${this.name}>
+          <h3><slot name="header"></slot></h3>
+        </label>
+
+        <!-- This will create a place for the chosen input -->
+        <slot></slot>
       </div>
     `;
   }
