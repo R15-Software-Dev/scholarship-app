@@ -108,7 +108,9 @@ export class Dropdown extends LitElement implements InputElement {
   @property({ type: Boolean, reflect: true }) required: boolean = false;
   @property({ type: Boolean, reflect: true }) disabled: boolean = false; // Added disabled property
   @property({ type: String }) value: string = ""; // Single value for each dropdown element
+  @property({ type: String }) name: string = ""; // Name of the dropdown element
   @property({ type: String, attribute: "error-message" }) accessor errorMessage: string = ""; // Public version, used to set the default error message
+  @property({ type: String }) placeholder: string = "Select an option"; // Placeholder text for the dropdown
 
   @state() accessor _hasChanged: boolean = false;
   @state() accessor _showError: boolean = false;
@@ -129,8 +131,8 @@ export class Dropdown extends LitElement implements InputElement {
   render() {
     return html`
       <div class="select-container ${classMap({ error: this._showError })}">
-        <select>
-          <option value="" disabled selected>Select a state</option>
+        <select name=${this.name}>
+          <option value="" disabled selected>${this.placeholder}</option>
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
       </div>
