@@ -1,6 +1,7 @@
 export interface InputElement {
   required: boolean;
   disabled: boolean;
+  name: string;
 
   getValue(): string;
   checkValidity(): boolean;

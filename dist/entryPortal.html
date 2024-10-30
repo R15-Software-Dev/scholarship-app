@@ -37,7 +37,18 @@
     <tab-panel id="testPanel">
       <form-section
         header="Testing Page">
-        <text-area placeholder="Testing textarea" name="test"></text-area>
+        <form-question
+          id="sclshpTestingQuestion">
+          <label for="sclshpTestingInput">
+            <h3 slot="header">Testing Question</h3>
+          </label>
+          <drop-down
+            id="sclshpTestingInput"
+            placeholder="Testing selection...">
+            <option value="test1">Test 1</option>
+            <option value="test2">Test 2</option>
+          </drop-down>
+        </form-question>
       </form-section>
     </tab-panel>
 
@@ -49,12 +60,18 @@
         id="scholarshipAdminInfoForm">
 
         <form-question
-        label="Enter a title"
-        name="sclshpTitle"
-        type="text"
         id="sclshpTitleInput"
         required>
-        Scholarship Title
+          <label for="sclshpTitle">
+            <h3 slot="header">Scholarship Title</h3>
+          </label>
+          <outlined-text-field
+            id="sclshpTitleInput"
+            name="sclshpTitle"
+            type="text"
+            placeholder="Enter a title"
+            required>
+          </outlined-text-field>
         </form-question>
 
         <form-question
