@@ -8,6 +8,7 @@ import {
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { OutlinedTextField } from "./OutlinedTextField";
+import { InputElement } from "./InputElement";
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
@@ -27,30 +28,28 @@ export class FormQuestion extends LitElement {
   @property({ type: Boolean }) accessor required: boolean = false;
   @property({ type: String }) accessor label: string = "";
   @property({ type: Boolean }) accessor disabled: boolean = false;
-  @property({ type: String, attribute: "suffix-text" }) accessor suffixText =
-    "";
-  @property({ type: String, attribute: "prefix-text" }) accessor prefixText =
-    "";
-  // @property({type: String}) accessor value: string = "";
-  @property({ type: ElementInternals }) accessor internals: ElementInternals;
+  @property({ type: String, attribute: "suffix-text" }) accessor suffixText = "";
+  @property({ type: String, attribute: "prefix-text" }) accessor prefixText = "";
 
-  @query("outlined-text-field") private accessor _input: OutlinedTextField;
+  // Even though this returns an array, we will only ever use the first element
+  // that we find. Only one input element per question.
+  @queryAssignedElements() private accessor _inputList: InputElement[];
 
   constructor() {
     super();
-    this.internals = this.attachInternals();
   }
 
+  // Allows the form that this question is a part of to check the validity
+  // of the input.
   checkValidity(): boolean {
-    return this._input.checkValidity();
+    const input = this._inputList[0];
+    return input.checkValidity();
   }
 
-  set value(newValue: string) {
-    this._input.value = newValue;
-  }
-
-  get value() {
-    return this._input.value;
+  // Allows the form that this question is a part of to get the value of the input.
+  get value(): string {
+    const input = this._inputList[0];
+    return input.getValue();
   }
 
   protected render(): HTMLTemplateResult {
@@ -61,7 +60,7 @@ export class FormQuestion extends LitElement {
           <h3><slot name="header"></slot></h3>
         </label>
 
-        <!-- This will create a place for the chosen input -->
+        <!-- This is where our input element will go -->
         <slot></slot>
       </div>
     `;
