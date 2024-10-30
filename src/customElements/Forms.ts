@@ -18,18 +18,9 @@ export class FormQuestion extends LitElement {
       flex-direction: column;
       margin: 10px;
       margin-bottom: 30px;
-      backrgound-color: inherit;
+      background-color: inherit;
     }
   `;
-
-  @property({ type: String }) accessor type: string = "";
-  @property({ type: String }) accessor name: string = "";
-  @property({ type: String }) accessor id: string = "";
-  @property({ type: Boolean }) accessor required: boolean = false;
-  @property({ type: String }) accessor label: string = "";
-  @property({ type: Boolean }) accessor disabled: boolean = false;
-  @property({ type: String, attribute: "suffix-text" }) accessor suffixText = "";
-  @property({ type: String, attribute: "prefix-text" }) accessor prefixText = "";
 
   // Even though this returns an array, we will only ever use the first element
   // that we find. Only one input element per question.
@@ -40,25 +31,22 @@ export class FormQuestion extends LitElement {
   }
 
   // Allows the form that this question is a part of to check the validity
-  // of the input.
+  // of the input. Really just shorthand for input.checkValidity().
   checkValidity(): boolean {
-    const input = this._inputList[0];
-    return input.checkValidity();
+    return this.input.checkValidity();
   }
 
-  // Allows the form that this question is a part of to get the value of the input.
-  get value(): string {
-    const input = this._inputList[0];
-    return input.getValue();
+  // Allows other elements to get an instance of the input element.
+  get input(): InputElement {
+    return this._inputList[0];
   }
 
   protected render(): HTMLTemplateResult {
     // This element MUST be used within a FormSection or HTMLFormElement.
     return html`
       <div>
-        <label for=${this.name}>
-          <h3><slot name="header"></slot></h3>
-        </label>
+        <!-- The label tag must be put in manually -->
+        <slot name="header"></slot>
 
         <!-- This is where our input element will go -->
         <slot></slot>
@@ -152,11 +140,8 @@ export class FormSection extends LitElement {
     console.log(`Got ${customQuestions.length} questions, printing values.`);
     for (let i = 0; i < customQuestions.length; i++) {
       const question = customQuestions[i];
-      console.log(`Found user input control: ${question}`);
-      console.log(`Assumed value: ${question.value}`);
-      console.log(`Question ID: ${question.name}`);
       // if (!input.reportValidity()) send = false;
-      formData.append(question.name, question.value);
+      formData.append(question.input.name, question.input.getValue());
     }
 
     console.log(
@@ -206,7 +191,7 @@ export class FormSection extends LitElement {
     this._questions.forEach((question) => {
       // Check validity of questions.
       if (!question.checkValidity()) {
-        console.log(`Question ${question.name} is not valid.`);
+        console.log(`Question ${question.input.name} is not valid.`);
         submittable = false;
       }
     });
@@ -219,7 +204,7 @@ export class FormSection extends LitElement {
     const formData = new FormData();
 
     this._questions.forEach((question) => {
-      formData.set(question.name, question.value);
+      formData.set(question.input.name, question.input.getValue());
     });
 
     fetch(this.action, {
