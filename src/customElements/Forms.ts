@@ -29,8 +29,6 @@ export class FormQuestion extends LitElement {
   // After render, for accessibility, we want to set the label's "for" attribute
   @query("label") private accessor _label!: HTMLLabelElement;
 
-  @state() private accessor inputID: string = "";
-
   constructor() {
     super();
 
