@@ -65,7 +65,7 @@ export class FormQuestion extends LitElement {
 
         <!-- This is where our input element will go -->
         <!-- This is queried as the default slot. -->
-        <slot name="input">
+        <slot>
           <p>No input element found</p>
         </slot>
       </div>
