@@ -24,10 +24,21 @@ export class FormQuestion extends LitElement {
 
   // Even though this returns an array, we will only ever use the first element
   // that we find. Only one input element per question.
-  @queryAssignedElements() private accessor _inputList: InputElement[];
+  @queryAssignedElements({ slot: "input" }) accessor _inputList!: Array<InputElement>;
+
+  // After render, for accessibility, we want to set the label's "for" attribute
+  @query("label") private accessor _label!: HTMLLabelElement;
+
+  @state() private accessor inputID: string = "";
 
   constructor() {
     super();
+
+    // Wait for shadow root to render before setting up the label element.
+    // Use this.updateComplete
+    this.updateComplete.then(() => {
+      this._label.setAttribute("for", this.input.id);
+    });
   }
 
   // Allows the form that this question is a part of to check the validity
@@ -45,11 +56,18 @@ export class FormQuestion extends LitElement {
     // This element MUST be used within a FormSection or HTMLFormElement.
     return html`
       <div>
-        <!-- The label tag must be put in manually -->
-        <slot name="header"></slot>
+        <!-- Headers should be contained here. -->
+        <label>
+          <slot name="header">
+            <h2>No question header found</h2>
+          </slot>
+        </label>
 
         <!-- This is where our input element will go -->
-        <slot></slot>
+        <!-- This is queried as the default slot. -->
+        <slot name="input">
+          <p>No input element found</p>
+        </slot>
       </div>
     `;
   }

@@ -39,10 +39,9 @@
         header="Testing Page">
         <form-question
           id="sclshpTestingQuestion">
-          <label for="sclshpTestingInput">
-            <h3 slot="header">Testing Question</h3>
-          </label>
+          <h3 slot="header">Testing Question</h3>
           <drop-down
+            slot="input"
             id="sclshpTestingInput"
             placeholder="Testing selection...">
             <option value="test1">Test 1</option>
@@ -62,9 +61,7 @@
         <form-question
         id="sclshpTitleInput"
         required>
-          <label for="sclshpTitle">
-            <h3 slot="header">Scholarship Title</h3>
-          </label>
+          <h3 slot="header">Scholarship Title</h3>
           <outlined-text-field
             id="sclshpTitleInput"
             name="sclshpTitle"
