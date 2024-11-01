@@ -11,7 +11,8 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
     <script src="./bundles/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/entryPortal.bundle.js"></script>
+    <script src="./bundles/entryPortal.bundle.js" defer></script>
+    <script src="./bundles/tabs.bundle.js" defer></script>
   </head>
 
 
@@ -52,7 +53,18 @@
             "Option 4"]'>
         </check-box>
 
-
+      <form-section
+        header="Testing Page">
+        <form-question
+          id="sclshpTestingQuestion">
+          <h3 slot="header">Testing Question</h3>
+          <drop-down
+            id="sclshpTestingInput"
+            placeholder="Testing selection...">
+            <option value="test1">Test 1</option>
+            <option value="test2">Test 2</option>
+          </drop-down>
+        </form-question>
       </form-section>
     </tab-panel>
     
@@ -65,12 +77,16 @@
         id="scholarshipAdminInfoForm">
 
         <form-question
-        label="Enter a title"
-        name="sclshpTitle"
-        type="text"
         id="sclshpTitleInput"
         required>
-        Scholarship Title
+          <h3 slot="header">Scholarship Title</h3>
+          <outlined-text-field
+            id="sclshpTitleInput"
+            name="sclshpTitle"
+            type="text"
+            placeholder="Enter a title"
+            required>
+          </outlined-text-field>
         </form-question>
 
         <form-question

@@ -30,6 +30,13 @@ module.exports = {
         type: "var",
       },
     },
+    tabs: {
+      import: "./src/scripts/tabs.js",
+      library: {
+        name: "Lib",
+        type: "var",
+      },
+    },
   },
   mode: "production",
   module: {
