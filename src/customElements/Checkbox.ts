@@ -5,7 +5,7 @@ import {
     CSSResultGroup,
     HTMLTemplateResult,
   } from "lit-element";
-  import { customElement, property, query } from "lit-element/decorators.js";
+  import { customElement, property, state, query, queryAll } from "lit-element/decorators.js";
   import { InputElement } from "./InputElement";
 
   @customElement("check-box") 
@@ -16,7 +16,7 @@ import {
         display: block;
         position: relative;
         padding-left: 35px;
-        margin-bottom: 12px;
+        margin-bottom: 12px;  
         cursor: pointer;
         font-size: 22px;       
           -webkit-user-select: none;
@@ -118,7 +118,7 @@ import {
       background-color: #ccc;
     }
 
-    /* When the checkbox is checked, add a blue background */
+    /* When the checkbox is checked, add a green background */
     .checkbox input:checked ~ .checkmark {
       background-color: #0b6623;
       /*change background-color to var(--theme-primary-color)*/
@@ -149,22 +149,24 @@ import {
       transform: rotate(45deg);
     }
     `
-
-  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;    
-  @property({ type: String, reflect: true }) accessor name: string = "";
   @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;    
+  @property({ type: String, reflect: true }) accessor value: string = "";
+
+  @state() accessor _hasChanged: boolean = false;
+  @state() accessor _showError: boolean = false;
+  @state() accessor _errorMessage: string = "";
 
   @property({ type: String }) accessor inputType: string = "checkbox"; //default type is checkbox if undefined
 
-  @property({ type: String }) selectedRadio: string = ''; // Keep track of selected radio option
   @property({ type: String }) radioOptions: string = '[]'; // Receive the radio button options as a JSON string
   
   @property({ type: String }) selectedCheckbox: string[] = []; // Keep track of selected checkbox options
   @property({ type: String }) checkboxOptions: string = '[]'; // Receive the checkbox options as a JSON string
 
-  @property({ type: String }) otherCheckbox: string = ''; // Checkbox with text field for custom response
-
   @property({ type: String }) otherRadio: String = ''; // Radio button with text field for custom response
+
+  @queryAll('input') accessor _checkboxList: Array<HTMLInputElement>;
 
 
   // Method to render checkbox options
@@ -181,7 +183,7 @@ import {
                         name="checkbox-group"
                         value="${option}"
                         ?checked="${this.selectedCheckbox.includes(option)}"
-                        @change="${this.checkboxSelect}"
+                        @change="${this.optionSelect}"
                       />
                     <span class="checkmark"></span>
                 </label>
@@ -191,41 +193,6 @@ import {
             `;
   }
 
-  //Method for checkbox with textbox option
-  private renderCheckboxOther(): HTMLTemplateResult {
-    const optionsArray = JSON.parse(this.checkboxOptions); // Parse the JSON string to array
-    return html`
-      <div>
-        ${optionsArray.map(
-          (option: string) => html`
-              <label class="checkbox">
-                  ${option}
-                     <input
-                        type="checkbox"
-                        name="checkboxgroup"
-                        value="${option}"
-                        ?checked="${this.selectedCheckbox.includes(option)}"
-                        @change="${this.checkboxSelect}"
-                      />
-                    <span class="checkmark"></span>
-                </label>
-                `
-                    )}
-        <label class="checkbox">
-            <input 
-              type="checkbox" 
-              name="checkboxgroup" 
-              ?checked="${this.otherCheckbox}"/>
-                <outlined-text-field 
-                  name="checkboxgroup" 
-                  placeholder="Enter text here">
-                </outlined-text-field>
-          <span class="checkmark"></span>
-        </label>
-
-      </div>
-    `
-  }
 
   // Method to render radio button
   private renderRadio(): HTMLTemplateResult {
@@ -240,8 +207,8 @@ import {
                         type="radio"
                         name="radiobutton"
                         value="${option}"
-                        ?checked="${this.selectedRadio === option}"
-                        @change="${this.radioChange}"
+                        ?checked="${this.selectedCheckbox.includes(option)}"
+                        @change="${this.optionSelect}"
                       />
                     <span class="checkdot"></span>
                 </label>
@@ -265,8 +232,8 @@ import {
                         type="radio"
                         name="radiogroup"
                         value="${option}"
-                        ?checked="${this.selectedRadio === option}"
-                        @change="${this.radioChange}"
+                        ?checked="${this.selectedCheckbox.includes(option)}"
+                        @change="${this.optionSelect}"
                       />
                     <span class="checkdot"></span>
                 </label>
@@ -277,23 +244,20 @@ import {
             <input
               type="radio"
               name="radiogroup"
-              value="${this.getValue}
-              ?checked="${this.selectedRadio }"
-              @change="${this.radioChange}" 
-            />
-              <outlined-text-field 
-                name="radiogroup" 
-                placeholder="Enter text here">
-              </outlined-text-field>
-                
-          <span class="checkdot"></span>
+              value="other"
+              ?checked="${this.selectedCheckbox}"
+              @change="${this.optionSelect}" 
+              />
+                <outlined-text-field 
+                  name="radiogroup" 
+                  placeholder="Enter text here">
+                </outlined-text-field>
+              <span class="checkdot"></span>
         </label>
 
       </div> 
     `
   }
-
-
 
   // Main render method to choose between rendering a checkbox or a radio button
   protected render(): HTMLTemplateResult {
@@ -303,9 +267,6 @@ import {
       else if (this.inputType === "radio") {
       return this.renderRadio();
     } 
-      else if (this.inputType === "checkbox-text"){
-      return this.renderCheckboxOther();
-    }
     else if (this.inputType === "radio-text"){
       return this.renderRadioOther();
     }
@@ -316,40 +277,31 @@ import {
   }
 
 
-// Event listener to determine which radio button is clicked
-private radioChange(event: Event) {
-  const target = event.target as HTMLInputElement;
-  this.selectedRadio = target.value;
-  // For testing
-  console.log(this.selectedRadio);
-
-  this.dispatchEvent(new CustomEvent('change', { detail: { value: this.selectedRadio } }));
-}
-
-
-// Event listener for which checkboxes are clicked
-private checkboxSelect(event: Event) {
-  const checkboxes = this.shadowRoot?.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+private optionSelect(event: Event)
+{
+  const checkboxes = this._checkboxList;
   // Reset selectedOptions array
   this.selectedCheckbox = [];
-  checkboxes.forEach((checkbox) => {
+  this._checkboxList.forEach((checkbox) => {
     if (checkbox.checked) {
       // If the checkbox is checked, add its value to the selectedOptions array
       this.selectedCheckbox.push(checkbox.value);
     }
   });
-  // For testing
-  console.log(this.selectedCheckbox);
-  }
-
+}
 
   getValue(): string {
-    //placeholder 
-    return this.name;
+    return JSON.stringify(this.selectedCheckbox);
   }
+
   checkValidity(): boolean {
-    //placeholder
-    return this.required;
+    // Check if the value is empty and the element is required
+    if (this.required && !this.disabled) {
+      if (this.value !== "") return true;
+      else return false;
+    }
+    // Default to true if the element is not required and is enabled
+    else return true;
   }
   displayError(message: string): void{
 
