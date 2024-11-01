@@ -31,11 +31,34 @@
     <c-tab panel-id="contactInformationPanel">Contact Information</c-tab>
     <c-tab panel-id="eligibilityFactorsPanel">Eligibility Factors</c-tab>
     <c-tab panel-id="studentRequirementsPanel">Student Requirements</c-tab>
-    <c-tab panel-id="testPanel">TEST</c-tab>
+    <c-tab panel-id="test">test</c-tab>
     </tab-bar>
 
-    <tab-panel id="testPanel">
+    <tab-panel id="test">
       <form-section
+      header="Testing Page">
+        
+        <form-question>
+          <check-box inputType="radio" 
+            radioOptions=
+              '["Yes",
+                "No",
+                "Maybe"]'>
+          </check-box>
+        </form-question>
+        
+        <!--checkbox test-->
+        <form-question>
+          <check-box inputType="checkbox" 
+            checkboxOptions='[
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"]'>
+          </check-box>
+        </form-question>
+
+      <!-- <form-section
         header="Testing Page">
         <form-question
           id="sclshpTestingQuestion">
@@ -47,11 +70,12 @@
             <option value="test2">Test 2</option>
           </drop-down>
         </form-question>
-      </form-section>
+      </form-section> -->
     </tab-panel>
-
-    <!--Scholarship Information-->
+    
+    <!--Scholarship InfAormation-->
     <tab-panel id="scholarshipInformationPanel">
+
       <form-section
         header="Scholarship Information"
         name="scholarshipInfo"
