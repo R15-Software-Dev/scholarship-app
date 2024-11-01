@@ -35,25 +35,30 @@
     </tab-bar>
 
     <tab-panel id="test">
-      <form-section>
-        <check-box inputType="radio" 
-          radioOptions=
-            '["Yes",
-              "No",
-              "Maybe"]'>
-        </check-box>
-
-        <br>
-        <!--checkbox test-->
-        <check-box inputType="checkbox" 
-          checkboxOptions='[
-            "Option 1",
-            "Option 2",
-            "Option 3",
-            "Option 4"]'>
-        </check-box>
-
       <form-section
+      header="Testing Page">
+        
+        <form-question>
+          <check-box inputType="radio" 
+            radioOptions=
+              '["Yes",
+                "No",
+                "Maybe"]'>
+          </check-box>
+        </form-question>
+        
+        <!--checkbox test-->
+        <form-question>
+          <check-box inputType="checkbox" 
+            checkboxOptions='[
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"]'>
+          </check-box>
+        </form-question>
+
+      <!-- <form-section
         header="Testing Page">
         <form-question
           id="sclshpTestingQuestion">
@@ -65,7 +70,7 @@
             <option value="test2">Test 2</option>
           </drop-down>
         </form-question>
-      </form-section>
+      </form-section> -->
     </tab-panel>
     
     <!--Scholarship InfAormation-->
