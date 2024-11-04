@@ -1,6 +1,7 @@
 name: AWS CodeBuild Release
 
 on:
+  workflow_dispatch: 
   release:
     types: [ published ]
 
