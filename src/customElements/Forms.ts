@@ -7,7 +7,6 @@ import {
   state,
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { OutlinedTextField } from "./OutlinedTextField";
 import { InputElement } from "./InputElement";
 
 @customElement("form-question")
