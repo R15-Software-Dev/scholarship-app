@@ -6,7 +6,7 @@ on:
     types: [ published ]
 
 jobs:
-  aws-codbuild:
+  aws-codebuild:
     if: github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
 
@@ -16,7 +16,7 @@ jobs:
         with:
           aws-region: us-east-1
           aws-access-key-id: ${{ secrets.CODEBUILDPUBLIC }}
-          aws-secret-access-key: ${{ secrets.CODEBUILDSECRET }}
+          aws-secret-access-key: ${{ secrets.CODEBUILDPRIVATE }}
           
     
       - name: CodeBuild Trigger
