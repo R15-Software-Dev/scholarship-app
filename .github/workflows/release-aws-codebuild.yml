@@ -1,0 +1,24 @@
+name: AWS CodeBuild Release
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  aws-codbuild:
+    if: github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.CODEBUILDPUBLIC }}
+          aws-secret-access-key: ${{ secrets.CODEBUILDSECRET }}
+          
+    
+      - name: CodeBuild Trigger
+        uses: aws-actions/aws-codebuild-run-build@v1
+        with:
+          project-name: WebsiteBuildGithub
