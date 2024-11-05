@@ -1,13 +1,12 @@
-name: AWS CodeBuild Release
+name: AWS CodeBuild Deployment
 
 on:
   workflow_dispatch: 
   release:
-    types: [ published ]
+    types: [published]
 
 jobs:
   aws-codebuild:
-    if: github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +18,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.CODEBUILDPRIVATE }}
           
     
-      - name: CodeBuild Trigger
+      - name: Build on AWS CodeBuild
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
           project-name: WebsiteBuildGithub
