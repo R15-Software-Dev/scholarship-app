@@ -42,7 +42,6 @@ export class Dropdown extends LitElement implements InputElement {
         transition:
           border-color 400ms ease,
           background-color 400ms ease;
-      }
     }
 
     select {
@@ -50,11 +49,16 @@ export class Dropdown extends LitElement implements InputElement {
       flex-grow: 1;
       border: none;
       padding: 2px 15px;
+      padding: 2px 15px 2px 40px;
       color: #696158;
       border-radius: 8px;
       background-color: transparent;
       appearance: none;
       cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23696158' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 10px center;
+      background-size: 24px;
     }
 
     select:focus {
@@ -103,6 +107,8 @@ export class Dropdown extends LitElement implements InputElement {
         color: var(--theme-error-color);
       }
     }
+
+    
   `;
 
   @property({ type: Boolean, reflect: true }) required: boolean = false;
