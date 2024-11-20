@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Google OAuth scripts -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="bundles/customElements.bundle.js" type="module"></script>
+    <script>
+      function handleTokenResponse(response) {
+        console.log(`Returned token: ${response.credential}`);
+        console.log(`Adding value into cookie`);
+        document.cookie = `authorization=${response.credential}`;
+        console.log(`Redirecting to next page...`);
+        window.location.replace('entryPortal.html');  // This automatically carries cookies
+      }
+    </script>
+
+    <style>
+      div.container {
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+        background-color: inherit;
+        box-shadow: 0 0 6px rgb(173, 170, 179);
+        padding: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      div.login-button {
+        width: 50%;
+      }
+
+      hr {
+        border: none;
+        border-top:  3px;
+        overflow: visible;
+        height: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Make login look pretty, probably make a box and put login in the middle -->
+
+    <div id="g_id_onload"
+      data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-callback="handleTokenResponse"
+      data-auto_prompt="false"></div>
+
+    <div class="container">
+      <h1>Login</h1>
+      <hr />
+      <div class="login-button">
+        <div class="g_id_signin"
+          data-type="standard"
+          data-shape="rectangular"
+          data-theme="outline"
+          data-text="signin_with"
+          data-size="large"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
