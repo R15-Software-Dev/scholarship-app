@@ -1,6 +1,6 @@
 {
   "name": "scholarship-app",
-  "version": "1.0.0",
+  "version": "0.1.1-alpha",
   "description": "Region 15 Scholarship Application templates.",
   "main": "index.js",
   "scripts": {
