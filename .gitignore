@@ -138,3 +138,6 @@ dist/bundles/customElements.bundle.js.LICENSE.txt
 
 # zed configuration files
 .zed/
+
+# Package lock
+package-lock.json

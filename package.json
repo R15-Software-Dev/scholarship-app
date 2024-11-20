@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "start": "npm run build && npm run start-server",
-    "start-server": "http-server ./dist --cors"
+    "start-server": "http-server ./dist --cors",
+    "install": "npm install commitizen -g"
   },
   "author": "Lucas Vas",
   "license": "ISC",
@@ -22,6 +23,13 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.30",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "terser-webpack-plugin": "^5.3.10"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
