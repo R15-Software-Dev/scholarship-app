@@ -141,3 +141,6 @@ dist/bundles/customElements.bundle.js.LICENSE.txt
 
 # Package lock
 package-lock.json
+
+# zip files
+*.zip
