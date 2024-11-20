@@ -16,8 +16,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
-          aws-access-key-id: ${{ secrets.LAMBDAPUBLIC }}
-          aws-secret-access-key: ${{ secrets.LAMBDAPRIVATE }}
+          aws-access-key-id: ${{ secrets.CODEBUILDPUBLIC }}
+          aws-secret-access-key: ${{ secrets.CODEBUILDPRIVATE }}
 
       - name: Zip Lambda function
         run: |
