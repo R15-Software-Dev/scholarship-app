@@ -16,6 +16,13 @@
     </script>
 
     <style>
+      div.centering {
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        text-align: center;
+      }
+
       div.container {
         display: flex;
         flex-direction: column;
@@ -46,22 +53,24 @@
   <body>
     <!-- Make login look pretty, probably make a box and put login in the middle -->
 
-    <div class="container">
-      <h1>Login</h1>
-      <hr />
-      <div class="login-button">
-        <div id="g_id_onload"
-          data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
-          data-context="signin"
-          data-ux_mode="popup"
-          data-callback="handleTokenResponse"
-          data-auto_prompt="true"></div>
-        <div class="g_id_signin"
-          data-type="standard"
-          data-shape="rectangular"
-          data-theme="outline"
-          data-text="signin_with"
-          data-size="large"></div>
+    <div class="centering">
+      <div class="container">
+        <h1>Login</h1>
+        <hr />
+        <div class="login-button">
+          <div id="g_id_onload"
+            data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-callback="handleTokenResponse"
+            data-auto_prompt="true"></div>
+          <div class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"></div>
+          </div>
         </div>
       </div>
     </div>
