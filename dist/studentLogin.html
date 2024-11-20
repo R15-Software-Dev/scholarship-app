@@ -11,7 +11,7 @@
         console.log(`Adding value into cookie`);
         document.cookie = `authorization=${response.credential}`;
         console.log(`Redirecting to next page...`);
-        window.location.replace('index.html');  // This automatically carries cookies
+        window.location.href = 'index.html'  // This automatically carries cookies
       }
     </script>
 
@@ -46,17 +46,16 @@
   <body>
     <!-- Make login look pretty, probably make a box and put login in the middle -->
 
-    <div id="g_id_onload"
-      data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
-      data-context="signin"
-      data-ux_mode="popup"
-      data-callback="handleTokenResponse"
-      data-auto_prompt="false"></div>
-
     <div class="container">
       <h1>Login</h1>
       <hr />
       <div class="login-button">
+        <div id="g_id_onload"
+          data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
+          data-context="signin"
+          data-ux_mode="popup"
+          data-callback="handleTokenResponse"
+          data-auto_prompt="true"></div>
         <div class="g_id_signin"
           data-type="standard"
           data-shape="rectangular"
