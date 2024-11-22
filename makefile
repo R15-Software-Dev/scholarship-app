@@ -2,17 +2,15 @@
 SRC_DIR := ./src/lambdaFunctions
 # Directory to store the zip files
 OUT_DIR := ./lambdaZips
-# Command to execute on each zip file (replace 'echo' with your desired command)
-ZIP_COMMAND := echo
 
 # Find all subdirectories in SRC_DIR
 FOLDERS := $(shell find $(SRC_DIR) -mindepth 1 -maxdepth 1 -type d)
 
 # Generate zip filenames corresponding to folders
-ZIP_FILES := $(addprefix $(OUT_DIR)/,$(notdir $(FOLDERS)).zip)
+ZIP_FILES := $(addsuffix .zip, $(addprefix $(OUT_DIR)/,$(notdir $(FOLDERS))))
 
 # Default target
-all: $(ZIP_FILES) run-command
+lambda: $(ZIP_FILES) run-command
 
 # Create the OUT_DIR if it doesn't exist
 $(OUT_DIR):
@@ -20,13 +18,14 @@ $(OUT_DIR):
 
 # Rule to zip the contents of each folder
 $(OUT_DIR)/%.zip: $(SRC_DIR)/%
+	mkdir -p $(OUT_DIR)
 	cd $< && zip -r $(abspath $@) ./*
 
 # Run the command on each zip file
+# This updates the lambda function code, and then outputs the result to /dev/null
+# This is done to avoid printing the result of the command
 run-command: $(ZIP_FILES)
-	@for zip in $^; do \
-		$(ZIP_COMMAND) $$zip; \
-	done
+	$(foreach zip, $(ZIP_FILES), aws lambda update-function-code --function-name $(basename $(notdir $(zip))) --zip-file fileb://$(zip) > /dev/null;)
 
 # Clean up generated zips
 clean:
