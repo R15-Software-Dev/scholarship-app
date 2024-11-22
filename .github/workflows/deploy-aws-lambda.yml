@@ -1,0 +1,24 @@
+name: AWS Lambda Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  aws-lambda:
+    runs-on: ubuntu-latest
+    environment: amazon-s3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.CODEBUILDPUBLIC }}
+          aws-secret-access-key: ${{ secrets.CODEBUILDPRIVATE }}
+
+      - name: Deploy to AWS Lambda
+        run: |
+          make lambda

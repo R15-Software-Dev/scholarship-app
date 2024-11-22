@@ -1,0 +1,14 @@
+{
+  "name": "lambdafunctions",
+  "version": "0.0.1",
+  "description": "Lambda functions required for overall project",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jose": "^5.9.6"
+  }
+}
