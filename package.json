@@ -13,6 +13,7 @@
   "author": "Lucas Vas",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.696.0",
     "http-server": "^14.1.1",
     "jose": "^5.6.3",
     "lit": "^3.1.4",
