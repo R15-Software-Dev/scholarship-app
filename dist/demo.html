@@ -26,20 +26,8 @@
     <script src="./bundles/index.bundle.js" defer></script>
     <script src="./bundles/tabs.bundle.js" defer></script>
     <script>
-      async function handleTokenResponse(response) {
-        // Send the response to our API
-
-          "https://qngitit3sb.execute-api.us-east-1.amazonaws.com/demo/sign-in",
-          {
-            method: "POST",
-            body: JSON.stringify({ token: response }),
-          },
-        );
-
-        const body = await tokenResponse.json();
-        document.querySelector("#loginLabel").innerHTML =
-          `Response: ${body.Message}`;
-        console.log(body);
+      function handleTokenResponse(response) {
+        console.log(`Returned JWT is: ${response.credential}`)
       }
     </script>
   </head>
@@ -54,7 +42,7 @@
     <div id="signin-container">
       <div
         id="g_id_onload"
-        data-client_id="817432784177-0b190flgk60cntjpdesjebbea3meq10k.apps.googleusercontent.com"
+        data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
         data-context="signin"
         data-ux_mode="popup"
         data-callback="handleTokenResponse"

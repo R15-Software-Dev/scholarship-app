@@ -138,3 +138,7 @@ dist/bundles/customElements.bundle.js.LICENSE.txt
 
 # zed configuration files
 .zed/
+
+# zip files and build output
+lambdaZips/
+*.zip

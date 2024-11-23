@@ -1,17 +1,19 @@
 {
   "name": "scholarship-app",
-  "version": "1.0.0",
+  "version": "0.1.1-alpha",
   "description": "Region 15 Scholarship Application templates.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "start": "npm run build && npm run start-server",
-    "start-server": "http-server ./dist --cors"
+    "start-server": "http-server ./dist --cors",
+    "install": "npm install commitizen -g"
   },
   "author": "Lucas Vas",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.696.0",
     "http-server": "^14.1.1",
     "jose": "^5.6.3",
     "lit": "^3.1.4",
@@ -22,6 +24,13 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.30",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "terser-webpack-plugin": "^5.3.10"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

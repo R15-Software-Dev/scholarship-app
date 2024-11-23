@@ -23,7 +23,7 @@ export class FormQuestion extends LitElement {
 
   // Even though this returns an array, we will only ever use the first element
   // that we find. Only one input element per question.
-  @queryAssignedElements({ slot: "input" }) accessor _inputList!: Array<InputElement>;
+  @queryAssignedElements( ) accessor _inputList!: Array<InputElement>;
 
   // After render, for accessibility, we want to set the label's "for" attribute
   @query("label") private accessor _label!: HTMLLabelElement;
