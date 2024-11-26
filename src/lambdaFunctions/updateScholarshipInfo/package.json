@@ -1,5 +1,5 @@
 {
-  "name": "getallusers",
+  "name": "updateScholarshipInfo",
   "version": "0.0.1",
   "main": "index.mjs",
   "scripts": {
@@ -8,4 +8,5 @@
   "author": "",
   "license": "ISC",
   "description": ""
+
 }
