@@ -142,3 +142,6 @@ dist/bundles/customElements.bundle.js.LICENSE.txt
 # zip files and build output
 lambdaZips/
 *.zip
+
+# Idea config
+.idea/
