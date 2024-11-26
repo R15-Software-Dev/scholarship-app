@@ -19,21 +19,9 @@ export async function handler(event) {
         });
 
         const dbresponse = await client.send(command);
-        return buildResponse(dbresponse.$metadata.httpStatusCode, dbresponse);
+        return dbresponse;
     } catch (e) {
-        console.log("Error: " + JSON.stringify(e));
-        return buildResponse(500, {ErrorMessage: e.message, EventBody: event.body});
+        console.error(e.message);
+        throw new Error(e.message);
     }
-};
-
-const buildResponse = (statusCode, bodyContent) => {
-    return {
-        statusCode: statusCode,
-        headers: {
-            "Access-Control-Allow-Headers" : "Content-Type",
-            "Access-Control-Allow-Origin": "https://alphafetus-testbucket.s3.amazonaws.com",
-            "Access-Control-Allow-Methods": "OPTIONS,POST"
-        },
-        body: JSON.stringify(bodyContent)
-    };
-};
+}
