@@ -3,39 +3,29 @@ import {DynamoDBClient, PutItemCommand} from '@aws-sdk/client-dynamodb';
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
-export async function handler(event) {
+// Designed for use with a POST request.
+export const handler = async (event) => {
+    console.log("Attempting to run function...");
     try {
-        const input = JSON.parse(event.body);
+
+        console.log("Running function.");
 
         const command = new PutItemCommand({
             TableName: "contact-info",
             Item: {
-                contact: {S: input.contact},
-                contactBusiness: {S: input.contactBusiness},
-                address: {S: input.address},
-                homePhone: {S: input.homePhone},
-                businessPhone: {S: input.businessPhone},
-                cellPhone: {S: input.cellPhone},
-                email: {S: input.email}
+                studentResidence: {BOOL: input.studentResidence},
+                sclshpNonPHS: {BOOL: input.sclshpNonPHS},
+                studyAreaRequirement: {S: input.studyAreaRequirement},
+                financialNeed: {BOOL: input.financialNeed},
+                eligibilityOther: {S: input.eligibilityOther}
             }
         });
 
+        // return buildResponse(dbresponse.$metadata.httpStatusCode, dbresponse);
         const dbresponse = await client.send(command);
-        return buildResponse(dbresponse.$metadata.httpStatusCode, dbresponse);
+        return dbresponse;  // Return the database response json
     } catch (e) {
-        console.log("Error: " + JSON.stringify(e));
-        return buildResponse(500, {ErrorMessage: e.message, EventBody: event.body});
+        console.error(e.message);
+        throw new Error(e.message);
     }
-};
-
-const buildResponse = (statusCode, bodyContent) => {
-    return {
-        statusCode: statusCode,
-        headers: {
-            "Access-Control-Allow-Headers" : "Content-Type",
-            "Access-Control-Allow-Origin": "https://alphafetus-testbucket.s3.amazonaws.com",
-            "Access-Control-Allow-Methods": "OPTIONS,POST"
-        },
-        body: JSON.stringify(bodyContent)
-    };
-};
+}
