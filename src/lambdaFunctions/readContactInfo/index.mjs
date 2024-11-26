@@ -9,7 +9,7 @@ export async function handler(event) {
         const input = JSON.parse(event.body);
 
         const command = new GetItemCommand({
-            TableName: "contact-info",
+            TableName: "scholarship-info",
             Item: {
                 contact: {S: input.contact},
                 contactBusiness: {S: input.contactBusiness},
