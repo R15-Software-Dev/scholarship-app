@@ -3,6 +3,11 @@ import {DynamoDBClient, PutItemCommand} from '@aws-sdk/client-dynamodb';
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
+/**
+ * Creates and or updates a record in the scholarship info table in DynamoDB
+ * @param {ScholarshipInfo} event - A scholarship info object
+ * @returns DynamoDB response object
+ */
 export async function handler(event) {
     try {
         const input = JSON.parse(event.body);
@@ -23,5 +28,23 @@ export async function handler(event) {
     } catch (e) {
         console.error(e.message);
         throw new Error(e.message);
+    }
+}
+
+class ScholarshipInfo{
+    constructor(
+        sclshpTitle,
+        sclshpSponsor,
+        sclshpNumAwards,
+        sclshpAwardsTotal,
+        sclshpAmountPerAward
+    ) {
+        return {
+            sclshpTitle: sclshpTitle,
+            sclshpSponsor: sclshpSponsor,
+            sclshpNumAwards: sclshpNumAwards,
+            sclshpAwardsTotal: sclshpAwardsTotal,
+            sclshpAmountPerAward: sclshpAmountPerAward
+        }
     }
 }
