@@ -3,7 +3,7 @@ SRC_DIR := ./src/lambdaFunctions
 # Directory to store the zip files
 OUT_DIR := ./lambdaZips
 # Placeholder role ARN for lambda functions
-PLACEHOLDER_ROLE := arn:aws:iam::582555552507:role/LambdaPlaceholderRole
+PLACEHOLDER_ROLE := arn:aws:iam::$(AWS_ID):role/LambdaPlaceholderRole
 
 # Find all subdirectories in SRC_DIR
 FOLDERS := $(shell find $(SRC_DIR) -mindepth 1 -maxdepth 1 -type d)
