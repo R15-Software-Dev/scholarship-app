@@ -17,7 +17,7 @@ define check_lambdas
   $(info Checking if lambda function $(function_name) exists)
   $(eval exists = $(shell aws lambda get-function --function-name $(1)))
   $(if $(exists), \
-  	$(shell aws lambda update-function-code --function-name $(function_name) --zip-file fileb://$(zip_file) > /dev/null), \
+    $(shell aws lambda update-function-code --function-name $(function_name) --zip-file fileb://$(zip_file) > /dev/null), \
     $(shell aws lambda create-function --function-name $(function_name) --runtime nodejs22.x --handler index.handler --role $(PLACEHOLDER_ROLE) --zip-file fileb://$(zip_file) > /dev/null))
 endef
 
