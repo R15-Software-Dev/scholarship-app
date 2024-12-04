@@ -8,7 +8,7 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "jsonwebtoken": "^9.0.2"
+  "dependencies": {
+    "jose": "^5.9.6"
   }
 }
