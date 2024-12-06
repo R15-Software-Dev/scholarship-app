@@ -13,7 +13,6 @@
 @property --theme-primary-color {
   syntax: "<color>";
   inherits: false;
-
   initial-value: #980000;
   /* Old value: #0b6623*/
 }
