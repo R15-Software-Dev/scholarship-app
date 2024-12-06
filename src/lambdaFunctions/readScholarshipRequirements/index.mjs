@@ -3,7 +3,11 @@ import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
-// Designed for use with a POST request.
+/**
+ * Reads scholarship requirement data from the scholarship info table.
+ * @param {string} event - The scholarship ID
+ * @returns The scholarship requirement information
+ */
 export async function handler(event) {
 
     try {
@@ -15,7 +19,7 @@ export async function handler(event) {
                 studentAidReport: {BOOL: input.studentAidReport},
                 studentInterviews: {BOOL: input.studentInterviews},
                 recipientSelection: {S: input.recipientSelection},
-                transcriptRequirements: {BOOL: input.transcriptRequirements},
+                transcriptRequirement: {BOOL: input.transcriptRequirement},
                 awardTo: {BOOL: input.awardTo},
                 sclshpReApplication: {BOOL: input.sclshpReApplication},
                 essayRequirement: {BOOL: input.essayRequirement},
@@ -31,3 +35,5 @@ export async function handler(event) {
         throw new Error(e.message);
     }
 }
+
+
