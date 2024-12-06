@@ -16,7 +16,8 @@ import { createRipple, rippleCSS } from "./Ripple";
 export class TabBar extends LitElement {
   static styles?: CSSResultGroup = css`
     div {
-      margin-bottom: 20px;
+      //margin-bottom: 20px;
+      background-color: var(--theme-primary-color);
     }
 
     slot {
@@ -104,43 +105,59 @@ export class TabBar extends LitElement {
 @customElement("c-tab")
 export class Tab extends LitElement {
   static styles?: CSSResultGroup = css`
-    .container {
-      &::after {
-        content: "";
-        width: 0;
-        height: 3px;
-        margin: auto;
-        display: block;
-        background: transparent;
-        transition:
-          width 150ms ease,
-          background-color 150ms ease;
-      }
-      &.active::after {
-        width: 100%;
-        background: var(--theme-primary-color);
-      }
-
-      &.disabled {
-        display: none;
-      }
-    }
+    //.container {
+    //  &::after {
+    //    content: "";
+    //    width: 0;
+    //    height: 3px;
+    //    margin: auto;
+    //    display: block;
+    //    background: transparent;
+    //    transition: width 150ms ease, background-color 150ms ease;
+    //  }
+    //  &.active::after {
+    //    width: 100%;
+    //    //background: #fff; /* Matches text when active */
+    //  }
+    //}
 
     .button {
       width: auto;
       position: relative;
       overflow: hidden;
-      transition: background-color 400ms ease;
+      transition: background-color 150ms ease, color 150ms ease;
       user-select: none;
       text-align: center;
-      padding: 5px;
+      padding: 10px 20px;
       z-index: 0;
-      border-radius: 4px;
-      margin: 0 2px 5px 2px;
+      border-radius: 8px 8px 0 0; /* Rounded top corners */
+      margin: 0 2px;
+      background-color: #8B0000; /* Default dark red */
+      color: white; /* Default white text */
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: bold;
 
       &:hover {
-        background-color: #e9e9e9;
+        background-color: #6B0000; /* Slightly darker red on hover */
       }
+
+      &.active {
+        background-color: white; /* Blend with white page */
+        color: black; /* Black text on white background */
+        border-color: #8B0000; /* Red border for separation */
+        z-index: 1; /* Keep the active tab above others */
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 4px #8B0000;
+      }
+    }
+
+    .button.disabled {
+      pointer-events: none;
+      opacity: 0.5; /* Greyed-out appearance for disabled tabs */
     }
 
     ${rippleCSS}
@@ -156,19 +173,23 @@ export class Tab extends LitElement {
     return html`
       <!-- This is essentially a customized button. -->
       <div
-        class="${classMap({
-          container: true,
-          active: this.active,
-          disabled: this.disabled,
-        })}"
+          class="${classMap({
+            container: true,
+            active: this.active,
+            disabled: this.disabled,
+          })}"
       >
-        <div class="button" role="tab" @click=${this._handleClick}>
-          <!-- Define where text and/or icons will appear. -->
+        <div
+            class="button ${classMap({
+              active: this.active,
+            })}"
+            role="tab"
+            @click=${this._handleClick}
+        >
+          <!-- Icon slot (optional) -->
           <slot name="icon"></slot>
-          <slot>
-            <!-- This is where our label content will go. -->
-            <!-- Material Design has @slotchange here, but I don't know what that's for. -->
-          </slot>
+          <!-- Label slot -->
+          <slot></slot>
         </div>
       </div>
     `;
@@ -192,6 +213,12 @@ export class TabPanel extends LitElement {
       &.active {
         display: block;
       }
+
+      background-color: white; /* Matches the background */
+      border-color: #fff; /* White border for separation */
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+      color: black;
     }
   `;
 
