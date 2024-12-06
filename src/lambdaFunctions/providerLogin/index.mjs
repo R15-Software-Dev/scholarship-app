@@ -14,6 +14,8 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  */
 export const handler = async (event) => {
   try {
+    console.log("Recieved event: ");
+    console.log(event);
     // Create command to get user information
     const getCommand = GetItemCommand({
       TableName: "scholarship-providers",
