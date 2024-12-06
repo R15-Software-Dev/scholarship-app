@@ -37,7 +37,7 @@ export const handler = async (event) => {
   console.log(dbresponse);
   if (dbresponse.Item.Password.S !== event.password ||
     dbresponse.Item.Email.S !== event.email) {
-    return "Password does not match";
+    throw Error("Password does not match");
   }
 
   // If password matches, get the secret from Secrets Manager
