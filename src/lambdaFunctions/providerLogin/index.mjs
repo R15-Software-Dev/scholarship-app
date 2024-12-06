@@ -27,7 +27,6 @@ export const handler = async (event) => {
     AttributesToGet: [
       "Password",
       "Email",
-      "UserID"
     ]
   });
 
@@ -42,7 +41,7 @@ export const handler = async (event) => {
 
   // If password matches, get the secret from Secrets Manager
   const secretResponse = await secretClient.send(new GetSecretValueCommand({
-    "SecretId": "providerjwt"
+    SecretId: "providerjwt"
   }));
   const secret = new TextEncoder().encode(secretResponse.SecretString);
 
