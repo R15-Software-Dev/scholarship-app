@@ -17,7 +17,7 @@ export const handler = async (event) => {
     console.log("Recieved event: ");
     console.log(event);
     // Create command to get user information
-    const getCommand = GetItemCommand({
+    const getCommand = new GetItemCommand({
       TableName: "scholarship-providers",
       Key: {
         email: { S: event.email }
