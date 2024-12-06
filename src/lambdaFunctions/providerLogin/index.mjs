@@ -47,7 +47,6 @@ export const handler = async (event) => {
 
   // Create JWT and return it
   const token = await new jose.SignJWT({
-    sub: dbresponse.Item.UserID.N,
     email: dbresponse.Item.Email.S
   })
   .setIssuedAt()
