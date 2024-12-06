@@ -22,6 +22,90 @@
       any of the already entered scholarships.
     -->
 
+  <!-- Banner -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .banner {
+      position: relative; /* Allows absolute positioning of the text box */
+      height: 80px;
+      background-color: var(--theme-primary-color); /* Dark red */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      margin-right: 10px; /* Space between logo and text */
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .banner-text h1 {
+      margin: 0;
+      font-size: 18px;
+      color: white; /* White text for contrast */
+      text-align: left;
+    }
+
+    .text-box {
+      position: absolute; /* Keep it in the center regardless of other content */
+      left: 50%;
+      transform: translateX(-50%); /* Center it horizontally */
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-box h1 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--theme-primary-color); /* Match banner color for contrast */
+      text-align: center;
+    }
+
+    .right-logo {
+      width: 90px;
+      height: 90px;
+      padding-top: 35px;
+    }
+  </style>
+  <body>
+  <div class="banner">
+    <div class="left-section">
+      <div class="logo left-logo">
+        <img src="images/PHS_Stacked_Acronym.png" alt="Left Logo">
+      </div>
+      <div class="banner-text">
+        <h1>Scholarship Provider Form</h1>
+      </div>
+    </div>
+    <div class="text-box">
+      <h1>Submission Date: --/--/--</h1>
+    </div>
+    <div class="logo right-logo">
+      <img src="images/R15_logo_colorMatchWhite.png" alt="Right Logo">
+    </div>
+  </div>
+  </body>
+
 <body>
 
     <tab-bar>
