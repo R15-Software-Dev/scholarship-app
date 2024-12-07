@@ -52,7 +52,7 @@ import {
 
       /* When the checkbox is checked, add a green background */
       .radio input:checked ~ .checkdot {
-        background-color: #0b6623;
+        background-color: var(--theme-primary-color);
         }
 
       /* Create the checkmark/indicator (hidden when not checked) */
@@ -120,7 +120,7 @@ import {
 
     /* When the checkbox is checked, add a green background */
     .checkbox input:checked ~ .checkmark {
-      background-color: #0b6623;
+      background-color: var(--theme-primary-color);
       /*change background-color to var(--theme-primary-color)*/
     }
 
