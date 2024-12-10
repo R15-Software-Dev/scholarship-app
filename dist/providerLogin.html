@@ -33,7 +33,7 @@
 
     .login-container {
         width: 400px;
-        height: 400px;
+        height: 500px;
         border-radius: 7px;
         background-color: inherit;
         box-shadow: 0 0 6px rgb(173, 170, 179);
@@ -130,30 +130,41 @@
     }
 </style>
 <body>
-<div class="login-container">
-    <div class="banner">
-        <div class="left-section">
-            <div class="logo">
-                <img src="images/PHS_Stacked_Acronym.png" alt="Logo">
+
+
+        <div class="login-container">
+            <div class="banner">
+                <div class="left-section">
+                    <div class="logo">
+                        <img src="images/PHS_Stacked_Acronym.png" alt="Logo">
+                    </div>
+                    <div class="banner-text">
+                        <h1>Scholarship Provider Login</h1>
+                    </div>
+                </div>
             </div>
-            <div class="banner-text">
-                <h1>Scholarship Provider Login</h1>
-            </div>
+            <tab-bar>
+                <c-tab active panel-id = "scholarshipProviderLoginPanel"> Sign on </c-tab>
+                <c-tab panel-id = "scholarshipProviderRegistrationPanel" > Register </c-tab>
+            </tab-bar>
+            <tab-panel id="scholarshipProviderLoginPanel">
+                <div class="login-content">
+                    <label for="username">Email</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                    <div class="register-text">
+                        <span>Don't have an account? <a href="#">Click here to register</a></span>
+                    </div>
+                    <div class="relative-wrapper">
+                        <button class="login-button">Sign in</button>
+                    </div>
+                </div>
+            </tab-panel>
         </div>
-    </div>
-    <div class="login-content">
-        <label for="username">Email</label>
-        <input type="text" id="username" placeholder="Enter your username">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password">
-        <div class="register-text">
-            <span>Don't have an account? <a href="#">Click here to register</a></span>
-        </div>
-        <div class="relative-wrapper">
-            <button class="login-button">Sign in</button>
-        </div>
-    </div>
-</div>
+
+
+
 
 </body>
 </html>
