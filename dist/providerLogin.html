@@ -69,10 +69,6 @@
         padding: 10px;
     }
 
-    .login-content {
-
-    }
-
     .register-text {
         margin-top: 10px;
         text-align: center;
@@ -130,8 +126,6 @@
     }
 </style>
 <body>
-
-
         <div class="login-container">
             <div class="banner">
                 <div class="left-section">
@@ -179,10 +173,45 @@
                     </div>
                 </div>
             </tab-panel>
+
+            <!-- Registration tab -->
+            <tab-panel id = "scholarshipProviderRegistrationPanel">
+
+                <form-question>
+                    <h3 slot="header"> Email </h3>
+                    <outlined-text-field
+                            label = "Email"
+                            placeholder = "Enter your email"
+                            type = "email"
+                            name = "sclshpProviderEmail"
+                    >
+                    </outlined-text-field>
+                </form-question>
+                <!-- Create password -->
+                <form-question>
+                    <h3 slot="header"> Password </h3>
+                    <outlined-text-field
+                            label = "Password"
+                            placeholder = "Enter your password"
+                            type = "password"
+                            name = "sclshpProviderPassword"
+                    >
+                    </outlined-text-field>
+                </form-question>
+                <!-- Confirm password -->
+                <form-question>
+                    <h3 slot="header"> Confirm password </h3>
+                    <outlined-text-field
+                            label = "confirmPassword"
+                            placeholder = "Enter your password again"
+                            type = "password"
+                            name = "sclshpProviderConfirmPassword"
+                    >
+                    </outlined-text-field>
+                </form-question>
+            </tab-panel>
         </div>
 
-
-
-
 </body>
+
 </html>
