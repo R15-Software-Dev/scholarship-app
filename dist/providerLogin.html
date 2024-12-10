@@ -32,8 +32,8 @@
     }
 
     .login-container {
-        width: 400px;
-        height: 500px;
+        width: 600px;
+        height: 600px;
         border-radius: 7px;
         background-color: inherit;
         box-shadow: 0 0 6px rgb(173, 170, 179);
@@ -70,7 +70,7 @@
     }
 
     .login-content {
-        padding: 20px;
+
     }
 
     .register-text {
@@ -149,10 +149,28 @@
             </tab-bar>
             <tab-panel id="scholarshipProviderLoginPanel">
                 <div class="login-content">
-                    <label for="username">Email</label>
-                    <input type="text" id="username" placeholder="Enter your username">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
+                    <form-question>
+                        <h3 slot="header"> Email </h3>
+                        <outlined-text-field
+                                label = "Email"
+                                placeholder = "Enter your email"
+                                type = "email"
+                                name = "sclshpProviderEmail"
+                        >
+                        </outlined-text-field>
+                    </form-question>
+
+                    <form-question>
+                        <h3 slot="header"> Password </h3>
+                        <outlined-text-field
+                                label = "Password"
+                                placeholder = "Enter your password"
+                                type = "password"
+                                name = "sclshpProviderPassword"
+                        >
+                        </outlined-text-field>
+                    </form-question>
+
                     <div class="register-text">
                         <span>Don't have an account? <a href="#">Click here to register</a></span>
                     </div>
