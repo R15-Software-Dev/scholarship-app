@@ -170,7 +170,7 @@
                     </form-question>
 
                     <div class="register-text">
-                        <span>Don't have an account? <a href="#">Click here to register</a></span>
+                        <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
                     </div>
                     <div class="relative-wrapper">
                         <button class="login-button">Sign in</button>
@@ -219,10 +219,25 @@
             </tab-panel>
         </div>
 
+
         <script>
-            // Get references to the tab-bar and container
+            // Get the register link, tab-bar element, and container
+            const registerLink = document.getElementById('register-link');
             const tabBar = document.querySelector('tab-bar');
             const loginContainer = document.querySelector('.login-container');
+
+            // Listen for the click event on the "Click here to register" link
+            registerLink.addEventListener('click', function(event) {
+                event.preventDefault();  // Prevent default anchor behavior
+
+                // Find the Register tab using the panel-id
+                const registerTab = [...tabBar.querySelectorAll('c-tab')].find(tab => tab.panelId === 'scholarshipProviderRegistrationPanel');
+
+                if (registerTab) {
+                    // Activate the Register tab via tabBar's API
+                    tabBar.activeTab = registerTab;  // This sets the active tab within the tab-bar
+                }
+            });
 
             // Listen for the tab change event
             tabBar.addEventListener('change', function() {
