@@ -13,6 +13,7 @@
     <script src="./bundles/customElements.bundle.js" type="module"></script>
     <script src="./bundles/entryPortal.bundle.js" defer></script>
     <script src="./bundles/tabs.bundle.js" defer></script>
+    <script src="./bundles/stickyScrolling.bundle.js" defer></script>
   </head>
 
     <!--
@@ -33,6 +34,11 @@
       position: sticky;
       top: 0;
       z-index: 999;
+      transition: box-shadow 0.3s; /* Add shadow transition */
+      &.sticky-shadow {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);  /* Add shadow when sticky */
+        transition: box-shadow 0.3s; /* Add shadow transition */
+      }
     }
 
     .banner {
