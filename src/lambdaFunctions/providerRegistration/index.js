@@ -1,4 +1,4 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
+const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 
 // Create a DynamoDB client
 const client = new DynamoDBClient({ region: "us-east-1" });
@@ -10,8 +10,13 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @returns A success message or an error
  * @type {(event: Provider) => string | Error}
  */
+async function handler(event) {
+  // console.log(event);
+  // Check if the event fits the Provider class.
+  if (!event.email || !event.password ||
+    event.email === "" || event.password === "")
+    throw new Error(`Invalid input: ${event}`);
 
-export const handler = async (event) => {
   // Create a command to check if the provider is already registered.
   // If the provider is already registered, return an error and do not register them again.
   const getCommand = new GetItemCommand({
@@ -61,3 +66,6 @@ class Provider {
    */
   password = "";
 }
+
+
+module.exports = { handler, Provider };
