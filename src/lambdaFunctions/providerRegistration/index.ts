@@ -8,9 +8,8 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  *
  * @param event - Event body from API request
  * @returns A success message or an error
- * @type {(event: Provider) => string | Error}
  */
-async function handler(event) {
+async function handler(event: Provider) {
   // console.log(event);
   // Check if the event fits the Provider class.
   if (!event.email || !event.password ||

@@ -27,10 +27,14 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.30",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "terser-webpack-plugin": "^5.3.10"
+    "terser-webpack-plugin": "^5.3.10",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2"
   },
   "config": {
     "commitizen": {

@@ -1,20 +1,20 @@
-const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
 
-const handler = require("./../providerRegistration/index").handler;
+const handler = require("./../index").handler;
 
 // Test an input to a function
 test("throws error with no object", async () => {
-  await expect(handler()).rejects.toThrowError();
+  await expect(handler()).rejects.toThrow();
 });
 
 test("throws error with empty object", async () => {
-  await expect(handler({})).rejects.toThrowError();
+  await expect(handler({})).rejects.toThrow();
 });
 
 test("throws error with incorrect input", async () => {
-  await expect(handler({ email: "hello@gmail.com", password: "" })).rejects.toThrowError();
-  await expect(handler({ email: "", password: "blahblahblah" })).rejects.toThrowError();
-  await expect(handler({})).rejects.toThrowError();
+  await expect(handler({ email: "hello@gmail.com", password: "" })).rejects.toThrow();
+  await expect(handler({ email: "", password: "blahblahblah" })).rejects.toThrow();
+  await expect(handler({})).rejects.toThrow();
 });
 
 test("returns 'Provider registered successfully' with correct input", async () => {
