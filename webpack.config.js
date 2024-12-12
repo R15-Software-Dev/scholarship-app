@@ -16,6 +16,13 @@ module.exports = {
         "./src/customElements/Checkbox.ts"
       ],
     },
+    stickyScrolling: {
+      import: "./src/scripts/stickyScrolling.js",
+      library: {
+        name: "Lib",
+        type: "var",
+      },
+    },
     index: {
       import: "./src/scripts/index.js",
       library: {
