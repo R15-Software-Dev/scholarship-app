@@ -107,10 +107,10 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ScholarshipInfoTable
-  getScholarshipContactInfo:
+  readScholarshipContactInfo:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambdaFunctions/getScholarshipContactInfo
+      CodeUri: src/lambdaFunctions/readScholarshipContactInfo
       Handler: index.handler
       Runtime: nodejs20.x
       MemorySize: 3008
@@ -151,10 +151,10 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ScholarshipInfoTable
-  getScholarshipInfo:
+  readScholarshipInfo:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambdaFunctions/getScholarshipInfo
+      CodeUri: src/lambdaFunctions/readScholarshipInfo
       Handler: index.handler
       Runtime: nodejs20.x
       MemorySize: 3008
@@ -195,12 +195,12 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ScholarshipInfoTable
-  getScholarshipEligibility:
+  readScholarshipEligibility:
     Type: AWS::Serverless::Function
     Properties:
       Description: A function to get the data for a given scholarship's eligibility.
-      CodeUri: src/lambdaFunctions/getScholarshipEligibility
-      Handler: scholarshipEligibility.handler
+      CodeUri: src/lambdaFunctions/readScholarshipEligibility
+      Handler: index.handler
       Runtime: nodejs20.x
       Events:
         GetRequest:
@@ -260,14 +260,14 @@ Metadata:
       Label: Provider Form
       Members:
         - providerLogin
-        - getScholarshipRequirements
+        - readScholarshipRequirements
         - updateScholarshipRequirements
         - updateScholarshipEligibility
-        - getScholarshipContactInfo
+        - readgetScholarshipContactInfo
         - updateScholarshipContactInfo
-        - getScholarshipInfo
+        - readScholarshipInfo
         - updateScholarshipInfo
-        - getScholarshipEligibility
+        - readScholarshipEligibility
         - ServerlessRestApi
         - ScholarshipProvidersTable
         - ScholarshipInfoTable
