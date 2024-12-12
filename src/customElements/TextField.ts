@@ -333,3 +333,87 @@ export class TextArea extends TextField {
     return this._textarea.checkValidity();
   }
 }
+
+@customElement("small-outlined-text-field")
+export class SmallOutlinedTextField extends OutlinedTextField {
+  static override styles = css`
+    :host {
+      display: block;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      border: 2px solid;
+      border-radius: 8px;
+      border-color: var(--theme-primary-color);
+      background-color: transparent;
+      margin-top: 2px;
+      height: 36px;
+      position: relative;
+      transition:
+        border-color 400ms ease,
+        background-color 400ms ease;
+    }
+
+    input {
+      font-family: inherit;
+      font-size: 10pt;
+      flex-grow: 1;
+      border: none;
+      padding: 0 10px;
+      color: #696158;
+      border-radius: 6px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    label {
+      font-size: 12pt;
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      transition: all 0.1s ease;
+      background-color: transparent;
+      padding: 0 2px;
+      display: flex;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    input:focus ~ label,
+    input:not(:placeholder-shown) ~ label {
+      top: -6px;
+      font-size: 10pt;
+      background-color: white;
+    }
+
+    .prefix,
+    .suffix {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      font-size: 10pt;
+    }
+
+    .prefix {
+      margin-left: 8px;
+    }
+
+    .suffix {
+      margin-right: 8px;
+    }
+    
+    /* Changing the h3 header used to be uniform with the smaller text field
+       must be done within <styles></styles> in the html of the page. Custom 
+       element should be created in future for custom headers.
+       Following h3 redesign:
+        h3 {
+          margin: 0 0 4px 0;
+          padding: 8px 8px 8px 0;
+          font-size: 14pt; 
+          font-weight: bold; */
+  `;
+}
