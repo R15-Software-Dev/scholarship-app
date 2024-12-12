@@ -379,6 +379,7 @@ export class SmallOutlinedTextField extends OutlinedTextField {
       padding: 0 2px;
       display: flex;
       z-index: 2;
+      pointer-events: none;
     }
 
     input:focus ~ label,
