@@ -146,3 +146,6 @@ lambdaZips/
 
 # Idea config
 .idea/
+
+# SAM build output
+.aws-sam/

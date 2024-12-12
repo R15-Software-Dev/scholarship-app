@@ -1,0 +1,273 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A testing template for an existing project.
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  providerLogin:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: A function to login a scholarship provider.
+      CodeUri: src/lambdaFunctions/providerLogin
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post
+      Policies:
+        # Give CRUD access to the DynamoDB table
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipProvidersTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipProvidersTable
+          TABLE_ARN: !GetAtt ScholarshipProvidersTable.Arn
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+          - "@aws-sdk/client-secrets-manager"
+        EntryPoints:
+          - index.ts
+  readScholarshipRequirements:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/readScholarshipRequirements
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/requirements
+            Method: get
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  updateScholarshipRequirements:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/updateScholarshipRequirements
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/requirements
+            Method: post
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  updateScholarshipEligibility:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/updateScholarshipEligibility
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/eligibility
+            Method: post
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  getScholarshipContactInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/getScholarshipContactInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/contact-info
+            Method: get
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  updateScholarshipContactInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/updateScholarshipContactInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/contact-info
+            Method: post
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  getScholarshipInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/getScholarshipInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/info
+            Method: get
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  updateScholarshipInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdaFunctions/updateScholarshipInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            Path: /sclshp-form/info
+            Method: post
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+  getScholarshipEligibility:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: A function to get the data for a given scholarship's eligibility.
+      CodeUri: src/lambdaFunctions/getScholarshipEligibility
+      Handler: scholarshipEligibility.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            Path: /scholarship-eligibility
+            Method: get
+      Policies:
+        # Give CRUD access to the DynamoDB table
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ScholarshipInfoTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ScholarshipInfoTable
+      MemorySize: 3008
+      Timeout: 30
+  ScholarshipProvidersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: scholarship-providers
+      AttributeDefinitions:
+        - AttributeName: Email
+          AttributeType: S
+        - AttributeName: Password
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Email
+          KeyType: HASH
+  ScholarshipInfoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: ScholarshipName
+          AttributeType: S
+        - AttributeName: ProviderEmail
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ScholarshipName
+          KeyType: HASH
+
+Outputs:
+  scholarshipEligibilityApi:
+    Description: API Gateway endpoint URL for Prod stage for scholarship eligibility function
+    Value: !Sub https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/scholarship-eligibility/
+  providerLoginApi:
+    Description: API Gateway endpoint URL for Prod stage for provider login function
+    Value: !Sub https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/login/
+  scholarshipEligibilityFunction:
+    Description: Scholarship Eligibility Lambda Function ARN
+    Value: !GetAtt getScholarshipEligibility.Arn
+  scholarshipEligibilityFunctionIamRole:
+    Description: Implicit IAM Role created for scholarship eligibility function
+    Value: !GetAtt readScholarshipEligibilityRole.Arn
+Metadata:
+  AWS::Composer::Groups:
+    Group:
+      Label: Provider Form
+      Members:
+        - providerLogin
+        - getScholarshipRequirements
+        - updateScholarshipRequirements
+        - updateScholarshipEligibility
+        - getScholarshipContactInfo
+        - updateScholarshipContactInfo
+        - getScholarshipInfo
+        - updateScholarshipInfo
+        - getScholarshipEligibility
+        - ServerlessRestApi
+        - ScholarshipProvidersTable
+        - ScholarshipInfoTable
