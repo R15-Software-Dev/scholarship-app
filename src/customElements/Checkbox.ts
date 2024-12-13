@@ -36,6 +36,9 @@ import {
 
       /* Create a custom radio button */
       .checkdot {
+        border-radius: 1px;
+        border-style: solid;
+        border-width: 1px;
         position: absolute;
         top: 0;
         left: 0;

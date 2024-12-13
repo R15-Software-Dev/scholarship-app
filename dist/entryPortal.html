@@ -85,6 +85,8 @@
       height: 90px;
       padding-top: 35px;
     }
+
+    /* Modify h3 header */
   </style>
   <body>
   <div class="banner">
@@ -221,7 +223,8 @@
         </form-question>
       </form-section>
     </tab-panel>
-    
+
+
     <!--Scholarship InfAormation-->
     <tab-panel id="scholarshipInformationPanel">
 
@@ -235,52 +238,60 @@
         required>
           <h3 slot="header">Scholarship Title</h3>
           <outlined-text-field
-            id="sclshpTitleInput"
-            name="sclshpTitle"
-            type="text"
-            placeholder="Enter a title"
-            required>
+                id="sclshpTitleInput"
+                name="sclshpTitle"
+                type="text"
+                placeholder="Enter a title"
+                required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-        label="Enter a name"
-        name="sclshpSponsorName"
-        type="text"
-        id="sclshpSponsorNameInput"
-        required>
-        Scholarship Organization/Sponsor
+        <form-question>
+          <h3 slot="header"> Scholarship Sponsor </h3>
+          <outlined-text-field
+                id = "sclshpSponsorNameInput"
+                name = "sclshpSponsorName"
+                type = "text"
+                placeholder = "Enter text here"
+                required>
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-        label="Enter a number"
-        name="sclshpAwardsTotal"
-        type="number"
-        id="sclshpAwardsTotalInput"
-        required>
-        Number of Awards
+        <form-question>
+          <h3 slot="header"> Number of Awards </h3>
+          <outlined-text-field
+                  id = "sclshpAwardsTotalInput"
+                  name = "sclshpAwardsTotal"
+                  type = "number"
+                  placeholder = "Enter a number"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-        label="Enter an amount"
-        name="sclshpAmountEach"
-        type="number"
-        id="sclshpAmountEachInput"
-        prefix-text="$"
-        required>
-        Amount of each scholarship
+        <form-question>
+          <h3 slot="header"> Amount of each scholarship </h3>
+          <outlined-text-field
+                  id = "sclshpAmountEachInput"
+                  name = "sclshpAmountEach"
+                  type = "number"
+                  placeholder = "Enter an amount"
+                  prefix-text="$"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-        label="Enter an amount"
-        name="sclshpTotalAmount"
-        type="number"
-        prefix-text="$"
-        id="sclshpTotalAmountInput"
-        required>
-        Total amount of scholarships
+        <form-question>
+          <h3 slot="header"> Total amount of schoalrships </h3>
+          <outlined-text-field
+                  id = "sclshpTotalAmountInput"
+                  name = "sclshpTotalAmount"
+                  type = "number"
+                  placeholder = "Enter an amount"
+                  prefix-text="$"
+                  required>
+          </outlined-text-field>
         </form-question>
-      </form-section>
+
     </tab-panel>
 
     <!--Contact Information-->
@@ -289,93 +300,105 @@
         header="Contact Information"
         name="contactInfo"
         id="contactAdminInfoForm">
-        <form-question
-          label="Enter your name"
-          name="contactName"
-          type="text"
-          id="contactNameInput"
-          required>
-          Contact Name
+
+        <form-question>
+          <h3 slot="header"> Contact Name</h3>
+          <outlined-text-field
+                  id = "contactNameInput"
+                  name = "contactName"
+                  type = "text"
+                  placeholder = "Enter your name"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-          label="Enter a phone number"
-          name="sclshpPhoneNumber"
-          type="tel"
-          pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
-          id="sclshpPhoneNumberInput"
-          required>
-          Business Phone Number
+        <form-question>
+          <h3 slot="header"> Business Phone Number</h3>
+          <outlined-text-field
+                  id = "sclshpPhoneNumberInput"
+                  name = "sclshpPhoneNumber"
+                  type = "tel"
+                  placeholder = "Enter a phone number"
+                  pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <!--Optional?-->
-        <form-question
-          label="Enter a phone number"
-          name="sclshpPhoneNumber"
-          type="tel"
-          pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
-          id="sclshpPhoneNumberInput">
-          Home Phone Number
+        <form-question>
+          <h3 slot="header"> Home Phone Number (Optional)</h3>
+          <outlined-text-field
+                  id = "sclshpPhoneNumberInput"
+                  name = "sclshpPhoneNumber"
+                  type = "tel"
+                  placeholder = "Enter a phone number">
+                  pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
+          </outlined-text-field>
         </form-question>
 
-        <!--Optional?-->
-        <form-question
-          label="Enter a phone number"
-          name="sclshpPhoneNumber"
-          type="tel"
-          pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
-          id="sclshpPhoneNumberInput">
-          Cell Phone Number
+        <form-question>
+          <h3 slot="header"> Cell Phone Number (Optional)</h3>
+          <outlined-text-field
+                  id = "sclshpPhoneNumberInput"
+                  name = "sclshpPhoneNumber"
+                  type = "tel"
+                  placeholder = "Enter a phone number"
+                  pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}">
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-          label="Enter an email"
-          name="sclshpContactEmail"
-          type="email"
-          suffix-text="@gmail.com"
-          id="sclshpContactEmailInput"
-          required>
-          Contact Email Address
+        <form-question>
+          <h3 slot="header"> Contact Email Address</h3>
+          <outlined-text-field
+                  id = "sclshpContactEmailInput"
+                  name = "sclshpContactEmail"
+                  type = "email"
+                  placeholder = "Enter an email"
+                  suffix-text="@gmail.com"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <!--Test for same email-->
-        <form-question
-          label="Enter an email"
-          name="sclshpConfirmEmail"
-          type="email"
-          suffix-text="@gmail.com"
-          id="sclshpConfirmEmailInput"
-          required>
-          Confirm Email Address
+        <form-question>
+          <h3 slot="header"> Confirm Email Address </h3>
+          <outlined-text-field
+                  id = "sclshpConfirmEmailInput"
+                  name = "sclshpConfirmEmail"
+                  type = "email"
+                  placeholder = "Enter an email"
+                  suffix-text="@gmail.com"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-          label="Enter an address"
-          name="sponserAddress"
-          type="text"
-          id="sponsorAddressInput"
-          required>
-          Street address
+        <form-question>
+          <h3 slot="header">Business Street Address</h3>
+          <outlined-text-field
+                  id = "sponsorAddressInput"
+                  name = "sponserAddress"
+                  type = "text"
+                  placeholder = "Enter an address"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <form-question
-          label="Enter zip code"
-          name="sponsorZipCode"
-          type="number"
-          id="sponsorZipCodeInput"
-          required>
-          Zip Code
+        <form-question>
+          <h3 slot="header"> Zip Code </h3>
+          <outlined-text-field
+                  id = "sponsorZipCodeInput"
+                  name = "sponsorZipCode"
+                  type = "number"
+                  placeholder = "Enter zip code"
+                  required>
+          </outlined-text-field>
         </form-question>
 
-        <!--Re-style dropdown-->
-        <form-quesiton
-          label="State"
-          name="sponsorState"
-          id="sponsorStateSelection"
-          required
-          >
-          Select state
-          <select>
+        <form-question>
+          <h3 slot="header"> Select State </h3>
+          <drop-down
+                  id = "sponsorStateSelection"
+                  name = "sponsorState"
+                  placeholder = "Select state"
+                  required>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
             <option value="AZ">Arizona</option>
@@ -427,7 +450,8 @@
             <option value="WV">West Virginia</option>
             <option value="WI">Wisconsin</option>
             <option value="WY">Wyoming</option>
-          </select>
+          </drop-down>
+
         </form-question>
 
       </form-section>
@@ -442,80 +466,66 @@
         id="eligibilityFactorsForm">
 
         <!--Style radio buttons-->
-        <form
-          name="studentResidence"
-          id="studentResidenceOption"
-          required>
-          Student residency requirement?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
-        <br>
 
-        <form
-          name="scholarshipNonPHS"
-          id="scholarshipNonPHSOption"
-          required>
-          Is the scholarship available to non-PHS students?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
-        <br>
+        <form-question>
+          <h3 slot="header">Student residency requirement</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                "No"]'
+              id="studentResidenceOption"
+              name="studentResidence"
+              required>
+          </check-box>
+        </form-question>
 
-        <form
-          name="studyRequirement"
-          id="studyRequirementOption"
-          required>
-          Area of study requirement?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
-        <br>
+        <form-question>
+          <h3 slot="header">Is the scholarship available to non-PHS students?</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                "No"]'
+              id="scholarshipNonPHSOption"
+              name="scholarshipNonPHS"
+              required>
+          </check-box>
+        </form-question>
 
-        <form
-          name="financialRequirement"
-          id="financialRequirementOption"
-          required>
-          Is financial need a requirement?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
-        <br>
+        <form-question>
+          <h3 slot="header">Area of study requirement?</h3>
+          <check-box inputType="radio"
+               radioOptions=
+                 '["Yes",
+                 "No"]'
+               id="studyRequirementOption"
+               name="studyRequirement"
+               required>
+          </check-box>
+        </form-question>
 
-        <!-- Resize & reformat textbox -->
-        <form
-          name="eligibilityOther"
-          id="eligibilityOtherInput">
-          Other eligibility factors please list.
-          <br>
-          <textarea></textarea>
-        </form>
+        <form-question>
+          <h3 slot="header">Is financial need a requirement?</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                "No"]'
+              id="financialRequirementOption"
+              name="financialRequirement"
+              required>
+          </check-box>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Other eligibility factors please list. </h3>
+          <text-area
+                  id = "eligibilityOtherInput"
+                  name = "eligibilityOther"
+                  placeholder = "Other eligibility factors...">
+          </text-area>
+        </form-question>
 
       </form-section>
+
     </tab-panel>
 
     <!--Student Requirements-->
