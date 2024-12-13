@@ -1,0 +1,9 @@
+{
+  "name": "providerregistration",
+  "version": "0.1.0",
+  "main": "index.mjs",
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
