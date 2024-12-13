@@ -535,187 +535,107 @@
         name="studentRequirementInfo"
         id="studentRequirementInfoForm">
 
-        <form
-          name="studentAidRequirement"
-          id="studentAidRequirementOption"
-          required>
-          Do you requrie a copy of the student aid report?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
-
-        <br>
-
-        <form
-          name="studentInterview"
-          id="studentInterviewRequirement"
-          required>
-          Will there be student interviews?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
-
-        <br>
-
-        <form-question
-          label="Enter a name"
-          name="recipientSelection"
-          type="text"
-          id="recipientSelectionInput"
-          required>
-          Who will make the selection of the recipient?
+        <form-question>
+          <h3 slot="header">Do you requrie a copy of the student aid report?</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                "No"]'
+              id="studentAidRequirementOption"
+              name="studentAidRequirement"
+              required>
+          </check-box>
         </form-question>
 
-        <form
-          name="transcriptRequirement"
-          id="transcriptRequirementOption"
-          required>
-          Do you require a transcript?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
+        <form-question>
+          <h3 slot="header">Will there be student interviews?</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                "No"]'
+              id="studentInterviewRequirement"
+              name="studentInterview"
+              required>
+          </check-box>
+        </form-question>
 
-        <br>
+        <form-question>
+          <h3 slot="header">Who will make the selection of the recipient?</h3>
+          <outlined-text-field
+                id = "recipientSelectionInput"
+                name = "recipientSelection"
+                type = "text"
+                placeholder = "Enter text here"
+                required>
+          </outlined-text-field>
+        </form-question>
 
-        <form
-          name="awardTo"
-          id="awardToOption"
-          required>
-          Will the award be made to the student or the college?
-          <div>
-            <label for="student">Student</label>
-            <input type="radio" name="option" id="student">
-          </div>
-          <div>
-            <label for="college">College</label>
-            <input type="radio" name="option" id="college">
-          </div>
-        </form>
+        <form-question>
+          <h3 slot="header">Do you require a transcript?</h3>
+          <check-box inputType="radio"
+             radioOptions=
+               '["Yes",
+               "No"]'
+             id="transcriptRequirementOption"
+             name="transcriptRequirement"
+             required>
+          </check-box>
+        </form-question>
 
-        <br>
+        <form-question>
+          <h3 slot="header">Will the award be made to the student or college</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Student",
+                "College"]'
+              id="awardToOption"
+              name="awardTo"
+              required>
+          </check-box>
+        </form-question>
 
-        <form
-          name="essayRequirment"
-          id="essayRequirmentOption">
-          Is there an essay requirement?
-          <div>
-            <label for="yes">Yes</label>
-            <input type="radio" name="option" id="yes">
-          </div>
-          <div>
-            <label for="no">No</label>
-            <input type="radio" name="option" id="no">
-          </div>
-        </form>
+        <form-question>
+          <h3 slot="header">Is there an essay requirement?</h3>
+          <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                "No"]'
+              id="essayRequirmentOption"
+              name="essayRequirment">
+          </check-box>
+        </form-question>
 
-        <br>
-
-        <!--Modal window with checkboxes for essay prompts-->
-        <form
-          name="essayPrompt"
-          id="essayPromptSelection">
-          If yes, please make sure the correct one(s) is selected below…
-          <div>
-            <input type="checkbox" name="prompt" id="cb1">
-              El. Write an essay describing why you have chosen your present major/career direction.
-              Include any abilities, interests, experiences, employment, clubs you have had that have affected your direction.
-              (If you are undecided, indicate why.) For FCCLA Schol-indicate how FCCLA helped you in your HS career.
-          <br>
-            <input type="checkbox" name="prompt" id="cb2">
-              E2. Write an essay describing how you feel you have personally contributed to Pomperaug High School.
-          <br>
-            <input type="checkbox" name="prompt" id="cb3">
-              E3. Write an essay in completion of this sentence: The continuation of my education will benefit mankind because...
-          <br>
-            <input type="checkbox" name="prompt" id="cb4">
-              E4. Discuss a person who, or an event that, has had a significant impact on you.
-              Tell how it influenced your thinking and/or actions.
-          <br>
-            <input type="checkbox" name="prompt" id="cb5">
-              E5. Why is community service important? How has it personally affected you and your goals, and what role
-              do you hope to play in it in the future? (For Middlebury Volunteer Fire Dept. Scholarship please list any
-              community service you have personally accomplished.)
-          <br>
-            <input type="checkbox" name="prompt" id="cb6">
-              E6. Discuss anything of importance to you that would help us to better understand you. This might include
-              aspects of your abilities, interests, experiences, community service and aspirations.
-          <br>
-            <input type="checkbox" name="prompt" id="cb7">
-              E7. How has being a member of Panther Aquatic Club impacted your high school swimming career? If you are in college,
-              how has it impacted your college swimming experience.
-          <br>
-            <input type="checkbox" name="prompt" id="cb8">
-              E8. If you had a child who demonstrated some aptitude for swimming as well as a love for
-              it-would you encourage them to swim competitively and why?
-          <br>
-            <input type="checkbox" name="prompt" id="cb9">
-              E9. How has participation in sports been beneficial to your personal, academic and emotional growth?
-              Include the influence of the organization. (For Pomperaug Pop Warner Scholarship please change sports to football
-              or cheer. For PHS Softball Scholarships change sports to Softball). (For Pomperaug Grid Iron Change sport to PHS Football)
-          <br>
-            <input type="checkbox" name="prompt" id="cb10">
-              E10. What does furthering your education mean to you?
-          <br>
-            <input type="checkbox" name="prompt" id="cb11">
-              E11. Why are youth sports an important part of community?
-          <br>
-            <input type="checkbox" name="prompt" id="cb12">
-              E12. Write a one page essay expressing your involvement with UCC Southbury and how it has affected your life.
-              Explain in what ways your UCC participation has been meaningful to you. (Please use the attached UCC Addendum)
-          <br>
-            <input type="checkbox" name="prompt" id="cb13">
-              E13. Why is sportsmanship an important part of sports? Provide examples of your own sportsmanship qualities.
-          <br>
-            <input type="checkbox" name="prompt" id="cb14">
-              E14. Describe the challenge you faced and tell how you were able to address and overcome it.
-          <br>
-            <input type="checkbox" name="prompt" id="cb15">
-              E15. What soccer means to me? 250 Word Maximum (Please use the attached Southbury Soccer Addendum)
-          <br>
-            <input type="checkbox" name="prompt" id="cb16">
-              E16. How have you given generously of your time, treasure, and/or talents to improve the lives of others?
-          <br>
-            <input type="checkbox" name="prompt" id="cb17">
-              E17. How has the Southbury Public Library influenced you? (Must Include Library Card #)
-          <br>
-            <input type="checkbox" name="prompt" id="cb18">
-              E18. Write a personal statement that demonstrates how you have given generously of your time, treasure, and/or
-              talents to improve the lives of others.
-          <br>
-            <input type="checkbox" name="prompt" id="cb19">
-              E19. A Mason is taught to be of good character, to be a good citizen, to give back to the community and to help
-              the less fortuate. What have you done during your high school career to emulate these characteristics?
-          <br>
-            <input type="checkbox" name="prompt" id="cb20">
-              E20. How have you contributed to the PHS Field Hockey team and what lessons have you learned from Field Hockey that
-              you will use in the future.
-          <br>
-            <input type="checkbox" name="prompt" id="cb21">
-              E21. (200 words or less) on how veterans and or the ideals they stand for have influenced your life during your four years of high school.
-          <br>
-            <input type="checkbox" name="prompt" id="cb22">
-              E22. This year has been a focus on recognizing diversity and fostering attitudes of tolerance and acceptance. In relation to this ideal, tell us something about your experience at Pomperaug High School (in or out of school) that has challenged you to grow, and how this impacts you moving on after high school.
-
-          </div>
-        </form>
+        <form-question>
+          <h3 slot="header">Select all that are applicable</h3>
+          <check-box inputType="checkbox"
+                     checkboxOptions='[
+                        "E1. Write an essay describing why you have chosen your present major/career direction. Include any abilities, interests, experiences, employment, clubs you have had that have affected your direction. (If you are undecided, indicate why.) For FCCLA Schol-indicate how FCCLA helped you in your HS career.",
+                        "E2. Write an essay describing how you feel you have personally contributed to Pomperaug High School.",
+                        "E3. Write an essay in completion of this sentence: The continuation of my education will benefit mankind because...",
+                        "E4. Discuss a person who, or an event that, has had a significant impact on you. Tell how it influenced your thinking and/or actions.",
+                        "E5. Why is community service important? How has it personally affected you and your goals, and what role do you hope to play in it in the future? (For Middlebury Volunteer Fire Dept. Scholarship please list any community service you have personally accomplished.)",
+                        "E6. Discuss anything of importance to you that would help us to better understand you. This might include aspects of your abilities, interests, experiences, community service and aspirations.",
+                        "E7. How has being a member of Panther Aquatic Club impacted your high school swimming career? If you are in college, how has it impacted your college swimming experience.",
+                        "E8. If you had a child who demonstrated some aptitude for swimming as well as a love for it-would you encourage them to swim competitively and why?",
+                        "E9. How has participation in sports been beneficial to your personal, academic and emotional growth? Include the influence of the organization. (For Pomperaug Pop Warner Scholarship please change sports to football or cheer. For PHS Softball Scholarships change sports to Softball). (For Pomperaug Grid Iron Change sport to PHS Football).",
+                        "E10. What does furthering your education mean to you?",
+                        "E11. Why are youth sports an important part of community?",
+                        "E12. Write a one-page essay expressing your involvement with UCC Southbury and how it has affected your life. Explain in what ways your UCC participation has been meaningful to you. (Please use the attached UCC Addendum).",
+                        "E13. Why is sportsmanship an important part of sports? Provide examples of your own sportsmanship qualities.",
+                        "E14. Describe the challenge you faced and tell how you were able to address and overcome it.",
+                        "E15. What soccer means to me? 250 Word Maximum (Please use the attached Southbury Soccer Addendum).",
+                        "E16. How have you given generously of your time, treasure, and/or talents to improve the lives of others?",
+                        "E17. How has the Southbury Public Library influenced you? (Must Include Library Card #).",
+                        "E18. Write a personal statement that demonstrates how you have given generously of your time, treasure, and/or talents to improve the lives of others.",
+                        "E19. A Mason is taught to be of good character, to be a good citizen, to give back to the community and to help the less fortunate. What have you done during your high school career to emulate these characteristics?",
+                        "E20. How have you contributed to the PHS Field Hockey team and what lessons have you learned from Field Hockey that you will use in the future.",
+                        "E21. (200 words or less) on how veterans and/or the ideals they stand for have influenced your life during your four years of high school.",
+                        "E22. This year has been a focus on recognizing diversity and fostering attitudes of tolerance and acceptance. In relation to this ideal, tell us something about your experience at Pomperaug High School (in or out of school) that has challenged you to grow, and how this impacts you moving on after high school."
+                        ]'
+                      id = "essayRequirementSelection"
+                      name = "essaySelection">
+          </check-box>
+        </form-question>
 
       </form-section>
 
