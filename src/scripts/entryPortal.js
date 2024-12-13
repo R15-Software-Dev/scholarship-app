@@ -17,4 +17,17 @@ $(function () {
       compEmailInput.hideErrors();
     }
   });
+
+
+
+  $("#essayRequirementOption").on("change", function () {
+    const essaySelection = $("#essayRequirementSelection");
+    if (this.selectedCheckbox[0] === "Yes") {
+      // Show the box
+      essaySelection.css("display","block");
+    } else {
+      // Don't show a box
+      essaySelection.css("display","none");
+    }
+  })
 });

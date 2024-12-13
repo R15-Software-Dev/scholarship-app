@@ -7,7 +7,6 @@
     "build": "node esbuildRun.mjs",
     "start": "npm run build && npm run start-server",
     "start-server": "http-server ./dist --cors",
-    "install": "npm install commitizen -g && npm install esbuild -g",
     "test": "jest"
   },
   "author": "Lucas Vas",
@@ -34,7 +33,8 @@
     "cz-conventional-changelog": "^3.3.0",
     "terser-webpack-plugin": "^5.3.10",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "esbuild":  "^0.24.0"
   },
   "config": {
     "commitizen": {

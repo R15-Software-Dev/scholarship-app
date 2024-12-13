@@ -1,7 +1,7 @@
 import "lit";
 
-// import "./ActionButton";
-// import "./Checkbox";
+import "./ActionButton";
+import "./Checkbox";
 import "./Dropdown";
 import "./Forms";
 import "./InputElement";
