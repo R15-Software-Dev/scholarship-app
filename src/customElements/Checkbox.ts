@@ -280,18 +280,19 @@ import {
   }
 
 
-private optionSelect(event: Event)
-{
-  const checkboxes = this._checkboxList;
-  // Reset selectedOptions array
-  this.selectedCheckbox = [];
-  this._checkboxList.forEach((checkbox) => {
-    if (checkbox.checked) {
-      // If the checkbox is checked, add its value to the selectedOptions array
-      this.selectedCheckbox.push(checkbox.value);
-    }
-  });
-}
+  private optionSelect(event: Event)
+  {
+    const checkboxes = this._checkboxList;
+    // Reset selectedOptions array
+    this.selectedCheckbox = [];
+    this._checkboxList.forEach((checkbox) => {
+      if (checkbox.checked) {
+        // If the checkbox is checked, add its value to the selectedOptions array
+        this.selectedCheckbox.push(checkbox.value);
+      }
+    });
+    this.dispatchEvent(new Event("change"));
+  }
 
   getValue(): string {
     return JSON.stringify(this.selectedCheckbox);

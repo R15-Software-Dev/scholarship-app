@@ -600,12 +600,12 @@
               radioOptions=
                 '["Yes",
                 "No"]'
-              id="essayRequirmentOption"
-              name="essayRequirment">
+              id="essayRequirementOption"
+              name="essayRequirement">
           </check-box>
         </form-question>
 
-        <form-question>
+        <form-question id=essayRequirementSelection style="display: none;">
           <h3 slot="header">Select all that are applicable</h3>
           <check-box inputType="checkbox"
                      checkboxOptions='[
@@ -640,6 +640,12 @@
       </form-section>
 
     </tab-panel>
+
+    <style>
+      #essayRequirementSection {
+        transition: all 0.3s ease;
+      }
+    </style>
 
   </body>
 </html>
