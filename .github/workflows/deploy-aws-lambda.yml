@@ -23,5 +23,5 @@ jobs:
 
       - name: Deploy to AWS Lambda
         run: |
-          make lambda AWS_ID=${{ secrets.AWS_ID }}
-          make clean
+          sam build
+          sam deploy

@@ -21,7 +21,7 @@ export class ActionButton extends LitElement {
     }
 
     ${rippleCSS}
-  `; 
+  `;
 
   @property({type: String}) accessor type: string = "button";
   @property({type: String}) accessor form: string = "";
@@ -29,7 +29,7 @@ export class ActionButton extends LitElement {
 
   private handleClick(event: MouseEvent): void {
     createRipple(event);
-    
+
     if (this.type === "submit") {
       // Attempt to submit the associated form.
       // Otherwise, this event will be handled by user specified functions

@@ -68,6 +68,16 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
   updateScholarshipRequirements:
     Type: AWS::Serverless::Function
     Properties:
@@ -90,6 +100,16 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
   updateScholarshipEligibility:
     Type: AWS::Serverless::Function
     Properties:
@@ -112,6 +132,16 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
   readScholarshipContactInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -134,6 +164,16 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
   updateScholarshipContactInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -156,6 +196,16 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
   readScholarshipInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -178,6 +228,16 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
   updateScholarshipInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -200,6 +260,17 @@ Resources:
             TableName: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+          - "@aws-sdk/client-secrets-manager"
+        EntryPoints:
+          - index.ts
   readScholarshipEligibility:
     Type: AWS::Serverless::Function
     Properties:
@@ -223,6 +294,16 @@ Resources:
           TABLE_NAME: !Ref ScholarshipInfoTable
       FunctionUrlConfig:
         AuthType: AWS_IAM
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        # Sourcemap: true
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
