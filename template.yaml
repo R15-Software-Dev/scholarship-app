@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: A testing template for an existing project.
+Description: A serverless application that allows scholarship providers to create and manage their scholarships.
 
 Globals:
   Function:
@@ -24,7 +24,7 @@ Resources:
             Method: post
       Policies:
         # Give CRUD access to the DynamoDB table
-        - DynamoDBCrudPolicy:
+        - DynamoDBReadPolicy:
             TableName: !Ref ScholarshipProvidersTable
       Environment:
         Variables:
@@ -61,7 +61,7 @@ Resources:
           TABLE_NAME: !Ref ScholarshipInfoTable
           TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
-        - DynamoDBCrudPolicy:
+        - DynamoDBReadPolicy:
             TableName: !Ref ScholarshipInfoTable
   updateScholarshipRequirements:
     Type: AWS::Serverless::Function
@@ -127,7 +127,7 @@ Resources:
           TABLE_NAME: !Ref ScholarshipInfoTable
           TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
-        - DynamoDBCrudPolicy:
+        - DynamoDBReadPolicy:
             TableName: !Ref ScholarshipInfoTable
   updateScholarshipContactInfo:
     Type: AWS::Serverless::Function
@@ -171,7 +171,7 @@ Resources:
           TABLE_NAME: !Ref ScholarshipInfoTable
           TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
-        - DynamoDBCrudPolicy:
+        - DynamoDBReadPolicy:
             TableName: !Ref ScholarshipInfoTable
   updateScholarshipInfo:
     Type: AWS::Serverless::Function
@@ -210,7 +210,7 @@ Resources:
             Method: get
       Policies:
         # Give CRUD access to the DynamoDB table
-        - DynamoDBCrudPolicy:
+        - DynamoDBReadPolicy:
             TableName: !Ref ScholarshipInfoTable
       Environment:
         Variables:
@@ -224,8 +224,6 @@ Resources:
       AttributeDefinitions:
         - AttributeName: Email
           AttributeType: S
-        - AttributeName: Password
-          AttributeType: S
       KeySchema:
         - AttributeName: Email
           KeyType: HASH
@@ -234,8 +232,6 @@ Resources:
     Properties:
       AttributeDefinitions:
         - AttributeName: ScholarshipName
-          AttributeType: S
-        - AttributeName: ProviderEmail
           AttributeType: S
       KeySchema:
         - AttributeName: ScholarshipName
@@ -250,7 +246,7 @@ Outputs:
     Value: !Sub https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/login/
   scholarshipEligibilityFunction:
     Description: Scholarship Eligibility Lambda Function ARN
-    Value: !GetAtt getScholarshipEligibility.Arn
+    Value: !GetAtt readScholarshipEligibility.Arn
   scholarshipEligibilityFunctionIamRole:
     Description: Implicit IAM Role created for scholarship eligibility function
     Value: !GetAtt readScholarshipEligibilityRole.Arn
