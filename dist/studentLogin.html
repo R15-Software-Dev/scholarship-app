@@ -18,12 +18,6 @@
 
 
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-      :root {
-        --theme-primary-color: #980000;
-      }
-
       body {
         margin: 0;
         font-family: 'Roboto', sans-serif;
@@ -75,8 +69,16 @@
         padding: 10px;
       }
 
+      .prompt-text {
+        margin: 25px 15px 0 15px;
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+      }
+
+
       .login-button {
-        background-color: var(--theme-primary-color);
+        background-color: inherit;
         color: white;
         border: none;
         padding: 15px 0;
@@ -85,12 +87,13 @@
         cursor: pointer;
         display: block;
         width: 55%; /* Make the button longer */
-        margin: 40px auto 0; /* Center the button horizontally and add space at the top */
+        margin: 10px auto 0; /* Center the button horizontally and add space at the top */
         text-align: center;
+
       }
 
       .login-button:hover {
-        background-color: #7c0000;
+        background-color: inherit;
       }
 
       .relative-wrapper {
@@ -120,6 +123,9 @@
           </div>
         </div>
       </div>
+      <div class="prompt-text">
+        <span>Please sign in with your <b>Region 15</b>  email.</span>
+      </div>
         <div class="login-button">
           <div id="g_id_onload"
             data-client_id="940972195757-c26m5aai3l14iug3btcq6sgvo54l85qs.apps.googleusercontent.com"
@@ -129,7 +135,7 @@
             data-auto_prompt="true"></div>
           <div class="g_id_signin"
                data-type="standard"
-               data-shape="rectangular"
+               data-shape="pill"
                data-theme="outline"
                data-text="signin_with"
                data-size="large"></div>
