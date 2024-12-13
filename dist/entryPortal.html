@@ -10,9 +10,10 @@
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
-    <script src="./bundles/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/entryPortal.bundle.js" defer></script>
-    <script src="./bundles/tabs.bundle.js" defer></script>
+    <script src="./bundles/customElements/customElements.bundle.js" type="module"></script>
+    <script src="./bundles/scripts/entryPortal.bundle.js" defer></script>
+    <script src="./bundles/scripts/tabs.bundle.js" defer></script>
+    <script src="./bundles/scripts/stickyScrolling.bundle.js" defer></script>
   </head>
 
     <!--
@@ -29,8 +30,18 @@
       font-family: 'Roboto', sans-serif;
     }
 
+    .banner-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      transition: box-shadow 0.3s; /* Add shadow transition */
+      &.sticky-shadow {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);  /* Add shadow when sticky */
+        transition: box-shadow 0.3s; /* Add shadow transition */
+      }
+    }
+
     .banner {
-      position: relative; /* Allows absolute positioning of the text box */
       height: 80px;
       background-color: var(--theme-primary-color); /* Dark red */
       display: flex;
@@ -89,33 +100,31 @@
     /* Modify h3 header */
   </style>
   <body>
-  <div class="banner">
-    <div class="left-section">
-      <div class="logo left-logo">
-        <img src="images/PHS_Stacked_Acronym.png" alt="Left Logo">
+    <div class="banner-sticky">
+      <div class="banner">
+        <div class="left-section">
+          <div class="logo left-logo">
+            <img src="images/PHS_Stacked_Acronym.png" alt="Left Logo">
+          </div>
+          <div class="banner-text">
+            <h1>Scholarship Provider Form</h1>
+          </div>
+        </div>
+        <div class="text-box">
+          <h1>Submission Date: --/--/--</h1>
+        </div>
+        <div class="logo right-logo">
+          <img src="images/R15_logo_colorMatchWhite.png" alt="Right Logo">
+        </div>
       </div>
-      <div class="banner-text">
-        <h1>Scholarship Provider Form</h1>
-      </div>
+      <tab-bar>
+        <c-tab active panel-id="scholarshipInformationPanel">Scholarship Information</c-tab>
+        <c-tab panel-id="contactInformationPanel">Contact Information</c-tab>
+        <c-tab panel-id="eligibilityFactorsPanel">Eligibility Factors</c-tab>
+        <c-tab panel-id="studentRequirementsPanel">Student Requirements</c-tab>
+        <c-tab panel-id="test">test</c-tab>
+      </tab-bar>
     </div>
-    <div class="text-box">
-      <h1>Submission Date: --/--/--</h1>
-    </div>
-    <div class="logo right-logo">
-      <img src="images/R15_logo_colorMatchWhite.png" alt="Right Logo">
-    </div>
-  </div>
-  </body>
-
-<body>
-
-    <tab-bar>
-    <c-tab active panel-id="scholarshipInformationPanel">Scholarship Information</c-tab>
-    <c-tab panel-id="contactInformationPanel">Contact Information</c-tab>
-    <c-tab panel-id="eligibilityFactorsPanel">Eligibility Factors</c-tab>
-    <c-tab panel-id="studentRequirementsPanel">Student Requirements</c-tab>
-    <c-tab panel-id="test">test</c-tab>
-    </tab-bar>
 
     <tab-panel id="test">
       <form-section
@@ -197,11 +206,11 @@
                 "Maybe"]'>
           </check-box>
         </form-question>
-        
+
         <!--Checkbox test-->
         <form-question>
           <h3 slot="header">Checkbox Question</h3>
-          <check-box inputType="checkbox" 
+          <check-box inputType="checkbox"
             checkboxOptions='[
               "Option 1",
               "Option 2",
@@ -223,7 +232,6 @@
         </form-question>
       </form-section>
     </tab-panel>
-
 
     <!--Scholarship InfAormation-->
     <tab-panel id="scholarshipInformationPanel">
