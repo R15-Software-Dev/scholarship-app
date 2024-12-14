@@ -1,6 +1,7 @@
 import * as jose from "jose";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
+import { AWSRequest, AWSResponse } from "./../types";
 
 
 // Create a DynamoDB client
@@ -13,16 +14,30 @@ const secretClient = new SecretsManagerClient({ region: "us-east-1" });
  *
  * @param event - Event body from API request
  * @returns A JWT with the user's information or an authorization error
- * @type {(event: AuthProvider) => string | Error}
  */
-export const handler = async (event) => {
-  console.log("Recieved event: ");
-  console.log(event);
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  const eventBody: AuthProvider = JSON.parse(event.body);
+  console.log("Event body: ");
+  console.log(eventBody);
+  // const response: AWSResponse = {
+  //   statusCode: 200,
+  //   headers: {
+  //     // Just testing adding custom headers.
+  //     "Set-Cookie": "test=123"
+  //   },
+  //   body: JSON.stringify({
+  //     message: "Testing function successful!",
+  //     input: eventBody
+  //   })
+  // };
+
+  // return response;
+
   // Create command to get user information
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
     Key: {
-      Email: { S: event.email },
+      Email: { S: eventBody.email },
     },
     AttributesToGet: [
       "Password",
@@ -34,8 +49,8 @@ export const handler = async (event) => {
   const dbresponse = await client.send(getCommand);
   console.log("Database response: ");
   console.log(dbresponse);
-  if (dbresponse.Item.Password.S !== event.password ||
-    dbresponse.Item.Email.S !== event.email) {
+  if (dbresponse.Item.Password.S !== eventBody.password ||
+    dbresponse.Item.Email.S !== eventBody.email) {
     throw Error("Password does not match");
   }
 
@@ -56,8 +71,20 @@ export const handler = async (event) => {
   .setProtectedHeader({ alg: "HS256" })
   .sign(secret);
 
-  // Return the JWT - this should be stored in the client's local storage
-  return token;
+  // Get the expiration time of the token
+  const expTime = new Date();
+  expTime.setDate(expTime.getDate() + 7);
+
+  // Return that the login was successful - this should store an HttpOnly Secure cookie
+  return {
+    statusCode: 200,
+    headers: {
+      "Set-Cookie": `token=${token}; Expires=${expTime}; Secure; HttpOnly`
+    },
+    body: JSON.stringify({
+      message: "Login successful"
+    })
+  };
 }
 
 /**
@@ -66,13 +93,11 @@ export const handler = async (event) => {
 class AuthProvider {
   /**
   * Email address of the user
-  * @type {string}
   */
-  email = "";
+  email: string = "";
 
   /**
   * Password of the user. This should already be hashed.
-  * @type {string}
   */
-  password = "";
+  password: string = "";
 }
