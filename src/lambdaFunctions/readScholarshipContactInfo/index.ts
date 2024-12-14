@@ -13,17 +13,31 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const command = new GetItemCommand({
     TableName: "scholarship-info",
-    Item: {
-      contact: {S: input.contact},
-      contactBusiness: {S: input.contactBusiness},
-      address: {S: input.address},
-      homePhone: {S: input.homePhone},
-      businessPhone: {S: input.businessPhone},
-      cellPhone: {S: input.cellPhone},
-      email: {S: input.email}
-    }
+    Key: {
+      scholarshipId: {S: input.scholarshipId}
+    },
+    AttributesToGet: [
+      "contact",
+      "contactBusiness",
+      "address",
+      "homePhone",
+      "businessPhone",
+      "cellPhone",
+      "email"
+    ]
   });
 
   const dbresponse = await client.send(command);
-  return dbresponse;
+
+  if (!dbresponse.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({message: "Scholarship not found"})
+    };
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(dbresponse.Item)
+  };
 }
