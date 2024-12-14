@@ -1,7 +1,7 @@
 import * as jose from "jose";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
-import { AWSRequest, AWSResponse } from "./../types";
+import { AWSRequest, AWSResponse } from "./../types/types";
 
 
 // Create a DynamoDB client
