@@ -2,12 +2,12 @@
 * This interface will allow Typescript to pick up on pieces of an API request.
 */
 export interface AWSRequest {
-  body: string;
-  headers: {
+  body?: string;
+  headers?: {
     [key: string]: string;
   },
-  httpMethod: string,
-  isBase64Encoded: boolean,
+  httpMethod?: string,
+  isBase64Encoded?: boolean,
 }
 
 /**
@@ -15,7 +15,7 @@ export interface AWSRequest {
 */
 export interface AWSResponse {
   body: string;
-  headers: {
+  headers?: {
     [key: string]: string;
   },
   statusCode: number,
