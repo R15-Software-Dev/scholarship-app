@@ -30,11 +30,7 @@ Resources:
       Policies:
         # Give CRUD access to the DynamoDB table
         - DynamoDBReadPolicy:
-            TableName: !Ref ScholarshipProvidersTable
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipProvidersTable
-          TABLE_ARN: !GetAtt ScholarshipProvidersTable.Arn
+            TableName: scholarship-providers
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -59,13 +55,9 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /sclshp-form/requirements
             Method: get
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
         - DynamoDBReadPolicy:
-            TableName: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -91,13 +83,9 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /sclshp-form/requirements
             Method: post
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -123,45 +111,9 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /sclshp-form/eligibility
             Method: post
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref ScholarshipInfoTable
-      FunctionUrlConfig:
-        AuthType: AWS_IAM
-    Metadata:
-      BuildMethod: esbuild
-      BuildProperties:
-        Minify: true
-        Target: "es2020"
-        # Sourcemap: true
-        External:
-          - "@aws-sdk/client-dynamodb"
-        EntryPoints:
-          - index.ts
-  readScholarshipContactInfo:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/lambdaFunctions/readScholarshipContactInfo
-      Handler: index.handler
-      Runtime: nodejs20.x
-      Events:
-        GetRequest:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/contact-info
-            Method: get
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
         - DynamoDBReadPolicy:
-            TableName: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -187,13 +139,9 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /sclshp-form/contact-info
             Method: post
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -219,13 +167,9 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /sclshp-form/info
             Method: get
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
         - DynamoDBReadPolicy:
-            TableName: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -251,13 +195,9 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /sclshp-form/info
             Method: post
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
-          TABLE_ARN: !GetAtt ScholarshipInfoTable.Arn
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -288,10 +228,7 @@ Resources:
       Policies:
         # Give CRUD access to the DynamoDB table
         - DynamoDBReadPolicy:
-            TableName: !Ref ScholarshipInfoTable
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipInfoTable
+            TableName: scholarship-providers
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -324,10 +261,10 @@ Resources:
     Properties:
       TableName: scholarship-info
       AttributeDefinitions:
-        - AttributeName: ScholarshipName
+        - AttributeName: Name
           AttributeType: S
       KeySchema:
-        - AttributeName: ScholarshipName
+        - AttributeName: Name
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 300
@@ -345,11 +282,7 @@ Resources:
         - x86_64
       Policies:
         - DynamoDBReadPolicy:
-            TableName: !Ref ScholarshipProvidersTable
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref ScholarshipProvidersTable
-          TABLE_ARN: !GetAtt ScholarshipProvidersTable.Arn
+            TableName: scholarship-providers
 
   #Define the API Gateway endpoints
   ScholarshipApi:
@@ -373,6 +306,9 @@ Outputs:
   providerLoginApi:
     Description: API Gateway endpoint URL for Prod stage for provider login function
     Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/login/
+  scholarshipTableName:
+    Description: Name of the scholarship info table
+    Value: scholarship-providers
 Metadata:
   AWS::Composer::Groups:
     Group:
