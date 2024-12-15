@@ -1,5 +1,5 @@
-import {DynamoDBClient, PutItemCommand} from '@aws-sdk/client-dynamodb';
-
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { AWSRequest, AWSResponse, ScholarshipContactInfo } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
@@ -8,46 +8,39 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @param {ContactInfo} event - Scholarship provider contact info object
  * @returns DynamoDB response object
  */
-export async function handler(event) {
-    console.log("Attempting to run function...");
-    try {
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  const input = JSON.parse(event.body);
+  const scholarshipInfo: ScholarshipContactInfo = input.scholarshipInfo;
 
-        const input = JSON.parse(event.body);
+  const command = new PutItemCommand({
+    TableName: "scholarship-info",
+    Item: {
+      contactName: { S: scholarshipInfo.contactName },
+      homePhone: { S: scholarshipInfo.homePhone },
+      businessPhone: { S: scholarshipInfo.businessPhone },
+      cellPhone: { S: scholarshipInfo.cellPhone },
+      contactEmail: { S: scholarshipInfo.contactEmail },
+      sponsorAddress: { S: scholarshipInfo.sponsorAddress },
+      sponsorCity: { S: scholarshipInfo.sponsorCity },
+      sponsorZipCode: { S: scholarshipInfo.sponsorZipCode },
+      sponsorState: { S: scholarshipInfo.sponsorState },
+      additionalInfo: { S: scholarshipInfo.additionalInfo },
+    },
+    // ConditionExpression: "attribute_not_exists(contactName)",
+  });
 
-        const command = new PutItemCommand({
-            TableName: "contact-info",
-            Item: {
-                studentResidence: {BOOL: input.studentResidence},
-                sclshpNonPHS: {BOOL: input.sclshpNonPHS},
-                studyAreaRequirement: {S: input.studyAreaRequirement},
-                financialNeed: {BOOL: input.financialNeed},
-                eligibilityOther: {S: input.eligibilityOther}
-            }
-        });
-
-        // return buildResponse(dbresponse.$metadata.httpStatusCode, dbresponse);
-        const dbresponse = await client.send(command);
-        return dbresponse;  // Return the database response json
-    } catch (e) {
-        console.error(e.message);
-        throw new Error(e.message);
+  try {
+    const dbresponse = await client.send(command);
+  } catch (e) {
+    console.error(e.message);
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: e.message }),
     }
-}
+  }
 
-class ContactInfo {
-    constructor (
-        studentResidence,
-        sclshpNonPHS,
-        studyAreaRequirement,
-        financialNeed,
-        eligibilityOther
-        ) {
-        return {
-            studentResidence: studentResidence,
-            sclshpNonPHS: sclshpNonPHS,
-            studyAreaRequirement: studyAreaRequirement,
-            financialNeed: financialNeed,
-            eligibilityOther: eligibilityOther
-        }
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: "Success" }),
+  };
 }

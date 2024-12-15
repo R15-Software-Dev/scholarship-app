@@ -1,17 +1,32 @@
-type ScholarshipInfo = {
+
+/**
+ * All the "header" information about a scholarship.
+ */
+export type ScholarshipInfo = {
 
 }
 
-type Scholarship = {
+/**
+ * All the information about the scholarship.
+ * Includes info from all the other requests.
+ */
+export type Scholarship = {
 
 }
 
-type ScholarshipContactInfo = {
-  email: string;
-  contactBusiness: string;
-  contact: string;
-  address: string;
-  homePhone: string;
+/**
+ * Contact information for the scholarship provider.
+ * This is scholarship specific, and not necessarily the user's contact info.
+ */
+export type ScholarshipContactInfo = {
+  contactName: string;
+  homePhone?: string;
   businessPhone: string;
-  cellPhone: string;
+  cellPhone?: string;
+  contactEmail: string;
+  sponsorAddress: string;
+  sponsorCity: string;
+  sponsorZipCode: string;
+  sponsorState: string;
+  additionalInfo?: string;
 }
