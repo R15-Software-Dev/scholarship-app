@@ -6,6 +6,14 @@ export type ScholarshipInfo = {
 
 }
 
+export type ScholarshipEligibility = {
+  studentResidence: string;
+  scholarshipNonPHS: boolean;
+  studyRequirement: boolean;
+  financialRequirement: boolean;
+  eligibilityOther?: string;
+}
+
 /**
  * All the information about the scholarship.
  * Includes info from all the other requests.

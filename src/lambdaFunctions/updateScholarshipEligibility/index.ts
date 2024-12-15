@@ -1,5 +1,5 @@
-import {DynamoDBClient, PutItemCommand} from '@aws-sdk/client-dynamodb';
-
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { AWSRequest, AWSResponse, ScholarshipEligibility } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
@@ -8,43 +8,32 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @param {ScholarshipEligibility} event - A scholarship eligibility object
  * @returns DynamoDB response object
  */
-export async function handler(event) {
-    try {
-        const input = JSON.parse(event.body);
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  const input = JSON.parse(event.body);
+  const info: ScholarshipEligibility = input.scholarshipInfo;
 
-        const command = new PutItemCommand({
-            TableName: "contact-info",
-            Item: {
-                studentResidence: {BOOL: input.studentResidence},
-                sclshpNonPHS: {BOOL: input.sclshpNonPHS},
-                studyAreaRequirement: {S: input.studyAreaRequirement},
-                financialNeed: {BOOL: input.financialNeed},
-                eligibilityOther: {S: input.eligibilityOther}
-            }
-        });
+  const command = new PutItemCommand({
+    TableName: "scholarship-info",
+    Item: {
+      studentResidence: { S: info.studentResidence },
+      scholarshipNonPHS: { BOOL: info.scholarshipNonPHS },
+      studyRequirement: { BOOL: info.studyRequirement },
+      financialRequirement: { BOOL: info.financialRequirement },
+      eligibilityOther: { S: info.eligibilityOther },
+    },
+  });
 
-        const dbresponse = await client.send(command);
-        return dbresponse;
-    } catch (e) {
-        console.error(e.message);
-        throw new Error(e.message);
-    }
-}
+  try {
+    const dbresponse = await client.send(command);
+  } catch (e) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: e.message }),
+    };
+  }
 
-class ScholarshipEligibility {
-    constructor (
-        studentResidence,
-        sclshpNonPHS,
-        studyAreaRequirement,
-        financialNeed,
-        eligibilityOther
-    ) {
-        return {
-            studentResidence: studentResidence,
-            sclshpNonPHS: sclshpNonPHS,
-            studyAreaRequirement: studyAreaRequirement,
-            financialNeed: financialNeed,
-            eligibilityOther: eligibilityOther
-        }
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: "Success" })
+  };
 }
