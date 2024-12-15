@@ -3,7 +3,11 @@
  * All the "header" information about a scholarship.
  */
 export type ScholarshipInfo = {
-
+  scholarshipTitle: string;
+  scholarshipSponsor: string;
+  scholarshipNumAwards: number;
+  scholarshipAwardsTotal: number;
+  scholarshipAmountPerAward: number;
 }
 
 export type ScholarshipEligibility = {
