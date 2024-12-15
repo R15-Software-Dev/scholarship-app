@@ -19,14 +19,6 @@ export type ScholarshipEligibility = {
 }
 
 /**
- * All the information about the scholarship.
- * Includes info from all the other requests.
- */
-export type Scholarship = {
-
-}
-
-/**
  * Contact information for the scholarship provider.
  * This is scholarship specific, and not necessarily the user's contact info.
  */
@@ -41,4 +33,19 @@ export type ScholarshipContactInfo = {
   sponsorZipCode: string;
   sponsorState: string;
   additionalInfo?: string;
+}
+
+/**
+ * Requirements for the scholarship application.
+ */
+export type ScholarshipRequirements = {
+  studentAidReport: boolean;
+  studentInterviews: boolean;
+  recipientSelection: string;
+  transcriptRequirements: boolean;
+  awardTo: boolean;
+  sclshpReApplication: boolean;
+  essayRequirement: boolean;
+  essaySelection: string[];
+  awardNightRemarks: string;
 }

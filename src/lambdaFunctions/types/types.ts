@@ -1,2 +1,2 @@
 export { AWSRequest, AWSResponse } from "./aws";
-export { ScholarshipContactInfo, Scholarship, ScholarshipInfo, ScholarshipEligibility } from "./scholarship";
+export { ScholarshipContactInfo, ScholarshipInfo, ScholarshipEligibility, ScholarshipRequirements } from "./scholarship";
