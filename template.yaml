@@ -283,6 +283,15 @@ Resources:
       Policies:
         - DynamoDBReadPolicy:
             TableName: scholarship-providers
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-secrets-manager"
+        EntryPoints:
+          - index.ts
 
   #Define the API Gateway endpoints
   ScholarshipApi:
@@ -295,8 +304,8 @@ Resources:
           providerAuthorizer:
             FunctionArn: !GetAtt providerAuthorizer.Arn
             Identity:
-              Header: Authorization
-              ValidationExpression: ^Bearer [-0-9a-zA-z\.]*$
+              Header: Cookie
+              ValidationExpression: .*authToken=([^;]+).*;
 
 
 Outputs:

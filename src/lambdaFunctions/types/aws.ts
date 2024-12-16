@@ -20,3 +20,31 @@ export type AWSResponse = {
   },
   statusCode: number,
 }
+
+/**
+ * This type represents the structure of an AWS authentication request.
+ * It should only be used by the authorizer function.
+ */
+export type AWSAuthRequest = {
+  authorizationToken: string;
+  methodArn: string;
+  type: string;
+}
+
+/**
+ * This type represents the structure of an AWS authentication response.
+ * It should only be used by the authorizer function.
+ */
+export type AWSAuthResponse = {
+  principalId: string;
+  policyDocument: {
+    Version: string;
+    Statement: [
+      {
+        Action: string;
+        Effect: string;
+        Resource: string;
+      }
+    ]
+  }
+}
