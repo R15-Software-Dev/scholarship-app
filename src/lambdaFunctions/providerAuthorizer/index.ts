@@ -14,27 +14,25 @@ const secretClient = new SecretsManagerClient({ region: "us-east-1" });
 export async function handler(event: AWSAuthRequest): Promise<AWSAuthResponse> {
   console.log("Recieved event: ");
   console.log(event);
-  // // Get the secret from Secrets Manager
-  // const secretResponse = await secretClient.send(new GetSecretValueCommand({
-  //   SecretId: "providerjwt"
-  // }));
-  // const secret = new TextEncoder().encode(secretResponse.SecretString);
-  //
-  // // Verify the token
-  // // TODO Put real values in the iss and aud fields
-  // let { payload, protectedHeader } = await jwtVerify(event.token, secret, {
-  //   iss: "https://smwldja6ql.execute-api.us-east-1.amazonaws.com/login",
-  //   aud: "https://alphafetus-testbucket.s3.amazonaws.com/entryPortal.html"
-  // });
-  //
-  // console.log(payload);
+  // Get the secret from Secrets Manager
+  const secretResponse = await secretClient.send(new GetSecretValueCommand({
+    SecretId: "providerjwt"
+  }));
+  const secret = new TextEncoder().encode(secretResponse.SecretString);
 
   // Check the cookie header to see if it is valid
-  const token: string = event.authorizationToken;
-
-  // If invalid, disallow
-  if (!token)
+  // First, get the authToken cookie
+  const authToken = event.authorizationToken.match(/authToken=([^;]*)/)[1];
+  // Then try to verify it - this will throw an error if it doesn't work.
+  try {
+    let {payload, protectedHeader} = await jwtVerify(authToken, secret, {
+      issuer: "https://smwldja6ql.execute-api.us-east-1.amazonaws.com/sclshp-form/login",
+      audience: "https://alphafetus-testbucket.s3.amazonaws.com/entryPortal.html"
+    });
+  } catch (e) {
+    console.error(e);
     throw new Error('Unauthorized');
+  }
 
   // If valid, return a response with a proper policy document.
   return {

@@ -305,7 +305,7 @@ Resources:
             FunctionArn: !GetAtt providerAuthorizer.Arn
             Identity:
               Header: Cookie
-              ValidationExpression: .*authToken=([^;]+).*;
+              ValidationExpression: .*authToken=([^;]+).*
 
 
 Outputs:
