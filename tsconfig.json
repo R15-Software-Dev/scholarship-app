@@ -7,5 +7,6 @@
     "allowJs": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "esModuleInterop": true
   }
 }

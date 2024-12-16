@@ -1,4 +1,5 @@
 import {DynamoDBClient, GetItemCommand} from '@aws-sdk/client-dynamodb';
+import { AWSRequest, AWSResponse } from '../types/types';
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
@@ -7,28 +8,36 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @param {string} event - The scholarship ID
  * @returns The scholarship provider contact information
  */
-export async function handler(event) {
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  const input = JSON.parse(event.body);
 
-    try {
-        const input = JSON.parse(event.body);
+  const command = new GetItemCommand({
+    TableName: "scholarship-info",
+    Key: {
+      scholarshipId: {S: input.scholarshipId}
+    },
+    AttributesToGet: [
+      "contact",
+      "contactBusiness",
+      "address",
+      "homePhone",
+      "businessPhone",
+      "cellPhone",
+      "email"
+    ]
+  });
 
-        const command = new GetItemCommand({
-            TableName: "scholarship-info",
-            Item: {
-                contact: {S: input.contact},
-                contactBusiness: {S: input.contactBusiness},
-                address: {S: input.address},
-                homePhone: {S: input.homePhone},
-                businessPhone: {S: input.businessPhone},
-                cellPhone: {S: input.cellPhone},
-                email: {S: input.email}
-            }
-        });
+  const dbresponse = await client.send(command);
 
-        const dbresponse = await client.send(command);
-        return dbresponse;
-    } catch (e) {
-        console.error(e.message);
-        throw new Error(e.message);
-    }
+  if (!dbresponse.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({message: "Scholarship not found"})
+    };
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(dbresponse.Item)
+  };
 }

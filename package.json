@@ -4,6 +4,7 @@
   "description": "Region 15 Scholarship Application templates.",
   "main": "index.js",
   "scripts": {
+    "start-api": "sam build & sam local start-api",
     "build": "node esbuildRun.mjs",
     "start": "npm run build && npm run start-server",
     "start-server": "http-server ./dist --cors",
