@@ -19,6 +19,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   // Create a command to check if the provider is already registered.
   // If the provider is already registered, return an error and do not register them again.
+  // TODO Remove this command entirely. Use the PutItemCommand to do this work.
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
     Key: {
@@ -33,6 +34,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   let dbresponse = await client.send(getCommand);
 
   // If the provider is already registered, return an error
+  // TODO Properly configure PutItemCommand with the ConditionExpression argument.
+  // TODO Find out if Dynamo can use UUIDs for the providers.
+  const uuid = self.crypto.randomUUID();
   if (!dbresponse.Item) {
     // Create a command to add the provider to the database
     const putCommand = new PutItemCommand({

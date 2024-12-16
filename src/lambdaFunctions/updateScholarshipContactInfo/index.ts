@@ -12,6 +12,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const input = JSON.parse(event.body);
   const scholarshipInfo: ScholarshipContactInfo = input.scholarshipInfo;
 
+  // TODO Convert this into the proper UpdateItemCommand.
   const command = new PutItemCommand({
     TableName: "scholarship-info",
     Item: {
@@ -29,6 +30,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     // ConditionExpression: "attribute_not_exists(contactName)",
   });
 
+  // TODO Properly catch any errors from the client
   try {
     const dbresponse = await client.send(command);
   } catch (e) {
