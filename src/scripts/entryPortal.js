@@ -18,7 +18,18 @@ $(function () {
     }
   });
 
+  // Function scrolls to the top of the page when you click a tab
+  // Get the button element
+  const scrollToTopButton = document.querySelector('tab-bar');
 
+  // Add a click event listener to the button
+  scrollToTopButton.addEventListener("click", () => {
+    // Scroll to the top of the page with smooth behavior
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
 
   $("#essayRequirementOption").on("change", function () {
     const essaySelection = $("#essayRequirementSelection");
