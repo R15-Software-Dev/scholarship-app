@@ -1,5 +1,6 @@
-import {DynamoDBClient, PutItemCommand} from '@aws-sdk/client-dynamodb';
-
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { AWSRequest, AWSResponse } from "../types/aws";
+import { ScholarshipInfo } from "../types/scholarship";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
@@ -8,43 +9,32 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @param {ScholarshipInfo} event - A scholarship info object
  * @returns DynamoDB response object
  */
-export async function handler(event) {
-    try {
-        const input = JSON.parse(event.body);
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  const input = JSON.parse(event.body);
+  const info: ScholarshipInfo = input.info;
 
-        const command = new PutItemCommand({
-            TableName: "scholarship-info",
-            Item: {
-                sclshpTitle: {S: input.sclshpTitle},
-                sclshpSponsor: {S: input.sclshpSponsor},
-                sclshpNumAwards: {N: input.sclshpNumAwards},
-                sclshpAwardsTotal: {N: input.sclshpAwardsTotal},
-                sclshpAmountPerAward: {N: input.sclshpAmountPerAward}
-            }
-        });
+  const command = new PutItemCommand({
+    TableName: "scholarship-info",
+    Item: {
+      sclshpTitle: { S: input.sclshpTitle },
+      sclshpSponsor: { S: input.sclshpSponsor },
+      sclshpNumAwards: { N: input.sclshpNumAwards },
+      sclshpAwardsTotal: { N: input.sclshpAwardsTotal },
+      sclshpAmountPerAward: { N: input.sclshpAmountPerAward },
+    },
+  });
 
-        const dbresponse = await client.send(command);
-        return dbresponse;
-    } catch (e) {
-        console.error(e.message);
-        throw new Error(e.message);
-    }
-}
+  try {
+    const dbresponse = await client.send(command);
+  } catch (e) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify(e),
+    };
+  }
 
-class ScholarshipInfo{
-    constructor(
-        sclshpTitle,
-        sclshpSponsor,
-        sclshpNumAwards,
-        sclshpAwardsTotal,
-        sclshpAmountPerAward
-    ) {
-        return {
-            sclshpTitle: sclshpTitle,
-            sclshpSponsor: sclshpSponsor,
-            sclshpNumAwards: sclshpNumAwards,
-            sclshpAwardsTotal: sclshpAwardsTotal,
-            sclshpAmountPerAward: sclshpAmountPerAward
-        }
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: "Success" }),
+  };
 }

@@ -1,4 +1,5 @@
-const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+import { DynamoDBClient, GetItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { AWSRequest, AWSResponse } from "./../types/types";
 
 // Create a DynamoDB client
 const client = new DynamoDBClient({ region: "us-east-1" });
@@ -9,19 +10,19 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @param event - Event body from API request
  * @returns A success message or an error
  */
-async function handler(event: Provider) {
-  // console.log(event);
-  // Check if the event fits the Provider class.
-  if (!event.email || !event.password ||
-    event.email === "" || event.password === "")
-    throw new Error(`Invalid input: ${event}`);
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  // Parse into a ProviderRegInfo object
+  const eventBody: ProviderRegInfo = JSON.parse(event.body);
+  if (!eventBody.email || !eventBody.password ||
+    eventBody.email === "" || eventBody.password === "")
+    throw new Error(`Invalid input: ${eventBody}`);
 
   // Create a command to check if the provider is already registered.
   // If the provider is already registered, return an error and do not register them again.
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
     Key: {
-      Email: { S: event.email }
+      Email: { S: eventBody.email }
     },
     AttributesToGet: [
       "Email"
@@ -37,34 +38,39 @@ async function handler(event: Provider) {
     const putCommand = new PutItemCommand({
       TableName: "scholarship-providers",
       Item: {
-        Email: { S: event.email },
-        Password: { S: event.password }
+        Email: { S: eventBody.email },
+        Password: { S: eventBody.password }
       }
     });
 
     // Send command to DynamoDB
     dbresponse = await client.send(putCommand);
 
-    return "Provider registered successfully";
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Provider registered successfully"
+      })
+    };
   }
 
-  return "Provider already registered";
+  return {
+    statusCode: 400,
+    body: JSON.stringify({
+      message: "Provider already registered"
+    })
+  };
 }
 
-class Provider {
+class ProviderRegInfo {
   /**
    * Email address of the provider.
-   * @type {string}
    */
   email = "";
 
   /**
    * Password of the provider.
    * This value should be hashed before being sent here.
-   * @type {string}
    */
   password = "";
 }
-
-
-module.exports = { handler, Provider };

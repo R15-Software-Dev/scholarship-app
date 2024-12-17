@@ -1,4 +1,5 @@
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { AWSRequest, AWSResponse } from '../types/aws';
 
 
 const client = new DynamoDBClient({ region: "us-east-1" });
@@ -8,32 +9,38 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @param {string} event - The scholarship ID
  * @returns The scholarship requirement information
  */
-export async function handler(event) {
+export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  const input = JSON.parse(event.body);
 
-    try {
-        const input = JSON.parse(event.body);
+  const command = new GetItemCommand({
+    TableName: "scholarship-info",
+    Key: {
+      scholarshipId: {S: input.scholarshipId}
+    },
+    AttributesToGet: [
+      "studentAidReport",
+      "studentInterviews",
+      "recipientSelection",
+      "transcriptRequirement",
+      "awardTo",
+      "sclshpReApplication",
+      "essayRequirement",
+      "essaySelection",
+      "awardNightRemarks"
+    ]
+  });
 
-        const command = new GetItemCommand({
-            TableName: "scholarship-info",
-            Item: {
-                studentAidReport: {BOOL: input.studentAidReport},
-                studentInterviews: {BOOL: input.studentInterviews},
-                recipientSelection: {S: input.recipientSelection},
-                transcriptRequirement: {BOOL: input.transcriptRequirement},
-                awardTo: {BOOL: input.awardTo},
-                sclshpReApplication: {BOOL: input.sclshpReApplication},
-                essayRequirement: {BOOL: input.essayRequirement},
-                essaySelection: {SS: input.essaySelection},
-                awardNightRemarks: {S: input.awardNightRemarks}
-            }
-        });
+  const dbresponse = await client.send(command);
 
-        const dbresponse = await client.send(command);
-        return dbresponse;
-    } catch (e) {
-        console.error(e.message);
-        throw new Error(e.message);
-    }
+  if (!dbresponse.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify("Item not found")
+    };
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(dbresponse.Item)
+  };
 }
-
-
