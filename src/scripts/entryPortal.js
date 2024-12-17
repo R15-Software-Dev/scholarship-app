@@ -18,7 +18,7 @@ $(function () {
     }
   });
 
-  // Function scrolls to the top of the page when you click a tab
+  // Function scrolls to the top of the page when a tab is clicked
   // Get the button element
   const scrollToTopButton = document.querySelector('tab-bar');
 
