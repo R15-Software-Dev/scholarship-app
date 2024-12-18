@@ -1,4 +1,4 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { AWSRequest, AWSResponse, ScholarshipRequirements } from "../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
@@ -9,23 +9,42 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
-  const input = JSON.parse(event.body);
-  const info: ScholarshipRequirements = input.info;
-
-  // TODO Convert this into the proper UpdateItemCommand.
-  const command = new PutItemCommand({
+  const info: ScholarshipRequirements = JSON.parse(event.body);
+  
+  // Get the scholarship ID from the passed cookie
+  const scholarshipID = event.headers.cookie.match(/scholarshipID=(\w+)/)[1];
+  console.log(`Found scholarship ID: ${scholarshipID}`);
+  const command = new UpdateItemCommand({
     TableName: "scholarship-info",
-    Item: {
-      studentAidReport: { BOOL: input.studentAidReport },
-      studentInterviews: { BOOL: input.studentInterviews },
-      recipientSelection: { S: input.recipientSelection },
-      transcriptRequirements: { BOOL: input.transcriptRequirements },
-      awardTo: { BOOL: input.awardTo },
-      sclshpReApplication: { BOOL: input.sclshpReApplication },
-      essayRequirement: { BOOL: input.essayRequirement },
-      essaySelection: { SS: input.essaySelection },
-      awardNightRemarks: { S: input.awardNightRemarks },
+    Key: {
+      ScholarshipID: {S: scholarshipID}
     },
+    UpdateExpression: "SET studentAidReport = :studentAidReport, studentInterviews = :studentInterviews," +
+      "recipientSelection = :recipientSelection, transcriptRequirements = :transcriptRequirements," +
+      "awardTo = :awardTo, sclshpReApplication = :sclshpReApplication, essayRequirement = :essayRequirement," +
+      "essaySelection = :essaySelection, awardNightRemarks = :awardNightRemarks",
+    ExpressionAttributeValues: {
+      ":studentAidReport": {BOOL: info.studentAidReport},
+      ":studentInterviews": {BOOL: info.studentInterviews},
+      ":recipientSelection": {S: info.recipientSelection},
+      ":transcriptRequirements": {BOOL: info.transcriptRequirements},
+      ":awardTo": {BOOL: info.awardTo},
+      ":sclshpReApplication": {BOOL: info.sclshpReApplication},
+      ":essayRequirement": {BOOL: info.essayRequirement},
+      ":essaySelection": {SS: info.essaySelection},
+      ":awardNightRemarks": {S: info.awardNightRemarks}
+    },
+    ExpressionAttributeNames: {
+      ":studentAidReport": "studentAidReport",
+      ":studentInterviews": "studentInterviews",
+      ":recipientSelection": "recipientSelection",
+      ":transcriptRequirements": "transcriptRequirements",
+      ":awardTo": "awardTo",
+      ":sclshpReApplication": "sclshpReApplication",
+      ":essayRequirement": "essayRequirement",
+      ":essaySelection": "essaySelection",
+      ":awardNightRemarks": "awardNightRemarks"
+    }
   });
 
   // TODO Properly catch any errors from the client
