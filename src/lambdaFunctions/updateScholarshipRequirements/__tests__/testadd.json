@@ -3,7 +3,7 @@
   "studentInterviews": true,
   "recipientSelection": "who selects it?",
   "transcriptRequirements": true,
-  "awardTo": "university",
+  "awardTo": false,
   "sclshpReApplication": false,
   "essayRequirement": true,
   "essaySelection": [

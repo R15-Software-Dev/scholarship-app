@@ -292,10 +292,10 @@ Resources:
     Properties:
       TableName: scholarship-info
       AttributeDefinitions:
-        - AttributeName: Name
+        - AttributeName: ScholarshipID
           AttributeType: S
       KeySchema:
-        - AttributeName: Name
+        - AttributeName: ScholarshipID
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 300

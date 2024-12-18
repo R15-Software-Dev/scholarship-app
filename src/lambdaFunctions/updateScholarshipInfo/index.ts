@@ -13,7 +13,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const input: ScholarshipInfo = JSON.parse(event.body);
 
   // Get scholarship ID from the passed cookie header
-  const scholarshipID = event.headers.cookie.match(/scholarshipID=(\w+)/)[1];
+  const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
   console.log(`Found scholarship ID: ${scholarshipID}`);
   const command = new UpdateItemCommand({
     TableName: "scholarship-info",
@@ -35,7 +35,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":sclshpAmountPerAward": {N: input.scholarshipAmountPerAward.toString()},
     },
     UpdateExpression: "SET #sclshpTitle = :sclshpTitle, #sclshpSponsor = :sclshpSponsor," +
-      "#sclshpNumAwards = :sclshpNumAwards, #sclshpAwardsTotal = :sclshpAwardsTotal"
+      "#sclshpNumAwards = :sclshpNumAwards, #sclshpAwardsTotal = :sclshpAwardsTotal," +
+      "#sclshpAmountPerAward = :sclshpAmountPerAward"
   });
 
   // TODO Properly catch any errors from the client

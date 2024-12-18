@@ -12,7 +12,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const info: ScholarshipEligibility = JSON.parse(event.body);
 
   // Get the scholarship ID from the passed cookie
-  const scholarshipID = event.headers.cookie.match(/scholarshipID=(\w+)/)[1];
+  const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
   console.log(`Found scholarship ID: ${scholarshipID}`);
   const command = new UpdateItemCommand({
     TableName: "scholarship-info",
