@@ -10,14 +10,15 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const scholarshipInfo: ScholarshipContactInfo = JSON.parse(event.body);
+  console.log(scholarshipInfo);
 
   // Get the scholarship ID from the corresponding cookie
-  const scholarshipID = event.headers.cookie.match(/scholarshipID=(\w+)/)[1];
+  const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
   console.log(`Found scholarship ID: ${scholarshipID}`);
   const command = new UpdateItemCommand({
     TableName: "scholarship-info",
     Key: {
-      ScholarshipID: {S: scholarshipID}
+      ScholarshipID: {S: scholarshipID.toString()}
     },
     ExpressionAttributeNames: {
       "#contactName": "contactName",
@@ -38,16 +39,19 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":contactEmail": {S: scholarshipInfo.contactEmail},
       ":sponsorAddress": {S: scholarshipInfo.sponsorAddress},
       ":sponsorCity": {S: scholarshipInfo.sponsorCity},
-      ":sponsorZipCode": {S: scholarshipInfo.sponsorZipCode}
+      ":sponsorZipCode": {S: scholarshipInfo.sponsorZipCode},
+      ":sponsorState": {S: scholarshipInfo.sponsorState}
     },
     UpdateExpression: "SET #contactName = :contactName, #homePhone = :homePhone, #businessPhone = :businessPhone," +
       "#cellPhone = :cellPhone, #contactEmail = :contactEmail, #sponsorAddress = :sponsorAddress," +
-      "#sponsorCity = :sponsorCity, #sponsorZipCode = :sponsorZipCode"
+      "#sponsorCity = :sponsorCity, #sponsorZipCode = :sponsorZipCode, #sponsorState = :sponsorState"
   });
 
   // TODO Properly catch any errors from the client
+  console.log("Sending update command...");
   try {
     const dbresponse = await client.send(command);
+    console.log("Update command sent successfully.");
   } catch (e) {
     console.error(e.message);
     return {

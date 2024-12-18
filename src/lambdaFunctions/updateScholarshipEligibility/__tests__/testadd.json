@@ -1,0 +1,7 @@
+{
+  "studentResidence": "something",
+  "scholarshipNonPHS": true,
+  "studyRequirement": true,
+  "financialRequirement": true,
+  "eligibilityOther": "this is some other string"
+}

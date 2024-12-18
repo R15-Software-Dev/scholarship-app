@@ -1,0 +1,11 @@
+{
+  "contactName": "Test User",
+  "homePhone": "1234567890",
+  "cellPhone": "1234567890",
+  "businessPhone": "1234567890",
+  "contactEmail": "testuser@region15.org",
+  "sponsorAddress": "234 Judd Rd",
+  "sponsorCity": "Southbury",
+  "sponsorZipCode": "06488",
+  "sponsorState": "CT"
+}
