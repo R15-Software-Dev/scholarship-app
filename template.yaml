@@ -21,7 +21,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /login
+            Path: /providers/login
             Method: post
             Auth:
               Authorizer: NONE
