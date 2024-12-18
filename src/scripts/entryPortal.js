@@ -18,7 +18,11 @@ $(function () {
     }
   });
 
-
+  // Function scrolls to the top of the page when a tab is clicked
+  $('tab-bar').on('click', function () {
+    // Scroll to the top of the page smoothly
+    $('html, body').animate({ scrollTop: 0 }, 'smooth');
+  });
 
   $("#essayRequirementOption").on("change", function () {
     const essaySelection = $("#essayRequirementSelection");
