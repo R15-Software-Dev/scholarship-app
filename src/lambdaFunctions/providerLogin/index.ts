@@ -30,6 +30,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     AttributesToGet: [
       "Password",
       "Email",
+      "ScholarshipID"
     ]
   });
 
@@ -71,8 +72,11 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Return that the login was successful - this should store an HttpOnly Secure cookie
   return {
     statusCode: 200,
-    headers: {
-      "Set-Cookie": `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`
+    multiValueHeaders: {
+      "Set-Cookie": [
+        `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`,
+        `scholarshipID=${dbresponse.Item.ScholarshipID.S}; Expires=${expTime}; Secure; HttpOnly`
+      ]
     },
     body: JSON.stringify({
       message: "Login successful"
