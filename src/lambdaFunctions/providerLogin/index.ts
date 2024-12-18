@@ -16,23 +16,10 @@ const secretClient = new SecretsManagerClient({ region: "us-east-1" });
  * @returns A JWT with the user's information or an authorization error
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
-  const eventBody: AuthProvider = JSON.parse(event.body);
+  const eventBody: AuthProviderInfo = JSON.parse(event.body);
   console.log("Event body: ");
   console.log(eventBody);
-  // const response: AWSResponse = {
-  //   statusCode: 200,
-  //   headers: {
-  //     // Just testing adding custom headers.
-  //     "Set-Cookie": "test=123"
-  //   },
-  //   body: JSON.stringify({
-  //     message: "Testing function successful!",
-  //     input: eventBody
-  //   })
-  // };
-
-  // return response;
-
+  
   // Create command to get user information
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
@@ -90,14 +77,14 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 /**
 * Template class for the authentication request body.
 */
-class AuthProvider {
+type AuthProviderInfo = {
   /**
-  * Email address of the user
-  */
-  email: string = "";
+   * Email address of the user
+   */
+  email: string;
 
   /**
-  * Password of the user. This should already be hashed.
-  */
-  password: string = "";
+   * Password of the user.
+   */
+  password: string;
 }
