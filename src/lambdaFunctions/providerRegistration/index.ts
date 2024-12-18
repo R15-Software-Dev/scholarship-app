@@ -78,8 +78,11 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     
     return {
       statusCode: 200,
-      headers: {
-        "Set-Cookie": `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`
+      multiValueHeaders: {
+        "Set-Cookie": [
+          `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`,
+          `scholarshipID=${scholarshipID}; Expires=${expTime}; Secure; HttpOnly`
+        ]
       },
       body: JSON.stringify({
         message: "Registration successful",

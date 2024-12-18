@@ -18,6 +18,9 @@ export type AWSResponse = {
   headers?: {
     [key: string]: string;
   },
+  multiValueHeaders?: {
+    [key: string]: string[];
+  }
   statusCode: number,
 }
 
