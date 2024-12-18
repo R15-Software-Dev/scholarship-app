@@ -2,6 +2,7 @@ import * as jose from "jose";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import { AWSRequest, AWSResponse } from "./../types/types";
+import * as bcrypt from "bcryptjs";
 
 
 // Create a DynamoDB client
@@ -34,11 +35,16 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   // Send command to DynamoDB and check if the password matches
   const dbresponse = await client.send(getCommand);
-  console.log("Database response: ");
-  console.log(dbresponse);
-  if (dbresponse.Item.Password.S !== eventBody.password ||
-    dbresponse.Item.Email.S !== eventBody.email) {
-    throw Error("Password does not match");
+  // Get the password from the response - this will be hashed since it's from the server
+  const hashedPassword = dbresponse.Item.Password.S;
+  if (await bcrypt.compare(eventBody.password, hashedPassword) === false) {
+    // Then the password is incorrect
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        message: "Incorrect password"
+      })
+    };
   }
 
   // If password matches, get the secret from Secrets Manager

@@ -3,6 +3,7 @@ import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-sec
 import { AWSRequest, AWSResponse } from "./../types/types";
 import { SignJWT } from "jose";
 import { v4 as uuidv4 } from "uuid";
+import * as bcrypt from "bcryptjs";
 
 // Create a DynamoDB client
 const client = new DynamoDBClient({ region: "us-east-1" });
@@ -37,14 +38,16 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Create a command to check if the provider is already registered.
   // If the provider is already registered, return an error and do not register them again.
   try {
-    // Create the command to send to the database
-    // TODO Hash the password before putting it in the database.
+    // Generate a GUID for the provider's scholarship - this will be used later
     const scholarshipID = uuidv4();
+    // Get the hash of the user's password
+    const passwordHash = await hashPassword(eventBody.password);
+    // Create the command to send to the database client
     const putCommand = new PutItemCommand({
       TableName: "scholarship-providers",
       Item: {
         Email: {S: eventBody.email},
-        Password: {S: eventBody.password},
+        Password: {S: passwordHash},
         ScholarshipID: {S: scholarshipID}
       },
       ConditionExpression: "attribute_not_exists(Email) AND attribute_not_exists(ScholarshipID)"
@@ -90,6 +93,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       body: JSON.stringify(e)
     }
   }
+}
+
+async function hashPassword(password: string): Promise<string> {
+  return await bcrypt.hash(password, 10);
 }
 
 type ProviderRegInfo = {
