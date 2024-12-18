@@ -47,7 +47,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     }
   });
 
-  // TODO Properly catch any errors from the client
   try {
     const dbresponse = await client.send(command);
   } catch (e) {

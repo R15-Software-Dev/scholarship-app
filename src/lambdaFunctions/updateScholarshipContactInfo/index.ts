@@ -47,7 +47,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#sponsorCity = :sponsorCity, #sponsorZipCode = :sponsorZipCode, #sponsorState = :sponsorState"
   });
 
-  // TODO Properly catch any errors from the client
   console.log("Sending update command...");
   try {
     const dbresponse = await client.send(command);
