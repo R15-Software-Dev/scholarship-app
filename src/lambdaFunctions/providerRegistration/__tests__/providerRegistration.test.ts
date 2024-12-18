@@ -1,5 +1,5 @@
 import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
-import { AWSRequest, AWSResponse } from "./../../types";
+import { AWSRequest, AWSResponse } from "../../types/types";
 
 const handler = require("./../index").handler;
 
