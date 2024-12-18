@@ -1,36 +1,56 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { AWSRequest, AWSResponse, ScholarshipContactInfo } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Creates and or updates a record in the contact info table in DynamoDB
- * @param {ContactInfo} event - Scholarship provider contact info object
- * @returns DynamoDB response object
+ * @param event - Scholarship provider contact info object
+ * @returns AWSResponse that contains a success or error code.
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
-  const input = JSON.parse(event.body);
-  const scholarshipInfo: ScholarshipContactInfo = input.scholarshipInfo;
+  const scholarshipInfo: ScholarshipContactInfo = JSON.parse(event.body);
+  console.log(scholarshipInfo);
 
-  const command = new PutItemCommand({
+  // Get the scholarship ID from the corresponding cookie
+  const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
+  console.log(`Found scholarship ID: ${scholarshipID}`);
+  const command = new UpdateItemCommand({
     TableName: "scholarship-info",
-    Item: {
-      contactName: { S: scholarshipInfo.contactName },
-      homePhone: { S: scholarshipInfo.homePhone },
-      businessPhone: { S: scholarshipInfo.businessPhone },
-      cellPhone: { S: scholarshipInfo.cellPhone },
-      contactEmail: { S: scholarshipInfo.contactEmail },
-      sponsorAddress: { S: scholarshipInfo.sponsorAddress },
-      sponsorCity: { S: scholarshipInfo.sponsorCity },
-      sponsorZipCode: { S: scholarshipInfo.sponsorZipCode },
-      sponsorState: { S: scholarshipInfo.sponsorState },
-      additionalInfo: { S: scholarshipInfo.additionalInfo },
+    Key: {
+      ScholarshipID: {S: scholarshipID.toString()}
     },
-    // ConditionExpression: "attribute_not_exists(contactName)",
+    ExpressionAttributeNames: {
+      "#contactName": "contactName",
+      "#homePhone": "homePhone",
+      "#businessPhone": "businessPhone",
+      "#cellPhone": "cellPhone",
+      "#contactEmail": "contactEmail",
+      "#sponsorAddress": "sponsorAddress",
+      "#sponsorCity": "sponsorCity",
+      "#sponsorZipCode": "sponsorZipCode",
+      "#sponsorState": "sponsorState"
+    },
+    ExpressionAttributeValues: {
+      ":contactName": {S: scholarshipInfo.contactName},
+      ":homePhone": {S: scholarshipInfo.homePhone},
+      ":businessPhone": {S: scholarshipInfo.businessPhone},
+      ":cellPhone": {S: scholarshipInfo.cellPhone},
+      ":contactEmail": {S: scholarshipInfo.contactEmail},
+      ":sponsorAddress": {S: scholarshipInfo.sponsorAddress},
+      ":sponsorCity": {S: scholarshipInfo.sponsorCity},
+      ":sponsorZipCode": {S: scholarshipInfo.sponsorZipCode},
+      ":sponsorState": {S: scholarshipInfo.sponsorState}
+    },
+    UpdateExpression: "SET #contactName = :contactName, #homePhone = :homePhone, #businessPhone = :businessPhone," +
+      "#cellPhone = :cellPhone, #contactEmail = :contactEmail, #sponsorAddress = :sponsorAddress," +
+      "#sponsorCity = :sponsorCity, #sponsorZipCode = :sponsorZipCode, #sponsorState = :sponsorState"
   });
 
+  console.log("Sending update command...");
   try {
     const dbresponse = await client.send(command);
+    console.log("Update command sent successfully.");
   } catch (e) {
     console.error(e.message);
     return {

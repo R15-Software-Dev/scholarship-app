@@ -1,4 +1,4 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import {DynamoDBClient, PutItemCommand, UpdateItemCommand} from "@aws-sdk/client-dynamodb";
 import { AWSRequest, AWSResponse } from "../types/aws";
 import { ScholarshipInfo } from "../types/scholarship";
 
@@ -10,18 +10,33 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
-  const input = JSON.parse(event.body);
-  const info: ScholarshipInfo = input.info;
+  const input: ScholarshipInfo = JSON.parse(event.body);
 
-  const command = new PutItemCommand({
+  // Get scholarship ID from the passed cookie header
+  const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
+  console.log(`Found scholarship ID: ${scholarshipID}`);
+  const command = new UpdateItemCommand({
     TableName: "scholarship-info",
-    Item: {
-      sclshpTitle: { S: input.sclshpTitle },
-      sclshpSponsor: { S: input.sclshpSponsor },
-      sclshpNumAwards: { N: input.sclshpNumAwards },
-      sclshpAwardsTotal: { N: input.sclshpAwardsTotal },
-      sclshpAmountPerAward: { N: input.sclshpAmountPerAward },
+    Key: {
+      ScholarshipID: {S: scholarshipID}
     },
+    ExpressionAttributeNames: {
+      "#sclshpTitle": "sclshpTitle",
+      "#sclshpSponsor": "sclshpSponsor",
+      "#sclshpNumAwards": "sclshpNumAwards",
+      "#sclshpAwardsTotal": "sclshpAwardsTotal",
+      "#sclshpAmountPerAward": "sclshpAmountPerAward"
+    },
+    ExpressionAttributeValues: {
+      ":sclshpTitle": {S: input.scholarshipTitle},
+      ":sclshpSponsor": {S: input.scholarshipSponsor},
+      ":sclshpNumAwards": {N: input.scholarshipNumAwards.toString()},
+      ":sclshpAwardsTotal": {N: input.scholarshipAwardsTotal.toString()},
+      ":sclshpAmountPerAward": {N: input.scholarshipAmountPerAward.toString()},
+    },
+    UpdateExpression: "SET #sclshpTitle = :sclshpTitle, #sclshpSponsor = :sclshpSponsor," +
+      "#sclshpNumAwards = :sclshpNumAwards, #sclshpAwardsTotal = :sclshpAwardsTotal," +
+      "#sclshpAmountPerAward = :sclshpAmountPerAward"
   });
 
   try {

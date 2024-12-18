@@ -2,6 +2,7 @@ import * as jose from "jose";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import { AWSRequest, AWSResponse } from "./../types/types";
+import * as bcrypt from "bcryptjs";
 
 
 // Create a DynamoDB client
@@ -16,23 +17,10 @@ const secretClient = new SecretsManagerClient({ region: "us-east-1" });
  * @returns A JWT with the user's information or an authorization error
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
-  const eventBody: AuthProvider = JSON.parse(event.body);
+  const eventBody: AuthProviderInfo = JSON.parse(event.body);
   console.log("Event body: ");
   console.log(eventBody);
-  // const response: AWSResponse = {
-  //   statusCode: 200,
-  //   headers: {
-  //     // Just testing adding custom headers.
-  //     "Set-Cookie": "test=123"
-  //   },
-  //   body: JSON.stringify({
-  //     message: "Testing function successful!",
-  //     input: eventBody
-  //   })
-  // };
-
-  // return response;
-
+  
   // Create command to get user information
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
@@ -42,16 +30,22 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     AttributesToGet: [
       "Password",
       "Email",
+      "ScholarshipID"
     ]
   });
 
   // Send command to DynamoDB and check if the password matches
   const dbresponse = await client.send(getCommand);
-  console.log("Database response: ");
-  console.log(dbresponse);
-  if (dbresponse.Item.Password.S !== eventBody.password ||
-    dbresponse.Item.Email.S !== eventBody.email) {
-    throw Error("Password does not match");
+  // Get the password from the response - this will be hashed since it's from the server
+  const hashedPassword = dbresponse.Item.Password.S;
+  if (await bcrypt.compare(eventBody.password, hashedPassword) === false) {
+    // Then the password is incorrect
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        message: "Incorrect password"
+      })
+    };
   }
 
   // If password matches, get the secret from Secrets Manager
@@ -78,8 +72,11 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Return that the login was successful - this should store an HttpOnly Secure cookie
   return {
     statusCode: 200,
-    headers: {
-      "Set-Cookie": `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`
+    multiValueHeaders: {
+      "Set-Cookie": [
+        `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`,
+        `scholarshipID=${dbresponse.Item.ScholarshipID.S}; Expires=${expTime}; Secure; HttpOnly`
+      ]
     },
     body: JSON.stringify({
       message: "Login successful"
@@ -90,14 +87,14 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 /**
 * Template class for the authentication request body.
 */
-class AuthProvider {
+type AuthProviderInfo = {
   /**
-  * Email address of the user
-  */
-  email: string = "";
+   * Email address of the user
+   */
+  email: string;
 
   /**
-  * Password of the user. This should already be hashed.
-  */
-  password: string = "";
+   * Password of the user.
+   */
+  password: string;
 }

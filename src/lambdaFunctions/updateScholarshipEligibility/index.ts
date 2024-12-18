@@ -1,26 +1,41 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { AWSRequest, AWSResponse, ScholarshipEligibility } from "./../types/types";
+import { DynamoDBClient, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
+import {AWSRequest, AWSResponse, ScholarshipEligibility } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Creates and or updates a record in the scholarship info table in DynamoDB
- * @param {ScholarshipEligibility} event - A scholarship eligibility object
+ * @param event - A scholarship eligibility object
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
-  const input = JSON.parse(event.body);
-  const info: ScholarshipEligibility = input.scholarshipInfo;
+  const info: ScholarshipEligibility = JSON.parse(event.body);
 
-  const command = new PutItemCommand({
+  // Get the scholarship ID from the passed cookie
+  const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
+  console.log(`Found scholarship ID: ${scholarshipID}`);
+  const command = new UpdateItemCommand({
     TableName: "scholarship-info",
-    Item: {
-      studentResidence: { S: info.studentResidence },
-      scholarshipNonPHS: { BOOL: info.scholarshipNonPHS },
-      studyRequirement: { BOOL: info.studyRequirement },
-      financialRequirement: { BOOL: info.financialRequirement },
-      eligibilityOther: { S: info.eligibilityOther },
+    Key: {
+      ScholarshipID: {S: scholarshipID}
     },
+    ExpressionAttributeNames: {
+      "#studentResidence": "studentResidence",
+      "#scholarshipNonPHS": "scholarshipNonPHS",
+      "#studyRequirement": "studyRequirement",
+      "#financialRequirement": "financialRequirement",
+      "#eligibilityOther": "eligibilityOther"
+    },
+    ExpressionAttributeValues: {
+      ":studentResidence": {S: info.studentResidence},
+      ":scholarshipNonPHS": {BOOL: info.scholarshipNonPHS},
+      ":studyRequirement": {BOOL: info.studyRequirement},
+      ":financialRequirement": {BOOL: info.financialRequirement},
+      ":eligibilityOther": {S: info.eligibilityOther}
+    },
+    UpdateExpression: "SET #studentResidence = :studentResidence, #scholarshipNonPHS = :scholarshipNonPHS," +
+      "#studyRequirement = :studyRequirement, #financialRequirement = :financialRequirement," +
+      "#eligibilityOther = :eligibilityOther"
   });
 
   try {

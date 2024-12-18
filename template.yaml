@@ -21,7 +21,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /login
+            Path: /providers/login
             Method: post
             Auth:
               Authorizer: NONE
@@ -42,6 +42,37 @@ Resources:
           - "@aws-sdk/client-secrets-manager"
         EntryPoints:
           - index.ts
+  providerRegistration:
+    Type: AWS::Serverless::Function
+    Properties: 
+      Description: Handles registration of new scholarship provider accounts.
+      CodeUri: src/lambdaFunctions/providerRegistration
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /providers/registration
+            Method: post
+            Auth:
+              Authorizer: NONE
+      Policies: 
+        - DynamoDBCrudPolicy:
+            TableName: scholarship-providers
+    Metadata: 
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+          - "@aws-sdk/client-secrets-manager"
+        EntryPoints:
+          - index.ts
   readScholarshipRequirements:
     Type: AWS::Serverless::Function
     Properties:
@@ -53,7 +84,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/requirements
+            Path: /providers/requirements
             Method: get
       Policies:
         - DynamoDBReadPolicy:
@@ -81,7 +112,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/requirements
+            Path: /providers/requirements
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
@@ -109,7 +140,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/eligibility
+            Path: /providers/eligibility
             Method: post
       Policies:
         - DynamoDBReadPolicy:
@@ -137,7 +168,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/contact-info
+            Path: /providers/contact-info
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
@@ -165,7 +196,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/info
+            Path: /providers/info
             Method: get
       Policies:
         - DynamoDBReadPolicy:
@@ -193,7 +224,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/info
+            Path: /providers/info
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
@@ -223,7 +254,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
-            Path: /sclshp-form/eligibility
+            Path: /providers/eligibility
             Method: get
       Policies:
         # Give CRUD access to the DynamoDB table
@@ -261,10 +292,10 @@ Resources:
     Properties:
       TableName: scholarship-info
       AttributeDefinitions:
-        - AttributeName: Name
+        - AttributeName: ScholarshipID
           AttributeType: S
       KeySchema:
-        - AttributeName: Name
+        - AttributeName: ScholarshipID
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 300
@@ -292,6 +323,8 @@ Resources:
           - "@aws-sdk/client-secrets-manager"
         EntryPoints:
           - index.ts
+
+  # Define the S3 bucket for the website here.
 
   #Define the API Gateway endpoints
   ScholarshipApi:

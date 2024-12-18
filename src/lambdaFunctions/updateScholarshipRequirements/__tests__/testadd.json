@@ -1,0 +1,16 @@
+{
+  "studentAidReport": true,
+  "studentInterviews": true,
+  "recipientSelection": "who selects it?",
+  "transcriptRequirements": true,
+  "awardTo": false,
+  "sclshpReApplication": false,
+  "essayRequirement": true,
+  "essaySelection": [
+    "These",
+    "Are",
+    "Some",
+    "Essays"
+  ],
+  "awardNightRemarks": "I have a remark!"
+}
