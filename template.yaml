@@ -366,18 +366,17 @@ Resources:
             Identity:
               Header: Cookie
               ValidationExpression: .*authToken=([^;]+).*
+      Cors:
+        AllowCredentials: true
+        AllowMethods: "'POST, GET, OPTIONS'"
+        AllowOrigin: "'*'"
+        MaxAge: "'300'"
 
 
 Outputs:
   scholarshipEligibilityApi:
-    Description: API Gateway endpoint URL for Prod stage for scholarship eligibility function
-    Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/scholarship-eligibility/
-  providerLoginApi:
-    Description: API Gateway endpoint URL for Prod stage for provider login function
-    Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/login/
-  scholarshipTableName:
-    Description: Name of the scholarship info table
-    Value: scholarship-providers
+    Description: API Gateway endpoint URL for the dev stage of the scholarship API
+    Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/dev/
 Metadata:
   AWS::Composer::Groups:
     Group:

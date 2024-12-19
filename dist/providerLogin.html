@@ -12,6 +12,7 @@
     <script src="./bundles/customElements.bundle.js" type="module"></script>
     <script src="./bundles/entryPortal.bundle.js" defer></script>
     <script src="./bundles/tabs.bundle.js" defer></script>
+    <script src="./bundles/scripts/providerLogin.bundle.js" defer></script>
     <title>R15 Scholarship Application</title>
     <!-- Create a login tab and a registration tab-->
   </head>
@@ -148,8 +149,8 @@
       </tab-bar>
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
-          <form method="post" enctype="application/x-www-form-urlencoded">
-            <form-question>
+          <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
+            <form-question id="loginEmailInput">
               <h3 slot="header"> Email </h3>
               <small-outlined-text-field
                 label = "Email"
@@ -160,7 +161,7 @@
               </small-outlined-text-field>
             </form-question>
 
-            <form-question>
+            <form-question id="loginPasswordInput">
               <h3 slot="header"> Password </h3>
               <small-outlined-text-field
                 label = "Password"
@@ -170,55 +171,56 @@
               >
               </small-outlined-text-field>
             </form-question>
-          </form>
 
-          <div class="register-text">
-            <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
-          </div>
-          <div class="relative-wrapper">
-            <button class="login-button" id="loginButton">Sign in</button>
-          </div>
+            <div class="register-text">
+              <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
+            </div>
+            <div class="relative-wrapper">
+              <button class="login-button" id="loginButton" type="submit">Sign in</button>
+            </div>
+          </form>
         </div>
       </tab-panel>
 
       <!-- Registration tab -->
       <tab-panel id = "scholarshipProviderRegistrationPanel">
-
-        <form-question>
-          <h3 slot="header"> Email </h3>
-          <small-outlined-text-field
-            label = "Email"
-            placeholder = "Enter your email"
-            type = "email"
-            name = "sclshpProviderEmail"
-          >
-          </small-outlined-text-field>
-        </form-question>
-        <!-- Create password -->
-        <form-question>
-          <h3 slot="header"> Password </h3>
-          <small-outlined-text-field
-            label = "Password"
-            placeholder = "Enter your password"
-            type = "password"
-            name = "sclshpProviderPassword"
-          >
-          </small-outlined-text-field>
-        </form-question>
-        <!-- Confirm password -->
-        <form-question>
-          <h3 slot="header"> Confirm password </h3>
-          <small-outlined-text-field
-            label = "confirmPassword"
-            placeholder = "Enter your password again"
-            type = "password"
-            name = "sclshpProviderConfirmPassword"
-          >
-          </small-outlined-text-field>
-        </form-question>
-        <div class="relative-wrapper">
-          <button class="login-button" id="registerButton"> Register </button>
-        </div>
+        <form id="registration-form" method="post" enctype="application/x-www-form-urlencoded">
+          <form-question id="registerEmailInput">
+            <h3 slot="header"> Email </h3>
+            <small-outlined-text-field
+              label = "Email"
+              placeholder = "Enter your email"
+              type = "email"
+              name = "sclshpProviderEmail"
+            >
+            </small-outlined-text-field>
+          </form-question>
+          <!-- Create password -->
+          <form-question id="registerPasswordInput">
+            <h3 slot="header"> Password </h3>
+            <small-outlined-text-field
+              label = "Password"
+              placeholder = "Enter your password"
+              type = "password"
+              name = "sclshpProviderPassword"
+            >
+            </small-outlined-text-field>
+          </form-question>
+          <!-- Confirm password -->
+          <form-question id="registerConfirmPasswordInput">
+            <h3 slot="header"> Confirm password </h3>
+            <small-outlined-text-field
+              label = "confirmPassword"
+              placeholder = "Enter your password again"
+              type = "password"
+              name = "sclshpProviderConfirmPassword"
+            >
+            </small-outlined-text-field>
+          </form-question>
+          <div class="relative-wrapper">
+            <button class="login-button" id="registerButton" type="submit"> Register </button>
+          </div>
+        </form>
       </tab-panel>
     </div>
 
