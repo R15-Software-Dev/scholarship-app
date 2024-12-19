@@ -148,27 +148,29 @@
       </tab-bar>
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
-          <form-question>
-            <h3 slot="header"> Email </h3>
-            <small-outlined-text-field
-              label = "Email"
-              placeholder = "Enter your email"
-              type = "email"
-              name = "sclshpProviderEmail"
-            >
-            </small-outlined-text-field>
-          </form-question>
+          <form method="post" enctype="application/x-www-form-urlencoded">
+            <form-question>
+              <h3 slot="header"> Email </h3>
+              <small-outlined-text-field
+                label = "Email"
+                placeholder = "Enter your email"
+                type = "email"
+                name = "sclshpProviderEmail"
+              >
+              </small-outlined-text-field>
+            </form-question>
 
-          <form-question>
-            <h3 slot="header"> Password </h3>
-            <small-outlined-text-field
-              label = "Password"
-              placeholder = "Enter your password"
-              type = "password"
-              name = "sclshpProviderPassword"
-            >
-            </small-outlined-text-field>
-          </form-question>
+            <form-question>
+              <h3 slot="header"> Password </h3>
+              <small-outlined-text-field
+                label = "Password"
+                placeholder = "Enter your password"
+                type = "password"
+                name = "sclshpProviderPassword"
+              >
+              </small-outlined-text-field>
+            </form-question>
+          </form>
 
           <div class="register-text">
             <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
