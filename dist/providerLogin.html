@@ -28,6 +28,7 @@
     }
 
     .login-container {
+      position: relative;
       width: 450px;
       max-width: 100%;
       height: 520px; /* Default height for Login tab */
@@ -91,6 +92,7 @@
     }
 
     .login-content input {
+      position: relative;
       width: 100%;
       padding: 10px;
       margin-bottom: 20px;
@@ -101,6 +103,7 @@
     }
 
     .login-button {
+      position: relative;
       background-color: var(--theme-primary-color);
       color: white;
       border: none;
@@ -137,19 +140,19 @@
     }
     /* Error message for incorrect password */
     .error {
+      position: absolute;
       text-align: center;
       border: solid 2px;
       border-color: red;
       font-weight: bold;
       color: red;
-      width: 60%;
       margin: 0 auto;
+      left: 50%;
+      transform: translateX(-50%);
       display: none;
-    }
-    /* Grey out login button */
-    pending{
 
     }
+
   </style>
   <body>
     <div class="login-container">
