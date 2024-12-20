@@ -3,6 +3,7 @@
 */
 export type AWSRequest = {
   body?: string;
+  pathParameters?: Record<string, string>;
   headers?: {
     [key: string]: string;
   },

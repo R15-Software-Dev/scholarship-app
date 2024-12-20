@@ -20,12 +20,12 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const eventBody: AuthProviderInfo = JSON.parse(event.body);
   console.log("Event body: ");
   console.log(eventBody);
-  
+
   // Create command to get user information
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
     Key: {
-      Email: { S: eventBody.email },
+      Email: {S: eventBody.email},
     },
     AttributesToGet: [
       "Password",
@@ -34,54 +34,72 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     ]
   });
 
-  // Send command to DynamoDB and check if the password matches
-  const dbresponse = await client.send(getCommand);
-  // Get the password from the response - this will be hashed since it's from the server
-  const hashedPassword = dbresponse.Item.Password.S;
-  if (await bcrypt.compare(eventBody.password, hashedPassword) === false) {
-    // Then the password is incorrect
+  try {
+    // Send command to DynamoDB and check if the password matches
+    const dbresponse = await client.send(getCommand);
+    // Check if dbresponse has an item
+    if (!dbresponse.Item) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: "User not found"
+        })
+      }
+    }
+
+    // Get the password from the response - this will be hashed since it's from the server
+    const hashedPassword = dbresponse.Item.Password.S;
+    if (await bcrypt.compare(eventBody.password, hashedPassword) === false) {
+      // Then the password is incorrect
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: "Incorrect password"
+        })
+      };
+    }
+
+    // If password matches, get the secret from Secrets Manager
+    const secretResponse = await secretClient.send(new GetSecretValueCommand({
+      SecretId: "providerjwt"
+    }));
+    const secret = new TextEncoder().encode(secretResponse.SecretString);
+
+    // Create JWT and return it
+    const token = await new jose.SignJWT({
+      email: dbresponse.Item.Email.S
+    })
+      .setIssuedAt()
+      .setIssuer("https://smwldja6ql.execute-api.us-east-1.amazonaws.com/sclshp-form/login")
+      .setAudience("https://alphafetus-testbucket.s3.amazonaws.com/entryPortal.html")
+      .setExpirationTime("1w")
+      .setProtectedHeader({alg: "HS256"})
+      .sign(secret);
+
+    // Get the expiration time of the token
+    const expTime = new Date();
+    expTime.setDate(expTime.getDate() + 7);
+
+    // Return that the login was successful - this should store an HttpOnly Secure cookie
     return {
-      statusCode: 401,
+      statusCode: 200,
+      multiValueHeaders: {
+        "Set-Cookie": [
+          `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`,
+          `scholarshipID=${dbresponse.Item.ScholarshipID.S}; Expires=${expTime}; Secure; HttpOnly`
+        ]
+      },
       body: JSON.stringify({
-        message: "Incorrect password"
+        message: "Login successful"
       })
     };
+  } catch (e) {
+    console.error(e);
+    return {
+      statusCode: 400,
+      body: JSON.stringify(e)
+    }
   }
-
-  // If password matches, get the secret from Secrets Manager
-  const secretResponse = await secretClient.send(new GetSecretValueCommand({
-    SecretId: "providerjwt"
-  }));
-  const secret = new TextEncoder().encode(secretResponse.SecretString);
-
-  // Create JWT and return it
-  const token = await new jose.SignJWT({
-    email: dbresponse.Item.Email.S
-  })
-  .setIssuedAt()
-  .setIssuer("https://smwldja6ql.execute-api.us-east-1.amazonaws.com/sclshp-form/login")
-  .setAudience("https://alphafetus-testbucket.s3.amazonaws.com/entryPortal.html")
-  .setExpirationTime("1w")
-  .setProtectedHeader({ alg: "HS256" })
-  .sign(secret);
-
-  // Get the expiration time of the token
-  const expTime = new Date();
-  expTime.setDate(expTime.getDate() + 7);
-
-  // Return that the login was successful - this should store an HttpOnly Secure cookie
-  return {
-    statusCode: 200,
-    multiValueHeaders: {
-      "Set-Cookie": [
-        `authToken=${token}; Expires=${expTime}; Secure; HttpOnly`,
-        `scholarshipID=${dbresponse.Item.ScholarshipID.S}; Expires=${expTime}; Secure; HttpOnly`
-      ]
-    },
-    body: JSON.stringify({
-      message: "Login successful"
-    })
-  };
 }
 
 /**

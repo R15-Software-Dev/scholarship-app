@@ -12,118 +12,116 @@ import {
   query,
   queryAssignedElements,
 } from "lit-element/decorators.js";
-import { ModalWindow } from "./modalWindow";
-import { InputElement } from "./InputElement";
-import { classMap } from "lit/directives/class-map.js";
+import {ModalWindow} from "./modalWindow";
+import {InputElement} from "./InputElement";
+import {classMap} from "lit/directives/class-map.js";
 
 @customElement("drop-down")
 export class Dropdown extends LitElement implements InputElement {
   static styles: CSSResultGroup = css`
-    :host {
-      font-family: "Roboto", sans-serif;
-    }
-
-    .select-container {
-      display: flex;
-      flex-direction: row;
-      border: 2px solid;
-      border-radius: 8px;
-      border-color: var(--theme-primary-color);
-      background-color: transparent;
-      margin-top: 6px;
-      height: 48px;
-      position: relative;
-      transition:
-        border-color 400ms ease,
-        background-color 400ms ease;
-
-      &.error {
-        border-color: var(--theme-error-color);
-        transition:
-          border-color 400ms ease,
-          background-color 400ms ease;
-    }
-
-    select {
-      font-size: 11pt;
-      flex-grow: 1;
-      border: none;
-      padding: 2px 15px;
-      padding: 2px 15px 2px 40px;
-      color: #696158;
-      border-radius: 8px;
-      background-color: transparent;
-      appearance: none;
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23696158' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: left 10px center;
-      background-size: 24px;
-    }
-
-    select:focus {
-      outline: none;
-      border-color: var(--theme-primary-color);
-    }
-
-    .select-container.errors {
-      border-color: var(--theme-error-color);
-    }
-
-    .prefix {
-      height: auto;
-      width: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      margin-left: 15px;
-      opacity: 1;
-    }
-
-    .suffix {
-      height: auto;
-      width: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      margin-right: 15px;
-      opacity: 1;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    div .error {
-      color: var(--theme-error-color);
-      font-size: 10pt;
-      margin: 0;
-    }
-
-    p {
-      &.error {
-        color: var(--theme-error-color);
+      :host {
+          font-family: "Roboto", sans-serif;
       }
-    }
 
-    
+      .select-container {
+          display: flex;
+          flex-direction: row;
+          border: 2px solid;
+          border-radius: 8px;
+          border-color: var(--theme-primary-color);
+          background-color: transparent;
+          margin-top: 6px;
+          height: 48px;
+          position: relative;
+          transition: border-color 400ms ease,
+          background-color 400ms ease;
+
+          &.error {
+              border-color: var(--theme-error-color);
+              transition: border-color 400ms ease,
+              background-color 400ms ease;
+          }
+
+          select {
+              font-size: 11pt;
+              flex-grow: 1;
+              border: none;
+              padding: 2px 15px;
+              padding: 2px 15px 2px 40px;
+              color: #696158;
+              border-radius: 8px;
+              background-color: transparent;
+              appearance: none;
+              cursor: pointer;
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23696158' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+              background-repeat: no-repeat;
+              background-position: left 10px center;
+              background-size: 24px;
+          }
+
+          select:focus {
+              outline: none;
+              border-color: var(--theme-primary-color);
+          }
+
+          .select-container.errors {
+              border-color: var(--theme-error-color);
+          }
+
+          .prefix {
+              height: auto;
+              width: auto;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              pointer-events: none;
+              margin-left: 15px;
+              opacity: 1;
+          }
+
+          .suffix {
+              height: auto;
+              width: auto;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              pointer-events: none;
+              margin-right: 15px;
+              opacity: 1;
+          }
+
+          .hidden {
+              display: none;
+          }
+
+          div .error {
+              color: var(--theme-error-color);
+              font-size: 10pt;
+              margin: 0;
+          }
+
+          p {
+              &.error {
+                  color: var(--theme-error-color);
+              }
+          }
+
+
   `;
 
-  @property({ type: Boolean, reflect: true }) required: boolean = false;
-  @property({ type: Boolean, reflect: true }) disabled: boolean = false; // Added disabled property
-  @property({ type: String }) value: string = ""; // Single value for each dropdown element
-  @property({ type: String }) name: string = ""; // Name of the dropdown element
-  @property({ type: String, attribute: "error-message" }) accessor errorMessage: string = ""; // Public version, used to set the default error message
-  @property({ type: String }) placeholder: string = "Select an option"; // Placeholder text for the dropdown
+  @property({type: Boolean, reflect: true}) required: boolean = false;
+  @property({type: Boolean, reflect: true}) disabled: boolean = false; // Added disabled property
+  @property({type: String}) value: string = ""; // Single value for each dropdown element
+  @property({type: String}) name: string = ""; // Name of the dropdown element
+  @property({type: String, attribute: "error-message"}) accessor errorMessage: string = ""; // Public version, used to set the default error message
+  @property({type: String}) placeholder: string = "Select an option"; // Placeholder text for the dropdown
 
   @state() accessor _hasChanged: boolean = false;
   @state() accessor _showError: boolean = false;
   @state() accessor _errorMessage: string = ""; // private version, used in scripting for custom messages.
 
   @query("select") accessor _selectElement!: HTMLSelectElement;
-  @queryAssignedElements({ selector: "option", flatten: true })
+  @queryAssignedElements({selector: "option", flatten: true})
   accessor _options = Array<HTMLElement>();
 
   constructor() {
@@ -136,15 +134,15 @@ export class Dropdown extends LitElement implements InputElement {
   // Render the dropdown with a single value
   render() {
     return html`
-      <div class="select-container ${classMap({ error: this._showError })}">
-        <select name=${this.name}>
-          <option value="" disabled selected>${this.placeholder}</option>
-        </select>
-        <slot @slotchange="${this.handleSlotChange}"></slot>
-      </div>
-      <div id="error-message" class=${classMap({ error: true, hidden: !this._showError })}>
-        <p class="error">${this._errorMessage}</p>
-      </div>
+        <div class="select-container ${classMap({error: this._showError})}">
+            <select name=${this.name}>
+                <option value="" disabled selected>${this.placeholder}</option>
+            </select>
+            <slot @slotchange="${this.handleSlotChange}"></slot>
+        </div>
+        <div id="error-message" class=${classMap({error: true, hidden: !this._showError})}>
+            <p class="error">${this._errorMessage}</p>
+        </div>
     `;
   }
 
@@ -186,5 +184,10 @@ export class Dropdown extends LitElement implements InputElement {
 
     // Reset the error message to the default.
     this._errorMessage = this.errorMessage;
+  }
+  
+  setValue(value: string): void {
+    // TODO Make sure this updates the front end display
+    this._selectElement.value = value;
   }
 }

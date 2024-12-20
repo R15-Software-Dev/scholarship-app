@@ -9,7 +9,7 @@ import {
   import { InputElement } from "./InputElement";
 
   @customElement("check-box") 
-  export class Checkbox extends LitElement{
+  export class Checkbox extends LitElement implements InputElement {
     static styles?: CSSResultGroup = css`
     /* CONTAINER FOR RADIO ELEMENT */
      .radio {
@@ -155,6 +155,7 @@ import {
   @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
   @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;    
   @property({ type: String, reflect: true }) accessor value: string = "";
+  @property({ type: String, reflect: true }) accessor name: string = "";
 
   @state() accessor _hasChanged: boolean = false;
   @state() accessor _showError: boolean = false;
@@ -312,6 +313,11 @@ import {
   }
   clearError(): void{
 
+  }
+  
+  setValue(value: string[]) {
+    // TODO Make sure this updates the front end display
+    this.selectedCheckbox = value;
   }
   
 }

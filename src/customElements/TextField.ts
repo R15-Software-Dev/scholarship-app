@@ -9,7 +9,8 @@ import {
 import {
   customElement,
   property,
-  query,
+  queryAsync,
+  query, 
   state
 } from "lit/decorators.js";
 import { InputElement } from "./InputElement";
@@ -212,6 +213,11 @@ abstract class TextField extends LitElement implements InputElement {
   clearError() {
     this._errorVisible = false;
   }
+  
+  setValue(value: string) {
+    // TODO Make sure this updates the front end display
+    this.value = value;
+  }
 }
 
 @customElement("outlined-text-field")
@@ -220,11 +226,24 @@ export class OutlinedTextField extends TextField {
   @property({ type: String }) accessor pattern = "";  // Pattern for validation
   @property({ type: String, attribute: "prefix-text"}) accessor prefixText = "";
   @property({ type: String, attribute: "suffix-text"}) accessor suffixText = "";
-
+  
   @query("input") private accessor _input: HTMLInputElement;
-  @query(".prefix") private accessor _prefix: HTMLSpanElement;
-  @query(".suffix") private accessor _suffix: HTMLSpanElement;
+  @queryAsync(".prefix") private accessor _prefix: HTMLSpanElement;
+  @queryAsync(".suffix") private accessor _suffix: HTMLSpanElement;
 
+  get value(): string {
+    this.updateComplete.then(() => {
+      return this._input.value;
+    });
+    return "";
+  }
+  set value(value: string) {
+    this.updateComplete.then(() => {
+      this._input.setAttribute('value', value);
+    });
+  }
+  
+  
   protected render(): HTMLTemplateResult {
     return html`
       <div>

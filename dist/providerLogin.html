@@ -1,266 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="styles.css">
+  <head>
+    <link rel="stylesheet" href="./styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <script
-        src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-        crossorigin="anonymous"></script>
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
     <script src="./bundles/customElements.bundle.js" type="module"></script>
     <script src="./bundles/entryPortal.bundle.js" defer></script>
     <script src="./bundles/tabs.bundle.js" defer></script>
+    <script src="./bundles/scripts/providerLogin.bundle.js" defer></script>
+    <title>R15 Scholarship Application</title>
     <!-- Create a login tab and a registration tab-->
-</head>
-<style>
-
-
+  </head>
+  <style>
     body {
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
     .login-container {
-        width: 450px;
-        max-width: 100%;
-        height: 520px; /* Default height for Login tab */
-        transition: height 0.3s ease-in-out; /* Smooth transition for height change */
-        border-radius: 7px;
-        background-color: inherit;
-        box-shadow: 0 0 6px rgb(173, 170, 179);
-        overflow: hidden;
-
-
+      position: relative;
+      width: 450px;
+      max-width: 100%;
+      height: 520px; /* Default height for Login tab */
+      transition: height 0.3s ease-in-out; /* Smooth transition for height change */
+      border-radius: 7px;
+      background-color: inherit;
+      box-shadow: 0 0 6px rgb(173, 170, 179);
+      overflow: hidden;
     }
 
     .banner {
-        position: relative;
-        height: 80px;
-        background-color: var(--theme-primary-color);
-        display: flex;
-        align-items: center;
-        padding: 5px 15px;
+      position: relative;
+      height: 80px;
+      background-color: var(--theme-primary-color);
+      display: flex;
+      align-items: center;
+      padding: 5px 15px;
     }
 
     .left-section {
-        display: flex;
-        align-items: center;
+      display: flex;
+      align-items: center;
     }
 
     .logo img {
-        width: 70px;
-        height: 70px;
-        object-fit: contain;
-        margin-right: 10px;
-        margin-top: 5px;
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-right: 10px;
+      margin-top: 5px;
     }
 
     .banner-text h1 {
-        margin: 0;
-        font-size: 18px;
-        color: white;
-        padding: 10px;
+      margin: 0;
+      font-size: 18px;
+      color: white;
+      padding: 10px;
     }
 
     .register-text {
-        margin-top: 10px;
-        text-align: center;
-        font-size: 14px;
-        color: #555;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
     }
 
     .register-text a {
-        color: var(--theme-primary-color);
-        text-decoration: none;
-        font-weight: 700;
+      color: var(--theme-primary-color);
+      text-decoration: none;
+      font-weight: 700;
     }
 
     .register-text a:hover {
-        text-decoration: underline;
+      text-decoration: underline;
     }
 
     .login-content label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 700;
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
     }
 
     .login-content input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        box-sizing: border-box;
+      position: relative;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
     }
 
     .login-button {
-        background-color: var(--theme-primary-color);
-        color: white;
-        border: none;
-        padding: 15px 0;
-        font-size: 16px;
-        border-radius: 30px;
-        cursor: pointer;
-        display: block;
-        width: 60%; /* Make the button longer */
-        margin: 30px auto 0; /* Center the button horizontally and add space at the top */
-        text-align: center;
+      position: relative;
+      background-color: var(--theme-primary-color);
+      color: white;
+      border: none;
+      padding: 15px 0;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: block;
+      width: 60%; /* Make the button longer */
+      margin: 30px auto 0; /* Center the button horizontally and add space at the top */
+      text-align: center;
+
+      &.disabled {
+        background-color: var(--theme-pending-color);
+      }
+
     }
 
     .login-button:hover {
-        background-color: #7c0000;
+      background-color: #7c0000;
     }
 
     .relative-wrapper {
-        position: relative;
-        height: 100%;
+      position: relative;
+      height: 100%;
     }
 
     /* Modify h3 header */
     h3 {
-        margin: 0 0 4px 0; /* Add spacing below the heading */
-        padding: 8px 8px 8px 0; /* Remove any padding */
-        font-size: 14pt; /* Optional: Adjust font size */
-        font-weight: bold; /* Optional: Make it bold */
+      margin: 0 0 4px 0; /* Add spacing below the heading */
+      padding: 8px 8px 8px 0; /* Remove any padding */
+      font-size: 14pt; /* Optional: Adjust font size */
+      font-weight: bold; /* Optional: Make it bold */
     }
-</style>
-<body>
-        <div class="login-container">
-            <div class="banner">
-                <div class="left-section">
-                    <div class="logo">
-                        <img src="images/PHS_Stacked_Acronym.png" alt="Logo">
-                    </div>
-                    <div class="banner-text">
-                        <h1>Scholarship Provider Login</h1>
-                    </div>
-                </div>
-            </div>
-            <tab-bar>
-                <c-tab active panel-id = "scholarshipProviderLoginPanel"> Sign on </c-tab>
-                <c-tab panel-id = "scholarshipProviderRegistrationPanel" > Register </c-tab>
-            </tab-bar>
-            <tab-panel id="scholarshipProviderLoginPanel">
-                <div class="login-content">
-                    <form-question>
-                        <h3 slot="header"> Email </h3>
-                        <small-outlined-text-field
-                                label = "Email"
-                                placeholder = "Enter your email"
-                                type = "email"
-                                name = "sclshpProviderEmail"
-                        >
-                        </small-outlined-text-field>
-                    </form-question>
+    /* Error message for incorrect password */
+    .error {
+      position: absolute;
+      text-align: center;
+      border: solid 2px;
+      border-color: red;
+      font-weight: bold;
+      color: red;
+      margin: 0 auto;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
 
-                    <form-question>
-                        <h3 slot="header"> Password </h3>
-                        <small-outlined-text-field
-                                label = "Password"
-                                placeholder = "Enter your password"
-                                type = "password"
-                                name = "sclshpProviderPassword"
-                        >
-                        </small-outlined-text-field>
-                    </form-question>
-
-                    <div class="register-text">
-                        <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
-                    </div>
-                    <div class="relative-wrapper">
-                        <button class="login-button" id="loginButton">Sign in</button>
-                    </div>
-                </div>
-            </tab-panel>
-
-            <!-- Registration tab -->
-            <tab-panel id = "scholarshipProviderRegistrationPanel">
-
-                <form-question>
-                    <h3 slot="header"> Email </h3>
-                    <small-outlined-text-field
-                            label = "Email"
-                            placeholder = "Enter your email"
-                            type = "email"
-                            name = "sclshpProviderEmail"
-                    >
-                    </small-outlined-text-field>
-                </form-question>
-                <!-- Create password -->
-                <form-question>
-                    <h3 slot="header"> Password </h3>
-                    <small-outlined-text-field
-                            label = "Password"
-                            placeholder = "Enter your password"
-                            type = "password"
-                            name = "sclshpProviderPassword"
-                    >
-                    </small-outlined-text-field>
-                </form-question>
-                <!-- Confirm password -->
-                <form-question>
-                    <h3 slot="header"> Confirm password </h3>
-                    <small-outlined-text-field
-                            label = "confirmPassword"
-                            placeholder = "Enter your password again"
-                            type = "password"
-                            name = "sclshpProviderConfirmPassword"
-                    >
-                    </small-outlined-text-field>
-                </form-question>
-                <div class="relative-wrapper">
-                    <button class="login-button" id="registerButton"> Register </button>
-                </div>
-            </tab-panel>
+        &.shown {
+          display: block;
+        }
+    }
+  </style>
+  <body>
+    <div class="login-container">
+      <div class="banner">
+        <div class="left-section">
+          <div class="logo">
+            <img src="images/PHS_Stacked_Acronym.png" alt="Logo">
+          </div>
+          <div class="banner-text">
+            <h1>Scholarship Provider Login</h1>
+          </div>
         </div>
+      </div>
+      <tab-bar>
+        <c-tab active panel-id = "scholarshipProviderLoginPanel"> Sign in </c-tab>
+        <c-tab panel-id = "scholarshipProviderRegistrationPanel" > Register </c-tab>
+      </tab-bar>
+      <tab-panel id="scholarshipProviderLoginPanel">
+        <div class="login-content">
+          <!-- Password error message -->
+          <div id="divErrorLogin" class="error">
+          </div>
 
 
-        <script>
-            // Get the register link, tab-bar element, and container
-            const registerLink = document.getElementById('register-link');
-            const tabBar = document.querySelector('tab-bar');
-            const loginContainer = document.querySelector('.login-container');
-            const registerButton = document.getElementById('registerButton')
+          <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
+            <form-question id="loginEmailInput">
+              <h3 slot="header"> Email </h3>
+              <small-outlined-text-field
+                label = "Email"
+                placeholder = "Enter your email"
+                type = "email"
+                name = "sclshpProviderEmail"
+              >
+              </small-outlined-text-field>
+            </form-question>
+
+            <form-question id="loginPasswordInput">
+              <h3 slot="header"> Password </h3>
+              <small-outlined-text-field
+                label = "Password"
+                placeholder = "Enter your password"
+                type = "password"
+                name = "sclshpProviderPassword"
+              >
+              </small-outlined-text-field>
+            </form-question>
+
+            <div class="register-text">
+              <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
+            </div>
+            <div class="relative-wrapper">
+              <button class="login-button" id="loginButton" type="submit">Sign in</button>
+            </div>
+          </form>
+        </div>
+      </tab-panel>
+
+      <!-- Registration tab -->
+      <tab-panel id = "scholarshipProviderRegistrationPanel">
+        <form id="registration-form" method="post" enctype="application/x-www-form-urlencoded">
+          <!-- Error message if email is already registered -->
+          <div id="registeredEmailError" class="error">
+            Email is already registered.
+          </div>
+          <!-- Error message if passwords don't match -->
+          <div id="mismatchedPasswords" class="error">
+            Passwords do not match.
+          </div>
+          <form-question id="registerEmailInput">
+            <h3 slot="header"> Email </h3>
+            <small-outlined-text-field
+              label = "Email"
+              placeholder = "Enter your email"
+              type = "email"
+              name = "sclshpProviderEmail"
+            >
+            </small-outlined-text-field>
+          </form-question>
+          <!-- Create password -->
+          <form-question id="registerPasswordInput">
+            <h3 slot="header"> Password </h3>
+            <small-outlined-text-field
+              label = "Password"
+              placeholder = "Enter your password"
+              type = "password"
+              name = "sclshpProviderPassword"
+            >
+            </small-outlined-text-field>
+          </form-question>
+          <!-- Confirm password -->
+          <form-question id="registerConfirmPasswordInput">
+            <h3 slot="header"> Confirm password </h3>
+            <small-outlined-text-field
+              label = "confirmPassword"
+              placeholder = "Enter your password again"
+              type = "password"
+              name = "sclshpProviderConfirmPassword"
+            >
+            </small-outlined-text-field>
+          </form-question>
+          <div class="relative-wrapper">
+            <button class="login-button" id="registerButton" type="submit"> Register </button>
+          </div>
+        </form>
+      </tab-panel>
+    </div>
 
 
-            // Listen for the click event on the "Click here to register" link
-            registerLink.addEventListener('click', function(event) {
-                event.preventDefault();  // Prevent default anchor behavior
+    <script>
+      // Get the register link, tab-bar element, and container
+      const registerLink = document.getElementById('register-link');
+      const tabBar = document.querySelector('tab-bar');
+      const loginContainer = document.querySelector('.login-container');
+      const registerButton = document.getElementById('registerButton')
 
-                // Find the Register tab using the panel-id
-                const registerTab = [...tabBar.querySelectorAll('c-tab')].find(tab => tab.panelId === 'scholarshipProviderRegistrationPanel');
 
-                if (registerTab) {
-                    // Activate the Register tab via tabBar's API
-                    tabBar.activeTab = registerTab;  // This sets the active tab within the tab-bar
-                }
-            });
+      // Listen for the click event on the "Click here to register" link
+      registerLink.addEventListener('click', function(event) {
+        event.preventDefault();  // Prevent default anchor behavior
 
-            // Listen for the tab change event
-            tabBar.addEventListener('change', function() {
-                const activeTab = tabBar.activeTab;  // Get the active tab
+        // Find the Register tab using the panel-id
+        const registerTab = [...tabBar.querySelectorAll('c-tab')].find(tab => tab.panelId === 'scholarshipProviderRegistrationPanel');
 
-                // Adjust container height based on the active tab
-                if (activeTab && activeTab.panelId === "scholarshipProviderLoginPanel") {
-                    // Set height to 520px for the Login tab
-                    loginContainer.style.height = "520px";
-                } else if (activeTab && activeTab.panelId === "scholarshipProviderRegistrationPanel") {
-                    // Set height to 600px for the Register tab
-                    loginContainer.style.height = "600px";
-                    registerButton.style.margin = "40px auto 0";
-                }
-            });
-        </script>
+        if (registerTab) {
+          // Activate the Register tab via tabBar's API
+          tabBar.activeTab = registerTab;  // This sets the active tab within the tab-bar
+        }
+      });
 
-</body>
+      // Listen for the tab change event
+      tabBar.addEventListener('change', function() {
+        const activeTab = tabBar.activeTab;  // Get the active tab
 
+        // Adjust container height based on the active tab
+        if (activeTab && activeTab.panelId === "scholarshipProviderLoginPanel") {
+          // Set height to 520px for the Login tab
+          loginContainer.style.height = "520px";
+        } else if (activeTab && activeTab.panelId === "scholarshipProviderRegistrationPanel") {
+          // Set height to 600px for the Register tab
+          loginContainer.style.height = "600px";
+          registerButton.style.margin = "40px auto 0";
+        }
+      });
+    </script>
+  </body>
 </html>

@@ -272,6 +272,59 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
+  readAllScholarshipInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Returns all information about a scholarship, sectioned by tab/form.
+      CodeUri: src/lambdaFunctions/readAllScholarshipInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /providers/info/all
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: scholarship-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+
+  # Define provider login webpage endpoint
+#  getProviderWebpages:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      Description: Gets and returns the scholarship provider webpage.
+#      CodeUri: src/lambdaFunctions/getProviderWebpages
+#      Handler: index.handler
+#      Runtime: nodejs20.x
+#      Events:
+#        GetRequest:
+#          Type: Api
+#          Properties:
+#            RestApiId: !Ref ScholarshipApi
+#            Path: /providers/{proxy+}
+#            Method: get
+#            Auth:
+#              Authorizer: NONE
+#    Metadata:
+#      BuildMethod: esbuild
+#      BuildProperties:
+#        Minify: true
+#        Target: "es2020"
+#        External:
+#          - "@aws-sdk/client-s3"
+#        EntryPoints:
+#          - index.ts
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
@@ -339,18 +392,17 @@ Resources:
             Identity:
               Header: Cookie
               ValidationExpression: .*authToken=([^;]+).*
+      Cors:
+        AllowCredentials: true
+        AllowMethods: "'POST, GET, OPTIONS'"
+        AllowOrigin: "'*'"
+        MaxAge: "'300'"
 
 
 Outputs:
   scholarshipEligibilityApi:
-    Description: API Gateway endpoint URL for Prod stage for scholarship eligibility function
-    Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/scholarship-eligibility/
-  providerLoginApi:
-    Description: API Gateway endpoint URL for Prod stage for provider login function
-    Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/login/
-  scholarshipTableName:
-    Description: Name of the scholarship info table
-    Value: scholarship-providers
+    Description: API Gateway endpoint URL for the dev stage of the scholarship API
+    Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/dev/
 Metadata:
   AWS::Composer::Groups:
     Group:
