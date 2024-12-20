@@ -172,10 +172,15 @@
       </tab-bar>
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
-          <!-- Error message -->
+          <!-- Password error message -->
           <div id="wrongPasswordError" class="error">
             Incorrect password. Try again.
           </div>
+          <!-- Email error message -->
+          <div id="invalidEmailError" class="error">
+            Email is not registered.
+          </div>
+
           <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
             <form-question id="loginEmailInput">
               <h3 slot="header"> Email </h3>
@@ -212,6 +217,14 @@
       <!-- Registration tab -->
       <tab-panel id = "scholarshipProviderRegistrationPanel">
         <form id="registration-form" method="post" enctype="application/x-www-form-urlencoded">
+          <!-- Error message if email is already registered -->
+          <div id="registeredEmailError" class="error">
+            Email is already registered.
+          </div>
+          <!-- Error message if passwords don't match -->
+          <div id="mismatchedPasswords" class="error">
+            Passwords do not match.
+          </div>
           <form-question id="registerEmailInput">
             <h3 slot="header"> Email </h3>
             <small-outlined-text-field

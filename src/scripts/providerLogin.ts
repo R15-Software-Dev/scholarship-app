@@ -63,7 +63,11 @@ $(function() {
     const password = passwordInputOne.input.getValue();
     const passwordConfirm = passwordInputTwo.input.getValue();
 
+    const noMatch = $('#mismatchedPasswords');
+    const accountExist = $('#registeredEmailError');
+
     if (password === passwordConfirm) {
+      noMatch.css("display", "none");
       // Make the request.
       const request = {
         method: "POST",
@@ -77,10 +81,12 @@ $(function() {
       const responseJson = await response.json();
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");
-      } else {
-        // TODO Tell user there was an issue.
+        accountExist.css("display", "none");
+      } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
+        accountExist.css("display", "block");
       }
     } else {
+      noMatch.css("display", "block");
       console.log("Passwords don't match");
     }
   });
