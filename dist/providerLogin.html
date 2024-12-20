@@ -151,8 +151,10 @@
       transform: translateX(-50%);
       display: none;
 
+        &.shown {
+          display: block;
+        }
     }
-
   </style>
   <body>
     <div class="login-container">
@@ -173,13 +175,9 @@
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
           <!-- Password error message -->
-          <div id="wrongPasswordError" class="error">
-            Incorrect password. Try again.
+          <div id="divErrorLogin" class="error">
           </div>
-          <!-- Email error message -->
-          <div id="invalidEmailError" class="error">
-            Email is not registered.
-          </div>
+
 
           <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
             <form-question id="loginEmailInput">

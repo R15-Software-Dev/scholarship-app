@@ -23,11 +23,12 @@ $(function() {
     // Send these values to the API and wait for a response.
     // We'll react to the response's statusCode accordingly.
     // The API url will need to match our API's url and be tested through AWS as well.
-    const errorMessage = $('#wrongPasswordError');
     const pendingButton = $('#loginButton');
+    const loginErrorDiv = $('#divErrorLogin');
+
     try {
       pendingButton.addClass("disabled");
-
+      loginErrorDiv.removeClass('shown');
       const response = await fetch(apiBase + "/providers/login", {
         method: "POST",
         body: JSON.stringify(values)
@@ -38,13 +39,15 @@ $(function() {
       if (responseJson.message === "Login successful") {
         // Redirect to the entryPortal page.
         window.location.replace("./entryPortal.html");
-        errorMessage.css("display", "none");
+
       } else {
-        // TODO Tell user to retry.
-        errorMessage.css("display", "block")
+        loginErrorDiv.html(responseJson.message);
+        // Tell user to retry.
+        loginErrorDiv.addClass("shown");
+        console.log("password");
       }
     } catch (e) {
-      errorMessage.css("display", "block")
+       console.log("Caught statement");
     }
     finally {
       pendingButton.removeClass("disabled");
@@ -67,7 +70,7 @@ $(function() {
     const accountExist = $('#registeredEmailError');
 
     if (password === passwordConfirm) {
-      noMatch.css("display", "none");
+      noMatch.removeClass("error");
       // Make the request.
       const request = {
         method: "POST",
@@ -81,12 +84,12 @@ $(function() {
       const responseJson = await response.json();
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");
-        accountExist.css("display", "none");
+        accountExist.removeClass("error");
       } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
-        accountExist.css("display", "block");
+        accountExist.addClass("error");
       }
     } else {
-      noMatch.css("display", "block");
+      noMatch.addClass("error");
       console.log("Passwords don't match");
     }
   });
