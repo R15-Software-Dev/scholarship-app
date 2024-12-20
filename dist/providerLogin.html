@@ -28,6 +28,7 @@
     }
 
     .login-container {
+      position: relative;
       width: 450px;
       max-width: 100%;
       height: 520px; /* Default height for Login tab */
@@ -91,6 +92,7 @@
     }
 
     .login-content input {
+      position: relative;
       width: 100%;
       padding: 10px;
       margin-bottom: 20px;
@@ -101,6 +103,7 @@
     }
 
     .login-button {
+      position: relative;
       background-color: var(--theme-primary-color);
       color: white;
       border: none;
@@ -112,6 +115,11 @@
       width: 60%; /* Make the button longer */
       margin: 30px auto 0; /* Center the button horizontally and add space at the top */
       text-align: center;
+
+      &.disabled {
+        background-color: var(--theme-pending-color);
+      }
+
     }
 
     .login-button:hover {
@@ -129,6 +137,23 @@
       padding: 8px 8px 8px 0; /* Remove any padding */
       font-size: 14pt; /* Optional: Adjust font size */
       font-weight: bold; /* Optional: Make it bold */
+    }
+    /* Error message for incorrect password */
+    .error {
+      position: absolute;
+      text-align: center;
+      border: solid 2px;
+      border-color: red;
+      font-weight: bold;
+      color: red;
+      margin: 0 auto;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+
+        &.shown {
+          display: block;
+        }
     }
   </style>
   <body>
@@ -149,6 +174,11 @@
       </tab-bar>
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
+          <!-- Password error message -->
+          <div id="divErrorLogin" class="error">
+          </div>
+
+
           <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
             <form-question id="loginEmailInput">
               <h3 slot="header"> Email </h3>
@@ -185,6 +215,14 @@
       <!-- Registration tab -->
       <tab-panel id = "scholarshipProviderRegistrationPanel">
         <form id="registration-form" method="post" enctype="application/x-www-form-urlencoded">
+          <!-- Error message if email is already registered -->
+          <div id="registeredEmailError" class="error">
+            Email is already registered.
+          </div>
+          <!-- Error message if passwords don't match -->
+          <div id="mismatchedPasswords" class="error">
+            Passwords do not match.
+          </div>
           <form-question id="registerEmailInput">
             <h3 slot="header"> Email </h3>
             <small-outlined-text-field

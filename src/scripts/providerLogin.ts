@@ -23,18 +23,32 @@ $(function() {
     // Send these values to the API and wait for a response.
     // We'll react to the response's statusCode accordingly.
     // The API url will need to match our API's url and be tested through AWS as well.
-    const response = await fetch(apiBase + "/providers/login", {
-      method: "POST",
-      body: JSON.stringify(values)
-    });
+    const pendingButton = $('#loginButton');
+    const loginErrorDiv = $('#divErrorLogin');
 
-    const responseJson = await response.json();
+    try {
+      pendingButton.addClass("disabled");
+      loginErrorDiv.removeClass('shown');
+      const response = await fetch(apiBase + "/providers/login", {
+        method: "POST",
+        body: JSON.stringify(values)
+      });
 
-    if (responseJson.message === "Login successful") {
-      // Redirect to the entryPortal page.
-      window.location.replace("./entryPortal.html");
-    } else {
-      // TODO Tell user to retry.
+      const responseJson = await response.json();
+
+      if (responseJson.message === "Login successful") {
+        // Redirect to the entryPortal page.
+        window.location.replace("./entryPortal.html");
+
+      } else {
+        loginErrorDiv.html(responseJson.message);
+        loginErrorDiv.addClass("shown");
+      }
+    } catch (e) {
+       console.log("Caught statement");
+    }
+    finally {
+      pendingButton.removeClass("disabled");
     }
   });
 
@@ -50,7 +64,11 @@ $(function() {
     const password = passwordInputOne.input.getValue();
     const passwordConfirm = passwordInputTwo.input.getValue();
 
+    const noMatch = $('#mismatchedPasswords');
+    const accountExist = $('#registeredEmailError');
+
     if (password === passwordConfirm) {
+      noMatch.removeClass("error");
       // Make the request.
       const request = {
         method: "POST",
@@ -64,10 +82,12 @@ $(function() {
       const responseJson = await response.json();
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");
-      } else {
-        // TODO Tell user there was an issue.
+        accountExist.removeClass("error");
+      } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
+        accountExist.addClass("error");
       }
     } else {
+      noMatch.addClass("error");
       console.log("Passwords don't match");
     }
   });
