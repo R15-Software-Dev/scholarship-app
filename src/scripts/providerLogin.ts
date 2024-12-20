@@ -23,20 +23,24 @@ $(function() {
     // Send these values to the API and wait for a response.
     // We'll react to the response's statusCode accordingly.
     // The API url will need to match our API's url and be tested through AWS as well.
-    const response = await fetch(apiBase + "/providers/login", {
-      method: "POST",
-      body: JSON.stringify(values)
-    });
+    const errorMessage = $('#wrongPasswordError');
+    try {
+      const response = await fetch(apiBase + "/providers/login", {
+        method: "POST",
+        body: JSON.stringify(values)
+      });
 
-    const responseJson = await response.json();
-    const errorMessage = $('wrongPasswordError');
+      const responseJson = await response.json();
 
-    if (responseJson.message === "Login successful") {
-      // Redirect to the entryPortal page.
-      window.location.replace("./entryPortal.html");
-      errorMessage.css("display", "none");
-    } else {
-      // TODO Tell user to retry.
+      if (responseJson.message === "Login successful") {
+        // Redirect to the entryPortal page.
+        window.location.replace("./entryPortal.html");
+        errorMessage.css("display", "none");
+      } else {
+        // TODO Tell user to retry.
+        errorMessage.css("display", "block")
+      }
+    } catch (e) {
       errorMessage.css("display", "block")
     }
   });
