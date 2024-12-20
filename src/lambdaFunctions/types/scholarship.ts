@@ -10,6 +10,9 @@ export type ScholarshipInfo = {
   scholarshipAmountPerAward: number;
 }
 
+/**
+ * Any eligibility information about a scholarship.
+ */
 export type ScholarshipEligibility = {
   studentResidence: string;
   scholarshipNonPHS: boolean;
@@ -44,8 +47,15 @@ export type ScholarshipRequirements = {
   recipientSelection: string;
   transcriptRequirements: boolean;
   awardTo: boolean;
-  sclshpReApplication: boolean;
+  scholarshipReApplication: boolean;
   essayRequirement: boolean;
   essaySelection: string[];
   awardNightRemarks: string;
 }
+
+/**
+ * All scholarship information, in one object.
+ */
+export type Scholarship =
+  ScholarshipInfo & ScholarshipEligibility
+  & ScholarshipContactInfo & ScholarshipRequirements;

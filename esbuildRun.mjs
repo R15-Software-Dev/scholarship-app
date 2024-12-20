@@ -7,7 +7,7 @@ const buildConfig = {
   entryPoints: [
     "./src/customElements/customElements.ts",
     "./src/scripts/tabs.js",
-    "./src/scripts/entryPortal.js",
+    "./src/scripts/entryPortal.ts",
     "./src/scripts/index.js",
     "./src/scripts/stickyScrolling.js",
     "./src/scripts/providerLogin.ts"

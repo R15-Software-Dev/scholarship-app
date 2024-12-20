@@ -272,6 +272,32 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
+  readAllScholarshipInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Returns all information about a scholarship, sectioned by tab/form.
+      CodeUri: src/lambdaFunctions/readAllScholarshipInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /providers/info/all
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: scholarship-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   # Define provider login webpage endpoint
 #  getProviderWebpages:

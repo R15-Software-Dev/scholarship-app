@@ -29,7 +29,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":recipientSelection": {S: info.recipientSelection},
       ":transcriptRequirements": {BOOL: info.transcriptRequirements},
       ":awardTo": {BOOL: info.awardTo},
-      ":sclshpReApplication": {BOOL: info.sclshpReApplication},
+      ":sclshpReApplication": {BOOL: info.scholarshipReApplication},
       ":essayRequirement": {BOOL: info.essayRequirement},
       ":essaySelection": {SS: info.essaySelection},
       ":awardNightRemarks": {S: info.awardNightRemarks}
@@ -40,7 +40,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#recipientSelection": "recipientSelection",
       "#transcriptRequirements": "transcriptRequirements",
       "#awardTo": "awardTo",
-      "#sclshpReApplication": "sclshpReApplication",
+      "#sclshpReApplication": "scholarshipReApplication",
       "#essayRequirement": "essayRequirement",
       "#essaySelection": "essaySelection",
       "#awardNightRemarks": "awardNightRemarks"

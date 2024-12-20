@@ -21,22 +21,22 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ScholarshipID: {S: scholarshipID}
     },
     ExpressionAttributeNames: {
-      "#sclshpTitle": "sclshpTitle",
-      "#sclshpSponsor": "sclshpSponsor",
-      "#sclshpNumAwards": "sclshpNumAwards",
-      "#sclshpAwardsTotal": "sclshpAwardsTotal",
-      "#sclshpAmountPerAward": "sclshpAmountPerAward"
+      "#scholarshipTitle": "scholarshipTitle",
+      "#scholarshipSponsor": "scholarshipSponsor",
+      "#scholarshipNumAwards": "scholarshipNumAwards",
+      "#scholarshipAwardsTotal": "scholarshipAwardsTotal",
+      "#scholarshipAmountPerAward": "scholarshipAmountPerAward"
     },
     ExpressionAttributeValues: {
-      ":sclshpTitle": {S: input.scholarshipTitle},
-      ":sclshpSponsor": {S: input.scholarshipSponsor},
-      ":sclshpNumAwards": {N: input.scholarshipNumAwards.toString()},
-      ":sclshpAwardsTotal": {N: input.scholarshipAwardsTotal.toString()},
-      ":sclshpAmountPerAward": {N: input.scholarshipAmountPerAward.toString()},
+      ":scholarshipTitle": {S: input.scholarshipTitle},
+      ":scholarshipSponsor": {S: input.scholarshipSponsor},
+      ":scholarshipNumAwards": {N: input.scholarshipNumAwards.toString()},
+      ":scholarshipAwardsTotal": {N: input.scholarshipAwardsTotal.toString()},
+      ":scholarshipAmountPerAward": {N: input.scholarshipAmountPerAward.toString()},
     },
-    UpdateExpression: "SET #sclshpTitle = :sclshpTitle, #sclshpSponsor = :sclshpSponsor," +
-      "#sclshpNumAwards = :sclshpNumAwards, #sclshpAwardsTotal = :sclshpAwardsTotal," +
-      "#sclshpAmountPerAward = :sclshpAmountPerAward"
+    UpdateExpression: "SET #scholarshipTitle = :scholarshipTitle, #scholarshipSponsor = :scholarshipSponsor," +
+      "#scholarshipNumAwards = :scholarshipNumAwards, #scholarshipAwardsTotal = :scholarshipAwardsTotal," +
+      "#scholarshipAmountPerAward = :scholarshipAmountPerAward"
   });
 
   try {
