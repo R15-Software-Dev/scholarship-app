@@ -24,7 +24,10 @@ $(function() {
     // We'll react to the response's statusCode accordingly.
     // The API url will need to match our API's url and be tested through AWS as well.
     const errorMessage = $('#wrongPasswordError');
+    const pendingButton = $('#loginButton');
     try {
+      pendingButton.addClass("disabled");
+
       const response = await fetch(apiBase + "/providers/login", {
         method: "POST",
         body: JSON.stringify(values)
@@ -42,6 +45,9 @@ $(function() {
       }
     } catch (e) {
       errorMessage.css("display", "block")
+    }
+    finally {
+      pendingButton.removeClass("disabled");
     }
   });
 
