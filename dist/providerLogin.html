@@ -112,6 +112,11 @@
       width: 60%; /* Make the button longer */
       margin: 30px auto 0; /* Center the button horizontally and add space at the top */
       text-align: center;
+
+      &.disabled {
+        background-color: var(--theme-pending-color);
+      }
+
     }
 
     .login-button:hover {
@@ -140,6 +145,10 @@
       width: 60%;
       margin: 0 auto;
       display: none;
+    }
+    /* Grey out login button */
+    pending{
+
     }
   </style>
   <body>
