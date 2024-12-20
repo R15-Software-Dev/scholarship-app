@@ -42,9 +42,7 @@ $(function() {
 
       } else {
         loginErrorDiv.html(responseJson.message);
-        // Tell user to retry.
         loginErrorDiv.addClass("shown");
-        console.log("password");
       }
     } catch (e) {
        console.log("Caught statement");
