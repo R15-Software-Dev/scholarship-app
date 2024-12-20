@@ -130,6 +130,17 @@
       font-size: 14pt; /* Optional: Adjust font size */
       font-weight: bold; /* Optional: Make it bold */
     }
+    /* Error message for incorrect password */
+    .error {
+      text-align: center;
+      border: solid 2px;
+      border-color: red;
+      font-weight: bold;
+      color: red;
+      width: 60%;
+      margin: 0 auto;
+      display: none;
+    }
   </style>
   <body>
     <div class="login-container">
@@ -150,6 +161,10 @@
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
           <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
+            <!-- Error message -->
+            <div id="wrongPasswordError" class="error">
+              WONG PASHWORD NAURRRR
+            </div>
             <form-question id="loginEmailInput">
               <h3 slot="header"> Email </h3>
               <small-outlined-text-field

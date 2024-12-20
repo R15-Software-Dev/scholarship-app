@@ -29,12 +29,15 @@ $(function() {
     });
 
     const responseJson = await response.json();
+    const errorMessage = $('wrongPasswordError');
 
     if (responseJson.message === "Login successful") {
       // Redirect to the entryPortal page.
       window.location.replace("./entryPortal.html");
+      errorMessage.css("display", "none");
     } else {
       // TODO Tell user to retry.
+      errorMessage.css("display", "block")
     }
   });
 
