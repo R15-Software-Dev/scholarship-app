@@ -2,41 +2,65 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A serverless application that allows scholarship providers to create and manage their scholarships.
 
+# Anything created in this file is directly from AWS documentation.
+# The docs are available at https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/
+# Note that this primarily uses the AWS::Serverless::Function and AWS::Serverless::Api, which would be easily
+# findable under "How to use SAM -> The AWS SAM project -> Resources and Properties"
+
+
 Globals:
   Function:
     Timeout: 3
 
 Resources:
+  # Define a new resource
   providerLogin:
+    # Tells SAM to define a new Lambda function
     Type: AWS::Serverless::Function
     Properties:
       Description: A function to login a scholarship provider.
+      # The path to the folder containing this function's code
       CodeUri: src/lambdaFunctions/providerLogin
+      # The address to the entry point - is in <file>.<function> format.
       Handler: index.handler
+      # Everything should be using a nodejs runtime
       Runtime: nodejs20.x
       Architectures:
         - x86_64
       Events:
+        # Simply a name - doesn't actually mean this is a POST request only.
         PostRequest:
+          # Tell SAM to link this to an API
           Type: Api
           Properties:
+            # Link the API here
             RestApiId: !Ref ScholarshipApi
+            # Tell SAM what path to use in this API.
             Path: /providers/login
+            # Requires POST request to work
             Method: post
+            # This overrides the default authorizer - be careful with this.
+            # Should only be used on functions that require absolutely no authorization.
             Auth:
               Authorizer: NONE
+      # This function shouldn't be directly runnable by anyone except those that
+      # have access to the AWS console. Others will still be able to access the
+      # API to run it though.
       FunctionUrlConfig:
         AuthType: AWS_IAM
       Policies:
         # Give CRUD access to the DynamoDB table
         - DynamoDBReadPolicy:
             TableName: scholarship-providers
+    # Set up the build method for the function.
+    # Since we use typescript with esbuild, we'll set that up here.
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
         Target: "es2020"
         # Sourcemap: true
+        # Suppresses errors about these packages not existing during the build process.
         External:
           - "@aws-sdk/client-dynamodb"
           - "@aws-sdk/client-secrets-manager"
@@ -332,12 +356,22 @@ Resources:
     Properties:
       TableName: scholarship-providers
       AttributeDefinitions:
+        # Define the primary (and secondary) keys.
+        # We don't need to define any other attributes, only these.
         - AttributeName: Email
           AttributeType: S
+#        - AttributeName: SampleKey
+#          AttributeType: N
       KeySchema:
+        # Tell AWS which one of the keys is what.
         - AttributeName: Email
           KeyType: HASH
+#        - AttributeName: SampleKey
+#          KeyType: SORT
       ProvisionedThroughput:
+        # This determines how many read and write requests we can take
+        # in a minute without throwing a rate error.
+        # If you don't know what that is, don't touch these.
         ReadCapacityUnits: 300
         WriteCapacityUnits: 150
   ScholarshipInfoTable:
@@ -377,21 +411,29 @@ Resources:
         EntryPoints:
           - index.ts
 
-  # Define the S3 bucket for the website here.
+  # Define the S3 bucket for the website here (future update)
 
-  #Define the API Gateway endpoints
+  # Define the API Gateway endpoints
   ScholarshipApi:
     Type: AWS::Serverless::Api
     Properties:
+      # The name of the stage - this typically would change when you deploy
+      # from the dev to production stages.
       StageName: dev
+      # Define the authorizers that are available
       Auth:
+        # Tell SAM that this is the authorizer to always use, unless overridden.
         DefaultAuthorizer: providerAuthorizer
         Authorizers:
+          # Name the authorizer
           providerAuthorizer:
+            # Point SAM to the authorizer
             FunctionArn: !GetAtt providerAuthorizer.Arn
             Identity:
+              # Tell the authorizer to check for a cookie with this regex pattern.
               Header: Cookie
               ValidationExpression: .*authToken=([^;]+).*
+      # Set up the CORS settings - these can be overridden, but they're a pain.
       Cors:
         AllowCredentials: true
         AllowMethods: "'POST, GET, OPTIONS'"
@@ -404,6 +446,8 @@ Outputs:
     Description: API Gateway endpoint URL for the dev stage of the scholarship API
     Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/dev/
 Metadata:
+  # These are only used for the application designer in the console.
+  # They aren't really something that's required.
   AWS::Composer::Groups:
     Group:
       Label: Provider Form
