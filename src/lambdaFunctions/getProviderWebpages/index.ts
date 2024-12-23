@@ -1,6 +1,10 @@
 ﻿import {GetObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {AWSRequest, AWSResponse} from "../types/aws";
 
+// NOTE This file has been abandoned for now. It was originally going to be how people
+// would get to this website, however for now we're leaving it as an S3 bucket with public read
+// ACL's. This may change in the future, but for now we'll leave this as uncompleted.
+
 
 // Create an S3 client
 const s3_client = new S3Client({ region: "us-east-1" });
@@ -9,7 +13,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // First, get the path of the file that we want.
   const proxyValue = event.pathParameters.proxy;
 
-  console.log("Attempting to get file " + proxyValue);
+  // console.log("Attempting to get file " + proxyValue);
 
   // Get the contents of the file from our S3 bucket.
   // This does require a reference of some sort to the bucket.
