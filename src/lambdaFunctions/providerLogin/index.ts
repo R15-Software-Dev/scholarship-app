@@ -35,6 +35,16 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   });
 
   try {
+    // Show error if email or password field isn't filled out
+    if (!eventBody.email || !eventBody.password) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Email and password are required to login"
+        })
+      }
+    }
+
     // Send command to DynamoDB and check if the password matches
     const dbresponse = await client.send(getCommand);
     // Check if dbresponse has an item
@@ -46,6 +56,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
         })
       }
     }
+
 
     // Get the password from the response - this will be hashed since it's from the server
     const hashedPassword = dbresponse.Item.Password.S;
