@@ -8,10 +8,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Get all the information about a scholarship and parse it into
   // a reasonable form.
   
-  // First match the scholarship ID from the event.
+  // First match the scholarship ID from the event's cookies
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
-  
-  // Get all the scholarship's information
+
+  // Create a command to get all the scholarship's information
   const command = new GetItemCommand({
     TableName: "scholarship-info",
     Key: {
@@ -48,7 +48,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "awardNightRemarks"
     ]
   });
-  
+
+  // Send the command and wait for an Item.
+  // If there's no item, this will throw an error.
   const dbresponse = await client.send(command);
   const dbitem = dbresponse.Item;
   

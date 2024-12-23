@@ -13,6 +13,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const input: string = JSON.parse(event.body);
 
+  // Create a command to get the scholarship's info for the "info" form.
   const command = new GetItemCommand({
     TableName: "scholarship-info",
     Key: {
@@ -27,8 +28,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     ]
   });
 
+  // Send the command
   const dbresponse = await client.send(command);
 
+  // Check that there is an item in the response
   if (!dbresponse.Item) {
     return {
       statusCode: 404,
@@ -36,6 +39,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     };
   }
 
+  // Return the item's information
   return {
     statusCode: 200,
     body: JSON.stringify(dbresponse.Item)

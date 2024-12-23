@@ -18,10 +18,11 @@ const secretClient = new SecretsManagerClient({ region: "us-east-1" });
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const eventBody: AuthProviderInfo = JSON.parse(event.body);
-  console.log("Event body: ");
-  console.log(eventBody);
+  // console.log("Event body: ");
+  // console.log(eventBody);
 
   // Create command to get user information
+  // More info can be found on the AWS SDK for JavaScript v3 page.
   const getCommand = new GetItemCommand({
     TableName: "scholarship-providers",
     Key: {
@@ -48,6 +49,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     }
 
     // Get the password from the response - this will be hashed since it's from the server
+    // Hashes are salted and need to be compared using the same package that hashed the original.
     const hashedPassword = dbresponse.Item.Password.S;
     if (await bcrypt.compare(eventBody.password, hashedPassword) === false) {
       // Then the password is incorrect
@@ -59,13 +61,17 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       };
     }
 
-    // If password matches, get the secret from Secrets Manager
+    // Create a command to get the providerjwt secret from AWS.
+    // More info can be found here:
+    // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/secrets-manager/command/GetSecretValueCommand/
     const secretResponse = await secretClient.send(new GetSecretValueCommand({
       SecretId: "providerjwt"
     }));
     const secret = new TextEncoder().encode(secretResponse.SecretString);
 
-    // Create JWT and return it
+    // Create the JWT and return it
+    // Docs are found from the jose github:
+    // https://github.com/panva/jose/blob/main/docs/jwt/sign/classes/SignJWT.md
     const token = await new jose.SignJWT({
       email: dbresponse.Item.Email.S
     })
@@ -94,7 +100,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       })
     };
   } catch (e) {
-    console.error(e);
+    // Otherwise, simply return that there was an error.
+    // console.error(e);
     return {
       statusCode: 400,
       body: JSON.stringify(e)
@@ -103,8 +110,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 }
 
 /**
-* Template class for the authentication request body.
-*/
+ * Template class for the authentication request body.
+ * We likely do not need this class anymore, and it should instead be put into the
+ * types directory.
+ */
 type AuthProviderInfo = {
   /**
    * Email address of the user
