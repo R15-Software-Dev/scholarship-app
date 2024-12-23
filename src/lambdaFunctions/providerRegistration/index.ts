@@ -1,4 +1,4 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import { AWSRequest, AWSResponse } from "./../types/types";
 import { SignJWT } from "jose";
@@ -38,6 +38,26 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Create a command to check if the provider is already registered.
   // If the provider is already registered, return an error and do not register them again.
   try {
+    // Check if the email already exists
+    const getCommand = new GetItemCommand({
+      TableName: "scholarship-providers",
+      Key: {
+        Email: { S: eventBody.email }
+      }
+    });
+
+    const existingEmail = await client.send(getCommand);
+
+    if (existingEmail.Item) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Email already registered"
+        })
+      };
+    }
+
+    // Proceed with registration if email is not already registered
     // Generate a GUID for the provider's scholarship - this will be used later
     const scholarshipID = uuidv4();
     // Get the hash of the user's password
@@ -92,9 +112,11 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   } catch (e) {
     console.error(e);
     return {
-      statusCode: 400,
-      body: JSON.stringify(e)
-    }
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Internal server error"
+      })
+    };
   }
 }
 

@@ -45,9 +45,8 @@ $(function() {
         loginErrorDiv.addClass("shown");
       }
     } catch (e) {
-       console.log("Caught statement");
-    }
-    finally {
+      console.log("Caught statement");
+    } finally {
       pendingButton.removeClass("disabled");
     }
   });
@@ -65,11 +64,21 @@ $(function() {
     const passwordConfirm = passwordInputTwo.input.getValue();
 
     const noMatch = $('#mismatchedPasswords');
-    const accountExist = $('#registeredEmailError');
+    const registerErrorDiv = $('#divErrorRegister');
+    const pendingButton = $('#loginButton');
 
-    if (password === passwordConfirm) {
-      noMatch.removeClass("error");
-      // Make the request.
+    try {
+      // Hide any errors
+      noMatch.removeClass("shown");
+      registerErrorDiv.removeClass('shown');
+
+      if (password !== passwordConfirm) {
+        noMatch.addClass("shown");
+        return; // Exit if passwords match
+      }
+
+      // Make the API request if passwords match
+      pendingButton.addClass("disabled");
       const request = {
         method: "POST",
         body: JSON.stringify({
@@ -80,15 +89,20 @@ $(function() {
 
       const response = await fetch(apiBase + "/providers/registration", request);
       const responseJson = await response.json();
+
+      // Handle API response
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");
-        accountExist.removeClass("error");
-      } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
-        accountExist.addClass("error");
+      } else {
+        // Show error message
+        registerErrorDiv.html(responseJson.message);
+        registerErrorDiv.addClass("shown");
       }
-    } else {
-      noMatch.addClass("error");
-      console.log("Passwords don't match");
+    } catch (e) {
+      console.error("Caught exception during registration:", e);
+    } finally {
+      pendingButton.removeClass("disabled");
     }
   });
 })
+
