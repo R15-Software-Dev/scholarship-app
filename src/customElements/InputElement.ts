@@ -5,7 +5,6 @@ export interface InputElement extends HTMLElement {
   id: string;
 
   getValue(): string;
-  setValue(value: string | number | boolean | string[]): void;
   checkValidity(): boolean;
   displayError(message: string): void;
   clearError(): void;
