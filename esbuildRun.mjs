@@ -17,7 +17,7 @@ const buildConfig = {
     ".js": ".bundle.js",
   },
   format: "esm",
-  minify: false,
+  minify: true,
   bundle: true,
   target: "es2020"
 };

@@ -35,19 +35,20 @@ export async function handler(event: AWSAuthRequest): Promise<AWSAuthResponse> {
     });
   } catch (e) {
     // Handle the error - we'll return a policy document that denies invoke access to the requested function.
-    return {
-      principalId: "user",
-      policyDocument: {
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Action: "execute-api:Invoke",
-            Effect: "Deny",
-            Resource: event.methodArn
-          }
-        ]
-      }
-    };
+    // return {
+    //   principalId: "user",
+    //   policyDocument: {
+    //     Version: "2012-10-17",
+    //     Statement: [
+    //       {
+    //         Action: "execute-api:Invoke",
+    //         Effect: "Deny",
+    //         Resource: event.methodArn
+    //       }
+    //     ]
+    //   }
+    // };
+    throw new Error("Unauthorized");
   }
 
   // If valid, return a response with a proper policy document.
