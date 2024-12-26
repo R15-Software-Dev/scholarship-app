@@ -24,4 +24,4 @@ jobs:
       - name: Deploy to AWS Lambda
         run: |
           sam build
-          sam deploy
+          sam deploy --no-confirm-changeset
