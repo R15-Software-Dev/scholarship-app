@@ -433,9 +433,8 @@ Resources:
               # Tell the authorizer to check for a cookie with this regex pattern.
               Header: Cookie
               ValidationExpression: .*authToken=([^;]+).*
-      # Set up the CORS settings - these can be overridden, but they're a pain.
+      # Set up the CORS settings - these can be overridden, but it's a pain.
       Cors:
-        AllowCredentials: true
         AllowMethods: "'POST, GET, OPTIONS'"
         AllowOrigin: "'*'"
         MaxAge: "'300'"
@@ -445,23 +444,3 @@ Outputs:
   scholarshipEligibilityApi:
     Description: API Gateway endpoint URL for the dev stage of the scholarship API
     Value: !Sub https://${ScholarshipApi}.execute-api.${AWS::Region}.amazonaws.com/dev/
-Metadata:
-  # These are only used for the application designer in the console.
-  # They aren't really something that's required.
-  AWS::Composer::Groups:
-    Group:
-      Label: Provider Form
-      Members:
-        - providerLogin
-        - providerAuthorizer
-        - readScholarshipRequirements
-        - updateScholarshipRequirements
-        - updateScholarshipEligibility
-        - readScholarshipContactInfo
-        - updateScholarshipContactInfo
-        - readScholarshipInfo
-        - updateScholarshipInfo
-        - readScholarshipEligibility
-        - ScholarshipApi
-        - ScholarshipProvidersTable
-        - ScholarshipInfoTable

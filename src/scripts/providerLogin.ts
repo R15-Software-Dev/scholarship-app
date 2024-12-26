@@ -1,7 +1,6 @@
 ﻿import { FormQuestion } from "../customElements/Forms";
 
 $(function() {
-  const apiBase = "http://localhost:3000";
 
   // We will need to get the values for the form submission manually
   // Set up a listener on the login form
@@ -29,7 +28,7 @@ $(function() {
     try {
       pendingButton.addClass("disabled");
       loginErrorDiv.removeClass('shown');
-      const response = await fetch(apiBase + "/providers/login", {
+      const response = await fetch("/api/providers/login", {
         method: "POST",
         body: JSON.stringify(values)
       });
@@ -78,7 +77,7 @@ $(function() {
         })
       };
 
-      const response = await fetch(apiBase + "/providers/registration", request);
+      const response = await fetch("/api/providers/registration", request);
       const responseJson = await response.json();
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");
