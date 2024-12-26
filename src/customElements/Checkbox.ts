@@ -167,24 +167,21 @@ export class Checkbox extends LitElement implements InputElement {
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
     }
-  `
+  `;
+
   @property({type: Boolean, reflect: true}) accessor required: boolean = false;
   @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
   @property({type: String, reflect: true}) accessor value: string = "";
   @property({type: String, reflect: true}) accessor name: string = "";
+  @property({type: String}) accessor inputType: string = "checkbox"; //default type is checkbox if undefined
+  @property({type: String}) radioOptions: string = '[]'; // Receive the radio button options as a JSON string
+  @property({type: String}) selectedCheckbox: string[] = []; // Keep track of selected checkbox options
+  @property({type: String}) checkboxOptions: string = '[]'; // Receive the checkbox options as a JSON string
+  @property({type: String}) otherRadio: String = ''; // Radio button with text field for custom response
 
   @state() accessor _hasChanged: boolean = false;
   @state() accessor _showError: boolean = false;
   @state() accessor _errorMessage: string = "";
-
-  @property({type: String}) accessor inputType: string = "checkbox"; //default type is checkbox if undefined
-
-  @property({type: String}) radioOptions: string = '[]'; // Receive the radio button options as a JSON string
-
-  @property({type: String}) selectedCheckbox: string[] = []; // Keep track of selected checkbox options
-  @property({type: String}) checkboxOptions: string = '[]'; // Receive the checkbox options as a JSON string
-
-  @property({type: String}) otherRadio: String = ''; // Radio button with text field for custom response
 
   @queryAll('input') accessor _checkboxList: Array<HTMLInputElement>;
 
@@ -202,7 +199,7 @@ export class Checkbox extends LitElement implements InputElement {
                 type="checkbox"
                 name="checkbox-group"
                 value="${option}"
-                ?checked="${this.selectedCheckbox.includes(option)}"
+                .checked="${this.selectedCheckbox.includes(option)}"
                 @change="${this.optionSelect}"
               />
               <span class="checkmark"></span>
@@ -212,7 +209,6 @@ export class Checkbox extends LitElement implements InputElement {
       </div>
     `;
   }
-
 
   // Method to render radio button
   private renderRadio(): HTMLTemplateResult {
@@ -227,7 +223,7 @@ export class Checkbox extends LitElement implements InputElement {
                 type="radio"
                 name="radiobutton"
                 value="${option}"
-                ?checked="${this.selectedCheckbox.includes(option)}"
+                .checked="${this.selectedCheckbox.includes(option)}"
                 @change="${this.optionSelect}"
               />
               <span class="checkdot"></span>
@@ -252,7 +248,7 @@ export class Checkbox extends LitElement implements InputElement {
                 type="radio"
                 name="radiogroup"
                 value="${option}"
-                ?checked="${this.selectedCheckbox.includes(option)}"
+                .checked="${this.selectedCheckbox.includes(option)}"
                 @change="${this.optionSelect}"
               />
               <span class="checkdot"></span>
@@ -265,7 +261,7 @@ export class Checkbox extends LitElement implements InputElement {
             type="radio"
             name="radiogroup"
             value="other"
-            ?checked="${this.selectedCheckbox}"
+            .checked="${this.selectedCheckbox}"
             @change="${this.optionSelect}"
           />
           <outlined-text-field
@@ -307,7 +303,43 @@ export class Checkbox extends LitElement implements InputElement {
     this.dispatchEvent(new Event("change"));
   }
 
+  /**
+   * Checks a value, or series of values.
+   *
+   * NOTE: Setting a series of values does NOT currently work.
+   * Instead, iterate through an array of strings and do this one at a time instead.
+   * @param value
+   */
+  checkValue(value: string | string[]): void {
+    // Run almost the same code as optionSelect()
+    // Check the option that matches the value of the string
+    this._checkboxList.forEach(checkbox => {
+      console.log(`Checking checkbox ${checkbox.value} against ${value}`);
+      if (typeof value === "string") {
+        if (value === checkbox.value) {
+          checkbox.checked = true;
+          this.selectedCheckbox.push(checkbox.value);
+          return;
+        }
+      } else {
+        if (value.includes(checkbox.value)) {
+          checkbox.checked = false;
+          this.selectedCheckbox.push(checkbox.value);
+        }
+      }
+    });
+    this.dispatchEvent(new Event("change"));
+  }
+
   getValue(): string {
+    // let selected: string[] = []
+    // this._checkboxList.forEach((checkbox) => {
+    //   if (checkbox.checked) {
+    //     // If the checkbox is checked, add its value to the selectedOptions array
+    //     selected.push(checkbox.value);
+    //   }
+    // });
+    // return JSON.stringify(selected);
     return JSON.stringify(this.selectedCheckbox);
   }
 
@@ -328,10 +360,4 @@ export class Checkbox extends LitElement implements InputElement {
   clearError(): void {
 
   }
-
-  setValue(value: string[]) {
-    // TODO Make sure this updates the front end display
-    this.selectedCheckbox = value;
-  }
-
 }
