@@ -3,6 +3,7 @@ export interface InputElement extends HTMLElement {
   disabled: boolean;
   name: string;
   id: string;
+  value: string | boolean | string[] | number;
 
   getValue(): string;
   checkValidity(): boolean;
