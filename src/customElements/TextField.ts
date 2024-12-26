@@ -319,6 +319,7 @@ export class TextArea extends TextField {
           ?required=${this.required}
           maxlength=${this.maxLength || nothing}
           @input=${this._handleInput}
+          .value="${this.value}"
         ></textarea>
         <label>${this.placeholder}</label>
       </div>
