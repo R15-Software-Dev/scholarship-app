@@ -15,6 +15,7 @@ import {
 import {ModalWindow} from "./modalWindow";
 import {InputElement} from "./InputElement";
 import {classMap} from "lit/directives/class-map.js";
+import {PropertyValues} from "lit";
 
 @customElement("drop-down")
 export class Dropdown extends LitElement implements InputElement {
@@ -109,8 +110,8 @@ export class Dropdown extends LitElement implements InputElement {
 
   @property({type: Boolean, reflect: true}) required: boolean = false;
   @property({type: Boolean, reflect: true}) disabled: boolean = false; // Added disabled property
-  @property({type: String}) value: string = ""; // Single value for each dropdown element
   @property({type: String}) name: string = ""; // Name of the dropdown element
+  @property({type: String}) accessor value: string = "";
   @property({type: String, attribute: "error-message"}) accessor errorMessage: string = ""; // Public version, used to set the default error message
   @property({type: String}) placeholder: string = "Select an option"; // Placeholder text for the dropdown
 
@@ -129,11 +130,16 @@ export class Dropdown extends LitElement implements InputElement {
     this._errorMessage = this.errorMessage;
   }
 
+  updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties);
+    this.dispatchEvent(new Event("update-complete", { bubbles: true, composed: true }));
+  }
+
   // Render the dropdown with a single value
   render() {
     return html`
       <div class="select-container ${classMap({error: this._showError})}">
-        <select name=${this.name}>
+        <select name=${this.name} .value="${this.value}">
           <option value="" disabled selected>${this.placeholder}</option>
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
