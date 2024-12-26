@@ -17,7 +17,7 @@ $(function() {
     };
 
     // Only for debugging.
-    console.log(values);
+    // console.log(values);
 
     // Send these values to the API and wait for a response.
     // We'll react to the response's statusCode accordingly.
@@ -28,7 +28,7 @@ $(function() {
     try {
       pendingButton.addClass("disabled");
       loginErrorDiv.removeClass('shown');
-      const response = await fetch("/api/providers/login", {
+      const response = await fetch("/providers/login", {
         method: "POST",
         body: JSON.stringify(values)
       });
@@ -77,7 +77,7 @@ $(function() {
         })
       };
 
-      const response = await fetch("/api/providers/registration", request);
+      const response = await fetch("/providers/registration", request);
       const responseJson = await response.json();
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");

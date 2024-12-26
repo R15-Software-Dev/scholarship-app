@@ -19,7 +19,7 @@ $(async function () {
   // const apiBase = "http://localhost:3000";
   // Initialize the forms
   // First get the information from the database
-  const response = await fetch("/api/providers/info/all", { method: "get" });
+  const response = await fetch("/providers/info/all", { method: "get" });
   const scholarship = await response.json() as Scholarship;
  
   // Use the information on each input.

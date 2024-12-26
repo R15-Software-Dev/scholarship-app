@@ -43,6 +43,14 @@ Resources:
             # Should only be used on functions that require absolutely no authorization.
             Auth:
               Authorizer: NONE
+        OptionsRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /providers/login
+            Method: options
+            Auth:
+              Authorizer: NONE
       # This function shouldn't be directly runnable by anyone except those that
       # have access to the AWS console. Others will still be able to access the
       # API to run it though.
@@ -52,6 +60,8 @@ Resources:
         # Give CRUD access to the DynamoDB table
         - DynamoDBReadPolicy:
             TableName: scholarship-providers
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:providerjwt-bTmFJk"
     # Set up the build method for the function.
     # Since we use typescript with esbuild, we'll set that up here.
     Metadata:
@@ -87,6 +97,8 @@ Resources:
       Policies: 
         - DynamoDBCrudPolicy:
             TableName: scholarship-providers
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:providerjwt-bTmFJk"
     Metadata: 
       BuildMethod: esbuild
       BuildProperties:
@@ -263,7 +275,6 @@ Resources:
         # Sourcemap: true
         External:
           - "@aws-sdk/client-dynamodb"
-          - "@aws-sdk/client-secrets-manager"
         EntryPoints:
           - index.ts
   readScholarshipEligibility:
@@ -401,6 +412,8 @@ Resources:
       Policies:
         - DynamoDBReadPolicy:
             TableName: scholarship-providers
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:providerjwt-bTmFJk"
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
