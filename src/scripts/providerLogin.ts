@@ -28,7 +28,8 @@ $(function() {
 
     try {
       pendingButton.addClass("disabled");
-      loginErrorDiv.removeClass('shown');
+      loginErrorDiv.removeClass("shown");
+
       const response = await fetch(apiBase + "/providers/login", {
         method: "POST",
         body: JSON.stringify(values)
@@ -39,10 +40,8 @@ $(function() {
       if (responseJson.message === "Login successful") {
         // Redirect to the entryPortal page.
         window.location.replace("./entryPortal.html");
-
       } else {
-        loginErrorDiv.html(responseJson.message);
-        loginErrorDiv.addClass("shown");
+        loginErrorDiv.html(responseJson.message).addClass("shown");
       }
     } catch (e) {
       console.log("Caught statement");
@@ -70,7 +69,7 @@ $(function() {
     try {
       // Hide any errors
       noMatch.removeClass("shown");
-      registerErrorDiv.removeClass('shown');
+      registerErrorDiv.removeClass("shown");
 
       if (password !== passwordConfirm) {
         noMatch.addClass("shown");
@@ -95,8 +94,7 @@ $(function() {
         window.location.replace("./entryPortal.html");
       } else {
         // Show error message
-        registerErrorDiv.html(responseJson.message);
-        registerErrorDiv.addClass("shown");
+        registerErrorDiv.html(responseJson.message).addClass("shown");
       }
     } catch (e) {
       console.error("Caught exception during registration:", e);

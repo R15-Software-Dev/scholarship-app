@@ -28,16 +28,19 @@
     }
 
     .login-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       position: relative;
       width: 450px;
       max-width: 100%;
-      height: 520px; /* Default height for Login tab */
       transition: height 0.3s ease-in-out; /* Smooth transition for height change */
       border-radius: 7px;
       background-color: inherit;
       box-shadow: 0 0 6px rgb(173, 170, 179);
       overflow: hidden;
     }
+
 
     .banner {
       position: relative;
@@ -113,7 +116,7 @@
       cursor: pointer;
       display: block;
       width: 60%; /* Make the button longer */
-      margin: 30px auto 0; /* Center the button horizontally and add space at the top */
+      margin: 20px auto; /* Center the button horizontally and add space at the top */
       text-align: center;
 
       &.disabled {
@@ -140,16 +143,18 @@
     }
     /* Error message for incorrect password */
     .error {
-      position: absolute;
+      width: 80%;
+      max-width: 360px; /* Optional: Limit maximum width */
+      margin: 10px auto; /* Center horizontally with a small margin */
       text-align: center;
-      border: solid 2px;
-      border-color: red;
+      border: 2px solid red;
+      border-radius: 5px; /* Add some rounding for better appearance */
+      padding: 10px; /* Add padding for readability */
       font-weight: bold;
       color: red;
-      margin: 0 auto;
-      left: 50%;
-      transform: translateX(-50%);
-      display: none;
+      background-color: #ffe6e6; /* Optional: Light red background for visibility */
+      display: none; /* Hide by default */
+      box-sizing: border-box; /* Ensure padding doesn't affect width */
 
         &.shown {
           display: block;
@@ -174,8 +179,9 @@
       </tab-bar>
       <tab-panel id="scholarshipProviderLoginPanel">
         <div class="login-content">
-          <!-- Password error message -->
+
           <div id="divErrorLogin" class="error">
+            <!-- Empty div for error messages -->
           </div>
 
           <form id="login-form" method="post" enctype="application/x-www-form-urlencoded">
@@ -213,14 +219,16 @@
 
       <!-- Registration tab -->
       <tab-panel id = "scholarshipProviderRegistrationPanel">
+
+        <div id="divErrorRegister" class="error">
+          <!-- Empty div for error messages -->
+        </div>
+        <!-- Error message if passwords don't match -->
+        <div id="mismatchedPasswords" class="error">
+          Passwords do not match.
+        </div>
+
         <form id="registration-form" method="post" enctype="application/x-www-form-urlencoded">
-          <!-- Error message if email is already registered -->
-          <div id="divErrorRegister" class="error">
-          </div>
-          <!-- Error message if passwords don't match -->
-          <div id="mismatchedPasswords" class="error">
-            Passwords do not match.
-          </div>
           <form-question id="registerEmailInput">
             <h3 slot="header"> Email </h3>
             <small-outlined-text-field
@@ -262,10 +270,8 @@
 
 
     <script>
-      // Get the register link, tab-bar element, and container
       const registerLink = document.getElementById('register-link');
       const tabBar = document.querySelector('tab-bar');
-      const loginContainer = document.querySelector('.login-container');
       const registerButton = document.getElementById('registerButton')
 
 
@@ -279,21 +285,6 @@
         if (registerTab) {
           // Activate the Register tab via tabBar's API
           tabBar.activeTab = registerTab;  // This sets the active tab within the tab-bar
-        }
-      });
-
-      // Listen for the tab change event
-      tabBar.addEventListener('change', function() {
-        const activeTab = tabBar.activeTab;  // Get the active tab
-
-        // Adjust container height based on the active tab
-        if (activeTab && activeTab.panelId === "scholarshipProviderLoginPanel") {
-          // Set height to 520px for the Login tab
-          loginContainer.style.height = "520px";
-        } else if (activeTab && activeTab.panelId === "scholarshipProviderRegistrationPanel") {
-          // Set height to 600px for the Register tab
-          loginContainer.style.height = "600px";
-          registerButton.style.margin = "40px auto 0";
         }
       });
     </script>
