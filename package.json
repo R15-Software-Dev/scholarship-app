@@ -8,7 +8,8 @@
     "build": "node esbuildRun.mjs",
     "start": "npm run build && npm run start-server",
     "start-server": "node expressRun.mjs",
-    "test": "jest"
+    "test": "jest",
+    "installGlobals": "npm install & npm install -g esbuild"
   },
   "author": "Lucas Vas",
   "license": "ISC",
