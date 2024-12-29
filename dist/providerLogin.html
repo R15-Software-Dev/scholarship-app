@@ -272,7 +272,8 @@
     <script>
       const registerLink = document.getElementById('register-link');
       const tabBar = document.querySelector('tab-bar');
-      const registerButton = document.getElementById('registerButton')
+      const registerButton = document.getElementById('registerButton');
+      const loginContainer = document.querySelector('.login-container');
 
 
       // Listen for the click event on the "Click here to register" link
@@ -287,6 +288,21 @@
           tabBar.activeTab = registerTab;  // This sets the active tab within the tab-bar
         }
       });
+
+      // Switching tabs clears error messages
+      // Listen for tab switch
+      tabBar.addEventListener('change', function() {
+        const activeTab = tabBar.activeTab;
+        // Clear inputs and remove error messages when switching tabs
+        if (activeTab && activeTab.panelId === "scholarshipProviderLoginPanel") {
+          $('#divErrorLogin').removeClass('shown').html('');
+        } else if (activeTab && activeTab.panelId === "scholarshipProviderRegistrationPanel") {
+          // Hide error messages
+          $('#divErrorRegister').removeClass('shown').html('');
+          $('#mismatchedPasswords').removeClass('shown').html('');
+        }
+      });
+
     </script>
   </body>
 </html>
