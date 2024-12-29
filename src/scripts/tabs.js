@@ -13,5 +13,14 @@ $(function () {
     $('tab-panel').removeAttr('active');
     // Show the selected tab panel
     $(`#${panelId}`).attr('active', true);
+
+    // Scroll to the top of the page smoothly
+    $('html, body').animate({ scrollTop: 0 }, 'smooth');
   });
+
+  // Function scrolls to the top of the page when a tab is clicked
+  // $('tab-bar').on('click', function () {
+  //   // Scroll to the top of the page smoothly
+  //   $('html, body').animate({ scrollTop: 0 }, 'smooth');
+  // });
 });
