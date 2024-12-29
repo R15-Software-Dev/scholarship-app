@@ -62,17 +62,22 @@ $(function() {
     const password = passwordInputOne.input.getValue();
     const passwordConfirm = passwordInputTwo.input.getValue();
 
-    const noMatch = $('#mismatchedPasswords');
+    const mismatchedPasswords = $('#mismatchedPasswords');
     const registerErrorDiv = $('#divErrorRegister');
     const pendingButton = $('#loginButton');
 
     try {
       // Hide any errors
-      noMatch.removeClass("shown");
+      mismatchedPasswords.removeClass("shown");
       registerErrorDiv.removeClass("shown");
 
+      if(password == "" || passwordConfirm == ""){
+        registerErrorDiv.html("Fields cannot be empty").addClass("shown");
+        return; //Exit if fields are filled out
+      }
+
       if (password !== passwordConfirm) {
-        noMatch.addClass("shown");
+        registerErrorDiv.html("Passwords do not match").addClass("shown");
         return; // Exit if passwords match
       }
 
@@ -100,6 +105,43 @@ $(function() {
       console.error("Caught exception during registration:", e);
     } finally {
       pendingButton.removeClass("disabled");
+    }
+  });
+
+  const $registerLink = $('#register-link');
+  const $tabBar = $('tab-bar');
+  const $registerButton = $('#registerButton');
+
+// Listen for the click event on the "Click here to register" link
+  $registerLink.on('click', function (event) {
+    event.preventDefault(); // Prevent default anchor behavior
+
+    // Find the Register tab using the panel-id
+    const $registerTab = $tabBar.find('c-tab').filter(function () {
+      return $(this).attr('panel-id') === 'scholarshipProviderRegistrationPanel';
+    });
+
+    if ($registerTab.length) {
+      // Activate the Register tab via tabBar's API
+      ($tabBar[0] as any).activeTab = $registerTab[0]; // Use the tab-bar's API to set active tab
+    }
+  });
+
+// Listen for tab changes on the tab-bar
+  $tabBar.on('change', function () {
+    const activeTab = ($tabBar[0] as any).activeTab;
+
+    if (activeTab) {
+      const panelId = activeTab.panelId;
+      // Clears error codes when tabs are switched
+      if (panelId === 'scholarshipProviderLoginPanel') {
+        // Clear login form error messages
+        $('#divErrorLogin').removeClass('shown').html('');
+      } else if (panelId === 'scholarshipProviderRegistrationPanel') {
+        // Clear registration form error messages
+        $('#divErrorRegister').removeClass('shown').html('');
+        $('#mismatchedPasswords').removeClass('shown').html('');
+      }
     }
   });
 })

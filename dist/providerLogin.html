@@ -219,16 +219,12 @@
 
       <!-- Registration tab -->
       <tab-panel id = "scholarshipProviderRegistrationPanel">
-
-        <div id="divErrorRegister" class="error">
-          <!-- Empty div for error messages -->
-        </div>
-        <!-- Error message if passwords don't match -->
-        <div id="mismatchedPasswords" class="error">
-          Passwords do not match.
-        </div>
-
         <form id="registration-form" method="post" enctype="application/x-www-form-urlencoded">
+
+          <div id="divErrorRegister" class="error">
+            <!-- Empty div for error messages -->
+          </div>
+
           <form-question id="registerEmailInput">
             <h3 slot="header"> Email </h3>
             <small-outlined-text-field
@@ -267,42 +263,5 @@
         </form>
       </tab-panel>
     </div>
-
-
-    <script>
-      const registerLink = document.getElementById('register-link');
-      const tabBar = document.querySelector('tab-bar');
-      const registerButton = document.getElementById('registerButton');
-      const loginContainer = document.querySelector('.login-container');
-
-
-      // Listen for the click event on the "Click here to register" link
-      registerLink.addEventListener('click', function(event) {
-        event.preventDefault();  // Prevent default anchor behavior
-
-        // Find the Register tab using the panel-id
-        const registerTab = [...tabBar.querySelectorAll('c-tab')].find(tab => tab.panelId === 'scholarshipProviderRegistrationPanel');
-
-        if (registerTab) {
-          // Activate the Register tab via tabBar's API
-          tabBar.activeTab = registerTab;  // This sets the active tab within the tab-bar
-        }
-      });
-
-      // Switching tabs clears error messages
-      // Listen for tab switch
-      tabBar.addEventListener('change', function() {
-        const activeTab = tabBar.activeTab;
-        // Clear inputs and remove error messages when switching tabs
-        if (activeTab && activeTab.panelId === "scholarshipProviderLoginPanel") {
-          $('#divErrorLogin').removeClass('shown').html('');
-        } else if (activeTab && activeTab.panelId === "scholarshipProviderRegistrationPanel") {
-          // Hide error messages
-          $('#divErrorRegister').removeClass('shown').html('');
-          $('#mismatchedPasswords').removeClass('shown').html('');
-        }
-      });
-
-    </script>
   </body>
 </html>

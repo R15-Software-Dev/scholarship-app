@@ -30,7 +30,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: "Email and password cannot be empty"
+        message: "Fields cannot be empty"
       })
     };
   }
