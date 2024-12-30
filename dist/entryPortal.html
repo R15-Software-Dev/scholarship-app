@@ -494,7 +494,9 @@
       <form-section
         header="Eligibility Factors"
         name="eligibilityFactors"
-        id="eligibilityFactorsForm">
+        id="eligibilityFactorsForm"
+        action="/providers/eligibility"
+        method="post">
 
         <!--Style radio buttons-->
 
@@ -564,7 +566,9 @@
       <form-section
         header="Student Requirements"
         name="studentRequirementInfo"
-        id="studentRequirementInfoForm">
+        id="studentRequirementInfoForm"
+        action="/providers/requirements"
+        method="post">
 
         <form-question>
           <h3 slot="header">Do you require a copy of the student aid report?</h3>
@@ -654,8 +658,8 @@
         <form-question>
           <h3 slot="header">Input any remarks for awards night here:</h3>
           <text-area
-            id = "additionalInformationInput"
-            name = "additionalInformation"
+            id = "awardNightRemarksInput"
+            name = "awardNightRemarks"
             placeholder = "Enter text here">
           </text-area>
         </form-question>

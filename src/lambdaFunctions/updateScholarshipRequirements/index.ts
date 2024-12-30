@@ -23,17 +23,19 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     },
     UpdateExpression: "SET #studentAidReport = :studentAidReport, #studentInterviews = :studentInterviews," +
       "#recipientSelection = :recipientSelection, #transcriptRequirements = :transcriptRequirements," +
-      "#awardTo = :awardTo, #sclshpReApplication = :sclshpReApplication, #essayRequirement = :essayRequirement," +
+      "#awardTo = :awardTo, " +
+      // "#sclshpReApplication = :sclshpReApplication," +
+      "#essayRequirement = :essayRequirement," +
       "#essaySelection = :essaySelection, #awardNightRemarks = :awardNightRemarks",
     ExpressionAttributeValues: {
-      ":studentAidReport": {BOOL: info.studentAidReport},
-      ":studentInterviews": {BOOL: info.studentInterviews},
+      ":studentAidReport": {SS: JSON.parse(info.studentAidReport)},
+      ":studentInterviews": {SS: JSON.parse(info.studentInterviews)},
       ":recipientSelection": {S: info.recipientSelection},
-      ":transcriptRequirements": {BOOL: info.transcriptRequirements},
-      ":awardTo": {BOOL: info.awardTo},
-      ":sclshpReApplication": {BOOL: info.scholarshipReApplication},
-      ":essayRequirement": {BOOL: info.essayRequirement},
-      ":essaySelection": {SS: info.essaySelection},
+      ":transcriptRequirements": {SS: JSON.parse(info.transcriptRequirements)},
+      ":awardTo": {SS: JSON.parse(info.awardTo)},
+      // ":sclshpReApplication": {SS: JSON.parse(info.scholarshipReApplication)},
+      ":essayRequirement": {SS: JSON.parse(info.essayRequirement)},
+      ":essaySelection": {SS: JSON.parse(info.essaySelection)},
       ":awardNightRemarks": {S: info.awardNightRemarks}
     },
     ExpressionAttributeNames: {
@@ -42,7 +44,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#recipientSelection": "recipientSelection",
       "#transcriptRequirements": "transcriptRequirements",
       "#awardTo": "awardTo",
-      "#sclshpReApplication": "scholarshipReApplication",
+      // "#sclshpReApplication": "scholarshipReApplication",
       "#essayRequirement": "essayRequirement",
       "#essaySelection": "essaySelection",
       "#awardNightRemarks": "awardNightRemarks"
@@ -54,6 +56,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     const dbresponse = await client.send(command);
   } catch (e) {
     // Return that there was an error
+    console.error(e);
     return {
       statusCode: 500,
       body: JSON.stringify(e),

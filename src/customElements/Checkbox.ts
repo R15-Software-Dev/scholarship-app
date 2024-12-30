@@ -344,13 +344,16 @@ export class Checkbox extends LitElement implements InputElement {
   }
 
   checkValidity(): boolean {
-    // Check if the value is empty and the element is required
-    if (this.required && !this.disabled) {
-      if (this.value !== "") return true;
-      else return false;
-    }
-    // Default to true if the element is not required and is enabled
-    else return true;
+    // // Check if the value is empty and the element is required
+    // if (this.required && !this.disabled) {
+    //   if (this.value !== "") return true;
+    //   else return false;
+    // }
+    // // Default to true if the element is not required and is enabled
+    // else return true;
+    if (this.required && !this.disabled)
+      return this.selectedCheckbox.length !== 0;
+    return true;
   }
 
   displayError(message: string): void {

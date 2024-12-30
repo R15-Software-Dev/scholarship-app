@@ -32,6 +32,7 @@ $(async function () {
       // Check the type of the value
       if (typeof value === "object") {
         // This should be iterated over (we can only receive string[] as an object)
+        console.log("Found string[] value");
         value = value as string[];
         value.forEach((item) => {
           (input as Checkbox).checkValue(item);
