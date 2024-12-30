@@ -21,6 +21,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "homePhone",
       "businessPhone",
       "cellPhone",
+      "contactName",
       "contactEmail",
       "sponsorAddress",
       "sponsorCity",

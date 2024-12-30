@@ -163,13 +163,15 @@ export class Dropdown extends LitElement implements InputElement {
   }
 
   checkValidity(): boolean {
-    // Check if the value is empty and the element is required
-    if (this.required && !this.disabled) {
-      if (this.value !== "") return true;
-      else return false;
-    }
-    // Default to true if the element is not required and is enabled
-    else return true;
+    // // Check if the value is empty and the element is required
+    // if (this.required && !this.disabled) {
+    //   if (this.value !== "") return true;
+    //   else return false;
+    // }
+    // // Default to true if the element is not required and is enabled
+    // else return true;
+
+    return this._selectElement.checkValidity();
   }
 
   displayError(message: string): void {
