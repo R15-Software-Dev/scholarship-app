@@ -33,7 +33,10 @@ $(async function () {
       if (typeof value === "object") {
         // This should be iterated over (we can only receive string[] as an object)
         console.log("Found string[] value");
+        // TODO Find a better way of doing this, along with the API definitions.
+        //@ts-ignore
         value = value as string[];
+        //@ts-ignore
         value.forEach((item) => {
           (input as Checkbox).checkValue(item);
         })
