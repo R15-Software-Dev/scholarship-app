@@ -240,7 +240,9 @@
       <form-section
         header="Scholarship Information"
         name="scholarshipInfo"
-        id="scholarshipAdminInfoForm">
+        id="scholarshipAdminInfoForm"
+        action="/providers/info"
+        method="post">
 
         <form-question
         id="sclshpTitleInput"
@@ -308,7 +310,9 @@
       <form-section
         header="Contact Information"
         name="contactInfo"
-        id="contactAdminInfoForm">
+        id="contactAdminInfoForm"
+        action="/providers/contact-info"
+        method="post">
 
         <form-question>
           <h3 slot="header"> Contact Name</h3>
@@ -328,7 +332,7 @@
             name = "businessPhone"
             type = "tel"
             placeholder = "Enter a phone number"
-            pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}"
+            pattern="\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}"
             required>
           </outlined-text-field>
         </form-question>
@@ -340,7 +344,7 @@
             name = "homePhone"
             type = "tel"
             placeholder = "Enter a phone number"
-            pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}">
+            pattern="\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}">
           </outlined-text-field>
         </form-question>
 
@@ -351,7 +355,7 @@
             name = "cellPhone"
             type = "tel"
             placeholder = "Enter a phone number"
-            pattern="[(]?\d{3}[)]?[\s\-]?\d{3}[\s\-]?\d{4}">
+            pattern="\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}">
           </outlined-text-field>
         </form-question>
 
@@ -390,12 +394,12 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header"> Zip Code </h3>
+          <h3 slot="header">Business Town/City</h3>
           <outlined-text-field
-            id = "sponsorZipCodeInput"
-            name = "sponsorZipCode"
-            type = "number"
-            placeholder = "Enter zip code"
+            id="sponsorCityInput"
+            name = "sponsorCity"
+            type = "text"
+            placeholder="Enter a town/city"
             required>
           </outlined-text-field>
         </form-question>
@@ -462,14 +466,26 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Additional special information</h3>
-          <text-area
-            id = "additionalInfoInput"
-            name = "additionalInfo"
-            placeholder = "Enter text here"
+          <h3 slot="header"> Zip Code </h3>
+          <outlined-text-field
+            id = "sponsorZipCodeInput"
+            name = "sponsorZipCode"
+            type = "number"
+            placeholder = "Enter zip code"
             required>
-          </text-area>
+          </outlined-text-field>
         </form-question>
+
+        <!-- I'm not sure why this is here. -->
+<!--        <form-question>-->
+<!--          <h3 slot="header">Additional special information</h3>-->
+<!--          <text-area-->
+<!--            id = "additionalInfoInput"-->
+<!--            name = "additionalInfo"-->
+<!--            placeholder = "Enter text here"-->
+<!--            required>-->
+<!--          </text-area>-->
+<!--        </form-question>-->
       </form-section>
     </tab-panel>
 
@@ -478,7 +494,9 @@
       <form-section
         header="Eligibility Factors"
         name="eligibilityFactors"
-        id="eligibilityFactorsForm">
+        id="eligibilityFactorsForm"
+        action="/providers/eligibility"
+        method="post">
 
         <!--Style radio buttons-->
 
@@ -548,7 +566,9 @@
       <form-section
         header="Student Requirements"
         name="studentRequirementInfo"
-        id="studentRequirementInfoForm">
+        id="studentRequirementInfoForm"
+        action="/providers/requirements"
+        method="post">
 
         <form-question>
           <h3 slot="header">Do you require a copy of the student aid report?</h3>
@@ -638,8 +658,8 @@
         <form-question>
           <h3 slot="header">Input any remarks for awards night here:</h3>
           <text-area
-            id = "additionalInformationInput"
-            name = "additionalInformation"
+            id = "awardNightRemarksInput"
+            name = "awardNightRemarks"
             placeholder = "Enter text here">
           </text-area>
         </form-question>

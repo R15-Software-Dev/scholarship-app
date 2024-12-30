@@ -21,6 +21,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "homePhone",
       "businessPhone",
       "cellPhone",
+      "contactName",
       "contactEmail",
       "sponsorAddress",
       "sponsorCity",
@@ -55,6 +56,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const dbitem = dbresponse.Item;
   
   // Construct the response
+  // TODO Find a better way of getting SS values
   const response: Scholarship = {
     contactName: dbitem?.contactName?.S ?? null,
     homePhone: dbitem?.homePhone?.S ?? null,
@@ -66,23 +68,34 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     sponsorZipCode: dbitem?.sponsorZipCode?.S ?? null,
     sponsorState: dbitem?.sponsorState?.S ?? null,
     additionalInfo: dbitem?.additionalInfo?.S ?? null,
-    studentResidence: dbitem?.studentResidence?.S ?? null,
-    scholarshipNonPHS: dbitem?.scholarshipNonPHS?.BOOL,
-    studyRequirement: dbitem?.studyRequirement?.BOOL,
-    financialRequirement: dbitem?.financialRequirement?.BOOL,
+    //@ts-ignore
+    studentResidence: dbitem?.studentResidence?.SS ?? null,
+    //@ts-ignore
+    scholarshipNonPHS: dbitem?.scholarshipNonPHS?.SS ?? null,
+    //@ts-ignore
+    studyRequirement: dbitem?.studyRequirement?.SS ?? null,
+    //@ts-ignore
+    financialRequirement: dbitem?.financialRequirement?.SS ?? null,
     eligibilityOther: dbitem?.eligibilityOther?.S ?? null,
     scholarshipTitle: dbitem?.scholarshipTitle?.S ?? null,
     scholarshipSponsor: dbitem?.scholarshipSponsor?.S ?? null,
     scholarshipNumAwards: Number(dbitem?.scholarshipNumAwards?.N ?? null),
     scholarshipAwardsTotal: Number(dbitem?.scholarshipAwardsTotal?.N ?? null),
     scholarshipAmountPerAward: Number(dbitem?.scholarshipAmountPerAward?.N ?? null),
-    studentAidReport: dbitem?.studentAidReport?.BOOL ?? null,
-    studentInterviews: dbitem?.studentInterviews?.BOOL ?? null,
+    //@ts-ignore
+    studentAidReport: dbitem?.studentAidReport?.SS ?? null,
+    //@ts-ignore
+    studentInterviews: dbitem?.studentInterviews?.SS ?? null,
     recipientSelection: dbitem?.recipientSelection?.S ?? null,
-    transcriptRequirements: dbitem?.transcriptRequirements?.BOOL ?? null,
-    awardTo: dbitem?.awardTo?.BOOL ?? null,
-    scholarshipReApplication: dbitem?.scholarshipReApplication?.BOOL ?? null,
-    essayRequirement: dbitem?.essayRequirement?.BOOL ?? null,
+    //@ts-ignore
+    transcriptRequirements: dbitem?.transcriptRequirements?.SS ?? null,
+    //@ts-ignore
+    awardTo: dbitem?.awardTo?.SS ?? null,
+    //@ts-ignore
+    scholarshipReApplication: dbitem?.scholarshipReApplication?.SS ?? null,
+    //@ts-ignore
+    essayRequirement: dbitem?.essayRequirement?.SS ?? null,
+    //@ts-ignore
     essaySelection: dbitem?.essaySelection?.SS ?? null,
     awardNightRemarks: dbitem?.awardNightRemarks?.S ?? null
   }

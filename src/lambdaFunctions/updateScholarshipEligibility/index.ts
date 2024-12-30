@@ -10,6 +10,7 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const info: ScholarshipEligibility = JSON.parse(event.body);
+  console.log(info);
 
   // Get the scholarship ID from the passed cookie
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
@@ -29,10 +30,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#eligibilityOther": "eligibilityOther"
     },
     ExpressionAttributeValues: {
-      ":studentResidence": {S: info.studentResidence},
-      ":scholarshipNonPHS": {BOOL: info.scholarshipNonPHS},
-      ":studyRequirement": {BOOL: info.studyRequirement},
-      ":financialRequirement": {BOOL: info.financialRequirement},
+      ":studentResidence": {SS: JSON.parse(info.studentResidence)},
+      ":scholarshipNonPHS": {SS: JSON.parse(info.scholarshipNonPHS)},
+      ":studyRequirement": {SS: JSON.parse(info.studyRequirement)},
+      ":financialRequirement": {SS: JSON.parse(info.financialRequirement)},
       ":eligibilityOther": {S: info.eligibilityOther}
     },
     UpdateExpression: "SET #studentResidence = :studentResidence, #scholarshipNonPHS = :scholarshipNonPHS," +
@@ -45,9 +46,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     const dbresponse = await client.send(command);
   } catch (e) {
     // Return that there was an error
+    console.error(e);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: e.message }),
+      body: JSON.stringify(e),
     };
   }
 
