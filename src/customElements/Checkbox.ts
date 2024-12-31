@@ -7,6 +7,7 @@ import {
 } from "lit-element";
 import {customElement, property, state, query, queryAll} from "lit-element/decorators.js";
 import {InputElement} from "./InputElement";
+import {classMap} from "lit/directives/class-map.js";
 
 @customElement("check-box")
 export class Checkbox extends LitElement implements InputElement {
@@ -167,6 +168,22 @@ export class Checkbox extends LitElement implements InputElement {
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
     }
+
+    div .error {
+      display: none;
+      height: auto;
+      width: auto;
+      padding: 5px 5px 5px 8px;
+      margin-bottom: 0;
+
+      & span {
+        color: var(--theme-error-color);
+      }
+
+      &.shown {
+        display: block;
+      }
+    }
   `;
 
   @property({type: Boolean, reflect: true}) accessor required: boolean = false;
@@ -180,7 +197,7 @@ export class Checkbox extends LitElement implements InputElement {
   @property({type: String}) otherRadio: String = ''; // Radio button with text field for custom response
 
   @state() accessor _hasChanged: boolean = false;
-  @state() accessor _showError: boolean = false;
+  @state() accessor _errorShown: boolean = false;
   @state() accessor _errorMessage: string = "";
 
   @queryAll('input') accessor _checkboxList: Array<HTMLInputElement>;
@@ -191,21 +208,26 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.checkboxOptions); // Parse the JSON string to array
     return html`
       <div>
-        ${optionsArray.map(
-          (option: string) => html`
-            <label class="checkbox">
-              ${option}
-              <input
-                type="checkbox"
-                name="checkbox-group"
-                value="${option}"
-                .checked="${this.selectedCheckbox.includes(option)}"
-                @change="${this.optionSelect}"
-              />
-              <span class="checkmark"></span>
-            </label>
-          `
-        )}
+        <div>
+          ${optionsArray.map(
+            (option: string) => html`
+              <label class="checkbox">
+                ${option}
+                <input
+                  type="checkbox"
+                  name="checkbox-group"
+                  value="${option}"
+                  .checked="${this.selectedCheckbox.includes(option)}"
+                  @change="${this.optionSelect}"
+                />
+                <span class="checkmark"></span>
+              </label>
+            `
+          )}
+        </div>
+        <div class="error ${classMap({ shown: this._errorShown })}">
+          <span>${this._errorMessage}</span>
+        </div>
       </div>
     `;
   }
@@ -215,21 +237,26 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
     return html`
       <div>
-        ${optionsArray.map(
-          (option: string) => html`
-            <label class="radio">
-              ${option}
-              <input
-                type="radio"
-                name="radiobutton"
-                value="${option}"
-                .checked="${this.selectedCheckbox.includes(option)}"
-                @change="${this.optionSelect}"
-              />
-              <span class="checkdot"></span>
-            </label>
-          `
-        )}
+        <div>
+          ${optionsArray.map(
+            (option: string) => html`
+              <label class="radio">
+                ${option}
+                <input
+                  type="radio"
+                  name="radiobutton"
+                  value="${option}"
+                  .checked="${this.selectedCheckbox.includes(option)}"
+                  @change="${this.optionSelect}"
+                />
+                <span class="checkdot"></span>
+              </label>
+            `
+          )}
+        </div>
+        <div class="error ${classMap({ shown: this._errorShown })}">
+          <span>${this._errorMessage}</span>
+        </div>
       </div>
     `;
   }
@@ -238,39 +265,43 @@ export class Checkbox extends LitElement implements InputElement {
   private renderRadioOther(): HTMLTemplateResult {
     const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
     return html`
-
       <div>
-        ${optionsArray.map(
-          (option: string) => html`
-            <label class="radio">
-              ${option}
-              <input
-                type="radio"
-                name="radiogroup"
-                value="${option}"
-                .checked="${this.selectedCheckbox.includes(option)}"
-                @change="${this.optionSelect}"
-              />
-              <span class="checkdot"></span>
-            </label>
-          `
-        )}
-
-        <label class="radio">
-          <input
-            type="radio"
-            name="radiogroup"
-            value="other"
-            .checked="${this.selectedCheckbox}"
-            @change="${this.optionSelect}"
-          />
-          <outlined-text-field
-            name="radiogroup"
-            placeholder="Enter text here">
-          </outlined-text-field>
-          <span class="checkdot"></span>
-        </label>
-
+        <div>
+          ${optionsArray.map(
+            (option: string) => html`
+              <label class="radio">
+                ${option}
+                <input
+                  type="radio"
+                  name="radiogroup"
+                  value="${option}"
+                  .checked="${this.selectedCheckbox.includes(option)}"
+                  @change="${this.optionSelect}"
+                />
+                <span class="checkdot"></span>
+              </label>
+            `
+          )}
+  
+          <label class="radio">
+            <input
+              type="radio"
+              name="radiogroup"
+              value="other"
+              .checked="${this.selectedCheckbox}"
+              @change="${this.optionSelect}"
+            />
+            <outlined-text-field
+              name="radiogroup"
+              placeholder="Enter text here">
+            </outlined-text-field>
+            <span class="checkdot"></span>
+          </label>
+  
+        </div>
+        <div class="error ${classMap({ shown: this._errorShown })}">
+          <span>${this._errorMessage}</span>
+        </div>
       </div>
     `
   }
@@ -291,7 +322,6 @@ export class Checkbox extends LitElement implements InputElement {
 
 
   private optionSelect(event: Event) {
-    const checkboxes = this._checkboxList;
     // Reset selectedOptions array
     this.selectedCheckbox = [];
     this._checkboxList.forEach((checkbox) => {
@@ -357,10 +387,18 @@ export class Checkbox extends LitElement implements InputElement {
   }
 
   displayError(message: string): void {
+    // Set the error message
+    this._errorMessage = message;
 
+    // Display the error
+    this._errorShown = true;
   }
 
   clearError(): void {
+    // Reset the error message
+    this._errorMessage = "";
 
+    // Hide the error
+    this._errorShown = false;
   }
 }
