@@ -139,7 +139,7 @@ export class Dropdown extends LitElement implements InputElement {
   render() {
     return html`
       <div class="select-container ${classMap({error: this._showError})}">
-        <select name=${this.name} .value="${this.value}">
+        <select name=${this.name} .value="${this.value}" ?required=${this.required}>
           <option value="" disabled selected>${this.placeholder}</option>
         </select>
         <slot @slotchange="${this.handleSlotChange}"></slot>
