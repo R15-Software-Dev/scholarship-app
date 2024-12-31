@@ -53,7 +53,6 @@ $(function() {
   $("#registration-form").on("submit", async (event) => {
     event.preventDefault();
 
-    // We will check that the password fields are the same.
     const emailInput = this.querySelector("#registerEmailInput") as FormQuestion;
     const passwordInputOne = this.querySelector("#registerPasswordInput") as FormQuestion;
     const passwordInputTwo = this.querySelector("#registerConfirmPasswordInput") as FormQuestion;
@@ -61,37 +60,41 @@ $(function() {
     const email = emailInput.input.getValue();
     const password = passwordInputOne.input.getValue();
     const passwordConfirm = passwordInputTwo.input.getValue();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const mismatchedPasswords = $('#mismatchedPasswords');
     const registerErrorDiv = $('#divErrorRegister');
-    const pendingButton = $('#loginButton');
+    const pendingButton = $('#registerButton');
 
     try {
-      // Hide any errors
+      // Clear errors
       mismatchedPasswords.removeClass("shown");
       registerErrorDiv.removeClass("shown");
 
-      if(password == "" || passwordConfirm == ""){
+      pendingButton.addClass("disabled");
+
+      // Validating user input
+      // Test for empty fields
+      if (!password || !passwordConfirm || !email){
         registerErrorDiv.html("Fields cannot be empty").addClass("shown");
         return; //Exit if fields are filled out
-      }
-
-      if (password !== passwordConfirm) {
+        // Email validation
+      } else if (!emailRegex.test(email)){
+        registerErrorDiv.html("Invalid email format").addClass("shown");
+        return;
+        // Password validation
+      } else if (password !== passwordConfirm) {
         registerErrorDiv.html("Passwords do not match").addClass("shown");
         return; // Exit if passwords match
       }
 
-      // Make the API request if passwords match
-      pendingButton.addClass("disabled");
-      const request = {
+      const response = await fetch(apiBase + "/providers/registration",{
         method: "POST",
         body: JSON.stringify({
           email: email,
           password: password
         })
-      };
-
-      const response = await fetch(apiBase + "/providers/registration", request);
+      });
       const responseJson = await response.json();
 
       // Handle API response
@@ -110,9 +113,8 @@ $(function() {
 
   const $registerLink = $('#register-link');
   const $tabBar = $('tab-bar');
-  const $registerButton = $('#registerButton');
 
-// Listen for the click event on the "Click here to register" link
+  // Switch between Sign-in and Register tabs
   $registerLink.on('click', function (event) {
     event.preventDefault(); // Prevent default anchor behavior
 
@@ -127,13 +129,12 @@ $(function() {
     }
   });
 
-// Listen for tab changes on the tab-bar
+  // Clear error codes when tabs are switched
   $tabBar.on('change', function () {
     const activeTab = ($tabBar[0] as any).activeTab;
 
     if (activeTab) {
       const panelId = activeTab.panelId;
-      // Clears error codes when tabs are switched
       if (panelId === 'scholarshipProviderLoginPanel') {
         // Clear login form error messages
         $('#divErrorLogin').removeClass('shown').html('');
