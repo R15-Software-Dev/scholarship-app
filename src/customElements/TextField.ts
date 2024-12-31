@@ -313,19 +313,25 @@ export class TextArea extends TextField {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container textarea">
-        <textarea
-          placeholder=" "
-          name=${this.name}
-          rows=${this.rows}
-          wrap=${this.wrap}
-          ?disabled=${this.disabled}
-          ?required=${this.required}
-          maxlength=${this.maxLength || nothing}
-          @input=${this._handleInput}
-          .value="${this.value}"
-        ></textarea>
-        <label>${this.placeholder}</label>
+      <div>
+        <div class="container textarea">
+          <textarea
+            placeholder=" "
+            name=${this.name}
+            rows=${this.rows}
+            wrap=${this.wrap}
+            ?disabled=${this.disabled}
+            ?required=${this.required}
+            maxlength=${this.maxLength || nothing}
+            @input=${this._handleInput}
+            .value="${this.value}"
+          ></textarea>
+          <label>${this.placeholder}</label>
+        </div>
+        <div class="error ${classMap({ shown: this._errorVisible })}">
+          <!-- Our error will go here. -->
+          <span>${this.errorText}</span>
+        </div>
       </div>
     `;
   }
