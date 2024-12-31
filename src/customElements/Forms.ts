@@ -207,6 +207,7 @@ export class FormSection extends LitElement {
       // Check validity of questions.
       if (!question.checkValidity()) {
         console.log(`Question ${question.input.name} is not valid.`);
+        question.input.displayError("Invalid input");
         submittable = false;
       }
     });

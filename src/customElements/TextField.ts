@@ -50,8 +50,8 @@ abstract class TextField extends LitElement implements InputElement {
       display: none;
       height: auto;
       width: auto;
-      padding: 5px;
-      padding-left: 8px;
+      padding: 5px 5px 5px 8px;
+      margin-bottom: 0;  
 
       & span {
         color: var(--theme-error-color);
@@ -251,6 +251,10 @@ export class OutlinedTextField extends TextField {
           />
           ${this._renderSuffix()}
           <label>${this.placeholder}</label>
+        </div>
+        <div class="error ${classMap({ shown: this._errorVisible })}">
+          <!-- Our error will go here. For now, this is a temporary message. -->
+          <span>${this.errorText}</span>
         </div>
       </div>
     `;
