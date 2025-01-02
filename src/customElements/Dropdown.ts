@@ -43,69 +43,86 @@ export class Dropdown extends LitElement implements InputElement {
         background-color 400ms ease;
       }
 
-        select {
-          font-size: 11pt;
-          flex-grow: 1;
-          border: none;
-          padding: 2px 15px;
-          padding: 2px 15px 2px 40px;
-          color: #696158;
-          border-radius: 8px;
-          background-color: transparent;
-          appearance: none;
-          cursor: pointer;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23696158' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: left 10px center;
-          background-size: 24px;
-        }
+      select {
+        font-size: 11pt;
+        flex-grow: 1;
+        border: none;
+        padding: 2px 15px;
+        padding: 2px 15px 2px 40px;
+        color: #696158;
+        border-radius: 8px;
+        background-color: transparent;
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23696158' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: left 10px center;
+        background-size: 24px;
+      }
 
-        select:focus {
-          outline: none;
-          border-color: var(--theme-primary-color);
-        }
+      select:focus {
+        outline: none;
+        border-color: var(--theme-primary-color);
+      }
 
-        .select-container.errors {
-          border-color: var(--theme-error-color);
-        }
+      .select-container.errors {
+        border-color: var(--theme-error-color);
+      }
 
-        .prefix {
-          height: auto;
-          width: auto;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: none;
-          margin-left: 15px;
-          opacity: 1;
-        }
+      .prefix {
+        height: auto;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        margin-left: 15px;
+        opacity: 1;
+      }
 
-        .suffix {
-          height: auto;
-          width: auto;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: none;
-          margin-right: 15px;
-          opacity: 1;
-        }
+      .suffix {
+        height: auto;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        margin-right: 15px;
+        opacity: 1;
+      }
 
-        .hidden {
-          display: none;
-        }
+      .hidden {
+        display: none;
+      }
 
-        div .error {
+      div .error {
+        color: var(--theme-error-color);
+        font-size: 10pt;
+        margin: 0;
+      }
+
+      p {
+        &.error {
           color: var(--theme-error-color);
-          font-size: 10pt;
-          margin: 0;
         }
+      }
+    }
 
-        p {
-          &.error {
-            color: var(--theme-error-color);
-          }
-        }
+    div .error {
+      display: none;
+      height: auto;
+      width: auto;
+      padding: 5px 5px 5px 8px;
+      margin-bottom: 0;
+
+      & span {
+        color: var(--theme-error-color);
+      }
+
+      &.shown {
+        display: block;
+      }
+    }
   `;
 
   @property({type: Boolean, reflect: true}) required: boolean = false;
@@ -138,14 +155,17 @@ export class Dropdown extends LitElement implements InputElement {
   // Render the dropdown with a single value
   render() {
     return html`
-      <div class="select-container ${classMap({error: this._showError})}">
-        <select name=${this.name} .value="${this.value}">
-          <option value="" disabled selected>${this.placeholder}</option>
-        </select>
-        <slot @slotchange="${this.handleSlotChange}"></slot>
-      </div>
-      <div id="error-message" class=${classMap({error: true, hidden: !this._showError})}>
-        <p class="error">${this._errorMessage}</p>
+      <div>
+<!--        <div class="select-container ${classMap({error: this._showError})}">-->
+        <div class="select-container">
+          <select name=${this.name} .value="${this.value}" ?required=${this.required}>
+            <option value="" disabled selected>${this.placeholder}</option>
+          </select>
+          <slot @slotchange="${this.handleSlotChange}"></slot>
+        </div>
+        <div id="error-message" class=${classMap({error: true, shown: this._showError})}>
+          <span>${this._errorMessage}</span>
+        </div>
       </div>
     `;
   }

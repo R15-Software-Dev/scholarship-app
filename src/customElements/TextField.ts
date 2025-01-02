@@ -50,8 +50,8 @@ abstract class TextField extends LitElement implements InputElement {
       display: none;
       height: auto;
       width: auto;
-      padding: 5px;
-      padding-left: 8px;
+      padding: 5px 5px 5px 8px;
+      margin-bottom: 0;  
 
       & span {
         color: var(--theme-error-color);
@@ -228,9 +228,9 @@ export class OutlinedTextField extends TextField {
   @property({ type: String, attribute: "prefix-text"}) accessor prefixText = "";
   @property({ type: String, attribute: "suffix-text"}) accessor suffixText = "";
   
-  @query("input") private accessor _input: HTMLInputElement;
-  @query(".prefix") private accessor _prefix: HTMLSpanElement;
-  @query(".suffix") private accessor _suffix: HTMLSpanElement;
+  @query("input") protected accessor _input: HTMLInputElement;
+  @query(".prefix") protected accessor _prefix: HTMLSpanElement;
+  @query(".suffix") protected accessor _suffix: HTMLSpanElement;
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -252,6 +252,10 @@ export class OutlinedTextField extends TextField {
           ${this._renderSuffix()}
           <label>${this.placeholder}</label>
         </div>
+        <div class="error ${classMap({ shown: this._errorVisible })}">
+          <!-- Our error will go here. For now, this is a temporary message. -->
+          <span>${this.errorText}</span>
+        </div>
       </div>
     `;
   }
@@ -266,7 +270,7 @@ export class OutlinedTextField extends TextField {
     return true;
   }
 
-  private handleInput(e: InputEvent) {
+  protected handleInput(e: InputEvent) {
     if (this.type === "number" && isNaN(Number(e.data))) {
       this._input.value = this.value;  // Ensure value is not changed
       return;
@@ -274,7 +278,7 @@ export class OutlinedTextField extends TextField {
     this.value = this._input.value;
   }
 
-  private _renderPrefix(): HTMLTemplateResult {
+  protected _renderPrefix(): HTMLTemplateResult {
     if (!this._hasPrefix)
       return html``;
 
@@ -285,7 +289,7 @@ export class OutlinedTextField extends TextField {
     `;
   }
 
-  private _renderSuffix(): HTMLTemplateResult {
+  protected _renderSuffix(): HTMLTemplateResult {
     if (!this._hasSuffix) return html``;
 
     return html`
@@ -309,19 +313,25 @@ export class TextArea extends TextField {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container textarea">
-        <textarea
-          placeholder=" "
-          name=${this.name}
-          rows=${this.rows}
-          wrap=${this.wrap}
-          ?disabled=${this.disabled}
-          ?required=${this.required}
-          maxlength=${this.maxLength || nothing}
-          @input=${this._handleInput}
-          .value="${this.value}"
-        ></textarea>
-        <label>${this.placeholder}</label>
+      <div>
+        <div class="container textarea">
+          <textarea
+            placeholder=" "
+            name=${this.name}
+            rows=${this.rows}
+            wrap=${this.wrap}
+            ?disabled=${this.disabled}
+            ?required=${this.required}
+            maxlength=${this.maxLength || nothing}
+            @input=${this._handleInput}
+            .value="${this.value}"
+          ></textarea>
+          <label>${this.placeholder}</label>
+        </div>
+        <div class="error ${classMap({ shown: this._errorVisible })}">
+          <!-- Our error will go here. -->
+          <span>${this.errorText}</span>
+        </div>
       </div>
     `;
   }
@@ -414,15 +424,21 @@ export class SmallOutlinedTextField extends OutlinedTextField {
     .suffix {
       margin-right: 8px;
     }
-    
-    /* Changing the h3 header used to be uniform with the smaller text field
-       must be done within <styles></styles> in the html of the page. Custom 
-       element should be created in future for custom headers.
-       Following h3 redesign:
-        h3 {
-          margin: 0 0 4px 0;
-          padding: 8px 8px 8px 0;
-          font-size: 14pt; 
-          font-weight: bold; */
+      
+    div .error {
+      display: none;
+      height: auto;
+      width: auto;
+      padding: 5px 5px 5px 8px;
+      margin-bottom: 0;
+
+      & span {
+        color: var(--theme-error-color);
+      }
+
+      &.shown {
+        display: block;
+      }
+    }
   `;
 }
