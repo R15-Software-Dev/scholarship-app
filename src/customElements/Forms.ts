@@ -105,7 +105,7 @@ export class FormSection extends LitElement {
 
     span {
       display: none;
-      font-size: x-large;
+      font-size: small;
       &.shown {
         display: block;
       }
@@ -255,7 +255,7 @@ export class FormSection extends LitElement {
           <slot></slot>
           <div class="buttoncontainer">
             <action-button type="submit" form=${this.id}>Submit</action-button>
-            <span class=${classMap({ shown: this._checkShown })}>&#10003;</span>
+            <span class=${classMap({ shown: this._checkShown })}> Response recorded </span>
           </div>
         </form>
       </div>
