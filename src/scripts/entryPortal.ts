@@ -8,12 +8,12 @@ $(async function () {
     const essayQuestion = $("#essaySelectionQuestion");
     const customEssayQuestion = $("#customEssayPromptQuestion");
     if (this.selectedCheckbox[0] === "Yes") {
-      // Show the box
-      essayQuestion.css("display","block");
+      // Show the questions
+      essayQuestion.css("display", "block");
       customEssayQuestion.css("display", "block");
     } else {
-      // Ensure the box is hidden
-      essayQuestion.css("display","none");
+      // Ensure the questions are hidden
+      essayQuestion.css("display", "none");
       customEssayQuestion.css("display", "none");
     }
   });
