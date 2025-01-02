@@ -199,6 +199,7 @@ export class FormSection extends LitElement {
   handleFormAws(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
+    this._questions.forEach((question) => question.input.clearError());
 
     // First check if values are valid by calling checkValidity on
     // all the form's inputs.
