@@ -70,10 +70,15 @@ export class TabBar extends LitElement {
     `;
   }
 
+  public nextTab(){
+    const nextTab = this._tabs[this.activeTabIndex + 1];
+    this.activateTab(nextTab);
+  }
+
   private async handleClick(event: MouseEvent) {
     console.log("Found click event!");
     const tab = event.target as Tab;
-    // Allow event to bubble to other recievers
+    // Allow event to bubble to other receivers
     await 0;
 
     if (event.defaultPrevented || tab.active) {
@@ -100,6 +105,8 @@ export class TabBar extends LitElement {
       new Event("change", { bubbles: true, cancelable: true }),
     );
   }
+
+
 }
 
 @customElement("c-tab")
@@ -230,8 +237,10 @@ export class TabPanel extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       <div class="${classMap({ active: this.active })}">
-        <slot></slot>
+        <slot ></slot>
       </div>
     `;
   }
+
+
 }
