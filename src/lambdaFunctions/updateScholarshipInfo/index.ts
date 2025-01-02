@@ -46,6 +46,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     const dbresponse = await client.send(command);
   } catch (e) {
     // Return that there was an error
+    console.error(e);
     return {
       statusCode: 400,
       body: JSON.stringify(e),

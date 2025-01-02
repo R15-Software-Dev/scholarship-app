@@ -179,7 +179,7 @@ Resources:
             Path: /providers/eligibility
             Method: post
       Policies:
-        - DynamoDBReadPolicy:
+        - DynamoDBCrudPolicy:
             TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
