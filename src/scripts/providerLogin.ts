@@ -135,7 +135,7 @@ $(function() {
           if (responseJson.message === "Registration successful") {
             window.location.replace("./entryPortal.html");
             registerErrorDiv.removeClass("shown");
-          } else if(responseJson.name = "ConditionalCheckFailedException") {
+          } else if(responseJson.name === "ConditionalCheckFailedException") {
             registerErrorDiv.html("Email already registered")
               .addClass("shown");
           } else {
