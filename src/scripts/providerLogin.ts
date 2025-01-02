@@ -58,6 +58,7 @@ $(function() {
         if (responseJson.message === "Login successful") {
           // Redirect to the entryPortal page.
           window.location.replace("./entryPortal.html");
+          loginErrorDiv.removeClass("shown");
         } else {
           loginErrorDiv.html(responseJson.message)
             .addClass("shown");
@@ -86,14 +87,12 @@ $(function() {
     const passwordConfirm = passwordInputTwo.getValue();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const mismatchedPasswords = $('#mismatchedPasswords');
     const registerErrorDiv = $('#divErrorRegister');
     const pendingButton = $('#registerButton');
 
     try {
-      // Clear errors
-      mismatchedPasswords.removeClass("shown");
       registerErrorDiv.removeClass("shown");
+      pendingButton.addClass("disabled");
 
       allQuestions.forEach((question) => question.input.clearError());
 
@@ -147,7 +146,10 @@ $(function() {
       }
     } catch (e) {
       console.log(`Caught exception during registration: ${e}`);
+    } finally {
+      pendingButton.removeClass("disabled");
     }
+
   });
 
   const $registerLink = $('#register-link');
@@ -169,6 +171,11 @@ $(function() {
     }
   });
 
+  // Clear errors on click event
+  $('form-question').on("click", function() {
+    allQuestionsGlobal.forEach(question => question.input.clearError());
+  })
+
 // Listen for tab changes on the tab-bar
   $tabBar.on('change', function () {
     const activeTab = ($tabBar[0] as any).activeTab;
@@ -183,7 +190,6 @@ $(function() {
       } else if (panelId === 'scholarshipProviderRegistrationPanel') {
         // Clear registration form error messages
         $('#divErrorRegister').removeClass('shown').html('');
-        $('#mismatchedPasswords').removeClass('shown').html('');
       }
     }
   });
