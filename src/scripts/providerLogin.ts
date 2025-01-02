@@ -70,32 +70,48 @@ $(function() {
     const noMatch = $('#mismatchedPasswords');
     const accountExist = $('#registeredEmailError');
 
-    if (password === passwordConfirm) {
-      noMatch.removeClass("shown");
-      // Make the request.
-      const request = {
-        method: "POST",
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      };
+    let submittable = true;
+    if (!emailInput.checkValidity()) {
+      emailInput.input.displayError("Invalid input");
+      submittable = false;
+    }
+    if (!passwordInputOne.checkValidity()) {
+      passwordInputOne.input.displayError("Invalid input");
+      submittable = false;
+    }
+    if (!passwordInputTwo.input.getValue()) {
+      passwordInputTwo.input.displayError("Invalid input");
+      submittable = false;
+    }
 
-      const response = await fetch("/providers/registration", request);
-      if (!response.ok) {
-        // TODO Show an error message.
-      }
+    if (submittable) {
+      if (password === passwordConfirm) {
+        noMatch.removeClass("shown");
+        // Make the request.
+        const request = {
+          method: "POST",
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        };
 
-      const responseJson = await response.json();
-      if (responseJson.message === "Registration successful") {
-        window.location.replace("./entryPortal.html");
-        accountExist.removeClass("error");
-      } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
-        accountExist.addClass("error");
+        const response = await fetch("/providers/registration", request);
+        if (!response.ok) {
+          // TODO Show an error message.
+        }
+
+        const responseJson = await response.json();
+        if (responseJson.message === "Registration successful") {
+          window.location.replace("./entryPortal.html");
+          accountExist.removeClass("error");
+        } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
+          accountExist.addClass("error");
+        }
+      } else {
+        noMatch.addClass("shown");
+        console.log("Passwords don't match");
       }
-    } else {
-      noMatch.addClass("shown");
-      console.log("Passwords don't match");
     }
   });
 })

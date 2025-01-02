@@ -9,9 +9,9 @@
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
-    <script src="./bundles/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/entryPortal.bundle.js" defer></script>
-    <script src="./bundles/tabs.bundle.js" defer></script>
+    <script src="./bundles/customElements/customElements.bundle.js" type="module"></script>
+    <script src="./bundles/scripts/entryPortal.bundle.js" defer></script>
+    <script src="./bundles/scripts/tabs.bundle.js" defer></script>
     <script src="./bundles/scripts/providerLogin.bundle.js" defer></script>
     <title>R15 Scholarship Application</title>
     <!-- Create a login tab and a registration tab-->
@@ -36,7 +36,7 @@
       border-radius: 7px;
       background-color: inherit;
       box-shadow: 0 0 6px rgb(173, 170, 179);
-      overflow: hidden;
+      overflow: scroll;
     }
 
     .banner {
@@ -273,7 +273,7 @@
       const registerLink = document.getElementById('register-link');
       const tabBar = document.querySelector('tab-bar');
       const loginContainer = document.querySelector('.login-container');
-      const registerButton = document.getElementById('registerButton')
+      const registerButton = document.getElementById('registerButton');
 
 
       // Listen for the click event on the "Click here to register" link
