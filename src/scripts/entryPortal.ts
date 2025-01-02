@@ -6,12 +6,15 @@ $(async function () {
   // Handles showing the essay selections when the option to pick them is shown.
   document.querySelector("#essayRequirementInput").addEventListener("change", function () {
     const essayQuestion = $("#essaySelectionQuestion");
+    const customEssayQuestion = $("#customEssayPromptQuestion");
     if (this.selectedCheckbox[0] === "Yes") {
       // Show the box
       essayQuestion.css("display","block");
+      customEssayQuestion.css("display", "block");
     } else {
       // Ensure the box is hidden
       essayQuestion.css("display","none");
+      customEssayQuestion.css("display", "none");
     }
   });
 
@@ -24,7 +27,7 @@ $(async function () {
   // First get the information from the database
   const response = await fetch("/providers/info/all", { method: "get" });
   const scholarship = await response.json() as Scholarship;
- 
+
   // Use the information on each input.
   // We'll use the response JSON's entry names as selectors.
   Object.entries(scholarship).forEach(([key, value]) => {
