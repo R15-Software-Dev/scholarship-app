@@ -18,6 +18,9 @@ $(async function () {
   //#region Form Initialization
   // const apiBase = "http://localhost:3000";
   // Initialize the forms
+  // Show loader
+  const loader = $(".loader");
+  loader.show();
   // First get the information from the database
   const response = await fetch("/providers/info/all", { method: "get" });
   const scholarship = await response.json() as Scholarship;
@@ -46,6 +49,8 @@ $(async function () {
       }
     }
   });
+  // Fade out the loader
+  loader.fadeOut("fast");
   //#endregion
 
 
