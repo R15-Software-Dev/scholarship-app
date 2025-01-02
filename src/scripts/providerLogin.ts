@@ -59,34 +59,36 @@ $(function() {
     event.preventDefault();
 
     // We will check that the password fields are the same.
-    const emailInput = this.querySelector("#registerEmailInput") as FormQuestion;
-    const passwordInputOne = this.querySelector("#registerPasswordInput") as FormQuestion;
-    const passwordInputTwo = this.querySelector("#registerConfirmPasswordInput") as FormQuestion;
+    const form = document.querySelector("#registration-form");
+    const allQuestions = form.querySelectorAll("form-question") as NodeListOf<FormQuestion>;
+    const emailInput = (this.querySelector("#registerEmailInput") as FormQuestion).input;
+    const passwordInputOne = (this.querySelector("#registerPasswordInput") as FormQuestion).input;
+    const passwordInputTwo = (this.querySelector("#registerConfirmPasswordInput") as FormQuestion).input;
 
-    const email = emailInput.input.getValue();
-    const password = passwordInputOne.input.getValue();
-    const passwordConfirm = passwordInputTwo.input.getValue();
+    const email = emailInput.getValue();
+    const password = passwordInputOne.getValue();
+    const passwordConfirm = passwordInputTwo.getValue();
 
     const noMatch = $('#mismatchedPasswords');
     const accountExist = $('#registeredEmailError');
 
+    allQuestions.forEach((question) => question.input.clearError());
+
     let submittable = true;
-    if (!emailInput.checkValidity()) {
-      emailInput.input.displayError("Invalid input");
-      submittable = false;
-    }
-    if (!passwordInputOne.checkValidity()) {
-      passwordInputOne.input.displayError("Invalid input");
-      submittable = false;
-    }
-    if (!passwordInputTwo.input.getValue()) {
-      passwordInputTwo.input.displayError("Invalid input");
-      submittable = false;
-    }
+    allQuestions.forEach((question) => {
+      // Verify that the question is valid.
+      if (!question.checkValidity()) {
+        // Display the error
+        console.log("Found invalid question " + question.id);
+        question.input.displayError("Invalid input");
+        submittable = false;
+      }
+    });
 
     if (submittable) {
       if (password === passwordConfirm) {
-        noMatch.removeClass("shown");
+        console.log("Passwords match");
+        // noMatch.removeClass("shown");
         // Make the request.
         const request = {
           method: "POST",
@@ -109,9 +111,13 @@ $(function() {
           accountExist.addClass("error");
         }
       } else {
-        noMatch.addClass("shown");
+        // noMatch.addClass("shown");
+        passwordInputOne.displayError("Passwords do not match");
+        passwordInputTwo.displayError("Passwords do not match");
         console.log("Passwords don't match");
       }
+    } else {
+      console.log("Form is not submittable");
     }
   });
 })
