@@ -33,12 +33,16 @@ $(function() {
         body: JSON.stringify(values)
       });
 
+      if (!response.ok) {
+        // This means there's something wrong with the api.
+        // TODO Show some error.
+      }
+
       const responseJson = await response.json();
 
       if (responseJson.message === "Login successful") {
         // Redirect to the entryPortal page.
         window.location.replace("./entryPortal.html");
-
       } else {
         loginErrorDiv.html(responseJson.message);
         loginErrorDiv.addClass("shown");
@@ -67,7 +71,7 @@ $(function() {
     const accountExist = $('#registeredEmailError');
 
     if (password === passwordConfirm) {
-      noMatch.removeClass("error");
+      noMatch.removeClass("shown");
       // Make the request.
       const request = {
         method: "POST",
@@ -78,6 +82,10 @@ $(function() {
       };
 
       const response = await fetch("/providers/registration", request);
+      if (!response.ok) {
+        // TODO Show an error message.
+      }
+
       const responseJson = await response.json();
       if (responseJson.message === "Registration successful") {
         window.location.replace("./entryPortal.html");
@@ -86,7 +94,7 @@ $(function() {
         accountExist.addClass("error");
       }
     } else {
-      noMatch.addClass("error");
+      noMatch.addClass("shown");
       console.log("Passwords don't match");
     }
   });
