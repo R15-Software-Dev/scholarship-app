@@ -1,7 +1,7 @@
 ﻿import { FormQuestion } from "../customElements/Forms";
 
 $(function() {
-
+  const allQuestionsGlobal = document.querySelectorAll('form-question') as NodeListOf<FormQuestion>;
   // We will need to get the values for the form submission manually
   // Set up a listener on the login form
   document.querySelector("#login-form").addEventListener("submit", async event => {
@@ -58,9 +58,10 @@ $(function() {
         if (responseJson.message === "Login successful") {
           // Redirect to the entryPortal page.
           window.location.replace("./entryPortal.html");
+          loginErrorDiv.removeClass("shown");
         } else {
-          loginErrorDiv.html(responseJson.message);
-          loginErrorDiv.addClass("shown");
+          loginErrorDiv.html(responseJson.message)
+            .addClass("shown");
         }
       } catch (e) {
         console.log(e);
@@ -84,56 +85,115 @@ $(function() {
     const email = emailInput.getValue();
     const password = passwordInputOne.getValue();
     const passwordConfirm = passwordInputTwo.getValue();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const noMatch = $('#mismatchedPasswords');
-    const accountExist = $('#registeredEmailError');
+    const registerErrorDiv = $('#divErrorRegister');
+    const pendingButton = $('#registerButton');
 
-    allQuestions.forEach((question) => question.input.clearError());
+    try {
+      registerErrorDiv.removeClass("shown");
+      pendingButton.addClass("disabled");
 
-    let submittable = true;
-    allQuestions.forEach((question) => {
-      // Verify that the question is valid.
-      if (!question.checkValidity()) {
-        // Display the error
-        // console.log("Found invalid question " + question.id);
-        question.input.displayError("Invalid input");
-        submittable = false;
-      }
-    });
+      allQuestions.forEach((question) => question.input.clearError());
 
-    if (submittable) {
-      if (password === passwordConfirm) {
-        // console.log("Passwords match");
-        // noMatch.removeClass("shown");
-        // Make the request.
-        const request = {
-          method: "POST",
-          body: JSON.stringify({
-            email: email,
-            password: password
-          })
-        };
-
-        const response = await fetch("/providers/registration", request);
-        if (!response.ok) {
-          // TODO Show an error message.
+      let submittable = true;
+      allQuestions.forEach((question) => {
+        // Verify that the question is valid.
+        if (!question.checkValidity()) {
+          // Display the error
+          // console.log("Found invalid question " + question.id);
+          question.input.displayError("Invalid input");
+          submittable = false;
         }
+      });
 
-        const responseJson = await response.json();
-        if (responseJson.message === "Registration successful") {
-          window.location.replace("./entryPortal.html");
-          accountExist.removeClass("error");
-        } else if (responseJson.name === "ConditionalCheckFailedException") { //Checks if account already exists
-          accountExist.addClass("error");
+      if(password !== passwordConfirm){
+        registerErrorDiv.html("Passwords do not match")
+          .addClass('shown')
+        return
+      }
+
+      if (submittable) {
+        if (password === passwordConfirm) {
+          // console.log("Passwords match");
+          // noMatch.removeClass("shown");
+          // Make the request.
+          const request = {
+            method: "POST",
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+          };
+
+          const response = await fetch("/providers/registration", request);
+          if (!response.ok) {
+            // TODO Show an error message.
+          }
+
+          const responseJson = await response.json();
+          if (responseJson.message === "Registration successful") {
+            window.location.replace("./entryPortal.html");
+            registerErrorDiv.removeClass("shown");
+          } else if(responseJson.name === "ConditionalCheckFailedException") {
+            registerErrorDiv.html("Email already registered")
+              .addClass("shown");
+          } else {
+            // Show error message
+            registerErrorDiv.html(responseJson.message)
+              .addClass("shown");
+          }
         }
       } else {
-        // noMatch.addClass("shown");
-        passwordInputOne.displayError("Passwords do not match");
-        passwordInputTwo.displayError("Passwords do not match");
-        // console.log("Passwords don't match");
+        // console.log("Form is not submittable");
       }
-    } else {
-      // console.log("Form is not submittable");
+    } catch (e) {
+      console.log(`Caught exception during registration: ${e}`);
+    } finally {
+      pendingButton.removeClass("disabled");
+    }
+
+  });
+
+  const $registerLink = $('#register-link');
+  const $tabBar = $('tab-bar');
+  const $registerButton = $('#registerButton');
+
+// Listen for the click event on the "Click here to register" link
+  $registerLink.on('click', function (event) {
+    event.preventDefault(); // Prevent default anchor behavior
+
+    // Find the Register tab using the panel-id
+    const $registerTab = $tabBar.find('c-tab').filter(function () {
+      return $(this).attr('panel-id') === 'scholarshipProviderRegistrationPanel';
+    });
+
+    if ($registerTab.length) {
+      // Activate the Register tab via tabBar's API
+      ($tabBar[0] as any).activeTab = $registerTab[0]; // Use the tab-bar's API to set active tab
+    }
+  });
+
+  // Clear errors on click event
+  $('form-question').on("click", function() {
+    allQuestionsGlobal.forEach(question => question.input.clearError());
+  })
+
+// Listen for tab changes on the tab-bar
+  $tabBar.on('change', function () {
+    const activeTab = ($tabBar[0] as any).activeTab;
+
+    if (activeTab) {
+      const panelId = activeTab.panelId;
+      // Clears error codes when tabs are switched
+      if (panelId === 'scholarshipProviderLoginPanel') {
+        // Clear login form error messages
+        $('#divErrorLogin').removeClass('shown').html('');
+        allQuestionsGlobal.forEach(question => question.input.clearError());
+      } else if (panelId === 'scholarshipProviderRegistrationPanel') {
+        // Clear registration form error messages
+        $('#divErrorRegister').removeClass('shown').html('');
+      }
     }
   });
 })
