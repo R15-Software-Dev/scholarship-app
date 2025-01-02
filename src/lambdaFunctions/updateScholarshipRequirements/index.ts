@@ -16,43 +16,87 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // console.log(`Found scholarship ID: ${scholarshipID}`);
 
   // Create a command to update everything that may be entered in the requirements form.
-  const command = new UpdateItemCommand({
-    TableName: "scholarship-info",
-    Key: {
-      ScholarshipID: {S: scholarshipID}
-    },
-    UpdateExpression: "SET #studentAidReport = :studentAidReport, #studentInterviews = :studentInterviews," +
-      "#recipientSelection = :recipientSelection, #transcriptRequirements = :transcriptRequirements," +
-      "#awardTo = :awardTo, " +
-      // "#sclshpReApplication = :sclshpReApplication," +
-      "#essayRequirement = :essayRequirement," +
-      "#essaySelection = :essaySelection, #awardNightRemarks = :awardNightRemarks," +
-      "#customEssayPrompt = :customEssayPrompt",
-    ExpressionAttributeValues: {
-      ":studentAidReport": {SS: JSON.parse(info.studentAidReport)},
-      ":studentInterviews": {SS: JSON.parse(info.studentInterviews)},
-      ":recipientSelection": {S: info.recipientSelection},
-      ":transcriptRequirements": {SS: JSON.parse(info.transcriptRequirements)},
-      ":awardTo": {SS: JSON.parse(info.awardTo)},
-      // ":sclshpReApplication": {SS: JSON.parse(info.scholarshipReApplication)},
-      ":essayRequirement": {SS: JSON.parse(info.essayRequirement)},
-      ":essaySelection": {SS: JSON.parse(info.essaySelection)},
-      ":awardNightRemarks": {S: info.awardNightRemarks},
-      ":customEssayPrompt": {S: info.customEssayPrompt}
-    },
-    ExpressionAttributeNames: {
-      "#studentAidReport": "studentAidReport",
-      "#studentInterviews": "studentInterviews",
-      "#recipientSelection": "recipientSelection",
-      "#transcriptRequirements": "transcriptRequirements",
-      "#awardTo": "awardTo",
-      // "#sclshpReApplication": "scholarshipReApplication",
-      "#essayRequirement": "essayRequirement",
-      "#essaySelection": "essaySelection",
-      "#awardNightRemarks": "awardNightRemarks",
-      "#customEssayPrompt": "customEssayPrompt"
-    }
-  });
+  let command: UpdateItemCommand;
+  if (info.essayRequirement === "Yes") {
+    command = new UpdateItemCommand({
+      TableName: "scholarship-info",
+      Key: {
+        ScholarshipID: {S: scholarshipID}
+      },
+      UpdateExpression: "SET #studentAidReport = :studentAidReport," +
+        "#studentInterviews = :studentInterviews," +
+        "#recipientSelection = :recipientSelection," +
+        "#transcriptRequirements = :transcriptRequirements," +
+        "#awardTo = :awardTo, " +
+        // "#sclshpReApplication = :sclshpReApplication," +
+        "#essayRequirement = :essayRequirement," +
+        "#essaySelection = :essaySelection," +
+        "#awardNightRemarks = :awardNightRemarks," +
+        "#customEssayPrompt = :customEssayPrompt",
+      ExpressionAttributeValues: {
+        ":studentAidReport": {SS: JSON.parse(info.studentAidReport)},
+        ":studentInterviews": {SS: JSON.parse(info.studentInterviews)},
+        ":recipientSelection": {S: info.recipientSelection},
+        ":transcriptRequirements": {SS: JSON.parse(info.transcriptRequirements)},
+        ":awardTo": {SS: JSON.parse(info.awardTo)},
+        // ":sclshpReApplication": {SS: JSON.parse(info.scholarshipReApplication)},
+        ":essayRequirement": {SS: JSON.parse(info.essayRequirement)},
+        ":essaySelection": {SS: JSON.parse(info.essaySelection)},
+        ":awardNightRemarks": {S: info.awardNightRemarks},
+        ":customEssayPrompt": {S: info.customEssayPrompt}
+      },
+      ExpressionAttributeNames: {
+        "#studentAidReport": "studentAidReport",
+        "#studentInterviews": "studentInterviews",
+        "#recipientSelection": "recipientSelection",
+        "#transcriptRequirements": "transcriptRequirements",
+        "#awardTo": "awardTo",
+        // "#sclshpReApplication": "scholarshipReApplication",
+        "#essayRequirement": "essayRequirement",
+        "#essaySelection": "essaySelection",
+        "#awardNightRemarks": "awardNightRemarks",
+        "#customEssayPrompt": "customEssayPrompt"
+      }
+    });
+  } else {
+    // Create a command to update everything that may be entered in the requirements form, except for the essay prompt
+    // and essay selection
+    console.log("Entering values without essay requirement");
+    command = new UpdateItemCommand({
+      TableName: "scholarship-info",
+      Key: {
+        ScholarshipID: { S: scholarshipID }
+      },
+      UpdateExpression: "SET #studentAidReport = :studentAidReport," +
+        "#studentInterviews = :studentInterviews," +
+        "#recipientSelection = :recipientSelection," +
+        "#transcriptRequirements = :transcriptRequirements," +
+        "#awardTo = :awardTo, " +
+        // "#sclshpReApplication = :sclshpReApplication," +
+        "#essayRequirement = :essayRequirement," +
+        "#awardNightRemarks = :awardNightRemarks",
+      ExpressionAttributeValues: {
+        ":studentAidReport": { SS: JSON.parse(info.studentAidReport) },
+        ":studentInterviews": { SS: JSON.parse(info.studentInterviews) },
+        ":recipientSelection": { S: info.recipientSelection },
+        ":transcriptRequirements": { SS: JSON.parse(info.transcriptRequirements) },
+        ":awardTo": { SS: JSON.parse(info.awardTo) },
+        // ":sclshpReApplication": {SS: JSON.parse(info.scholarshipReApplication)},
+        ":essayRequirement": { SS: JSON.parse(info.essayRequirement) },
+        ":awardNightRemarks": { S: info.awardNightRemarks }
+      },
+      ExpressionAttributeNames: {
+        "#studentAidReport": "studentAidReport",
+        "#studentInterviews": "studentInterviews",
+        "#recipientSelection": "recipientSelection",
+        "#transcriptRequirements": "transcriptRequirements",
+        "#awardTo": "awardTo",
+        // "#sclshpReApplication": "scholarshipReApplication",
+        "#essayRequirement": "essayRequirement",
+        "#awardNightRemarks": "awardNightRemarks"
+      }
+    });
+  }
 
   try {
     // Send the command
