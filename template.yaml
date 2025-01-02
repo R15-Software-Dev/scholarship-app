@@ -78,7 +78,7 @@ Resources:
           - index.ts
   providerRegistration:
     Type: AWS::Serverless::Function
-    Properties: 
+    Properties:
       Description: Handles registration of new scholarship provider accounts.
       CodeUri: src/lambdaFunctions/providerRegistration
       Handler: index.handler
@@ -94,12 +94,12 @@ Resources:
             Method: post
             Auth:
               Authorizer: NONE
-      Policies: 
+      Policies:
         - DynamoDBCrudPolicy:
             TableName: scholarship-providers
         - AWSSecretsManagerGetSecretValuePolicy:
             SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:providerjwt-bTmFJk"
-    Metadata: 
+    Metadata:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
@@ -124,7 +124,7 @@ Resources:
             Method: get
       Policies:
         - DynamoDBReadPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -152,7 +152,7 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -180,7 +180,7 @@ Resources:
             Method: post
       Policies:
         - DynamoDBReadPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -208,7 +208,7 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -236,7 +236,7 @@ Resources:
             Method: get
       Policies:
         - DynamoDBReadPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -264,7 +264,7 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
@@ -294,7 +294,7 @@ Resources:
       Policies:
         # Give CRUD access to the DynamoDB table
         - DynamoDBReadPolicy:
-            TableName: scholarship-providers
+            TableName: scholarship-info
       FunctionUrlConfig:
         AuthType: AWS_IAM
     Metadata:
