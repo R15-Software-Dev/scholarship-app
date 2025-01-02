@@ -10,7 +10,7 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const info: ScholarshipRequirements = JSON.parse(event.body);
-  
+
   // Get the scholarship ID from the passed cookie
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
   // console.log(`Found scholarship ID: ${scholarshipID}`);
@@ -26,7 +26,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#awardTo = :awardTo, " +
       // "#sclshpReApplication = :sclshpReApplication," +
       "#essayRequirement = :essayRequirement," +
-      "#essaySelection = :essaySelection, #awardNightRemarks = :awardNightRemarks",
+      "#essaySelection = :essaySelection, #awardNightRemarks = :awardNightRemarks," +
+      "#customEssayPrompt = :customEssayPrompt",
     ExpressionAttributeValues: {
       ":studentAidReport": {SS: JSON.parse(info.studentAidReport)},
       ":studentInterviews": {SS: JSON.parse(info.studentInterviews)},
@@ -36,7 +37,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       // ":sclshpReApplication": {SS: JSON.parse(info.scholarshipReApplication)},
       ":essayRequirement": {SS: JSON.parse(info.essayRequirement)},
       ":essaySelection": {SS: JSON.parse(info.essaySelection)},
-      ":awardNightRemarks": {S: info.awardNightRemarks}
+      ":awardNightRemarks": {S: info.awardNightRemarks},
+      ":customEssayPrompt": {S: info.customEssayPrompt}
     },
     ExpressionAttributeNames: {
       "#studentAidReport": "studentAidReport",
@@ -47,7 +49,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       // "#sclshpReApplication": "scholarshipReApplication",
       "#essayRequirement": "essayRequirement",
       "#essaySelection": "essaySelection",
-      "#awardNightRemarks": "awardNightRemarks"
+      "#awardNightRemarks": "awardNightRemarks",
+      "#customEssayPrompt": "customEssayPrompt"
     }
   });
 
