@@ -11,13 +11,16 @@ const client = new DynamoDBClient({ region: "us-east-1" });
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const info: ScholarshipRequirements = JSON.parse(event.body);
 
+  console.log(info);
+
   // Get the scholarship ID from the passed cookie
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
   // console.log(`Found scholarship ID: ${scholarshipID}`);
 
   // Create a command to update everything that may be entered in the requirements form.
   let command: UpdateItemCommand;
-  if (info.essayRequirement === "Yes") {
+  if (info.essayRequirement === '["Yes"]') {
+    const essaySelection = (info.essaySelection === '[]') ? '["None"]' : info.essaySelection;
     command = new UpdateItemCommand({
       TableName: "scholarship-info",
       Key: {
@@ -41,7 +44,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
         ":awardTo": {SS: JSON.parse(info.awardTo)},
         // ":sclshpReApplication": {SS: JSON.parse(info.scholarshipReApplication)},
         ":essayRequirement": {SS: JSON.parse(info.essayRequirement)},
-        ":essaySelection": {SS: JSON.parse(info.essaySelection)},
+        ":essaySelection": {SS: JSON.parse(essaySelection)},
         ":awardNightRemarks": {S: info.awardNightRemarks},
         ":customEssayPrompt": {S: info.customEssayPrompt}
       },

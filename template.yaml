@@ -379,12 +379,8 @@ Resources:
           KeyType: HASH
 #        - AttributeName: SampleKey
 #          KeyType: SORT
-      ProvisionedThroughput:
-        # This determines how many read and write requests we can take
-        # in a minute without throwing a rate error.
-        # If you don't know what that is, don't touch these.
-        ReadCapacityUnits: 300
-        WriteCapacityUnits: 150
+      # ALWAYS use PAY_PER_REQUEST for billing mode.
+      BillingMode: PAY_PER_REQUEST
   ScholarshipInfoTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -395,9 +391,7 @@ Resources:
       KeySchema:
         - AttributeName: ScholarshipID
           KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 300
-        WriteCapacityUnits: 150
+      BillingMode: PAY_PER_REQUEST
 
   #Define the custom authorizer function
   providerAuthorizer:
