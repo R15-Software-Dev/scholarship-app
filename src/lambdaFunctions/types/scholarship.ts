@@ -51,6 +51,7 @@ export type ScholarshipRequirements = {
   essayRequirement: string;
   essaySelection: string;
   awardNightRemarks: string;
+  customEssayPrompt: string;
 }
 
 /**

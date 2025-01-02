@@ -7,7 +7,7 @@ const client = new DynamoDBClient({ region: "us-east-1" });
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Get all the information about a scholarship and parse it into
   // a reasonable form.
-  
+
   // First match the scholarship ID from the event's cookies
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
 
@@ -46,6 +46,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "scholarshipReApplication",
       "essayRequirement",
       "essaySelection",
+      "customEssayPrompt",
       "awardNightRemarks"
     ]
   });
@@ -54,7 +55,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // If there's no item, this will throw an error.
   const dbresponse = await client.send(command);
   const dbitem = dbresponse.Item;
-  
+
   // Construct the response
   // TODO Find a better way of getting SS values
   const response: Scholarship = {
@@ -97,9 +98,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     essayRequirement: dbitem?.essayRequirement?.SS ?? null,
     //@ts-ignore
     essaySelection: dbitem?.essaySelection?.SS ?? null,
+    customEssayPrompt: dbitem?.customEssayPrompt?.S ?? null,
     awardNightRemarks: dbitem?.awardNightRemarks?.S ?? null
   }
-  
+
   // Return the information
   return {
     statusCode: 200,
