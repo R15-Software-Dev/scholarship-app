@@ -4,7 +4,7 @@ import {
   css,
   nothing,
   HTMLTemplateResult,
-  CSSResultGroup
+  CSSResultGroup, PropertyValues
 } from "lit";
 import {
   customElement,
@@ -224,26 +224,14 @@ abstract class TextField extends LitElement implements InputElement {
 export class OutlinedTextField extends TextField {
 
   @property({ type: String }) accessor pattern = "";  // Pattern for validation
+  @property({ type: String }) accessor value = "";
   @property({ type: String, attribute: "prefix-text"}) accessor prefixText = "";
   @property({ type: String, attribute: "suffix-text"}) accessor suffixText = "";
   
   @query("input") private accessor _input: HTMLInputElement;
-  @queryAsync(".prefix") private accessor _prefix: HTMLSpanElement;
-  @queryAsync(".suffix") private accessor _suffix: HTMLSpanElement;
+  @query(".prefix") private accessor _prefix: HTMLSpanElement;
+  @query(".suffix") private accessor _suffix: HTMLSpanElement;
 
-  get value(): string {
-    this.updateComplete.then(() => {
-      return this._input.value;
-    });
-    return "";
-  }
-  set value(value: string) {
-    this.updateComplete.then(() => {
-      this._input.setAttribute('value', value);
-    });
-  }
-  
-  
   protected render(): HTMLTemplateResult {
     return html`
       <div>
@@ -259,6 +247,7 @@ export class OutlinedTextField extends TextField {
             ?required=${this.required}
             maxlength=${this.maxLength || nothing}
             @input=${this.handleInput}
+            .value=${this.value}
           />
           ${this._renderSuffix()}
           <label>${this.placeholder}</label>
@@ -330,6 +319,7 @@ export class TextArea extends TextField {
           ?required=${this.required}
           maxlength=${this.maxLength || nothing}
           @input=${this._handleInput}
+          .value="${this.value}"
         ></textarea>
         <label>${this.placeholder}</label>
       </div>

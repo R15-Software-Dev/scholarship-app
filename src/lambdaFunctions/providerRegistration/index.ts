@@ -22,10 +22,13 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     email: "",
     password: ""
   };
-  
+
+  // Make sure that we didn't get a null request.
   if (event.body != null)
     eventBody = JSON.parse(event.body);
-  
+
+  // Ensure that the use did not put in a blank email or password.
+  // This should be set from the front end as well, but it's good to be safe.
   if (eventBody.email === "" || eventBody.password === "") {
     return {
       statusCode: 400,
@@ -95,7 +98,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     // Get the token's expiration date
     const expTime = new Date();
     expTime.setDate(expTime.getDate() + 7);
-    
+
+    // Return the correct auth information.
+    // This includes the new user's JWT and their scholarship ID, both stored in cookies.
     return {
       statusCode: 200,
       multiValueHeaders: {
@@ -105,12 +110,11 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
         ]
       },
       body: JSON.stringify({
-        message: "Registration successful",
-        scholarshipID: scholarshipID
+        message: "Registration successful"
       })
     }
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     return {
       statusCode: 500,
       body: JSON.stringify({
@@ -120,6 +124,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   }
 }
 
+/**
+ * Simply handles hashing the password.
+ * @param password The plaintext password to hash.
+ */
 async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, 10);
 }

@@ -8,19 +8,20 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   // Get all the information about a scholarship and parse it into
   // a reasonable form.
   
-  // First match the scholarship ID from the event.
+  // First match the scholarship ID from the event's cookies
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
-  
-  // Get all the scholarship's information
+
+  // Create a command to get all the scholarship's information
   const command = new GetItemCommand({
     TableName: "scholarship-info",
     Key: {
-      Name: { S: scholarshipID }
+      ScholarshipID: { S: scholarshipID }
     },
     AttributesToGet: [
       "homePhone",
       "businessPhone",
       "cellPhone",
+      "contactName",
       "contactEmail",
       "sponsorAddress",
       "sponsorCity",
@@ -48,41 +49,55 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "awardNightRemarks"
     ]
   });
-  
+
+  // Send the command and wait for an Item.
+  // If there's no item, this will throw an error.
   const dbresponse = await client.send(command);
   const dbitem = dbresponse.Item;
   
   // Construct the response
+  // TODO Find a better way of getting SS values
   const response: Scholarship = {
-    contactName: dbitem.contactName.S,
-    homePhone: dbitem.homePhone.S, 
-    businessPhone: dbitem.businessPhone.S, 
-    cellPhone: dbitem.cellPhone.S, 
-    contactEmail: dbitem.contactEmail.S, 
-    sponsorAddress: dbitem.sponsorAddress.S,
-    sponsorCity: dbitem.sponsorCity.S, 
-    sponsorZipCode: dbitem.sponsorZipCode.S, 
-    sponsorState: dbitem.sponsorState.S,
-    additionalInfo: dbitem.additionalInfo.S,
-    studentResidence: dbitem.studentResidence.S, 
-    scholarshipNonPHS: dbitem.scholarshipNonPHS.BOOL, 
-    studyRequirement: dbitem.studyRequirement.BOOL, 
-    financialRequirement: dbitem.financialRequirement.BOOL, 
-    eligibilityOther: dbitem.eligibilityOther.S,
-    scholarshipTitle: dbitem.scholarshipTitle.S, 
-    scholarshipSponsor: dbitem.scholarshipSponsor.S, 
-    scholarshipNumAwards: Number(dbitem.scholarshipNumAwards.N), 
-    scholarshipAwardsTotal: Number(dbitem.scholarshipAwardsTotal.N), 
-    scholarshipAmountPerAward: Number(dbitem.scholarshipAmountPerAward.N),
-    studentAidReport: dbitem.studentAidReport.BOOL,
-    studentInterviews: dbitem.studentInterviews.BOOL,
-    recipientSelection: dbitem.recipientSelection.S,
-    transcriptRequirements: dbitem.transcriptRequirements.BOOL,
-    awardTo: dbitem.awardTo.BOOL,
-    scholarshipReApplication: dbitem.scholarshipReApplication.BOOL,
-    essayRequirement: dbitem.essayRequirement.BOOL,
-    essaySelection: dbitem.essaySelection.SS,
-    awardNightRemarks: dbitem.awardNightRemarks.S
+    contactName: dbitem?.contactName?.S ?? null,
+    homePhone: dbitem?.homePhone?.S ?? null,
+    businessPhone: dbitem?.businessPhone?.S ?? null,
+    cellPhone: dbitem?.cellPhone?.S ?? null,
+    contactEmail: dbitem?.contactEmail?.S ?? null,
+    sponsorAddress: dbitem?.sponsorAddress?.S ?? null,
+    sponsorCity: dbitem?.sponsorCity?.S ?? null,
+    sponsorZipCode: dbitem?.sponsorZipCode?.S ?? null,
+    sponsorState: dbitem?.sponsorState?.S ?? null,
+    additionalInfo: dbitem?.additionalInfo?.S ?? null,
+    //@ts-ignore
+    studentResidence: dbitem?.studentResidence?.SS ?? null,
+    //@ts-ignore
+    scholarshipNonPHS: dbitem?.scholarshipNonPHS?.SS ?? null,
+    //@ts-ignore
+    studyRequirement: dbitem?.studyRequirement?.SS ?? null,
+    //@ts-ignore
+    financialRequirement: dbitem?.financialRequirement?.SS ?? null,
+    eligibilityOther: dbitem?.eligibilityOther?.S ?? null,
+    scholarshipTitle: dbitem?.scholarshipTitle?.S ?? null,
+    scholarshipSponsor: dbitem?.scholarshipSponsor?.S ?? null,
+    scholarshipNumAwards: Number(dbitem?.scholarshipNumAwards?.N ?? null),
+    scholarshipAwardsTotal: Number(dbitem?.scholarshipAwardsTotal?.N ?? null),
+    scholarshipAmountPerAward: Number(dbitem?.scholarshipAmountPerAward?.N ?? null),
+    //@ts-ignore
+    studentAidReport: dbitem?.studentAidReport?.SS ?? null,
+    //@ts-ignore
+    studentInterviews: dbitem?.studentInterviews?.SS ?? null,
+    recipientSelection: dbitem?.recipientSelection?.S ?? null,
+    //@ts-ignore
+    transcriptRequirements: dbitem?.transcriptRequirements?.SS ?? null,
+    //@ts-ignore
+    awardTo: dbitem?.awardTo?.SS ?? null,
+    //@ts-ignore
+    scholarshipReApplication: dbitem?.scholarshipReApplication?.SS ?? null,
+    //@ts-ignore
+    essayRequirement: dbitem?.essayRequirement?.SS ?? null,
+    //@ts-ignore
+    essaySelection: dbitem?.essaySelection?.SS ?? null,
+    awardNightRemarks: dbitem?.awardNightRemarks?.S ?? null
   }
   
   // Return the information

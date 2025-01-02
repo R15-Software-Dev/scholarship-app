@@ -14,7 +14,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   // Get the scholarship ID from the corresponding cookie
   const scholarshipID = event.headers.Cookie.match(/scholarshipID=([^;]*)/)[1];
-  console.log(`Found scholarship ID: ${scholarshipID}`);
+  // console.log(`Found scholarship ID: ${scholarshipID}`);
+
+  // Create a command to update everything that may be entered in the contact info form.
   const command = new UpdateItemCommand({
     TableName: "scholarship-info",
     Key: {
@@ -47,18 +49,21 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#sponsorCity = :sponsorCity, #sponsorZipCode = :sponsorZipCode, #sponsorState = :sponsorState"
   });
 
-  console.log("Sending update command...");
+  // console.log("Sending update command...");
   try {
+    // Send the command
     const dbresponse = await client.send(command);
-    console.log("Update command sent successfully.");
+    // console.log("Update command sent successfully.");
   } catch (e) {
-    console.error(e.message);
+    // console.error(e.message);
+    // Return that there was an error
     return {
       statusCode: 400,
       body: JSON.stringify({ message: e.message }),
     }
   }
 
+  // Return that there was a success
   return {
     statusCode: 200,
     body: JSON.stringify({ message: "Success" }),

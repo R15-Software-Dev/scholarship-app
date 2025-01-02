@@ -3,6 +3,7 @@ import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-sec
 import {AWSAuthRequest, AWSAuthResponse } from "./../types/types";
 
 
+// Create an AWS Secrets Manager client.
 const secretClient = new SecretsManagerClient({ region: "us-east-1" });
 
 /**
@@ -12,9 +13,12 @@ const secretClient = new SecretsManagerClient({ region: "us-east-1" });
 * @type {(event: { token: string }) => boolean}
 */
 export async function handler(event: AWSAuthRequest): Promise<AWSAuthResponse> {
-  console.log("Recieved event: ");
-  console.log(event);
-  // Get the secret from Secrets Manager
+  // console.log("Recieved event: ");
+  // console.log(event);
+
+  // Create a command to get the providerjwt secret from AWS.
+  // More info can be found here:
+  // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/secrets-manager/command/GetSecretValueCommand/
   const secretResponse = await secretClient.send(new GetSecretValueCommand({
     SecretId: "providerjwt"
   }));
@@ -30,11 +34,26 @@ export async function handler(event: AWSAuthRequest): Promise<AWSAuthResponse> {
       audience: "https://alphafetus-testbucket.s3.amazonaws.com/entryPortal.html"
     });
   } catch (e) {
-    console.error(e);
-    throw new Error('Unauthorized');
+    // Handle the error - we'll return a policy document that denies invoke access to the requested function.
+    // return {
+    //   principalId: "user",
+    //   policyDocument: {
+    //     Version: "2012-10-17",
+    //     Statement: [
+    //       {
+    //         Action: "execute-api:Invoke",
+    //         Effect: "Deny",
+    //         Resource: event.methodArn
+    //       }
+    //     ]
+    //   }
+    // };
+    throw new Error("Unauthorized");
   }
 
   // If valid, return a response with a proper policy document.
+  // This follows the documentation found here:
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-lambda-authorizer-output.html
   return {
     principalId: 'user',
     policyDocument: {

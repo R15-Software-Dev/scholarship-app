@@ -1,58 +1,52 @@
-import {OutlinedTextField} from "../customElements/TextField";
 import {Scholarship} from "../lambdaFunctions/types/scholarship";
-import {Checkbox} from "../customElements/Checkbox";
-import {Dropdown} from "../customElements/Dropdown";
 import {InputElement} from "../customElements/InputElement";
+import {Checkbox} from "../customElements/Checkbox";
 
 $(async function () {
-  const apiBase = "http://localhost:3000";
+  // Handles showing the essay selections when the option to pick them is shown.
+  document.querySelector("#essayRequirementInput").addEventListener("change", function () {
+    const essayQuestion = $("#essaySelectionQuestion");
+    if (this.selectedCheckbox[0] === "Yes") {
+      // Show the box
+      essayQuestion.css("display","block");
+    } else {
+      // Ensure the box is hidden
+      essayQuestion.css("display","none");
+    }
+  });
+
+  //#region Form Initialization
+  // const apiBase = "http://localhost:3000";
   // Initialize the forms
   // First get the information from the database
-  const response = await fetch(apiBase + "/providers/info/all", { method: "get" });
+  const response = await fetch("/providers/info/all", { method: "get" });
   const scholarship = await response.json() as Scholarship;
  
   // Use the information on each input.
   // We'll use the response JSON's entry names as selectors.
   Object.entries(scholarship).forEach(([key, value]) => {
     // Update the corresponding input element with the value
-    let input: InputElement = document.querySelector(`#${key}Input`);
-    input.setValue(value);
-  });
-  
-  
-  // Listen for change event on email input
-  $("#sclshpConfirmEmailInput").on("focusout", function () {
-    console.log("Checking emails");
-    const emailInput = document.querySelector(
-      "#sclshpContactEmailInput",
-    )._input;
-    const compEmailInput = document.querySelector(
-      "#sclshpConfirmEmailInput",
-    )._input;
-
-    if (emailInput.value !== compEmailInput.value) {
-      console.log("Emails do not match, showing error.");
-      compEmailInput.showErrorString("Emails do not match.");
-    } else {
-      // Clear errors.
-      compEmailInput.hideErrors();
+    if (value !== null) {
+      let input: InputElement = document.querySelector(`#${key}Input`);
+      console.log(`Setting value of input ${key}Input`);
+      // Check the type of the value
+      if (typeof value === "object") {
+        // This should be iterated over (we can only receive string[] as an object)
+        console.log("Found string[] value");
+        // TODO Find a better way of doing this, along with the API definitions.
+        //@ts-ignore
+        value = value as string[];
+        //@ts-ignore
+        value.forEach((item) => {
+          (input as Checkbox).checkValue(item);
+        })
+      } else {
+        // We can set the value normally
+        input.value = value;
+      }
     }
   });
+  //#endregion
 
-  // Function scrolls to the top of the page when a tab is clicked
-  $('tab-bar').on('click', function () {
-    // Scroll to the top of the page smoothly
-    $('html, body').animate({ scrollTop: 0 }, 'smooth');
-  });
 
-  $("#essayRequirementOption").on("change", function () {
-    const essaySelection = $("#essayRequirementSelection");
-    if (this.selectedCheckbox[0] === "Yes") {
-      // Show the box
-      essaySelection.css("display","block");
-    } else {
-      // Don't show a box
-      essaySelection.css("display","none");
-    }
-  })
 });

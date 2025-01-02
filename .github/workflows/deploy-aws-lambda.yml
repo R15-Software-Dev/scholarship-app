@@ -21,7 +21,14 @@ jobs:
           aws-access-key-id: ${{ secrets.CODEBUILDPUBLIC }}
           aws-secret-access-key: ${{ secrets.CODEBUILDPRIVATE }}
 
-      - name: Deploy to AWS Lambda
+      - name: Get global npm packages
+        run: |
+          npm run installGlobals
+
+      - name: Build with SAM
         run: |
           sam build
-          sam deploy
+
+      - name: Deploy to AWS using SAM
+        run: |
+          sam deploy --no-confirm-changeset

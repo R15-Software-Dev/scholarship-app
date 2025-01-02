@@ -15,9 +15,9 @@ export type ScholarshipInfo = {
  */
 export type ScholarshipEligibility = {
   studentResidence: string;
-  scholarshipNonPHS: boolean;
-  studyRequirement: boolean;
-  financialRequirement: boolean;
+  scholarshipNonPHS: string;
+  studyRequirement: string;
+  financialRequirement: string;
   eligibilityOther?: string;
 }
 
@@ -42,14 +42,14 @@ export type ScholarshipContactInfo = {
  * Requirements for the scholarship application.
  */
 export type ScholarshipRequirements = {
-  studentAidReport: boolean;
-  studentInterviews: boolean;
+  studentAidReport: string;
+  studentInterviews: string;
   recipientSelection: string;
-  transcriptRequirements: boolean;
-  awardTo: boolean;
-  scholarshipReApplication: boolean;
-  essayRequirement: boolean;
-  essaySelection: string[];
+  transcriptRequirements: string;
+  awardTo: string;
+  scholarshipReApplication: string;
+  essayRequirement: string;
+  essaySelection: string;
   awardNightRemarks: string;
 }
 
