@@ -134,7 +134,10 @@ $(function() {
           const responseJson = await response.json();
           if (responseJson.message === "Registration successful") {
             window.location.replace("./entryPortal.html");
-            registerErrorDiv.removeClass("error");
+            registerErrorDiv.removeClass("shown");
+          } else if(responseJson.name = "ConditionalCheckFailedException") {
+            registerErrorDiv.html("Email already registered")
+              .addClass("shown");
           } else {
             // Show error message
             registerErrorDiv.html(responseJson.message)
