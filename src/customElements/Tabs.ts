@@ -105,8 +105,6 @@ export class TabBar extends LitElement {
       new Event("change", { bubbles: true, cancelable: true }),
     );
   }
-
-
 }
 
 @customElement("c-tab")
@@ -241,6 +239,4 @@ export class TabPanel extends LitElement {
       </div>
     `;
   }
-
-
 }
