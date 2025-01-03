@@ -26,7 +26,6 @@ export class ActionButton extends LitElement {
         }
     }
       
-
       ${rippleCSS}
   `;
 

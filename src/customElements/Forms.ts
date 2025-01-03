@@ -128,7 +128,9 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      question.input.setAttribute("disabled", "true");
+      question.input.disabled = true;
+      console.log("Disabled question:");
+      console.log(question.input);
     });
   }
 
@@ -136,7 +138,9 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      question.input.removeAttribute("disabled");
+      question.input.disabled = false;
+      console.log("Enabled question:");
+      console.log(question.input);
     });
   }
 
@@ -200,6 +204,7 @@ export class FormSection extends LitElement {
   handleFormAws(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
+
     this._questions.forEach((question) => question.input.clearError());
 
     // First check if values are valid by calling checkValidity on
@@ -234,12 +239,11 @@ export class FormSection extends LitElement {
         console.log("Success: " + data);
         this.dispatchEvent(new Event("submit-complete", { bubbles: true, composed: true }));
         this._checkShown = true;
+        this.enableForm();
       })
       .catch((error) => {
         console.error(`An error occurred: ${error}`);
       });
-
-    this.enableForm();
   }
 
   protected render(): HTMLTemplateResult {
