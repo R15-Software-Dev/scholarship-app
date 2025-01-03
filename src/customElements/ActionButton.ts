@@ -19,8 +19,12 @@ export class ActionButton extends LitElement {
       transition: background 400ms;
       cursor: pointer;
     }
+      &.disabled {
+          transition: background-color 0.2s linear;
+          background-color: dimgrey;
+      }
 
-    ${rippleCSS}
+      ${rippleCSS}
   `;
 
   @property({type: String}) accessor type: string = "button";

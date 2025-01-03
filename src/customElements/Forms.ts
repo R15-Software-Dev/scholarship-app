@@ -92,6 +92,7 @@ export class FormSection extends LitElement {
         gap: 10px;
         align-items: center;
       }
+        
     }
 
     h1 {
@@ -127,7 +128,7 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      question.setAttribute("disabled", "true");
+      question.input.setAttribute("disabled", "true");
     });
   }
 
@@ -135,7 +136,7 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      question.removeAttribute("disabled");
+      question.input.removeAttribute("disabled");
     });
   }
 
