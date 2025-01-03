@@ -231,6 +231,7 @@ export class FormSection extends LitElement {
       .then((response) => response.json)
       .then((data) => {
         console.log("Success: " + data);
+        this.dispatchEvent(new Event("submit-complete", { bubbles: true, composed: true }));
         this._checkShown = true;
       })
       .catch((error) => {

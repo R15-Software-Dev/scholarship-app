@@ -56,5 +56,4 @@ $(async function () {
   loader.fadeOut("fast");
   //#endregion
 
-
 });

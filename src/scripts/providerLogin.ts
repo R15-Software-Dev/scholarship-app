@@ -152,25 +152,23 @@ $(function() {
     } finally {
       pendingButton.removeClass("disabled");
     }
-
   });
 
-  const $registerLink = $('#register-link');
-  const $tabBar = $('tab-bar');
-  const $registerButton = $('#registerButton');
+  const registerLink = $('#register-link');
+  const tabBar = $('tab-bar');
 
 // Listen for the click event on the "Click here to register" link
-  $registerLink.on('click', function (event) {
+  registerLink.on('click', function (event) {
     event.preventDefault(); // Prevent default anchor behavior
 
     // Find the Register tab using the panel-id
-    const $registerTab = $tabBar.find('c-tab').filter(function () {
+    const registerTab = tabBar.find('c-tab').filter(function () {
       return $(this).attr('panel-id') === 'scholarshipProviderRegistrationPanel';
     });
 
-    if ($registerTab.length) {
+    if (registerTab.length) {
       // Activate the Register tab via tabBar's API
-      ($tabBar[0] as any).activeTab = $registerTab[0]; // Use the tab-bar's API to set active tab
+      (tabBar[0] as any).activeTab = registerTab[0]; // Use the tab-bar's API to set active tab
     }
   });
 
@@ -180,8 +178,8 @@ $(function() {
   })
 
 // Listen for tab changes on the tab-bar
-  $tabBar.on('change', function () {
-    const activeTab = ($tabBar[0] as any).activeTab;
+  tabBar.on('change', function () {
+    const activeTab = (tabBar[0] as any).activeTab;
 
     if (activeTab) {
       const panelId = activeTab.panelId;
