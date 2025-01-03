@@ -165,6 +165,18 @@ export class Tab extends LitElement {
       opacity: 0.5; /* Greyed-out appearance for disabled tabs */
     }
 
+    .checkmark {
+        position: absolute;
+        right: 5px;
+        bottom: 18px;
+        font-size: large;
+        display: none;
+        
+        &.checked {
+            display:block;
+        }
+    }
+      
     ${rippleCSS}
   `;
   @property({ type: String, attribute: "panel-id" }) accessor panelId: string =
@@ -173,6 +185,8 @@ export class Tab extends LitElement {
     false;
   @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
   private readonly _internals = this.attachInternals;
+
+  @property({ type: Boolean, reflect: true}) accessor checked: boolean = false;
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -195,6 +209,12 @@ export class Tab extends LitElement {
           <slot name="icon"></slot>
           <!-- Label slot -->
           <slot></slot>
+          <div id="tabChecked" class=" ${classMap({
+              checkmark: true,
+              checked: this.checked
+          })}">
+              <span>&#x2713</span>
+          </div>
         </div>
       </div>
     `;
