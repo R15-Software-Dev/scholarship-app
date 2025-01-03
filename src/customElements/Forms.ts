@@ -139,7 +139,7 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      this._buttonElement.disabled = true;
+      this._buttonElement.disabled = false;
       question.input.disabled = false;
     });
   }
