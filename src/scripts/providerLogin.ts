@@ -85,7 +85,6 @@ $(function() {
     const email = emailInput.getValue();
     const password = passwordInputOne.getValue();
     const passwordConfirm = passwordInputTwo.getValue();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const registerErrorDiv = $('#divErrorRegister');
     const pendingButton = $('#registerButton');
