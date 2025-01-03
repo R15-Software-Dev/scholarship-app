@@ -186,6 +186,8 @@ export class Tab extends LitElement {
   @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
   private readonly _internals = this.attachInternals;
 
+  @property({ type: Boolean, reflect: true}) accessor checked: boolean = false;
+
   protected render(): HTMLTemplateResult {
     return html`
       <!-- This is essentially a customized button. -->
@@ -207,9 +209,11 @@ export class Tab extends LitElement {
           <slot name="icon"></slot>
           <!-- Label slot -->
           <slot></slot>
-          <div class="checkmark">
+          <div id="tabChecked" class=" ${classMap({
+              checkmark: true,
+              checked: this.checked
+          })}">
               <span>&#x2713</span>
-<!--              <img src="./images/green-check-mark-3.png">-->
           </div>
         </div>
       </div>
