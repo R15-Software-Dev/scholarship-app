@@ -144,63 +144,6 @@ export class FormSection extends LitElement {
     });
   }
 
-  private handleForm(event: SubmitEvent): void {
-    event.preventDefault();
-    console.log("Attempting to submit form.");
-
-    // Build the object that will send the data to the server.
-    const formData = new FormData();
-    formData.append("formId", this._formElement.id);
-
-    // Get the questions from the form.
-    const customQuestions = this._questions;
-
-    let send = true;
-    console.log(customQuestions);
-    console.log(`Got ${customQuestions.length} questions, printing values.`);
-    for (let i = 0; i < customQuestions.length; i++) {
-      const question = customQuestions[i];
-      // if (!input.reportValidity()) send = false;
-      formData.append(question.input.name, question.input.getValue());
-    }
-
-    console.log(
-      `Built FormData object: ${JSON.stringify(Object.fromEntries(formData))}`,
-    );
-
-    // Assuming there are no errors, send data to Google's backend.
-    if (send) {
-      this.disableForm();
-
-      try {
-        // Anytime the google backend is referenced, Typescript throws compilation errors.
-        // This is because in its current state, "google" is not defined. This is only available
-        // within the Apps Script environment. Ignore these lines for now.
-        // @ts-ignore
-        if (typeof google === "undefined")
-          throw new Error(
-            "This script is being run outside of the Google scripting environment.",
-          );
-
-        // @ts-ignore
-        google.script.run
-          .withSuccessHandler(() => {
-            console.log("SUCCESS");
-          })
-          .withFailureHandler(() => {
-            console.log("FAILED");
-          })
-          .processForm(JSON.stringify(Object.fromEntries(formData)));
-      } catch (e) {
-        // Right now, this will only happen when the script is run outside of the
-        // Apps Script environment, which provides the "google" keyword.
-        console.log(e);
-      } finally {
-        this.enableForm();
-      }
-    }
-  }
-
   handleFormAws(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
