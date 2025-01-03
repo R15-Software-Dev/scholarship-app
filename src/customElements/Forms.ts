@@ -8,6 +8,7 @@ import {
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { InputElement } from "./InputElement";
+import {ActionButton} from "./ActionButton";
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
@@ -123,14 +124,14 @@ export class FormSection extends LitElement {
   @query("form") accessor _formElement: HTMLFormElement;
   @queryAssignedElements({ selector: "form-question", flatten: true })
   accessor _questions: FormQuestion[];
+  @query("action-button") accessor _buttonElement: ActionButton;
 
   private disableForm(): void {
     const questions = this._questions;
 
     questions.forEach((question) => {
+      this._buttonElement.disabled = true;
       question.input.disabled = true;
-      console.log("Disabled question:");
-      console.log(question.input);
     });
   }
 
@@ -138,9 +139,8 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
+      this._buttonElement.disabled = true;
       question.input.disabled = false;
-      console.log("Enabled question:");
-      console.log(question.input);
     });
   }
 
