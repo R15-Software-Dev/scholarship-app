@@ -165,6 +165,18 @@ export class Tab extends LitElement {
       opacity: 0.5; /* Greyed-out appearance for disabled tabs */
     }
 
+    .checkmark {
+        position: absolute;
+        right: 5px;
+        bottom: 18px;
+        font-size: large;
+        display: none;
+        
+        &.checked {
+            display:block;
+        }
+    }
+      
     ${rippleCSS}
   `;
   @property({ type: String, attribute: "panel-id" }) accessor panelId: string =
@@ -195,6 +207,10 @@ export class Tab extends LitElement {
           <slot name="icon"></slot>
           <!-- Label slot -->
           <slot></slot>
+          <div class="checkmark">
+              <span>&#x2713</span>
+<!--              <img src="./images/green-check-mark-3.png">-->
+          </div>
         </div>
       </div>
     `;
