@@ -44,6 +44,10 @@ abstract class TextField extends LitElement implements InputElement {
         height: auto;
         transition: height 0.2s ease;;
       }
+      &.disabled {
+        transition: background-color 0.2s linear;
+        background-color: dimgrey;
+      }
     }
 
     div .error {
@@ -160,6 +164,12 @@ abstract class TextField extends LitElement implements InputElement {
       font-size: 11pt;
       font-color: gray;
       background-color: white;
+      opacity: 100%;
+        
+        &.disabled{
+            transition: opacity 0.2s linear;
+            opacity: 0;
+        }
     }
 
     input:not(:placeholder-shown) ~ .suffix,
@@ -227,6 +237,7 @@ export class OutlinedTextField extends TextField {
   @property({ type: String }) accessor value = "";
   @property({ type: String, attribute: "prefix-text"}) accessor prefixText = "";
   @property({ type: String, attribute: "suffix-text"}) accessor suffixText = "";
+  @property({ type: Boolean, reflect: true}) accessor disable: boolean = false;
   
   @query("input") protected accessor _input: HTMLInputElement;
   @query(".prefix") protected accessor _prefix: HTMLSpanElement;
@@ -235,7 +246,10 @@ export class OutlinedTextField extends TextField {
   protected render(): HTMLTemplateResult {
     return html`
       <div>
-        <div class="container">
+        <div class="${classMap ({
+            container: true,
+            disabled: this.disabled
+        })}">
           ${this._renderPrefix()}
           <input
             class=${classMap({ hasPrefix: this._hasPrefix })}
