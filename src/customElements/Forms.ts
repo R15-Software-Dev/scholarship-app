@@ -144,7 +144,7 @@ export class FormSection extends LitElement {
     });
   }
 
-  handleFormAws(event: SubmitEvent): void {
+  handleForm(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
 
@@ -200,7 +200,7 @@ export class FormSection extends LitElement {
           name=${this.name}
           action=${this.action}
           method=${this.method}
-          @submit=${this.handleFormAws}
+          @submit=${this.handleForm}
         >
           <slot></slot>
           <div class="buttoncontainer">
