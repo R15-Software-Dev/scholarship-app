@@ -30,7 +30,7 @@ export class Dropdown extends LitElement implements InputElement {
       border: 2px solid;
       border-radius: 8px;
       border-color: var(--theme-primary-color);
-      background-color: transparent;
+      //background-color: transparent;
       margin-top: 6px;
       height: 48px;
       position: relative;
@@ -41,6 +41,11 @@ export class Dropdown extends LitElement implements InputElement {
         border-color: var(--theme-error-color);
         transition: border-color 400ms ease,
         background-color 400ms ease;
+      }
+
+      &.disabled {
+          transition: background-color 0.2s linear;
+          border-color: dimgrey;
       }
 
       select {
@@ -58,6 +63,11 @@ export class Dropdown extends LitElement implements InputElement {
         background-repeat: no-repeat;
         background-position: left 10px center;
         background-size: 24px;
+      }
+        
+      select.disabled {
+          transition: background-color 0.2s linear;
+          background-color: lightgray;
       }
 
       select:focus {
@@ -157,7 +167,10 @@ export class Dropdown extends LitElement implements InputElement {
     return html`
       <div>
 <!--        <div class="select-container ${classMap({error: this._showError})}">-->
-        <div class="select-container">
+        <div class="${classMap({
+            "select-container": true,
+            disabled: this.disabled
+        })}">
           <select name=${this.name} .value="${this.value}" ?required=${this.required}>
             <option value="" disabled selected>${this.placeholder}</option>
           </select>
