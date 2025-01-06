@@ -44,15 +44,15 @@ export class Dropdown extends LitElement implements InputElement {
       }
 
       &.disabled {
-          transition: background-color 0.2s linear;
-          border-color: dimgrey;
+        transition: background-color 0.2s linear;
+        border-color: dimgrey;
+        background-color: lightgray;
       }
 
       select {
         font-size: 11pt;
         flex-grow: 1;
         border: none;
-        padding: 2px 15px;
         padding: 2px 15px 2px 40px;
         color: #696158;
         border-radius: 8px;
@@ -63,11 +63,10 @@ export class Dropdown extends LitElement implements InputElement {
         background-repeat: no-repeat;
         background-position: left 10px center;
         background-size: 24px;
-      }
         
-      select.disabled {
-          transition: background-color 0.2s linear;
-          background-color: lightgray;
+        &.disabled {
+          pointer-events: none;
+        }
       }
 
       select:focus {
@@ -135,12 +134,12 @@ export class Dropdown extends LitElement implements InputElement {
     }
   `;
 
-  @property({type: Boolean, reflect: true}) required: boolean = false;
-  @property({type: Boolean, reflect: true}) disabled: boolean = false; // Added disabled property
-  @property({type: String}) name: string = ""; // Name of the dropdown element
+  @property({type: Boolean, reflect: true}) accessor required: boolean = false;
+  @property({type: Boolean, reflect: true}) accessor disabled: boolean = false; // Added disabled property
+  @property({type: String}) accessor name: string = ""; // Name of the dropdown element
   @property({type: String}) accessor value: string = "";
   @property({type: String, attribute: "error-message"}) accessor errorMessage: string = ""; // Public version, used to set the default error message
-  @property({type: String}) placeholder: string = "Select an option"; // Placeholder text for the dropdown
+  @property({type: String}) accessor placeholder: string = "Select an option"; // Placeholder text for the dropdown
 
   @state() accessor _hasChanged: boolean = false;
   @state() accessor _showError: boolean = false;
@@ -148,7 +147,7 @@ export class Dropdown extends LitElement implements InputElement {
 
   @query("select") accessor _selectElement!: HTMLSelectElement;
   @queryAssignedElements({selector: "option", flatten: true})
-  accessor _options = Array<HTMLElement>();
+    accessor _options = Array<HTMLElement>();
 
   constructor() {
     super();
@@ -168,10 +167,10 @@ export class Dropdown extends LitElement implements InputElement {
       <div>
 <!--        <div class="select-container ${classMap({error: this._showError})}">-->
         <div class="${classMap({
-            "select-container": true,
-            disabled: this.disabled
+          "select-container": true,
+          disabled: this.disabled
         })}">
-          <select name=${this.name} .value="${this.value}" ?required=${this.required}>
+          <select class="${classMap({ disabled: this.disabled })}" name=${this.name} .value="${this.value}" ?required=${this.required}>
             <option value="" disabled selected>${this.placeholder}</option>
           </select>
           <slot @slotchange="${this.handleSlotChange}"></slot>
