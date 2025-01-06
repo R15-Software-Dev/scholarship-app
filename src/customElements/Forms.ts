@@ -148,8 +148,6 @@ export class FormSection extends LitElement {
     event.preventDefault();
     this.disableForm();
 
-    this._questions.forEach((question) => question.input.clearError());
-
     // First check if values are valid by calling checkValidity on
     // all the form's inputs.
     let submittable = true;
@@ -164,7 +162,11 @@ export class FormSection extends LitElement {
 
     // If the form has invalid responses, do not submit the form and display
     // the error prompts underneath all the questions.
-    if (!submittable) return;
+    if (!submittable) {
+      // Enable questions again
+      this.enableForm();
+      return;
+    }
 
     // Build the FormData to send to the API.
     const formData = new FormData();
@@ -182,11 +184,11 @@ export class FormSection extends LitElement {
         console.log("Success: " + data);
         this.dispatchEvent(new Event("submit-complete", { bubbles: true, composed: true }));
         this._checkShown = true;
-        this.enableForm();
       })
       .catch((error) => {
         console.error(`An error occurred: ${error}`);
-      });
+      })
+      .finally(() => this.enableForm())
   }
 
   protected render(): HTMLTemplateResult {
