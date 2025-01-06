@@ -12,8 +12,13 @@ import {classMap} from "lit/directives/class-map.js";
 @customElement("check-box")
 export class Checkbox extends LitElement implements InputElement {
   static styles?: CSSResultGroup = css`
+    div .container {
+      &.disabled {
+        pointer-events: none;
+      }
+    }
+      
     /* CONTAINER FOR RADIO ELEMENT */
-
     .radio {
       display: block;
       position: relative;
@@ -26,6 +31,10 @@ export class Checkbox extends LitElement implements InputElement {
       -ms-user-select: none;
       user-select: none;
         
+    }
+      
+    input.disabled {
+      pointer-events: none;
     }
 
     /* Hide the browser's default radio button */
@@ -242,7 +251,7 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.checkboxOptions); // Parse the JSON string to array
     return html`
       <div>
-        <div>
+        <div class=${classMap({ container: true, disabled: this.disabled })}>
           ${optionsArray.map(
             (option: string) => html`
               <label class="checkbox">
@@ -274,12 +283,13 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
     return html`
       <div>
-        <div>
+        <div class=${classMap({ container: true, disabled: this.disabled })}>
           ${optionsArray.map(
             (option: string) => html`
               <label class="radio">
                 ${option}
                 <input
+                  class=${classMap({ disabled: this.disabled })}
                   type="radio"
                   name="radiobutton"
                   value="${option}"
@@ -306,12 +316,13 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
     return html`
       <div>
-        <div>
+        <div class=${classMap({ container: true, disabled: this.disabled })}>
           ${optionsArray.map(
             (option: string) => html`
               <label class="radio">
                 ${option}
                 <input
+                  class=${classMap({ disabled: this.disabled })}
                   type="radio"
                   name="radiogroup"
                   value="${option}"
@@ -325,6 +336,7 @@ export class Checkbox extends LitElement implements InputElement {
   
           <label class="radio">
             <input
+              class=${classMap({ disabled: this.disabled })}
               type="radio"
               name="radiogroup"
               value="other"
@@ -362,6 +374,8 @@ export class Checkbox extends LitElement implements InputElement {
 
 
   private optionSelect(event: Event) {
+    // If this element is disabled, do nothing.
+    if (this.disabled) return;
     // Reset selectedOptions array
     this.selectedCheckbox = [];
     this._checkboxList.forEach((checkbox) => {
