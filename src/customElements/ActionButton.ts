@@ -1,6 +1,7 @@
 import { LitElement, html, css, CSSResultGroup, HTMLTemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { createRipple, rippleCSS } from "./Ripple";
+import {classMap} from "lit/directives/class-map.js";
 
 @customElement("action-button")
 export class ActionButton extends LitElement {
@@ -18,14 +19,20 @@ export class ActionButton extends LitElement {
       box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
       transition: background 400ms;
       cursor: pointer;
+        
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+        }
     }
-
-    ${rippleCSS}
+      
+      ${rippleCSS}
   `;
 
   @property({type: String}) accessor type: string = "button";
   @property({type: String}) accessor form: string = "";
   @property({type: ElementInternals}) accessor internals: ElementInternals;
+  @property({type: Boolean, reflect: false}) accessor disabled: boolean = false;
 
   private handleClick(event: MouseEvent): void {
     createRipple(event);
@@ -49,7 +56,10 @@ export class ActionButton extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <button class="button" type="${this.type}" @click=${this.handleClick} form=${this.form}>
+      <button class="${classMap({
+          button: true,
+          disabled: this.disabled
+      })}" type="${this.type}" @click=${this.handleClick} form=${this.form}>
         <slot></slot>
       </button>
     `;

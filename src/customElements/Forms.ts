@@ -8,6 +8,7 @@ import {
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { InputElement } from "./InputElement";
+import {ActionButton} from "./ActionButton";
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
@@ -92,6 +93,7 @@ export class FormSection extends LitElement {
         gap: 10px;
         align-items: center;
       }
+        
     }
 
     h1 {
@@ -122,12 +124,14 @@ export class FormSection extends LitElement {
   @query("form") accessor _formElement: HTMLFormElement;
   @queryAssignedElements({ selector: "form-question", flatten: true })
   accessor _questions: FormQuestion[];
+  @query("action-button") accessor _buttonElement: ActionButton;
 
   private disableForm(): void {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      question.setAttribute("disabled", "true");
+      this._buttonElement.disabled = true;
+      question.input.disabled = true;
     });
   }
 
@@ -135,71 +139,14 @@ export class FormSection extends LitElement {
     const questions = this._questions;
 
     questions.forEach((question) => {
-      question.removeAttribute("disabled");
+      this._buttonElement.disabled = false;
+      question.input.disabled = false;
     });
   }
 
-  private handleForm(event: SubmitEvent): void {
-    event.preventDefault();
-    console.log("Attempting to submit form.");
-
-    // Build the object that will send the data to the server.
-    const formData = new FormData();
-    formData.append("formId", this._formElement.id);
-
-    // Get the questions from the form.
-    const customQuestions = this._questions;
-
-    let send = true;
-    console.log(customQuestions);
-    console.log(`Got ${customQuestions.length} questions, printing values.`);
-    for (let i = 0; i < customQuestions.length; i++) {
-      const question = customQuestions[i];
-      // if (!input.reportValidity()) send = false;
-      formData.append(question.input.name, question.input.getValue());
-    }
-
-    console.log(
-      `Built FormData object: ${JSON.stringify(Object.fromEntries(formData))}`,
-    );
-
-    // Assuming there are no errors, send data to Google's backend.
-    if (send) {
-      this.disableForm();
-
-      try {
-        // Anytime the google backend is referenced, Typescript throws compilation errors.
-        // This is because in its current state, "google" is not defined. This is only available
-        // within the Apps Script environment. Ignore these lines for now.
-        // @ts-ignore
-        if (typeof google === "undefined")
-          throw new Error(
-            "This script is being run outside of the Google scripting environment.",
-          );
-
-        // @ts-ignore
-        google.script.run
-          .withSuccessHandler(() => {
-            console.log("SUCCESS");
-          })
-          .withFailureHandler(() => {
-            console.log("FAILED");
-          })
-          .processForm(JSON.stringify(Object.fromEntries(formData)));
-      } catch (e) {
-        // Right now, this will only happen when the script is run outside of the
-        // Apps Script environment, which provides the "google" keyword.
-        console.log(e);
-      } finally {
-        this.enableForm();
-      }
-    }
-  }
-
-  handleFormAws(event: SubmitEvent): void {
+  handleForm(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
-    this._questions.forEach((question) => question.input.clearError());
 
     // First check if values are valid by calling checkValidity on
     // all the form's inputs.
@@ -215,7 +162,11 @@ export class FormSection extends LitElement {
 
     // If the form has invalid responses, do not submit the form and display
     // the error prompts underneath all the questions.
-    if (!submittable) return;
+    if (!submittable) {
+      // Enable questions again
+      this.enableForm();
+      return;
+    }
 
     // Build the FormData to send to the API.
     const formData = new FormData();
@@ -236,9 +187,8 @@ export class FormSection extends LitElement {
       })
       .catch((error) => {
         console.error(`An error occurred: ${error}`);
-      });
-
-    this.enableForm();
+      })
+      .finally(() => this.enableForm())
   }
 
   protected render(): HTMLTemplateResult {
@@ -252,7 +202,7 @@ export class FormSection extends LitElement {
           name=${this.name}
           action=${this.action}
           method=${this.method}
-          @submit=${this.handleFormAws}
+          @submit=${this.handleForm}
         >
           <slot></slot>
           <div class="buttoncontainer">

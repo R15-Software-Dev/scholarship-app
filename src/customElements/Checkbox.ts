@@ -12,8 +12,13 @@ import {classMap} from "lit/directives/class-map.js";
 @customElement("check-box")
 export class Checkbox extends LitElement implements InputElement {
   static styles?: CSSResultGroup = css`
+    div .container {
+      &.disabled {
+        pointer-events: none;
+      }
+    }
+      
     /* CONTAINER FOR RADIO ELEMENT */
-
     .radio {
       display: block;
       position: relative;
@@ -25,6 +30,11 @@ export class Checkbox extends LitElement implements InputElement {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+        
+    }
+      
+    input.disabled {
+      pointer-events: none;
     }
 
     /* Hide the browser's default radio button */
@@ -50,18 +60,36 @@ export class Checkbox extends LitElement implements InputElement {
       width: 25px;
       background-color: #eee;
       border-radius: 50%;
+        
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+            pointer-events: none;
+        }
     }
 
     /* On mouse-over, add a grey background color */
 
     .radio:hover input ~ .checkdot {
       background-color: #ccc;
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+            pointer-events: none;
+        }
     }
 
     /* When the checkbox is checked, add a green background */
 
     .radio input:checked ~ .checkdot {
       background-color: var(--theme-primary-color);
+      transition: background-color 0.2s linear;
+        
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+            pointer-events: none;
+        }
     }
 
     /* Create the checkmark/indicator (hidden when not checked) */
@@ -126,19 +154,34 @@ export class Checkbox extends LitElement implements InputElement {
       border-style: solid;
       border-width: 1px;
       background-color: #eee;
+
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+        }
     }
 
     /* On mouse-over, add a grey background color */
 
     .checkbox:hover input ~ .checkmark {
       background-color: #ccc;
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+        }
     }
 
     /* When the checkbox is checked, add a green background */
 
     .checkbox input:checked ~ .checkmark {
       background-color: var(--theme-primary-color);
+      transition: background-color 0.2s linear;
       /*change background-color to var(--theme-primary-color)*/
+
+        &.disabled {
+            transition: background-color 0.2s linear;
+            background-color: dimgrey;
+        }
     }
 
     /* Create the checkmark/indicator (hidden when not checked) */
@@ -208,7 +251,7 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.checkboxOptions); // Parse the JSON string to array
     return html`
       <div>
-        <div>
+        <div class=${classMap({ container: true, disabled: this.disabled })}>
           ${optionsArray.map(
             (option: string) => html`
               <label class="checkbox">
@@ -220,7 +263,10 @@ export class Checkbox extends LitElement implements InputElement {
                   .checked="${this.selectedCheckbox.includes(option)}"
                   @change="${this.optionSelect}"
                 />
-                <span class="checkmark"></span>
+                <span class="${classMap({
+                    checkmark: true,
+                    disabled: this.disabled
+                })}"></span>
               </label>
             `
           )}
@@ -237,19 +283,23 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
     return html`
       <div>
-        <div>
+        <div class=${classMap({ container: true, disabled: this.disabled })}>
           ${optionsArray.map(
             (option: string) => html`
               <label class="radio">
                 ${option}
                 <input
+                  class=${classMap({ disabled: this.disabled })}
                   type="radio"
                   name="radiobutton"
                   value="${option}"
                   .checked="${this.selectedCheckbox.includes(option)}"
                   @change="${this.optionSelect}"
                 />
-                <span class="checkdot"></span>
+                <span class="${classMap({
+                    checkdot: true,
+                    disabled: this.disabled
+                })}"></span>
               </label>
             `
           )}
@@ -266,12 +316,13 @@ export class Checkbox extends LitElement implements InputElement {
     const optionsArray = JSON.parse(this.radioOptions); // Parse the JSON string to array
     return html`
       <div>
-        <div>
+        <div class=${classMap({ container: true, disabled: this.disabled })}>
           ${optionsArray.map(
             (option: string) => html`
               <label class="radio">
                 ${option}
                 <input
+                  class=${classMap({ disabled: this.disabled })}
                   type="radio"
                   name="radiogroup"
                   value="${option}"
@@ -285,6 +336,7 @@ export class Checkbox extends LitElement implements InputElement {
   
           <label class="radio">
             <input
+              class=${classMap({ disabled: this.disabled })}
               type="radio"
               name="radiogroup"
               value="other"
@@ -322,6 +374,8 @@ export class Checkbox extends LitElement implements InputElement {
 
 
   private optionSelect(event: Event) {
+    // If this element is disabled, do nothing.
+    if (this.disabled) return;
     // Reset selectedOptions array
     this.selectedCheckbox = [];
     this._checkboxList.forEach((checkbox) => {
