@@ -157,6 +157,7 @@ export class FormSection extends LitElement {
   handleForm(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
+    // Clears error messages when input is valid
     this._questions.forEach((question) => question.input.clearError());
 
     // First check if values are valid by calling checkValidity on
