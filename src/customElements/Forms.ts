@@ -139,10 +139,8 @@ export class FormSection extends LitElement {
 
     this._loading = true; // Show loading icon
     questions.forEach((question) => {
-      if (question.checkValidity()) {
-        this._buttonElement.disabled = true;
-        question.input.disabled = true;
-      }
+      this._buttonElement.disabled = true;
+      question.input.disabled = true;
     });
   }
 
@@ -159,6 +157,7 @@ export class FormSection extends LitElement {
   handleForm(event: SubmitEvent): void {
     event.preventDefault();
     this.disableForm();
+    this._questions.forEach((question) => question.input.clearError());
 
     // First check if values are valid by calling checkValidity on
     // all the form's inputs.
