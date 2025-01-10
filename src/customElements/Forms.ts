@@ -112,6 +112,12 @@ export class FormSection extends LitElement {
         display: block;
       }
     }
+    .loading {
+        display: none;
+        &.shown {
+            display: block;
+        }
+    }
   `;
 
   @property({ type: String }) accessor header: string = "";
@@ -120,6 +126,8 @@ export class FormSection extends LitElement {
   @property({ type: String }) accessor action: string = "";
   @property({ type: String }) accessor method: string = "";
   @state() protected accessor _checkShown: boolean = false;
+  @state() private accessor _loading: boolean = false;
+
 
   @query("form") accessor _formElement: HTMLFormElement;
   @queryAssignedElements({ selector: "form-question", flatten: true })
@@ -129,6 +137,7 @@ export class FormSection extends LitElement {
   private disableForm(): void {
     const questions = this._questions;
 
+    this._loading = true; // Show loading icon
     questions.forEach((question) => {
       this._buttonElement.disabled = true;
       question.input.disabled = true;
@@ -138,6 +147,7 @@ export class FormSection extends LitElement {
   private enableForm(): void {
     const questions = this._questions;
 
+    this._loading = false; // Hide loading icon
     questions.forEach((question) => {
       this._buttonElement.disabled = false;
       question.input.disabled = false;
@@ -208,6 +218,9 @@ export class FormSection extends LitElement {
           <div class="buttoncontainer">
             <action-button type="submit" form=${this.id}>Submit</action-button>
             <span class=${classMap({ shown: this._checkShown })}> Response recorded </span>
+            <div class="loading ${classMap({ shown: this._loading })}">
+                <img src="./images/small_loader.gif" alt="Loading..." />
+            </div>
           </div>
         </form>
       </div>
