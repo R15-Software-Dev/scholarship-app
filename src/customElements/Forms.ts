@@ -139,8 +139,10 @@ export class FormSection extends LitElement {
 
     this._loading = true; // Show loading icon
     questions.forEach((question) => {
-      this._buttonElement.disabled = true;
-      question.input.disabled = true;
+      if (question.checkValidity()) {
+        this._buttonElement.disabled = true;
+        question.input.disabled = true;
+      }
     });
   }
 
