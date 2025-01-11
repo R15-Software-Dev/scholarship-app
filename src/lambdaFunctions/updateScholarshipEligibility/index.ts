@@ -29,6 +29,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#financialRequirement": "financialRequirement",
       "#eligibilityOther": "eligibilityOther",
       "#requiredResidenceArea": "requiredResidenceArea",
+      "#requiredStudyArea": "requiredStudyArea"
     },
     ExpressionAttributeValues: {
       ":studentResidence": {SS: JSON.parse(info.studentResidence)},
@@ -36,12 +37,14 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":studyRequirement": {SS: JSON.parse(info.studyRequirement)},
       ":financialRequirement": {SS: JSON.parse(info.financialRequirement)},
       ":eligibilityOther": {S: info.eligibilityOther},
-      ":requiredResidenceArea": {S: info.requiredResidenceArea}
+      ":requiredResidenceArea": {S: info.requiredResidenceArea},
+      ":requiredStudyArea": {S: info.requiredStudyArea}
     },
     UpdateExpression: "SET #studentResidence = :studentResidence," +
       "#requiredResidenceArea = :requiredResidenceArea," +
       "#scholarshipNonPHS = :scholarshipNonPHS," +
       "#studyRequirement = :studyRequirement," +
+      "#requiredStudyArea = :requiredStudyArea," +
       "#financialRequirement = :financialRequirement," +
       "#eligibilityOther = :eligibilityOther"
   });

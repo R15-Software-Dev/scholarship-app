@@ -23,13 +23,13 @@ $(async function () {
 
   document.querySelector("#studyRequirementInput").addEventListener("change", function () {
     // Control the studyAreaInput.
-    const areaInput = $("#studyAreaQuestion");
+    const areaInput = document.querySelector("#requiredStudyAreaQuestion") as FormQuestion;
     if (this.selectedCheckbox[0] === "Yes") {
-      areaInput.css("display", "block")
-        .attr("required", "true");
+      areaInput.input.required = true;
+      areaInput.style.display = "block";
     } else {
-      areaInput.css("display", "none")
-        .removeAttr("required");
+      areaInput.input.required = false;
+      areaInput.style.display = "none";
     }
   });
 

@@ -30,6 +30,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "additionalInfo",
       "studentResidence",
       "requiredResidenceArea",
+      "requiredStudyArea",
       "scholarshipNonPHS",
       "studyRequirement",
       "financialRequirement",
@@ -79,6 +80,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     scholarshipNonPHS: dbitem?.scholarshipNonPHS?.SS ?? null,
     //@ts-ignore
     studyRequirement: dbitem?.studyRequirement?.SS ?? null,
+    requiredStudyArea: dbitem?.requiredStudyArea?.S ?? null,
     //@ts-ignore
     financialRequirement: dbitem?.financialRequirement?.SS ?? null,
     eligibilityOther: dbitem?.eligibilityOther?.S ?? null,
