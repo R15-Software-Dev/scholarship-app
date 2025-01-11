@@ -517,6 +517,17 @@
           </check-box>
         </form-question>
 
+        <form-question id="requiredResidenceAreaQuestion" style="display: none;">
+          <h3 slot="header">Student residency location</h3>
+          <drop-down
+            id="requiredResidenceAreaInput"
+            name="requiredResidenceArea"
+            placeholder="Select town...">
+            <option>Southbury</option>
+            <option>Middlebury</option>
+          </drop-down>
+        </form-question>
+
         <form-question>
           <h3 slot="header">Is the scholarship available to non-PHS students?</h3>
           <check-box inputType="radio"

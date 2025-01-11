@@ -27,17 +27,22 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#scholarshipNonPHS": "scholarshipNonPHS",
       "#studyRequirement": "studyRequirement",
       "#financialRequirement": "financialRequirement",
-      "#eligibilityOther": "eligibilityOther"
+      "#eligibilityOther": "eligibilityOther",
+      "#requiredResidenceArea": "requiredResidenceArea",
     },
     ExpressionAttributeValues: {
       ":studentResidence": {SS: JSON.parse(info.studentResidence)},
       ":scholarshipNonPHS": {SS: JSON.parse(info.scholarshipNonPHS)},
       ":studyRequirement": {SS: JSON.parse(info.studyRequirement)},
       ":financialRequirement": {SS: JSON.parse(info.financialRequirement)},
-      ":eligibilityOther": {S: info.eligibilityOther}
+      ":eligibilityOther": {S: info.eligibilityOther},
+      ":requiredResidenceArea": {S: info.requiredResidenceArea}
     },
-    UpdateExpression: "SET #studentResidence = :studentResidence, #scholarshipNonPHS = :scholarshipNonPHS," +
-      "#studyRequirement = :studyRequirement, #financialRequirement = :financialRequirement," +
+    UpdateExpression: "SET #studentResidence = :studentResidence," +
+      "#requiredResidenceArea = :requiredResidenceArea," +
+      "#scholarshipNonPHS = :scholarshipNonPHS," +
+      "#studyRequirement = :studyRequirement," +
+      "#financialRequirement = :financialRequirement," +
       "#eligibilityOther = :eligibilityOther"
   });
 
