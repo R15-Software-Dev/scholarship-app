@@ -19,6 +19,8 @@ export type ScholarshipEligibility = {
   studyRequirement: string;
   financialRequirement: string;
   eligibilityOther?: string;
+  requiredResidenceArea?: string;
+  requiredStudyArea?: string;
 }
 
 /**

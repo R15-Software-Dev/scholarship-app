@@ -1,6 +1,7 @@
 import {Scholarship} from "../lambdaFunctions/types/scholarship";
 import {InputElement} from "../customElements/InputElement";
 import {Checkbox} from "../customElements/Checkbox";
+import {FormQuestion} from "../customElements/Forms";
 
 $(async function () {
   // Handles showing the essay selections when the option to pick them is shown.
@@ -17,6 +18,34 @@ $(async function () {
       customEssayQuestion.css("display", "none");
     }
   });
+
+  //#region Eligibility Factors Tab
+
+  document.querySelector("#studyRequirementInput").addEventListener("change", function () {
+    // Control the studyAreaInput.
+    const areaInput = document.querySelector("#requiredStudyAreaQuestion") as FormQuestion;
+    if (this.selectedCheckbox[0] === "Yes") {
+      areaInput.input.required = true;
+      areaInput.style.display = "block";
+    } else {
+      areaInput.input.required = false;
+      areaInput.style.display = "none";
+    }
+  });
+
+  document.querySelector("#studentResidenceInput").addEventListener("change", function () {
+    // Control the residenceAreaInput.
+    const areaInput = document.querySelector("#requiredResidenceAreaQuestion") as FormQuestion;
+    if (this.selectedCheckbox[0] === "Yes") {
+      areaInput.input.required = true;
+      areaInput.style.display = "block";
+    } else {
+      areaInput.input.required = false;
+      areaInput.style.display = "none";
+    }
+  });
+
+  //#endregion
 
   //#region Form Initialization
   // const apiBase = "http://localhost:3000";

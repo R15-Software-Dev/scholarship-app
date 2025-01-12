@@ -29,6 +29,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "sponsorState",
       "additionalInfo",
       "studentResidence",
+      "requiredResidenceArea",
+      "requiredStudyArea",
       "scholarshipNonPHS",
       "studyRequirement",
       "financialRequirement",
@@ -56,6 +58,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const dbresponse = await client.send(command);
   const dbitem = dbresponse.Item;
 
+  console.log(dbitem);
+
   // Construct the response
   // TODO Find a better way of getting SS values
   const response: Scholarship = {
@@ -71,10 +75,12 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     additionalInfo: dbitem?.additionalInfo?.S ?? null,
     //@ts-ignore
     studentResidence: dbitem?.studentResidence?.SS ?? null,
+    requiredResidenceArea: dbitem?.requiredResidenceArea?.S ?? null,
     //@ts-ignore
     scholarshipNonPHS: dbitem?.scholarshipNonPHS?.SS ?? null,
     //@ts-ignore
     studyRequirement: dbitem?.studyRequirement?.SS ?? null,
+    requiredStudyArea: dbitem?.requiredStudyArea?.S ?? null,
     //@ts-ignore
     financialRequirement: dbitem?.financialRequirement?.SS ?? null,
     eligibilityOther: dbitem?.eligibilityOther?.S ?? null,
