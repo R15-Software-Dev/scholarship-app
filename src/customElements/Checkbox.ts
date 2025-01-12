@@ -435,7 +435,7 @@ export class Checkbox extends LitElement implements InputElement {
     // }
     // // Default to true if the element is not required and is enabled
     // else return true;
-    if (this.required && !this.disabled)
+    if (this.required)
       return this.selectedCheckbox.length !== 0;
     return true;
   }
