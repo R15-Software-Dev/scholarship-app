@@ -33,10 +33,7 @@ abstract class TextField extends LitElement implements InputElement {
       transition:
         border-color 400ms ease,
         background-color 400ms ease;
-      &:has(input:disabled), :has(textarea:disabled) {
-        border-color: black;
-        background-color: lightgray;
-      }
+
       &.errors {
         border-color: var(--theme-error-color);
       }
@@ -46,7 +43,9 @@ abstract class TextField extends LitElement implements InputElement {
       }
       &.disabled {
         transition: background-color 0.2s linear;
-        background-color: dimgrey;
+        background-color: dimgray;
+        border-color: black;
+        pointer-events: none;
       }
     }
 
@@ -81,11 +80,16 @@ abstract class TextField extends LitElement implements InputElement {
       line-height: 25px;
       transition:
         height 0.2s ease;
+
       &:focus {
         outline: none;
       }
       &:required {
         box-shadow: none;
+      }
+      &.disabled {
+          transition: background-color 0.2s linear;
+          pointer-events: none;
       }
     }
 
@@ -328,7 +332,10 @@ export class TextArea extends TextField {
   protected render(): HTMLTemplateResult {
     return html`
       <div>
-        <div class="container textarea">
+        <div class="container textarea ${classMap ({
+            container: true,
+            disabled: this.disabled
+        })}">
           <textarea
             placeholder=" "
             name=${this.name}
