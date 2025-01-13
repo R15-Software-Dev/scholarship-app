@@ -266,10 +266,9 @@ export class TabPanel extends LitElement {
 export class TabCol extends LitElement {
   static styles?: CSSResultGroup = css`
     div {
-      background-color: var(--theme-primary-color);
+      background-color: lightgray;
       height: 100vh;
-      width: 15%;
-      padding-left: 5px;
+      width: 200px;
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -338,8 +337,8 @@ export class VerticalTab extends LitElement {
       padding: 10px;
       z-index: 0;
       border-radius: 8px 0 0 8px; /* Rounded left corners */
-      margin: 0 0 2px 0; /* Small space below button */
-      background-color: #8b0000; /* Default dark red */
+      margin: 0 0 3px 5px; /* Small space below button */
+      background-color: var(--theme-primary-color); /* Default dark red */
       color: white; /* Default white text */
       font-family: 'Roboto', sans-serif;
       font-size: 16px;
@@ -421,6 +420,32 @@ export class VerticalPanel extends LitElement {
         <slot></slot>
       </div>
     `;
+  }
+}
+
+// Section divides the tabs
+@customElement("section-title")
+export class Section extends LitElement {
+  static styles?: CSSResultGroup = css`
+      .section {
+          position: relative;
+          overflow: hidden;
+          text-align: center;
+          padding: 10px;
+          margin: 0 0 3px 0; /* Small space below button */
+          background-color: #8b0000; /* Default dark red */
+          color: white; /* Default white text */
+          font-family: 'Roboto', sans-serif;
+          font-size: 18px;
+          font-weight: bold;
+      }
+  `
+  protected render(): HTMLTemplateResult {
+    return html`
+        <div class="section">
+            <slot></slot>
+        </div>
+    `
   }
 }
 
