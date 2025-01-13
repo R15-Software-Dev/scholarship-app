@@ -433,7 +433,9 @@ export class Section extends LitElement {
           text-align: center;
           padding: 10px;
           margin: 0 0 3px 0; /* Small space below button */
-          background-color: #8b0000; /* Default dark red */
+          background-color: #8d0000; /* Default dark red */
+          border-style: solid;
+          border-color: #880000;
           color: white; /* Default white text */
           font-family: 'Roboto', sans-serif;
           font-size: 18px;
