@@ -67,7 +67,6 @@
     text-align: left;
     }
 
-  /* Modify h3 header */
   </style>
 
   <body>
@@ -89,23 +88,24 @@
   </div>
   <div>
     <tab-col>
-      <v-tab active panel-id = "testPanel"> Test </v-tab>
-      <v-tab panel-id = "testPanel2"> Test 2 </v-tab>
-      <v-tab panel-id = "testPanel3"> Test 3 </v-tab>
+      <section-title>Users</section-title>
+      <v-tab active panel-id = "providerUser"> Provider </v-tab>
+      <v-tab panel-id = "studentUser"> Student </v-tab>
+      <section-title>Data</section-title>
+      <v-tab panel-id = "scholarshipData"> Scholarship </v-tab>
+      <v-tab panel-id = "applicationData"> Application </v-tab>
     </tab-col>
   </div>
 
-  <vertical-panel id="testPanel">
+  <!-- User section -->
+  <vertical-panel id="providerUser"> </vertical-panel>
 
-  </vertical-panel>
+  <vertical-panel id="studentUser"> </vertical-panel>
 
-  <vertical-panel id="testPanel2">
+  <!-- Data section -->
+  <vertical-panel id="scholarshipData"> </vertical-panel>
 
-  </vertical-panel>
-
-  <vertical-panel id="testPanel3">
-
-  </vertical-panel>
+  <vertical-panel id="applicationData"> </vertical-panel>
 
   </body>
 </html>
