@@ -181,8 +181,8 @@ export class Tab extends LitElement {
   `;
   @property({ type: String, attribute: "panel-id" }) accessor panelId: string =
     "";
-  @property({ type: Boolean, reflect: true }) accessor disabled: boolean =
-    false;
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
+
   @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
   private readonly _internals = this.attachInternals;
 
