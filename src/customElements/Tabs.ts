@@ -260,3 +260,167 @@ export class TabPanel extends LitElement {
     `;
   }
 }
+
+// Vertical version of the element
+@customElement("tab-col")
+export class TabCol extends LitElement {
+  static styles?: CSSResultGroup = css`
+    div {
+      background-color: var(--theme-primary-color);
+      height: 100vh;
+      width: 15%;
+      padding-left: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    slot {
+      display: flex;
+      flex-direction: column;
+    }
+  `;
+
+  @query("slot") accessor slotElement!: HTMLSlotElement | null;
+  @queryAssignedElements({ selector: "v-tab", flatten: true })
+  accessor _tabs: Array<Tab>;
+
+  get activeTab() {
+    return this._tabs.find((tab) => tab.active) ?? null;
+  }
+  set activeTab(tab: Tab | null) {
+    if (tab) {
+      this.activateTab(tab);
+    }
+  }
+
+  protected render(): HTMLTemplateResult {
+    return html`
+      <div>
+        <slot @click=${this.handleClick}></slot>
+      </div>
+    `;
+  }
+
+  private handleClick(event: MouseEvent) {
+    const tab = event.target as Tab;
+    if (event.defaultPrevented || tab.active) {
+      return;
+    }
+    this.activateTab(tab);
+  }
+
+  activateTab(tab: Tab) {
+    const { _tabs } = this;
+    if (!_tabs.includes(tab) || tab.disabled) {
+      return;
+    }
+
+    for (const tabElement of _tabs) {
+      tabElement.active = tabElement === tab;
+    }
+
+    this.dispatchEvent(
+      new Event("change", { bubbles: true, cancelable: true })
+    );
+  }
+}
+
+@customElement("v-tab")
+export class VerticalTab extends LitElement {
+  static styles?: CSSResultGroup = css`
+    .button {
+      position: relative;
+      overflow: hidden;
+      transition: background-color 150ms ease, color 150ms ease;
+      user-select: none;
+      text-align: center;
+      padding: 10px;
+      z-index: 0;
+      border-radius: 8px 0 0 8px; /* Rounded left corners */
+      margin: 0 0 2px 0; /* Small space below button */
+      background-color: #8b0000; /* Default dark red */
+      color: white; /* Default white text */
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      background-color: #6b0000;
+    }
+
+    .button.active {
+      background-color: white;
+      color: black;
+      border-color: #8b0000;
+      z-index: 1;
+    }
+
+    .button:focus {
+      outline: none;
+      box-shadow: 0 0 4px #8b0000;
+    }
+
+    .button.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    ${rippleCSS}
+  `;
+
+  @property({ type: String, attribute: "panel-id" }) accessor panelId: string = "";
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
+  @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
+
+  protected render(): HTMLTemplateResult {
+    return html`
+      <div
+        class="button ${classMap({
+      active: this.active,
+      disabled: this.disabled,
+    })}"
+        role="tab"
+        @click=${this._handleClick}
+      >
+        <slot></slot>
+      </div>
+    `;
+  }
+
+  private _handleClick(event: MouseEvent): void {
+    event.stopPropagation();
+    this.click();
+    createRipple(event);
+  }
+}
+
+@customElement("vertical-panel")
+export class VerticalPanel extends LitElement {
+  static styles?: CSSResultGroup = css`
+    div {
+      display: none;
+    }
+
+    div.active {
+      display: block;
+      background-color: white;
+      border-color: #fff;
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+      color: black;
+    }
+  `;
+
+  @property({ type: Boolean, reflect: true }) accessor active: boolean = false;
+
+  protected render(): HTMLTemplateResult {
+    return html`
+      <div class="${classMap({ active: this.active })}">
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+
