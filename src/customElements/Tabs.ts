@@ -337,7 +337,7 @@ export class VerticalTab extends LitElement {
       padding: 10px;
       z-index: 0;
       border-radius: 8px 0 0 8px; /* Rounded left corners */
-      margin: 0 0 3px 5px; /* Small space below button */
+      margin: 0 0 3px 10px; /* Small space below button */
       background: #8d0000;
       color: white; /* Default white text */
       font-family: 'Roboto', sans-serif;
