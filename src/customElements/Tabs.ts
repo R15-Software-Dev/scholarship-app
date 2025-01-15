@@ -266,7 +266,7 @@ export class TabPanel extends LitElement {
 export class TabCol extends LitElement {
   static styles?: CSSResultGroup = css`
     div {
-      background-color: lightgray;
+      background-color: var(--theme-primary-color);
       height: 100vh;
       width: 200px;
       display: flex;
@@ -338,7 +338,7 @@ export class VerticalTab extends LitElement {
       z-index: 0;
       border-radius: 8px 0 0 8px; /* Rounded left corners */
       margin: 0 0 3px 5px; /* Small space below button */
-      background-color: var(--theme-primary-color); /* Default dark red */
+      background: #8d0000;
       color: white; /* Default white text */
       font-family: 'Roboto', sans-serif;
       font-size: 16px;
@@ -430,12 +430,12 @@ export class Section extends LitElement {
       .section {
           position: relative;
           overflow: hidden;
-          text-align: center;
+          text-align: left;
           padding: 10px;
           margin: 0 0 3px 0; /* Small space below button */
-          background-color: #8d0000; /* Default dark red */
-          border-style: solid;
-          border-color: #880000;
+          background-color: var(--theme-primary-color); /* Default dark red */
+          //border-style: solid;
+          //border-color: #880000;
           color: white; /* Default white text */
           font-family: 'Roboto', sans-serif;
           font-size: 18px;
