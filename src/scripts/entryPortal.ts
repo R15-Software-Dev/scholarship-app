@@ -54,35 +54,57 @@ $(async function () {
   const loader = $(".loader");
   loader.show();
   // First get the information from the database
-  const response = await fetch("/providers/info/all", { method: "get" });
-  const scholarship = await response.json() as Scholarship;
-
-  // Use the information on each input.
-  // We'll use the response JSON's entry names as selectors.
-  Object.entries(scholarship).forEach(([key, value]) => {
-    // Update the corresponding input element with the value
-    if (value !== null) {
-      let input: InputElement = document.querySelector(`#${key}Input`);
-      console.log(`Setting value of input ${key}Input`);
-      // Check the type of the value
-      if (typeof value === "object") {
-        // This should be iterated over (we can only receive string[] as an object)
-        console.log("Found string[] value");
-        // TODO Find a better way of doing this, along with the API definitions.
-        //@ts-ignore
-        value = value as string[];
-        //@ts-ignore
-        value.forEach((item) => {
-          (input as Checkbox).checkValue(item);
-        })
+  const response = fetch("/providers/info/all", { method: "get" })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
       } else {
-        // We can set the value normally
-        input.value = value;
+        throw new Error(`HTTP Error ${response.status} - ${response.statusText}`);
       }
-    }
-  });
-  // Fade out the loader
-  loader.fadeOut("fast");
+    })
+    .then(data => {
+      console.log("Got information successfully");
+      const scholarship = data as Scholarship;
+
+      // Use the information on each input.
+      // We'll use the response JSON's entry names as selectors.
+      Object.entries(scholarship).forEach(([key, value]) => {
+        // Update the corresponding input element with the value
+        if (value !== null) {
+          let input: InputElement = document.querySelector(`#${key}Input`);
+          console.log(`Setting value of input ${key}Input`);
+          // Check the type of the value
+          if (typeof value === "object") {
+            // This should be iterated over (we can only receive string[] as an object)
+            console.log("Found string[] value");
+            // TODO Find a better way of doing this, along with the API definitions.
+            //@ts-ignore
+            value = value as string[];
+            //@ts-ignore
+            value.forEach((item) => {
+              (input as Checkbox).checkValue(item);
+            })
+          } else {
+            // TODO Again find a better way of doing this.
+            // We can set the value normally
+            input.value = value;
+          }
+        }
+      });
+      // Fade out the loader
+      loader.fadeOut("fast");
+    })
+    .catch(error => {
+      console.log(`Error fetching: ${error}`);
+      loader.html(`<div><p>${error.message}</p><p>Please try again later, or send a bug report to <a href="mailto:developers@region15.org">developers@region15.org</a></p></div>`);
+    })
+    .finally(() => {
+      console.log("Finished loading.");
+    });
+
+  // const scholarship = await response.json() as Scholarship;
+
+
   //#endregion
 
 });
