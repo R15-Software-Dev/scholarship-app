@@ -62,9 +62,9 @@ $(async function () {
         throw new Error(`HTTP Error ${response.status} - ${response.statusText}`);
       }
     })
-    .then(scholarship => {
+    .then(data => {
       console.log("Got information successfully");
-      scholarship = scholarship as Scholarship;
+      const scholarship = data as Scholarship;
 
       // Use the information on each input.
       // We'll use the response JSON's entry names as selectors.
