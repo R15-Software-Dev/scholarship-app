@@ -96,7 +96,7 @@ $(async function () {
     })
     .catch(error => {
       console.log(`Error fetching: ${error}`);
-      loader.html(`<div><p>${error.message}</p><p>Please try again later.</p></div>`);
+      loader.html(`<div><p>${error.message}</p><p>Please try again later, or send a bug report to <a href="mailto:developers@region15.org">developers@region15.org</a></p></div>`);
     })
     .finally(() => {
       console.log("Finished loading.");
