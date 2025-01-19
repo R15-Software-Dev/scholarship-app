@@ -158,13 +158,20 @@
           display: block;
         }
     }
+
+    div .center-all {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
   </style>
   <body>
     <div class="login-container">
       <div class="banner">
         <div class="left-section">
           <div class="logo">
-            <img src="images/PHS_Stacked_Acronym.png" alt="Logo">
+            <img src="./images/PHS_Stacked_Acronym.png" alt="Logo">
           </div>
           <div class="banner-text">
             <h1>Scholarship Provider Login</h1>
@@ -211,8 +218,8 @@
             <div class="register-text">
               <span>Don't have an account? <a href="#" id="register-link">Click here to register</a></span>
             </div>
-            <div class="relative-wrapper">
-              <button class="login-button" id="loginButton" type="submit">Sign in</button>
+            <div class="center-all">
+              <action-button id="loginButton" type="submit">Sign in</action-button>
             </div>
           </form>
         </div>
@@ -262,8 +269,8 @@
             >
             </small-outlined-text-field>
           </form-question>
-          <div class="relative-wrapper">
-            <button class="login-button" id="registerButton" type="submit"> Register </button>
+          <div class="center-all">
+            <action-button id="registerButton" type="submit">Register</action-button>
           </div>
         </form>
       </tab-panel>
