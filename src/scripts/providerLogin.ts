@@ -1,4 +1,5 @@
 ﻿import { FormQuestion } from "../customElements/Forms";
+import {ActionButton} from "../customElements/ActionButton";
 
 $(function() {
   const allQuestionsGlobal = document.querySelectorAll('form-question') as NodeListOf<FormQuestion>;
@@ -13,6 +14,7 @@ $(function() {
     const allInputs = form.querySelectorAll("form-question") as NodeListOf<FormQuestion>;
     const emailInput = this.querySelector("#loginEmailInput") as FormQuestion;
     const passwordInput = this.querySelector("#loginPasswordInput") as FormQuestion;
+    const loginButton = this.querySelector("#loginButton") as ActionButton;
 
     allInputs.forEach(question => question.input.clearError());
 
@@ -36,12 +38,10 @@ $(function() {
 
       // Send these values to the API and wait for a response.
       // We'll react to the response's statusCode accordingly.
-      // The API url will need to match our API's url and be tested through AWS as well.
-      const pendingButton = $('#loginButton');
       const loginErrorDiv = $('#divErrorLogin');
 
       try {
-        pendingButton.addClass("disabled");
+        loginButton.setAttribute("disabled", "true");
         loginErrorDiv.removeClass('shown');
         const response = await fetch("/providers/login", {
           method: "POST",
@@ -66,7 +66,7 @@ $(function() {
       } catch (e) {
         console.log(e);
       } finally {
-        pendingButton.removeClass("disabled");
+        loginButton.removeAttribute("disabled");
       }
     }
   });
@@ -87,11 +87,11 @@ $(function() {
     const passwordConfirm = passwordInputTwo.getValue();
 
     const registerErrorDiv = $('#divErrorRegister');
-    const pendingButton = $('#registerButton');
+    const registerButton = this.querySelector("#registerButton");
 
     try {
       registerErrorDiv.removeClass("shown");
-      pendingButton.addClass("disabled");
+      registerButton.setAttribute("disabled", "true");
 
       allQuestions.forEach((question) => question.input.clearError());
 
@@ -149,7 +149,7 @@ $(function() {
     } catch (e) {
       console.log(`Caught exception during registration: ${e}`);
     } finally {
-      pendingButton.removeClass("disabled");
+      registerButton.removeAttribute("disabled");
     }
   });
 

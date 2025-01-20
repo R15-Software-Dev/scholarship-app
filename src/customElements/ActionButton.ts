@@ -23,6 +23,7 @@ export class ActionButton extends LitElement {
         &.disabled {
             transition: background-color 0.2s linear;
             background-color: dimgrey;
+            pointer-events: none;
         }
     }
       
