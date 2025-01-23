@@ -59,6 +59,10 @@ $(async function () {
       if (response.ok) {
         return response.json();
       } else {
+        if (response.status === 401) {
+          // If unauthorized, return user to the login page.
+          window.location.href = "/providerLogin.html";
+        }
         throw new Error(`HTTP Error ${response.status} - ${response.statusText}`);
       }
     })
