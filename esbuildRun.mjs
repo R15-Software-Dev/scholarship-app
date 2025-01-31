@@ -11,7 +11,8 @@ const buildConfig = {
     "./src/scripts/index.js",
     "./src/scripts/stickyScrolling.js",
     "./src/scripts/providerLogin.ts",
-    "./src/scripts/switchTab.ts"
+    "./src/scripts/switchTab.ts",
+    "./src/scripts/passwordReset.ts"
   ],
   outdir: "./dist/bundles",
   outExtension: {
