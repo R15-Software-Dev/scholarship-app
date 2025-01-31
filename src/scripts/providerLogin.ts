@@ -193,4 +193,13 @@ $(function() {
       }
     }
   });
+
+// Redirect user to password reset page
+  const resetPassLink = $('#reset-password');
+
+  resetPassLink.on('click', function (event){
+    event.preventDefault();
+    window.location.replace("./passwordReset.html");
+  })
+
 })
