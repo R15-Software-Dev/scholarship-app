@@ -31,7 +31,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     AttributesToGet: [
       "Password",
       "Email",
-      "ScholarshipID"
+      "ScholarshipID",
+      "ExpiredPassword"
     ]
   });
 
@@ -68,6 +69,16 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
         statusCode: 401,
         body: JSON.stringify({
           message: "Incorrect password"
+        })
+      };
+    }
+
+    // Check if the user must reset their password. If they do, we'll return a response stating so.
+    if (dbresponse.Item.ExpiredPassword.BOOL) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: "Password must be reset"
         })
       };
     }
