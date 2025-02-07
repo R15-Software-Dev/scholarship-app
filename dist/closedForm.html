@@ -52,22 +52,25 @@
         .closedForm {
             width: 100%;
             height: 100%;
-            background: white;
+            background: pink;
             justify-content: center;
             align-items: center;
         }
 
         .text-box {
-            position: relative; /* Keep it in the center regardless of other content */
-            align-items: center;
-            justify-content: center;
-            top: 220px;
+            position: absolute; /* Keep it in the center regardless of other content */
+            left: 50%;
+            transform: translateX(-50%); /* Center it horizontally */
+            background-color: var(--theme-primary-color);
+            top: 280px;
             padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .text-box h1 {
-            margin: 0;
             font-size: 30px;
+            color: white;
             text-align: center;
         }
     </style>
@@ -89,7 +92,7 @@
     </div>
 
     <div class="text-box">
-        <h1> This form is no longer accepting submissions </h1>
+        <h1> This form is no longer accepting submissions. </h1>
     </div>
 
     </body>
