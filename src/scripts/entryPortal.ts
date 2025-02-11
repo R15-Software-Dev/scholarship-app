@@ -4,6 +4,9 @@ import {Checkbox} from "../customElements/Checkbox";
 import {FormQuestion} from "../customElements/Forms";
 
 $(async function () {
+  // Redirect to closedForm.html
+  window.location.replace("closedForm.html");
+
   // Handles showing the essay selections when the option to pick them is shown.
   document.querySelector("#essayRequirementInput").addEventListener("change", function () {
     const essayQuestion = $("#essaySelectionQuestion");

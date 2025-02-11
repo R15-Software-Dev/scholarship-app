@@ -2,6 +2,9 @@
 import {ActionButton} from "../customElements/ActionButton";
 
 $(function() {
+  // Redirect to closedForm.html
+  window.location.replace("closedForm.html");
+
   const allQuestionsGlobal = document.querySelectorAll('form-question') as NodeListOf<FormQuestion>;
   // We will need to get the values for the form submission manually
   // Set up a listener on the login form
@@ -56,6 +59,10 @@ $(function() {
         const responseJson = await response.json();
 
         if (responseJson.message === "Login successful") {
+          //If it has not passed scholarship due date (2/3)
+          // Submit date id = "submitDate"
+          // If submitDate < currentDate : redirect to closedForm.html
+
           // Redirect to the entryPortal page.
           window.location.replace("./entryPortal.html");
           loginErrorDiv.removeClass("shown");
