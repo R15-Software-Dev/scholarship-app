@@ -6,9 +6,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
   <script
-          src="https://code.jquery.com/jquery-3.7.1.min.js"
-          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-          crossorigin="anonymous"></script>
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
   <script src="./bundles/customElements/customElements.bundle.js" type="module"></script>
   <script src="./bundles/scripts/studentEntry.bundle.js" defer></script>
   <script src="./bundles/scripts/tabs.bundle.js" defer></script>
@@ -17,288 +17,284 @@
   <title>R15 Student Information Form</title>
 </head>
 
-</head>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-  }
-
-  .banner-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    transition: box-shadow 0.3s; /* Add shadow transition */
-    &.sticky-shadow {
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);  /* Add shadow when sticky */
-      transition: box-shadow 0.3s; /* Add shadow transition */
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
     }
-  }
 
-  .banner {
-    height: 80px;
-    background-color: var(--theme-primary-color); /* Dark red */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5px 5px;
-  }
+    .banner-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      transition: box-shadow 0.3s; /* Add shadow transition */
+      &.sticky-shadow {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);  /* Add shadow when sticky */
+        transition: box-shadow 0.3s; /* Add shadow transition */
+      }
+    }
 
-  .left-section {
-    display: flex;
-    align-items: center;
-  }
+    .banner {
+      height: 80px;
+      background-color: var(--theme-primary-color); /* Dark red */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px 5px;
+    }
 
-  .logo {
-    width: 75px;
-    height: 70px;
-    margin-right: 10px; /* Space between logo and text */
-  }
+    .left-section {
+      display: flex;
+      align-items: center;
+    }
 
-  .logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+    .logo {
+      width: 75px;
+      height: 70px;
+      margin-right: 10px; /* Space between logo and text */
+    }
 
-  .banner-text h1 {
-    margin: 0;
-    font-size: 18px;
-    color: white; /* White text for contrast */
-    text-align: left;
-  }
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
-  .text-box {
-    position: absolute; /* Keep it in the center regardless of other content */
-    left: 50%;
-    transform: translateX(-50%); /* Center it horizontally */
-    background-color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
+    .banner-text h1 {
+      margin: 0;
+      font-size: 18px;
+      color: white; /* White text for contrast */
+      text-align: left;
+    }
 
-  .text-box h1 {
-    margin: 0;
-    font-size: 20px;
-    color: var(--theme-primary-color); /* Match banner color for contrast */
-    text-align: center;
-  }
+    .text-box {
+      position: absolute; /* Keep it in the center regardless of other content */
+      left: 50%;
+      transform: translateX(-50%); /* Center it horizontally */
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
 
-  .right-logo {
-    width: 70px;
-    height: 70px;
-  }
-</style>
-<body>
-  <div class="banner-sticky">
-      <div class="banner">
-          <div class="left-section">
-              <div class="logo left-logo">
-                  <img src="./images/PHS_Stacked_Acronym.png" alt="Left Logo">
-              </div>
-              <div class="banner-text">
-                  <h1>Student Information Form</h1>
-              </div>
-          </div>
-          <div class="text-box">
-              <h1>Submission Date: 3/27/25</h1>
-          </div>
-          <div class="logo right-logo">
-              <img src="./images/R15_logo_colorMatchWhite.png" alt="Right Logo">
-          </div>
+    .text-box h1 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--theme-primary-color); /* Match banner color for contrast */
+      text-align: center;
+    }
+
+    .right-logo {
+      width: 70px;
+      height: 70px;
+    }
+  </style>
+
+  <body>
+    <div class="banner-sticky">
+    <div class="banner">
+      <div class="left-section">
+        <div class="logo left-logo">
+          <img src="./images/PHS_Stacked_Acronym.png" alt="Left Logo">
+        </div>
+        <div class="banner-text">
+          <h1>Student Information Form</h1>
+        </div>
       </div>
-      <tab-bar>
-          <c-tab active panel-id="personalInformationPanel">Personal Info</c-tab>
-          <c-tab panel-id="academicHonorsPanel">Academic Honors</c-tab>
-          <c-tab panel-id="athleticParticipationPanel">Athletic Participation</c-tab>
-          <c-tab panel-id="communityInvolvementPanel">Community Involvement</c-tab>
-          <c-tab panel-id="studentWorkExperiencePanel">Work Experience</c-tab>
-          <c-tab panel-id="extracurricularActivitiesPanel">Extracurricular Activities</c-tab>
-          <c-tab panel-id="universityDetailsPanel">University Details</c-tab>
-          <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
-          <c-tab panel-id="institutionalResourcesPanel">Institutional Resources</c-tab>
-          <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
-      </tab-bar>
+      <div class="text-box">
+        <h1>Submission Date: 3/27/25</h1>
+      </div>
+      <div class="logo right-logo">
+        <img src="./images/R15_logo_colorMatchWhite.png" alt="Right Logo">
+      </div>
+    </div>
+    <tab-bar>
+      <c-tab active panel-id="personalInformationPanel">Personal Info</c-tab>
+      <c-tab panel-id="academicHonorsPanel">Academic Honors</c-tab>
+      <c-tab panel-id="athleticParticipationPanel">Athletic Participation</c-tab>
+      <c-tab panel-id="communityInvolvementPanel">Community Involvement</c-tab>
+      <c-tab panel-id="studentWorkExperiencePanel">Work Experience</c-tab>
+      <c-tab panel-id="extracurricularActivitiesPanel">Extracurricular Activities</c-tab>
+      <c-tab panel-id="universityDetailsPanel">University Details</c-tab>
+      <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
+      <c-tab panel-id="institutionalResourcesPanel">Institutional Resources</c-tab>
+      <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
+    </tab-bar>
   </div>
 
-  <tab-panel id="personalInformationPanel">
-    <form-section
-      header="Personal Information"
-      name="personalInfo"
-      id="personalInformationForm"
-      action=""
-      method="">
+    <tab-panel id="personalInformationPanel">
+      <form-section
+        header="Personal Information"
+        name="personalInfo"
+        id="personalInformationForm"
+        action=""
+        method="">
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header"> First Name </h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header"> First Name </h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header"> Last Name </h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header"> Last Name </h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header"> Student ID Number</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header"> Student ID Number</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header"> Date of Birth (MM/DD/YYYY)</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header"> Date of Birth (MM/DD/YYYY)</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question>
-        <h3 slot="header">Select gender</h3>
-        <check-box inputType="radio"
-         radioOptions=
-         '["Male",
-          "Female",
-           "Prefer not to answer"]'
-         id=""
-         name=""
-         required>
-        </check-box>
-      </form-question>
+        <form-question>
+          <h3 slot="header">Select gender</h3>
+          <check-box inputType="radio"
+           radioOptions=
+           '["Male",
+            "Female",
+             "Prefer not to answer"]'
+           id=""
+           name=""
+           required>
+          </check-box>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">Current street address</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header">Current street address</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question>
-        <h3 slot="header">Current town</h3>
-        <check-box inputType="radio"
-         radioOptions=
-          '["Southbury",
-          "Middlebury"]'
-         id=""
-         name=""
-         required>
-        </check-box>
-      </form-question>
+        <form-question>
+          <h3 slot="header">Current town</h3>
+          <check-box inputType="radio"
+           radioOptions=
+            '["Southbury",
+            "Middlebury"]'
+           id=""
+           name=""
+           required>
+          </check-box>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">Preferred phone number</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header">Preferred phone number</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">Preferred email address</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header">Preferred email address</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">Unweighted GPA</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder=""
           required>
-        </outlined-text-field>
-      </form-question>
+          <h3 slot="header">Unweighted GPA</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder=""
+            required>
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">SAT Reading high score</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder="">
-        </outlined-text-field>
-      </form-question>
+          required>
+          <h3 slot="header">SAT Reading high score</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder="">
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">SAT Math high score</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder="">
-        </outlined-text-field>
-      </form-question>
+          required>
+          <h3 slot="header">SAT Math high score</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder="">
+          </outlined-text-field>
+        </form-question>
 
-      <form-question
-        id=""
-        required>
-        <h3 slot="header">ACT high score</h3>
-        <outlined-text-field
+        <form-question
           id=""
-          name=""
-          type=""
-          placeholder="">
-        </outlined-text-field>
-      </form-question>
-    </form-section>
-
-
-  </tab-panel>
-
-
-</body>
+          required>
+          <h3 slot="header">ACT high score</h3>
+          <outlined-text-field
+            id=""
+            name=""
+            type=""
+            placeholder="">
+          </outlined-text-field>
+        </form-question>
+      </form-section>
+    </tab-panel>
+  </body>
 </html>
