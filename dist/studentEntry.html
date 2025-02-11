@@ -91,25 +91,36 @@
     }
 </style>
 <body>
-<div class="banner-sticky">
-    <div class="banner">
-        <div class="left-section">
-            <div class="logo left-logo">
-                <img src="./images/PHS_Stacked_Acronym.png" alt="Left Logo">
+    <div class="banner-sticky">
+        <div class="banner">
+            <div class="left-section">
+                <div class="logo left-logo">
+                    <img src="./images/PHS_Stacked_Acronym.png" alt="Left Logo">
+                </div>
+                <div class="banner-text">
+                    <h1>Student Information Form</h1>
+                </div>
             </div>
-            <div class="banner-text">
-                <h1>Student Information Form</h1>
+            <div class="text-box">
+                <h1>Submission Date: 3/27/25</h1>
+            </div>
+            <div class="logo right-logo">
+                <img src="./images/R15_logo_colorMatchWhite.png" alt="Right Logo">
             </div>
         </div>
-        <div class="text-box">
-            <h1>Submission Date: 3/27/25</h1>
-        </div>
-        <div class="logo right-logo">
-            <img src="./images/R15_logo_colorMatchWhite.png" alt="Right Logo">
-        </div>
+        <tab-bar>
+            <c-tab active panel-id="personalInformationPanel">Personal Info</c-tab>
+            <c-tab panel-id="academicHonorsPanel">Academic Honors</c-tab>
+            <c-tab panel-id="athleticParticipationPanel">Athletic Participation</c-tab>
+            <c-tab panel-id="communityInvolvementPanel">Community Involvement</c-tab>
+            <c-tab panel-id="studentWorkExperiencePanel">Work Experience</c-tab>
+            <c-tab panel-id="extracurricularActivitiesPanel">Extracurricular</c-tab>
+            <c-tab panel-id="universityDetailsPanel">University</c-tab>
+            <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
+            <c-tab panel-id="institutionalResourcesPanel">Institutional Resources</c-tab>
+            <c-tab panel-id="fafsaPanel">FAFSA</c-tab>
+        </tab-bar>
     </div>
-
-</div>
 
 </body>
 </html>
