@@ -305,67 +305,57 @@
         action=""
         method="">
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">University Name</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="universityNameInput"
+              name="universityName"
+              type="text"
+              placeholder="Enter the university name"
               required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header"> University State</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="universityStateInput"
+              name="universityState"
+              type="text"
+              placeholder="Enter the universities state"
               required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">University City</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="universityCityInput"
+              name="universityCity"
+              type="text"
+              placeholder="Enter the universities city"
               required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">University Zip Code</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="universityZipCodeInput"
+              name="universityZipCode"
+              type="text"
+              placeholder="Enter the zip code"
               required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">Student's intended major</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="studentsMajorInput"
+              name="studentsMajor"
+              type="text"
+              placeholder="Enter students intended major"
               required>
           </outlined-text-field>
         </form-question>
@@ -373,23 +363,33 @@
         <form-question>
           <h3 slot="header">Field of study</h3>
           <drop-down
-              id=""
-              name=""
-              placeholder=""
+              id="studentStudyFieldInput"
+              name="studentStudyField"
+              placeholder="Select your field of study"
               required>
-            <option></option>
+            <option value="AG">Agriculture</option>
+            <option value="ARTS">Arts (Music/Arts/Performance/Composition/Cinema)</option>
+            <option value="BUSN">Business (Business/Finance/Accounting/Marketing)</option>
+            <option value="Comm">Communications (General/Journalism/Advertising)</option>
+            <option value="COMSERV">Community Services (General/Criminal Justice/Exercise Sci/Social Work)</option>
+            <option value="COMPMATH">Computers & Math (General/CS/CIS/IS/MIS/Cybersecurity)</option>
+            <option value="ENGRTECH">Engineering & Technology (General/Ag/Civil/Chem/Computer/Industrial/Aero)</option>
+            <option value="EDU">Education (General/Special/Childhood/Physical/Social Sciences)</option>
+            <option value="HEALTHSCI">Health Sciences & Services(Nursing/Dental/Radiology/Pre-med/Veterinary)</option>
+            <option value="LANGHUMAN">Language & Humanities (General/Literature/Philosophy/Religion)</option>
+            <option value="NTRLSCI">Natural Sciences (Animal/Bio/Chem/Phys/Geo)</option>
+            <option value="CONSTR">Repair & Construction (Fire/Construction MGMT/HVAC/Auto)</option>
+            <option value="SOCIAL">Social Sciences (Psychology,Sociology/Criminology/Political Sci/History)</option>
           </drop-down>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">Career student intends to pursue</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="studentCareerInput"
+              name="studentCareer"
+              type="text"
+              placeholder="Enter career"
               required>
           </outlined-text-field>
         </form-question>
@@ -400,62 +400,54 @@
             radioOptions=
               '["Yes",
               "No"]'
-             id=""
-             name=""
+             id="universityAcceptanceInput"
+             name="universityAcceptance"
              required>
           </check-box>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">Tuition cost</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="tuitionCostInput"
+              name="tuitionCost"
+              type="number"
+              placeholder="Enter an amount"
               prefix-text="$"
               required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">Room & board cost</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="roomBoardInput"
+              name="roomBoard"
+              type="number"
+              placeholder="Enter an amount"
               prefix-text="$"
               required>
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">Travel costs</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="travelCostsInput"
+              name="travelCosts"
+              type="number"
+              placeholder="Enter an amount"
               prefix-text="$">
           </outlined-text-field>
         </form-question>
 
-        <form-question
-            id=""
-            required>
+        <form-question>
           <h3 slot="header">Miscellaneous costs</h3>
           <outlined-text-field
-              id=""
-              name=""
-              type=""
-              placeholder=""
+              id="miscCostsInput"
+              name="miscCosts"
+              type="number"
+              placeholder="Enter an amount"
               prefix-text="$">
           </outlined-text-field>
         </form-question>
