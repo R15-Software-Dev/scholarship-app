@@ -130,9 +130,7 @@
         action=""
         method="">
 
-        <form-question
-          id="studentFirstNameQuestion"
-          required>
+        <form-question>
           <h3 slot="header"> First Name </h3>
           <outlined-text-field
             id="studentFirstNameInput"
@@ -143,9 +141,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="studentLastNameQuestion"
-          required>
+        <form-question>
           <h3 slot="header"> Last Name </h3>
           <outlined-text-field
             id="studentLastNameInput"
@@ -156,9 +152,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="studentIDNumberQuestion"
-          required>
+        <form-question>
           <h3 slot="header"> Student ID Number</h3>
           <outlined-text-field
             id="studentIDNumberInput"
@@ -169,9 +163,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="studentBirthDateQuestion"
-          required>
+        <form-question>
           <h3 slot="header"> Date of Birth (MM/DD/YYYY)</h3>
           <outlined-text-field
             id="studentBirthDateInput"
@@ -195,9 +187,7 @@
           </check-box>
         </form-question>
 
-        <form-question
-          id="streetAddressQuestion"
-          required>
+        <form-question>
           <h3 slot="header">Current street address</h3>
           <outlined-text-field
             id="streetAddressInput"
@@ -220,9 +210,7 @@
           </check-box>
         </form-question>
 
-        <form-question
-          id="studentPhoneNumberQuestion"
-          required>
+        <form-question>
           <h3 slot="header">Preferred phone number</h3>
           <outlined-text-field
             id="studentPhoneNumberInput"
@@ -233,9 +221,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="studentEmailQuestion"
-          required>
+        <form-question>
           <h3 slot="header">Preferred email address</h3>
           <outlined-text-field
             id="studentEmailInput"
@@ -246,9 +232,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="unweightedGPAQuestion"
-          required>
+        <form-question>
           <h3 slot="header">Unweighted GPA</h3>
           <outlined-text-field
             id="unweightedGPAInput"
@@ -259,9 +243,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="readingScoreSATQuestion"
-          required>
+        <form-question>
           <h3 slot="header">SAT Reading high score</h3>
           <outlined-text-field
             id="readingScoreSATInput"
@@ -271,9 +253,7 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="mathScoreSATQuestion"
-          required>
+        <form-question>
           <h3 slot="header">SAT Math high score</h3>
           <outlined-text-field
             id="mathScoreSATInput"
@@ -283,15 +263,170 @@
           </outlined-text-field>
         </form-question>
 
-        <form-question
-          id="highScoreSATQuestion"
-          required>
+        <form-question>
           <h3 slot="header">ACT high score</h3>
           <outlined-text-field
             id="highScoreSATInput"
             name="highScoreSAT"
             type="number"
             placeholder="Enter ACT high score">
+          </outlined-text-field>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="universityDetailsPanel">
+      <form-section
+        header="University Details"
+        name="universityDetails"
+        id="universityDetailsForm"
+        action=""
+        method="">
+
+        <form-question>
+          <h3 slot="header">University Name</h3>
+          <outlined-text-field
+              id="universityNameInput"
+              name="universityName"
+              type="text"
+              placeholder="Enter the university name"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header"> University State</h3>
+          <outlined-text-field
+              id="universityStateInput"
+              name="universityState"
+              type="text"
+              placeholder="Enter the universities state"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">University City</h3>
+          <outlined-text-field
+              id="universityCityInput"
+              name="universityCity"
+              type="text"
+              placeholder="Enter the universities city"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">University Zip Code</h3>
+          <outlined-text-field
+              id="universityZipCodeInput"
+              name="universityZipCode"
+              type="text"
+              placeholder="Enter the zip code"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Student's intended major</h3>
+          <outlined-text-field
+              id="studentsMajorInput"
+              name="studentsMajor"
+              type="text"
+              placeholder="Enter students intended major"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Field of study</h3>
+          <drop-down
+              id="studentStudyFieldInput"
+              name="studentStudyField"
+              placeholder="Select your field of study"
+              required>
+            <option value="AG">Agriculture</option>
+            <option value="ARTS">Arts (Music/Arts/Performance/Composition/Cinema)</option>
+            <option value="BUSN">Business (Business/Finance/Accounting/Marketing)</option>
+            <option value="Comm">Communications (General/Journalism/Advertising)</option>
+            <option value="COMSERV">Community Services (General/Criminal Justice/Exercise Sci/Social Work)</option>
+            <option value="COMPMATH">Computers & Math (General/CS/CIS/IS/MIS/Cybersecurity)</option>
+            <option value="ENGRTECH">Engineering & Technology (General/Ag/Civil/Chem/Computer/Industrial/Aero)</option>
+            <option value="EDU">Education (General/Special/Childhood/Physical/Social Sciences)</option>
+            <option value="HEALTHSCI">Health Sciences & Services(Nursing/Dental/Radiology/Pre-med/Veterinary)</option>
+            <option value="LANGHUMAN">Language & Humanities (General/Literature/Philosophy/Religion)</option>
+            <option value="NTRLSCI">Natural Sciences (Animal/Bio/Chem/Phys/Geo)</option>
+            <option value="CONSTR">Repair & Construction (Fire/Construction MGMT/HVAC/Auto)</option>
+            <option value="SOCIAL">Social Sciences (Psychology,Sociology/Criminology/Political Sci/History)</option>
+          </drop-down>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Career student intends to pursue</h3>
+          <outlined-text-field
+              id="studentCareerInput"
+              name="studentCareer"
+              type="text"
+              placeholder="Enter career"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Has the student received acceptance from the university?</h3>
+          <check-box inputType="radio"
+            radioOptions=
+              '["Yes",
+              "No"]'
+             id="universityAcceptanceInput"
+             name="universityAcceptance"
+             required>
+          </check-box>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Tuition cost</h3>
+          <outlined-text-field
+              id="tuitionCostInput"
+              name="tuitionCost"
+              type="number"
+              placeholder="Enter an amount"
+              prefix-text="$"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Room & board cost</h3>
+          <outlined-text-field
+              id="roomBoardInput"
+              name="roomBoard"
+              type="number"
+              placeholder="Enter an amount"
+              prefix-text="$"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Travel costs</h3>
+          <outlined-text-field
+              id="travelCostsInput"
+              name="travelCosts"
+              type="number"
+              placeholder="Enter an amount"
+              prefix-text="$">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Miscellaneous costs</h3>
+          <outlined-text-field
+              id="miscCostsInput"
+              name="miscCosts"
+              type="number"
+              placeholder="Enter an amount"
+              prefix-text="$">
           </outlined-text-field>
         </form-question>
       </form-section>
