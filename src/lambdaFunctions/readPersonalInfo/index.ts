@@ -3,6 +3,11 @@ import { AWSRequest, AWSResponse } from '../types/types';
 
 const client = new DynamoDBClient({region: "us-east-1"});
 
+/**
+ * Reads personal information data from the ___ table
+ * @param {string}event - The student ID
+ * @returns The students personal information
+ */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const input = JSON.parse(event.body);
 
