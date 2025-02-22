@@ -6,7 +6,7 @@ const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Reads family data from the ___ table
- * @param {string} event - The scholarship name
+ * @param {string} event - The student ID
  * @returns family information
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
