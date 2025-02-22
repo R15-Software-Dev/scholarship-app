@@ -25,6 +25,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "readingScoreSAT",
       "mathScoreSAT",
       "highScoreACT",
+      "attendBAS"
     ]
   });
 
