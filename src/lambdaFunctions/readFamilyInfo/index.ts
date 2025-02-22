@@ -22,7 +22,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "numChildAttendCollege",
       "guardianOneName",
       "guardianOneRelation",
-      "guardianOneAge",
       "guardianOneOccupation",
       "guardianOneEmployer",
       "guardianTwoName",
