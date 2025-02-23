@@ -1,22 +1,22 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { AWSRequest, AWSResponse} from "./../types/types";
+import {AWSRequest, AWSResponse, UniversityDetails} from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
- * Creates and or updates a record in the ___ table in DynamoDb
- * @param event -
+ * Creates and or updates a record in the student applications table in DynamoDb
+ * @param {UniversityDetails}event - A university details object
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
-  const /*university*/info /*studentUniversityInfo*/ = JSON.parse(event.body);
+  const universityInfo: UniversityDetails = JSON.parse(event.body);
 
   // Create variable for the student table IDs corresponding cookie
 
   // Create a command to update everything that may be entered in the university details form
   const command = new UpdateItemCommand({
-    TableName: "",
+    TableName: "student-applications",
     Key: {
       //Key
     },
@@ -36,19 +36,19 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#miscCosts": "miscCosts"
     },
     ExpressionAttributeValues: {
-      ":universityDetails": {S: info.universityDetails},
-      ":universityName": {S: info.universityName},
-      ":universityState": {S: info.universityState},
-      ":universityCity": {S: info.universityCity},
-      ":universityZipCode": {S: info.universityZipCode},
-      ":studentsMajor": {S: info.studentsMajor},
-      ":studentStudyField": {S: info.studentStudyField},
-      ":studentCareer": {S: info.studentCareer},
-      ":universityAcceptance": {SS: JSON.parse(info.universityAcceptance)},
-      ":tuitionCost": {N: info.tuitionCost.toString()},
-      ":roomBoard": {N: info.roomBoard.toString()},
-      ":travelCosts": {N: info.travelCosts.toString()},
-      ":miscCosts": {N: info.miscCosts.toString()}
+      ":universityDetails": {S: universityInfo.universityDetails},
+      ":universityName": {S: universityInfo.universityName},
+      ":universityState": {S: universityInfo.universityState},
+      ":universityCity": {S: universityInfo.universityCity},
+      ":universityZipCode": {S: universityInfo.universityZipCode},
+      ":studentsMajor": {S: universityInfo.studentsMajor},
+      ":studentStudyField": {S: universityInfo.studentStudyField},
+      ":studentCareer": {S: universityInfo.studentCareer},
+      ":universityAcceptance": {SS: JSON.parse(universityInfo.universityAcceptance)},
+      ":tuitionCost": {N: universityInfo.tuitionCost.toString()},
+      ":roomBoard": {N: universityInfo.roomBoard.toString()},
+      ":travelCosts": {N: universityInfo.travelCosts.toString()},
+      ":miscCosts": {N: universityInfo.miscCosts.toString()}
     },
     UpdateExpression: "SET #universityDetails = :universityDetails," +
       "#universityName = :universityName," +
