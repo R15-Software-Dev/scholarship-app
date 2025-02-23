@@ -55,7 +55,6 @@ export type UniversityDetails = {
   roomBoard: string;
   travelCosts?: string;
   miscCosts?: string;
-
 }
 
 export type InstitutionalResources = {
