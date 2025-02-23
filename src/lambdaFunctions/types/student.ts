@@ -44,3 +44,9 @@ export type FamilyInfo = {
 export type AcademicHonors = {
 
 }
+
+export type InstitutionalResources = {
+  grantsAwarded?: string;
+  totalSelfHelp?: string;
+  loansValue?: string;
+}
