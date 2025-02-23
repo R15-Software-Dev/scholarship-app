@@ -1,24 +1,25 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import {AWSRequest, AWSResponse, UniversityDetails} from "./../types/types";
+import {AWSRequest, AWSResponse, UniversityDetails } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Creates and or updates a record in the student applications table in DynamoDb
- * @param {UniversityDetails}event - A university details object
+ * @param {AWSRequest} event - Request that contains a university details object.
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const universityInfo: UniversityDetails = JSON.parse(event.body);
 
-  // Create variable for the student table IDs corresponding cookie
+  // Get the student email from the corresponding cookie
+  const studentEmail = event.headers.Cookie.match(/studentEmail=([^;]*)/)[1];
 
   // Create a command to update everything that may be entered in the university details form
   const command = new UpdateItemCommand({
     TableName: "student-applications",
     Key: {
-      //Key
+      studentEmail: {S: studentEmail}
     },
     ExpressionAttributeNames: {
       "#universityDetails": "universityDetails",
