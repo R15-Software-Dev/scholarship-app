@@ -127,23 +127,28 @@ export class ModalWindow extends LitElement {
       question.input.value = "";
     });
     this.hideModal(); // Hides modal after resetting form
+    this.clearInformation();
   }
 
   // Method will be triggered upon clicking the 'Save' button
   saveEvent(event: SubmitEvent) {
     event.preventDefault(); // Prevents any default form submissions
 
-    // Collects form data
-    const data = this.getInformation();
+    if (this.reportValidity()) {
+      // Collects form data
+      const data = this.getInformation();
 
-    // Hide modal
-    this.hideModal();
-    this.clearInformation();
+      // Hide modal
+      this.hideModal();
+      this.clearInformation();
 
-    // Add data to event, then allow the event to bubble
-    this.dispatchEvent(
-      new CustomEvent("submit", { detail: data, bubbles: true }),
-    );
+      // Add data to event, then allow the event to bubble
+      this.dispatchEvent(
+        new CustomEvent("submit", {detail: data, bubbles: true}),
+      );
+    } else {
+      this.reportValidity();
+    }
   }
 
   // Collects form data and returns it as JSON
@@ -156,9 +161,33 @@ export class ModalWindow extends LitElement {
     return returnValue;
   }
 
+  checkValidity(): boolean {
+    let valid = true;
+    this.questions.forEach(question => {
+      // Check if the question is valid.
+      valid = question.checkValidity();
+    });
+    return valid;
+  }
+
+  reportValidity(): boolean {
+    let valid = true;
+    this.questions.forEach(question => {
+      // Check if question is valid.
+      if (!question.checkValidity()) {
+        question.input.displayError("Invalid input.");
+        valid = false;
+      } else {
+        question.input.clearError();
+      }
+    })
+    return valid;
+  }
+
   clearInformation(): void {
     this.questions.forEach((question) => {
       question.input.value = "";
+      question.input.clearError();
     });
   }
 }
