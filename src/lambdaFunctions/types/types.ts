@@ -2,5 +2,4 @@
 
 export { AWSRequest, AWSResponse, AWSAuthRequest, AWSAuthResponse } from "./aws";
 export { ScholarshipContactInfo, ScholarshipInfo, ScholarshipEligibility, ScholarshipRequirements, Scholarship } from "./scholarship";
-export { StudentPersonalInfo, FamilyInfo, AcademicHonors, UniversityDetails, InstitutionalResources } from "./student";
-
+export { StudentPersonalInfo, AcademicHonors, AthleticParticipation, UniversityDetails, FamilyInfo, InstitutionalResources } from "./student";

@@ -45,6 +45,10 @@ export type AcademicHonors = {
   
 }
 
+export type AthleticParticipation = {
+  
+}
+
 /**
  *  Details about the students university
  */
