@@ -37,3 +37,9 @@ export type FamilyInfo = {
   armedServiceMember: string;
   familyChurchMember: string;
 }
+
+export type InstitutionalResources = {
+  grantsAwarded?: string;
+  totalSelfHelp?: string;
+  loansValue?: string;
+}
