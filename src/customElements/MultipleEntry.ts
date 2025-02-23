@@ -46,7 +46,19 @@ export class MultiEntry extends LitElement implements InputElement {
   @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
   @property({ type: String }) accessor name: string = "";
   @property({ type: String }) accessor id: string = "";
-  @property({ type: String }) accessor value: string = "";
+  @property({ type: String })
+    // accessor value: string = "";
+  get value(): string {
+    return this.getValue();
+  }
+  set value(value: string) {
+    this._value = JSON.parse(value);
+    if (this._value.length > 0) {
+      this._value.forEach(item => {
+        this.entryDiv.appendChild(this.elementFromObject(item));
+      })
+    }
+  }
   @property({ type: String, noAccessor: true, attribute: "display-members" })
   set members(value: string) {
     this._displayMembers = JSON.parse(value);
@@ -60,6 +72,7 @@ export class MultiEntry extends LitElement implements InputElement {
 
   _displayMembers: { [key: string]: string };
   _editing: boolean = false;
+  _value: ModalReturn[] = [];
 
   constructor() {
     super();
@@ -111,11 +124,15 @@ export class MultiEntry extends LitElement implements InputElement {
     // this.modal.showModal();
     let response = await this.modal.showModalAsync();
     if (response != null) {
-      let entryElement = new CustomEntry(this._displayMembers, response);
-      this.entryDiv.appendChild(entryElement);
-      entryElement.addEventListener("delete", (e) => entryElement.remove());
-      entryElement.addEventListener("click", async (_) => await this.editEntry(entryElement));
+      this.entryDiv.appendChild(this.elementFromObject(response));
     }
+  }
+
+  elementFromObject(obj: ModalReturn): CustomEntry {
+    let entryElement = new CustomEntry(this._displayMembers, obj);
+    entryElement.addEventListener("delete", (e) => entryElement.remove());
+    entryElement.addEventListener("click", async (_) => await this.editEntry(entryElement));
+    return entryElement;
   }
 
   checkValidity(): boolean {
@@ -131,12 +148,14 @@ export class MultiEntry extends LitElement implements InputElement {
   getValue(): string {
     // Returns the values associated with all the currently displayed entry elements.
     const rVal: ModalReturn[] = [];
-    this.entryDiv.querySelectorAll<CustomEntry>("custom-entry").forEach(
-      (entry: CustomEntry) => {
-        // add the displayed object into the array
-        rVal.push(entry.displayObject);
-      }
-    )
+    if (this.entryDiv) {
+      this.entryDiv.querySelectorAll<CustomEntry>("custom-entry").forEach(
+        (entry: CustomEntry) => {
+          // add the displayed object into the array
+          rVal.push(entry.displayObject);
+        }
+      )
+    }
 
     return JSON.stringify(rVal);
   }
