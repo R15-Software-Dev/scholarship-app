@@ -1,5 +1,5 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import {AWSRequest, AWSResponse, FamilyInfo} from "./../types/types";
+import {AWSRequest, AWSResponse, FamilyInfo } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
@@ -12,13 +12,14 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const familyInfo: FamilyInfo = JSON.parse(event.body);
 
-  // Create variable for the student table IDs corresponding cookie
+  // Get the student email from the passed cookie
+  const studentEmail = event.headers.Cookie.match(/studentEmail=([^;]*)/)[1];
 
   // Create a command to update everything that may be entered in the family info form
   const command = new UpdateItemCommand({
     TableName: "student-applications",
     Key: {
-      //Key
+      studentEmail: {S: studentEmail}
     },
     ExpressionAttributeNames: {
       "#numChildTotal": "numChildTotal",
