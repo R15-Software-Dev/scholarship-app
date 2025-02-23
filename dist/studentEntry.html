@@ -266,11 +266,22 @@
         <form-question>
           <h3 slot="header">ACT high score</h3>
           <outlined-text-field
-            id="highScoreSATInput"
-            name="highScoreSAT"
+            id="highScoreACTInput"
+            name="highScoreACT"
             type="number"
             placeholder="Enter ACT high score">
           </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Did you attend the Region 15 BAS (Before and After School) program for a minimum of one year?</h3>
+          <check-box inputType="radio"
+            radioOptions=
+             '["Yes",
+              "No"]'
+              id="attendBASInput"
+              name="attendBAS">
+          </check-box>
         </form-question>
       </form-section>
     </tab-panel>
@@ -512,17 +523,6 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 1 age</h3>
-          <outlined-text-field
-            id="guardianOneAgeInput"
-            name="guardianOneAge"
-            type="number"
-            placeholder="Enter your guardians age"
-            required>
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
           <h3 slot="header">Parent/Guardian 1 occupation (Enter N/A if not applicable)</h3>
           <outlined-text-field
             id="guardianOneOccupationInput"
@@ -540,18 +540,6 @@
             name="guardianOneEmployer"
             type="text"
             placeholder="Enter your guardians employer"
-            required>
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">Parent/Guardian 1 yearly income</h3>
-          <outlined-text-field
-            id="guardianOneIncomeInput"
-            name="guardianOneIncome"
-            type="number"
-            placeholder="Enter your guardians yearly income"
-            prefix-text="$"
             required>
           </outlined-text-field>
         </form-question>
@@ -585,16 +573,6 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 2 age</h3>
-          <outlined-text-field
-            id="guardianTwoAgeInput"
-            name="guardianTwoAge"
-            type="number"
-            placeholder="Enter your guardians age">
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
           <h3 slot="header">Parent/Guardian 2 occupation (Enter N/A if not applicable)</h3>
           <outlined-text-field
             id="guardianTwoOccupationInput"
@@ -615,84 +593,36 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 2 yearly income</h3>
-          <outlined-text-field
-            id="guardianTwoIncomeInput"
-            name="guardianTwoIncome"
-            type="number"
-            placeholder="Enter your guardians yearly income"
-            prefix-text="$">
-          </outlined-text-field>
+          <h3 slot="header">Is a member of your family a current Pomperaug Education Association (PEA) member?</h3>
+            <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                  "No"]'
+               id="familyPEAMemberInput"
+               name="familyPEAMember">
+            </check-box>
         </form-question>
 
-        <form-question>
-          <h3 slot="header">Do your parents/guardians own their home?</h3>
-          <check-box inputType="radio"
+          <form-question>
+            <h3 slot="header">Is a member of your family a current or veteran member of the armed services?</h3>
+            <check-box inputType="radio"
              radioOptions=
                '["Yes",
-               "No"]'
-             id="guardianOwnsHomeInput"
-             name="guardianOwnsHome"
-             required>
-          </check-box>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">If so, what is its value today?</h3>
-          <outlined-text-field
-            id="guardianHomeValueInput"
-            name="guardianHomeValue"
-            type="number"
-            placeholder="Enter the value of your home"
-            prefix-text="$">
-          </outlined-text-field>
-        </form-question>
-
-          <form-question>
-            <h3 slot="header">If not, how much is still owed?</h3>
-            <outlined-text-field
-              id="guardianHomeOwedInput"
-              name="guardianHomeOwed"
-              type="number"
-              placeholder="Enter the value owed"
-              prefix-text="$">
-            </outlined-text-field>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">Students' yearly income</h3>
-          <outlined-text-field
-            id="studentIncomeInput"
-            name="studentIncome"
-            type="number"
-            placeholder="Enter students yearly income"
-            prefix-text="$"
-            required="">
-          </outlined-text-field>
-        </form-question>
-
-          <form-question>
-            <h3 slot="header">Value of student's savings, stocks, investments, etc.</h3>
-            <outlined-text-field
-              id="studentSavingsInput"
-              name="studentSavings"
-              type="number"
-              placeholder="Enter value of students savings"
-              prefix-text="$"
-              required>
-            </outlined-text-field>
+                "No"]'
+              id="armedServiceMemberInput"
+              name="armedServiceMember">
+            </check-box>
           </form-question>
 
-        <form-question>
-          <h3 slot="header">Value of other sources of income (alimony, child support, etc.)</h3>
-          <outlined-text-field
-              id="incomeSourcesOtherInput"
-              name="incomeSourcesOther"
-              type="number"
-              placeholder="Enter value of other income sources"
-              prefix-text="$"
-              required>
-          </outlined-text-field>
+            <form-question>
+              <h3 slot="header">Are you the child or grand-child of a member of the Knights of Columbus or a member or parishioner of Mid-South Catholic Church?</h3>
+              <check-box inputType="radio"
+                radioOptions=
+                  '["Yes",
+                  "No"]'
+                   id="familyChurchMemberInput"
+                   name="familyChurchMember">
+              </check-box>
         </form-question>
       </form-section>
     </tab-panel>
