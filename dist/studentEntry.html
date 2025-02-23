@@ -119,6 +119,7 @@
       <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
       <c-tab panel-id="institutionalResourcesPanel">Institutional Resources</c-tab>
       <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
+      <c-tab panel-id="testPanel">Testing</c-tab>
     </tab-bar>
   </div>
 
@@ -429,6 +430,30 @@
               prefix-text="$">
           </outlined-text-field>
         </form-question>
+      </form-section>
+    </tab-panel>
+    <tab-panel id="testPanel">
+      <form-section
+        header="Testing Page"
+        name="testing"
+        id="testingForm"
+        action=""
+        method="">
+        <multi-entry
+          display-members='{"Name":"name","Number of Years":"numYears"}'>
+          <small-outlined-text-field
+            id="nameInput"
+            name="name"
+            type="text"
+            placeholder="Input a name">
+          </small-outlined-text-field>
+          <small-outlined-text-field
+            id="numYearsInput"
+            name="numYears"
+            type="text"
+            placeholder="Input the number of year participated">
+          </small-outlined-text-field>
+        </multi-entry>
       </form-section>
     </tab-panel>
   </body>

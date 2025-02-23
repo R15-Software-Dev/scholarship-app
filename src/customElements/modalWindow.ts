@@ -8,6 +8,13 @@ import {
   state,
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
+import {InputElement} from "./InputElement";
+import {SmallOutlinedTextField} from "./TextField";
+
+
+export type ModalReturn = {
+  [key: string]: string
+}
 
 @customElement("modal-window")
 export class ModalWindow extends LitElement {
@@ -46,12 +53,15 @@ export class ModalWindow extends LitElement {
       left: 0;
       height: 100vh;
       width: 100vw;
+      z-index: 99;
+      transition: opacity 150ms linear;
+        
+      &.show {
+        pointer-events: all;
+        opacity: 1;
+      }
     }
-    /* Class*/
-    .modal-container.show {
-      pointer-events: all;
-      opacity: 1;
-    }
+      
     .modal {
       background-color: #fff;
       border-radius: 5px;
@@ -59,10 +69,15 @@ export class ModalWindow extends LitElement {
       width: 600px;
       max-width: 100%;
       text-align: center;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
     }
 
     .modal p {
       font-size: 20px;
+    }
+      
+    small-outlined-text-field {
+      margin: 10px;
     }
   `;
   @property({ type: Boolean }) accessor _modalVisible: boolean = false;
@@ -73,8 +88,8 @@ export class ModalWindow extends LitElement {
   @query("#save") _saveButton!: HTMLButtonElement;
   @query("form") _form!: HTMLFormElement;
   //Array of inputs, Assigned Elements gets elements in slots
-  @queryAssignedElements({ selector: "input", flatten: true, slot: "content" })
-  accessor _inputs!: HTMLInputElement[];
+  @queryAssignedElements({ selector: "small-outlined-text-field", flatten: true })
+  accessor _inputs!: InputElement[];
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -85,9 +100,9 @@ export class ModalWindow extends LitElement {
         <div class="modal">
           <form @submit=${this.saveEvent}>
             <slot name="header"> </slot>
-            <slot name="content"> </slot>
-            <button id="cancel" @click=${this.cancelEvent}>Cancel</button>
-            <button id="save" type="submit">Save</button>
+            <slot></slot>
+            <action-button id="cancel" @click=${this.cancelEvent}>Cancel</action-button>
+            <action-button id="save" type="submit">Save</action-button>
           </form>
         </div>
       </div>
@@ -120,6 +135,7 @@ export class ModalWindow extends LitElement {
 
     // Hide modal
     this.hideModal();
+    this.clearInformation();
 
     // Add data to event, then allow the event to bubble
     this.dispatchEvent(
@@ -128,13 +144,18 @@ export class ModalWindow extends LitElement {
   }
 
   // Collects form data and returns it as JSON
-  getInformation() {
-    const formData = new FormData(); // Collects all input fields within the form
+  getInformation(): ModalReturn {
+    const returnValue: ModalReturn = {};
     // Loop collecting data
-    this._inputs.forEach((input) => {
-      formData.set(input.name, input.value); // Add input information to formData
+    this._inputs.forEach((input: InputElement) => {
+      returnValue[input.name] = input.getValue(); // Add input information to formData
     });
+    return returnValue;
+  }
 
-    return Object.fromEntries(formData.entries()); // Returns data as object
+  clearInformation(): void {
+    this._inputs.forEach((input: InputElement) => {
+      input.value = "";
+    });
   }
 }
