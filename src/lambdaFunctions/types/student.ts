@@ -38,8 +38,34 @@ export type FamilyInfo = {
   familyChurchMember: string;
 }
 
-export type AthleticParticipation = {
+/**
+ *  Academic honors information
+ */
+export type AcademicHonors = {
+  
+}
 
+export type AthleticParticipation = {
+  
+}
+
+/**
+ *  Details about the students university
+ */
+export type UniversityDetails = {
+  universityDetails: string;
+  universityName: string;
+  universityState: string;
+  universityCity: string;
+  universityZipCode: string;
+  studentsMajor: string;
+  studentStudyField: string;
+  studentCareer: string;
+  universityAcceptance: string;
+  tuitionCost: string;
+  roomBoard: string;
+  travelCosts?: string;
+  miscCosts?: string;
 }
 
 export type InstitutionalResources = {
