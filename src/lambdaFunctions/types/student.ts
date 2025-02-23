@@ -38,6 +38,10 @@ export type FamilyInfo = {
   familyChurchMember: string;
 }
 
+export type ExtracurricularActivities = {
+
+}
+
 export type InstitutionalResources = {
   grantsAwarded?: string;
   totalSelfHelp?: string;
