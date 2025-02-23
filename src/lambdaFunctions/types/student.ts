@@ -39,6 +39,13 @@ export type FamilyInfo = {
 }
 
 /**
+ *  Academic honors information
+ */
+export type AcademicHonors = {
+  
+}
+
+/**
  *  Details about the students university
  */
 export type UniversityDetails = {
