@@ -2,7 +2,7 @@
 /**
  *  All personal information about student
  */
-export type StudentInfo = {
+export type StudentPersonalInfo = {
   studentFirstName: string;
   studentLastName: string;
   studentIDNumber: number;
