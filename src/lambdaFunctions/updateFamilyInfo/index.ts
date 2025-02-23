@@ -1,22 +1,22 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { AWSRequest, AWSResponse} from "./../types/types";
+import {AWSRequest, AWSResponse, FamilyInfo} from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
- * Creates and or updates a record in the ___ table in DynamoDB
- * @param event -
+ * Creates and or updates a record in the student applications table in DynamoDB
+ * @param event - A family info object
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
-  const /*family*/info /*studentFamilyInfo*/ = JSON.parse(event.body);
+  const familyInfo: FamilyInfo = JSON.parse(event.body);
 
   // Create variable for the student table IDs corresponding cookie
 
   // Create a command to update everything that may be entered in the family info form
   const command = new UpdateItemCommand({
-    TableName: "",
+    TableName: "student-applications",
     Key: {
       //Key
     },
@@ -36,19 +36,19 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#familyChurchMember": "familyChurchMember"
     },
     ExpressionAttributeValues: {
-      ":numChildTotal": {S: info.numChildTotal},
-      ":numChildAttendCollege": {S: info.numChildAttendCollege},
-      ":guardianOneName": {S: info.guardianOneName},
-      ":guardianOneRelation": {S: info.guardianOneRelation},
-      ":guardianOneOccupation": {S: info.guardianOneOccupation},
-      ":guardianOneEmployer": {S: info.guardianOneEmployer},
-      ":guardianTwoName": {S: info.guardianTwoName},
-      ":guardianTwoRelation": {S: info.guardianTwoRelation},
-      ":guardianTwoOccupation": {S: info.guardianTwoOccupation},
-      ":guardianTwoEmployer": {S: info.guardianTwoEmployer},
-      ":familyPEAMember": {SS: JSON.parse(info.familyPEAMember)},
-      ":armedServiceMember": {SS: JSON.parse(info.armedServiceMember)},
-      ":familyChurchMember": {SS: JSON.parse(info.familyChurchMember)}
+      ":numChildTotal": {S: familyInfo.numChildTotal},
+      ":numChildAttendCollege": {S: familyInfo.numChildAttendCollege},
+      ":guardianOneName": {S: familyInfo.guardianOneName},
+      ":guardianOneRelation": {S: familyInfo.guardianOneRelation},
+      ":guardianOneOccupation": {S: familyInfo.guardianOneOccupation},
+      ":guardianOneEmployer": {S: familyInfo.guardianOneEmployer},
+      ":guardianTwoName": {S: familyInfo.guardianTwoName},
+      ":guardianTwoRelation": {S: familyInfo.guardianTwoRelation},
+      ":guardianTwoOccupation": {S: familyInfo.guardianTwoOccupation},
+      ":guardianTwoEmployer": {S: familyInfo.guardianTwoEmployer},
+      ":familyPEAMember": {SS: JSON.parse(familyInfo.familyPEAMember)},
+      ":armedServiceMember": {SS: JSON.parse(familyInfo.armedServiceMember)},
+      ":familyChurchMember": {SS: JSON.parse(familyInfo.familyChurchMember)}
     },
     UpdateExpression: "SET #numChildTotal = :numChildTotal," +
       "#numChildAttendCollege = :numChildAttendCollege," +
