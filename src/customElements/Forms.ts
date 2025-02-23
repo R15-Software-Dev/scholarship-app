@@ -137,7 +137,7 @@ export class FormSection extends LitElement {
   @query("action-button")
     accessor _buttonElement: ActionButton;
   @queryAssignedElements({ selector: "multi-entry" })
-    accessor _multiEntry: MultiEntry[];  // There should only ever be one per section for now.
+    accessor _multiEntries: MultiEntry[];  // There should only ever be one per section for now.
 
   private disableForm(): void {
     const questions = this._questions;
@@ -146,6 +146,9 @@ export class FormSection extends LitElement {
     questions.forEach((question) => {
       this._buttonElement.disabled = true;
       question.input.disabled = true;
+    });
+    this._multiEntries.forEach((multiEntry) => {
+      multiEntry.disabled = true;
     });
   }
 
@@ -157,6 +160,9 @@ export class FormSection extends LitElement {
       this._buttonElement.disabled = false;
       question.input.disabled = false;
     });
+    this._multiEntries.forEach((multiEntry) => {
+      multiEntry.disabled = false;
+    });
   }
 
   handleForm(event: SubmitEvent): void {
@@ -167,9 +173,9 @@ export class FormSection extends LitElement {
     this.disableForm();
 
     try {
-      if (this._multiEntry.length > 0) {
+      if (this._multiEntries.length > 0) {
         console.log("Running form with multi entries");
-        this._multiEntry.forEach(entry => {
+        this._multiEntries.forEach(entry => {
           formData.set(entry.name, entry.getValue());
         });
       } else {

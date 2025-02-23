@@ -89,7 +89,7 @@ export class MultiEntry extends LitElement implements InputElement {
         <slot name="entries"></slot>
       </div>
       <div class="center-all">
-        <action-button id="btnCreateEntry" @click=${this.createElement}>Add</action-button>
+        <action-button id="btnCreateEntry" @click=${this.createElement} ?disabled=${this.disabled}>Add</action-button>
       </div>
     </div>`;
   }
