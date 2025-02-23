@@ -20,6 +20,40 @@ export type StudentPersonalInfo = {
 }
 
 /**
+ *  Academic honors information
+ */
+export type AcademicHonors = {
+  
+}
+
+export type AthleticParticipation = {
+  
+}
+
+export type CommunityInvolvement = {
+
+}
+
+/**
+ *  Details about the students university
+ */
+export type UniversityDetails = {
+  universityDetails: string;
+  universityName: string;
+  universityState: string;
+  universityCity: string;
+  universityZipCode: string;
+  studentsMajor: string;
+  studentStudyField: string;
+  studentCareer: string;
+  universityAcceptance: string;
+  tuitionCost: string;
+  roomBoard: string;
+  travelCosts?: string;
+  miscCosts?: string;
+}
+
+/**
  *  Information about the students family
  */
 export type FamilyInfo = {
@@ -36,10 +70,6 @@ export type FamilyInfo = {
   familyPEAMember: string;
   armedServiceMember: string;
   familyChurchMember: string;
-}
-
-export type CommunityInvolvement = {
-
 }
 
 export type InstitutionalResources = {
