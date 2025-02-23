@@ -57,3 +57,9 @@ export type UniversityDetails = {
   miscCosts?: string;
 
 }
+
+export type InstitutionalResources = {
+  grantsAwarded?: string;
+  totalSelfHelp?: string;
+  loansValue?: string;
+}
