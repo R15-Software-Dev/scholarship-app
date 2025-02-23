@@ -10,7 +10,7 @@ const client = new DynamoDBClient({ region: "us-east-1" });
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
-  const /*student*/info /*studentPersonalInfo*/ = JSON.parse(event.body);
+  const studentInfo: StudentPersonalInfo = JSON.parse(event.body);
 
   // Create variable for the student table IDs corresponding cookie
 
@@ -37,20 +37,20 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#attendBAS": "attendBAS"
     },
     ExpressionAttributeValues: {
-      ":studentFirstName": {S: info.studentFirstName},
-      ":studentLastName": {S: info.studentLastName},
-      ":studentIDNumber": {N: info.studentIDNumber.toString()},
-      ":studentBirthDate": {S: info.studentBirthDate},
-      ":studentGender": {SS: JSON.parse(info.studentGender)},
-      ":streetAddress": {S: info.streetAddress},
-      ":studentTown": {SS: JSON.parse(info.studentTown)},
-      ":studentPhoneNumber": {S: info.studentPhoneNumber},
-      ":studentEmail": {S: info.studentEmail},
-      ":unweightedGPA": {S: info.unweightedGPA},
-      ":readingScoreSAT": {N: info.readingScoreSAT.toString()},
-      ":mathScoreSAT": {N: info.mathScoreSAT.toString()},
-      ":highScoreACT": {N: info.highScoreACT.toString()},
-      ":attendBAS": {SS: JSON.parse(info.attendBAS)}
+      ":studentFirstName": {S: studentInfo.studentFirstName},
+      ":studentLastName": {S: studentInfo.studentLastName},
+      ":studentIDNumber": {N: studentInfo.studentIDNumber.toString()},
+      ":studentBirthDate": {S: studentInfo.studentBirthDate},
+      ":studentGender": {SS: JSON.parse(studentInfo.studentGender)},
+      ":streetAddress": {S: studentInfo.streetAddress},
+      ":studentTown": {SS: JSON.parse(studentInfo.studentTown)},
+      ":studentPhoneNumber": {S: studentInfo.studentPhoneNumber},
+      ":studentEmail": {S: studentInfo.studentEmail},
+      ":unweightedGPA": {S: studentInfo.unweightedGPA},
+      ":readingScoreSAT": {N: studentInfo.readingScoreSAT.toString()},
+      ":mathScoreSAT": {N: studentInfo.mathScoreSAT.toString()},
+      ":highScoreACT": {N: studentInfo.highScoreACT.toString()},
+      ":attendBAS": {SS: JSON.parse(studentInfo.attendBAS)}
     },
     UpdateExpression: "SET #studentFirstName = :studentFirstName," +
       "#studentLastName = :studentLastName," +
