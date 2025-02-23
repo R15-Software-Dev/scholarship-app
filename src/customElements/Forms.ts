@@ -8,7 +8,8 @@ import {
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { InputElement } from "./InputElement";
-import {ActionButton} from "./ActionButton";
+import { ActionButton } from "./ActionButton";
+import { MultiEntry } from "./MultipleEntry";
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
@@ -129,10 +130,14 @@ export class FormSection extends LitElement {
   @state() private accessor _loading: boolean = false;
 
 
-  @query("form") accessor _formElement: HTMLFormElement;
+  @query("form")
+    accessor _formElement: HTMLFormElement;
   @queryAssignedElements({ selector: "form-question", flatten: true })
-  accessor _questions: FormQuestion[];
-  @query("action-button") accessor _buttonElement: ActionButton;
+    accessor _questions: FormQuestion[];
+  @query("action-button")
+    accessor _buttonElement: ActionButton;
+  @queryAssignedElements({ selector: "multi-entry" })
+    accessor _multiEntry: MultiEntry[];  // There should only ever be one per section for now.
 
   private disableForm(): void {
     const questions = this._questions;
@@ -155,52 +160,60 @@ export class FormSection extends LitElement {
   }
 
   handleForm(event: SubmitEvent): void {
+    let submittable = true;
+    let formData = new FormData();
+
     event.preventDefault();
     this.disableForm();
-    // Clears error messages when input is valid
-    this._questions.forEach((question) => question.input.clearError());
 
-    // First check if values are valid by calling checkValidity on
-    // all the form's inputs.
-    let submittable = true;
-    this._questions.forEach((question) => {
-      // Check validity of questions.
-      if (!question.checkValidity()) {
-        console.log(`Question ${question.input.name} is not valid.`);
-        question.input.displayError("Invalid input");
-        submittable = false;
+    try {
+      if (this._multiEntry.length > 0) {
+        console.log("Running form with multi entries");
+        this._multiEntry.forEach(entry => {
+          formData.set(entry.name, entry.getValue());
+        });
+      } else {
+        // build general question data.
+        // Clears error messages when input is valid
+        this._questions.forEach((question) => question.input.clearError());
+
+        // First check if values are valid by calling checkValidity on
+        // all the form's inputs.
+        this._questions.forEach((question) => {
+          // Check validity of questions.
+          if (!question.checkValidity()) {
+            console.log(`Question ${question.input.name} is not valid.`);
+            question.input.displayError("Invalid input");
+            submittable = false;
+          }
+        });
+
+        if (submittable) {
+          this._questions.forEach((question) => {
+            formData.set(question.input.name, question.input.getValue());
+          });
+        }
       }
-    });
 
-    // If the form has invalid responses, do not submit the form and display
-    // the error prompts underneath all the questions.
-    if (!submittable) {
-      // Enable questions again
+      if (submittable) {
+        console.log("information to submit: ")
+        console.log(Object.fromEntries(formData));
+        fetch(this.action, {
+          method: this.method,
+          body: JSON.stringify(Object.fromEntries(formData.entries())),
+        })
+          .then((response) => response.json)
+          .then((data) => {
+            console.log("Success: " + data);
+            this.dispatchEvent(new Event("submit-complete", {bubbles: true, composed: true}));
+            this._checkShown = true;
+          })
+      }
+    } catch (e) {
+      console.error(`An error occurred: ${e}`);
+    } finally {
       this.enableForm();
-      return;
     }
-
-    // Build the FormData to send to the API.
-    const formData = new FormData();
-
-    this._questions.forEach((question) => {
-      formData.set(question.input.name, question.input.getValue());
-    });
-
-    fetch(this.action, {
-      method: this.method,
-      body: JSON.stringify(Object.fromEntries(formData.entries())),
-    })
-      .then((response) => response.json)
-      .then((data) => {
-        console.log("Success: " + data);
-        this.dispatchEvent(new Event("submit-complete", { bubbles: true, composed: true }));
-        this._checkShown = true;
-      })
-      .catch((error) => {
-        console.error(`An error occurred: ${error}`);
-      })
-      .finally(() => this.enableForm())
   }
 
   protected render(): HTMLTemplateResult {
