@@ -1,5 +1,5 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { AWSRequest, AWSResponse} from "./../types/types";
+import {AWSRequest, AWSResponse, StudentPersonalInfo} from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
@@ -16,7 +16,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   // Create a command to update everything that may be entered in the personal info form
   const command = new UpdateItemCommand({
-    TableName: "",
+    TableName: "student-applications",
     Key: {
       //Key
     },
