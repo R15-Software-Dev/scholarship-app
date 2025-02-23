@@ -1,24 +1,25 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import {AWSRequest, AWSResponse, FamilyInfo} from "./../types/types";
+import {AWSRequest, AWSResponse, FamilyInfo } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Creates and or updates a record in the student applications table in DynamoDB
- * @param {FamilyInfo}event - A family info object
+ * @param {AWSRequest} event - Request that contains a family info object.
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const familyInfo: FamilyInfo = JSON.parse(event.body);
 
-  // Create variable for the student table IDs corresponding cookie
+  // Get the student email from the passed cookie
+  const studentEmail = event.headers.Cookie.match(/studentEmail=([^;]*)/)[1];
 
   // Create a command to update everything that may be entered in the family info form
   const command = new UpdateItemCommand({
     TableName: "student-applications",
     Key: {
-      //Key
+      Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
       "#numChildTotal": "numChildTotal",
@@ -70,6 +71,12 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     // Send the command
     const dbresponse = await client.send(command);
 
+    // Return that there was a success
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "Success" }),
+    };
+
   } catch (e) {
     console.error(e.message);
     // Return that there was an error
@@ -78,10 +85,4 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       body: JSON.stringify({ message: e.message }),
     }
   }
-
-  // Return that there was a success
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: "Success" }),
-  };
 }
