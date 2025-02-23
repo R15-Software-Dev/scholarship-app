@@ -5,7 +5,7 @@ const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Creates and or updates a record in the student applications table in DynamoDB
- * @param event - A family info object
+ * @param {FamilyInfo}event - A family info object
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
