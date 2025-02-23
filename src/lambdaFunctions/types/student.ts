@@ -37,3 +37,10 @@ export type FamilyInfo = {
   armedServiceMember: string;
   familyChurchMember: string;
 }
+
+/**
+ *  Academic honors information
+ */
+export type AcademicHonors = {
+
+}
