@@ -63,7 +63,7 @@ export class ModalWindow extends LitElement {
       
     .modal {
       background-color: #fff;
-      border-radius: 5px;
+      border-radius: 7px;
       padding: 30px 50px;
       width: 600px;
       max-width: 100%;

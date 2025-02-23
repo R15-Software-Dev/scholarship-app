@@ -113,7 +113,8 @@ export class MultiEntry extends LitElement implements InputElement {
     if (response != null) {
       let entryElement = new CustomEntry(this._displayMembers, response);
       this.entryDiv.appendChild(entryElement);
-      entryElement.onclick = async (_) => await this.editEntry(entryElement);
+      entryElement.addEventListener("delete", (e) => entryElement.remove());
+      entryElement.addEventListener("click", async (_) => await this.editEntry(entryElement));
     }
   }
 
@@ -147,6 +148,9 @@ export class CustomEntry extends LitElement {
   // I'm not sure if this is needed just yet.
 
   static styles = css`
+    :host {
+      pointer-events: none;
+    }
     .entry-container {
       margin: 5px;
       display: flex;
@@ -155,14 +159,32 @@ export class CustomEntry extends LitElement {
       box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
       width: auto;
       padding: 10px;
+      pointer-events: inherit;
       
       &:hover {
         box-shadow: rgba(0, 0, 0, 0.6) 0 0 8px;
       }
 
       & div {
+        pointer-events: inherit;
         flex: 1 1 0;
-        padding: 5px;
+        display: flex;
+          
+        & div {
+          flex: 1 1 0;
+          padding: 5px;
+          pointer-events: all;
+          cursor: pointer;
+        }
+      }
+      
+      & span {
+        justify-content: center;
+        align-content: center;
+        width: auto;
+        font-size: 14pt;
+        pointer-events: all;
+        cursor: pointer;
       }
     }
   `;
@@ -181,12 +203,21 @@ export class CustomEntry extends LitElement {
     this.displayObject = displayObject;
   }
 
+  sendDeleteEvent(e: Event) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dispatchEvent(new Event("delete"));
+  }
+
   protected render(): HTMLTemplateResult {
     return html`
       <div class="entry-container">
-        ${Object.entries(this.displayMembers).map(([_, displayMember]) => 
-          html`<div class="display-value">${this.displayObject[displayMember]}</div>`
-        )}
+        <div>
+          ${Object.entries(this.displayMembers).map(([_, displayMember]) => 
+            html`<div class="display-value">${this.displayObject[displayMember]}</div>`
+          )}
+        </div>
+        <span @click="${this.sendDeleteEvent}">&#10006;</span>
       </div>
     `;
   }
