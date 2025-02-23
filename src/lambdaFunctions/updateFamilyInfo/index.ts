@@ -19,7 +19,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
   const command = new UpdateItemCommand({
     TableName: "student-applications",
     Key: {
-      studentEmail: {S: studentEmail}
+      Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
       "#numChildTotal": "numChildTotal",
