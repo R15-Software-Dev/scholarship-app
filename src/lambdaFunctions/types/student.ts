@@ -18,3 +18,22 @@ export type StudentPersonalInfo = {
   highScoreACT?: number;
   attendBAS: string;
 }
+
+/**
+ *  Information about the students family
+ */
+export type FamilyInfo = {
+  numChildTotal: string;
+  numChildAttendCollege: string;
+  guardianOneName: string;
+  guardianOneRelation: string;
+  guardianOneOccupation: string;
+  guardianOneEmployer: string;
+  guardianTwoName?: string;
+  guardianTwoRelation?: string;
+  guardianTwoOccupation?: string;
+  guardianTwoEmployer?: string;
+  familyPEAMember: string;
+  armedServiceMember: string;
+  familyChurchMember: string;
+}
