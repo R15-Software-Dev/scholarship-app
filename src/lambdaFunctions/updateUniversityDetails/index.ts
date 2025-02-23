@@ -70,6 +70,12 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     // Send the command
     const dbresponse = await client.send(command);
 
+    // Return that there was a success
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "Success" }),
+    };
+
   } catch (e) {
     console.error(e.message);
     // Return that there was an error
@@ -78,10 +84,4 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       body: JSON.stringify({ message: e.message }),
     }
   }
-
-  // Return that there was a success
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: "Success" }),
-  };
 }
