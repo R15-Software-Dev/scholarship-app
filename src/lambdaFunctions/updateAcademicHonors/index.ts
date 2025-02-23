@@ -1,5 +1,5 @@
 import { DynamoDBClient, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import {AWSRequest, AWSResponse, AcademicHonors} from "./../types/types";
+import {AWSRequest, AWSResponse, AcademicHonors } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
