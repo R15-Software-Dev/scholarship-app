@@ -440,19 +440,47 @@
         action=""
         method="">
         <multi-entry
-          display-members='{"Name":"name","Number of Years":"numYears"}'>
-          <small-outlined-text-field
-            id="nameInput"
-            name="name"
-            type="text"
-            placeholder="Input a name">
-          </small-outlined-text-field>
-          <small-outlined-text-field
-            id="numYearsInput"
-            name="numYears"
-            type="text"
-            placeholder="Input the number of year participated">
-          </small-outlined-text-field>
+          display-members='{"Name":"name","Number of Years":"numYears", "Testing":"universityAcceptance"}'>
+          <h1 slot="modal-header">Create new Activity</h1>
+          <form-question>
+            <h3 slot="header">Name of Activity:</h3>
+            <outlined-text-field
+              id="nameInput"
+              name="name"
+              type="text"
+              placeholder="Input a name"
+              required>
+            </outlined-text-field>
+          </form-question>
+          <form-question>
+            <h3 slot="header">Number of Years Participated:</h3>
+            <outlined-text-field
+              id="numYearsInput"
+              name="numYears"
+              type="number"
+              placeholder="Input the number of years participated"
+              required>
+            </outlined-text-field>
+          </form-question>
+          <form-question>
+            <h3 slot="header">Testing Question</h3>
+            <check-box inputType="radio"
+             radioOptions='["Yes", "No"]'
+             id="universityAcceptanceInput"
+             name="universityAcceptance"
+             required>
+            </check-box>
+          </form-question>
+          <form-question>
+            <h3 slot="header">Testing selection</h3>
+            <drop-down
+              id="testDropDown"
+              name="testDropDown"
+              required>
+              <option value="test1">Testing 1</option>
+              <option value="test2">Testing 2</option>
+            </drop-down>
+          </form-question>
         </multi-entry>
       </form-section>
     </tab-panel>

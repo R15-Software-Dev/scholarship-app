@@ -8,8 +8,7 @@ import {
   state,
 } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import {InputElement} from "./InputElement";
-import {SmallOutlinedTextField} from "./TextField";
+import { FormQuestion } from "./Forms";
 
 
 export type ModalReturn = {
@@ -68,8 +67,10 @@ export class ModalWindow extends LitElement {
       padding: 30px 50px;
       width: 600px;
       max-width: 100%;
-      text-align: center;
+      max-height: 66%;
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+      overflow-y: scroll;
+      z-index: 100;
     }
 
     .modal p {
@@ -82,14 +83,15 @@ export class ModalWindow extends LitElement {
   `;
   @property({ type: Boolean }) accessor _modalVisible: boolean = false;
 
-  @query("#modal-container") _modalContainer!: HTMLDivElement;
-  @query("#open") _openButton!: HTMLButtonElement;
-  @query("#cancel") _cancelButton!: HTMLButtonElement;
-  @query("#save") _saveButton!: HTMLButtonElement;
-  @query("form") _form!: HTMLFormElement;
+  @query("#modal-container") accessor _modalContainer!: HTMLDivElement;
+  @query(".modal") accessor _modal: HTMLDivElement;
+  @query("#open") accessor _openButton!: HTMLButtonElement;
+  @query("#cancel") accessor _cancelButton!: HTMLButtonElement;
+  @query("#save") accessor _saveButton!: HTMLButtonElement;
+  @query("form") accessor _form!: HTMLFormElement;
   //Array of inputs, Assigned Elements gets elements in slots
-  @queryAssignedElements({ selector: "small-outlined-text-field", flatten: true })
-  accessor _inputs!: InputElement[];
+  @queryAssignedElements({ selector: "form-question", flatten: true })
+  accessor questions!: FormQuestion[];
 
   protected render(): HTMLTemplateResult {
     return html`
@@ -111,6 +113,7 @@ export class ModalWindow extends LitElement {
 
   showModal() {
     this._modalVisible = true;
+    this._modal.scrollTo(0, 0);
   }
 
   hideModal() {
@@ -120,8 +123,8 @@ export class ModalWindow extends LitElement {
   // Clears any entries made in the modal
   cancelEvent() {
     // Goes through each slot and replaces with empty string
-    this._inputs.forEach((input) => {
-      input.value = "";
+    this.questions.forEach((question) => {
+      question.input.value = "";
     });
     this.hideModal(); // Hides modal after resetting form
   }
@@ -147,15 +150,15 @@ export class ModalWindow extends LitElement {
   getInformation(): ModalReturn {
     const returnValue: ModalReturn = {};
     // Loop collecting data
-    this._inputs.forEach((input: InputElement) => {
-      returnValue[input.name] = input.getValue(); // Add input information to formData
+    this.questions.forEach((question) => {
+      returnValue[question.input.name] = question.input.getValue(); // Add input information to formData
     });
     return returnValue;
   }
 
   clearInformation(): void {
-    this._inputs.forEach((input: InputElement) => {
-      input.value = "";
+    this.questions.forEach((question) => {
+      question.input.value = "";
     });
   }
 }

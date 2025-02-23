@@ -69,6 +69,7 @@ export class MultiEntry extends LitElement implements InputElement {
       <div>
         <!-- The modal window should go here. We'll need to open that later. -->
         <modal-window @submit=${this.modalWindow_submit}>
+          <slot name="modal-header" slot="header"></slot>
           <slot></slot>
         </modal-window>
       </div>
