@@ -9,7 +9,8 @@
     "start": "npm run build && npm run start-server",
     "start-server": "node expressRun.mjs",
     "test": "jest",
-    "installGlobals": "npm install & npm install -g esbuild"
+    "installGlobals": "npm install & npm install -g esbuild",
+    "newPasswordHash": "node ./src/lambdaFunctions/providerRegistration/newPasswordTemp.mjs"
   },
   "author": "Lucas Vas",
   "license": "ISC",
@@ -17,6 +18,7 @@
     "@aws-sdk/client-dynamodb": "^3.696.0",
     "@aws-sdk/client-s3": "^3.715.0",
     "@aws-sdk/client-secrets-manager": "^3.699.0",
+    "@aws-sdk/client-ses": "^3.738.0",
     "esbuild": "^0.24.0",
     "esbuild-loader": "^4.2.2",
     "express": "^4.21.2",
@@ -36,6 +38,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.30",
+    "bcryptjs": "^2.4.3",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.24.0",

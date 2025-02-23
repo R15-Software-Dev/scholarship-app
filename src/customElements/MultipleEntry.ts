@@ -1,111 +1,163 @@
-import {
-  LitElement,
-  html,
-  css,
-  CSSResultGroup,
-  HTMLTemplateResult,
-} from "lit-element";
-import { customElement, property, query } from "lit-element/decorators.js";
-import { ModalWindow } from "./modalWindow";
+import { ModalWindow, ModalReturn } from "./modalWindow";
 import { InputElement } from "./InputElement";
-
-type FormEntry = {
-  // Base element for the entry - is passed by reference, so we can modify it
-  baseElement: CustomEntry;
-  // Contains pertinent data for the entry
-  // This must be an any, because we can't predict the object that will be passed
-  entryData: any;
-};
+import {customElement, property, query} from "lit/decorators.js";
+import {css, CSSResultGroup, html, HTMLTemplateResult, LitElement} from "lit";
 
 @customElement("multi-entry")
 export class MultiEntry extends LitElement implements InputElement {
-  static styles?: CSSResultGroup = css``;
+  static styles?: CSSResultGroup = css`
+    div .center-all {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
 
-  @property({ type: Boolean, reflect: true })
-  accessor disabled: boolean = false;
-  @property({ type: String, reflect: true })
-  accessor name: string = "";
-  @property({ type: Boolean, reflect: true })
-  accessor required: boolean = false;
-  @property({ type: {} })
-  private accessor _entries: Array<FormEntry>;
-  @query('slot[name="entries"]')
-  private accessor _entriesSlot!: HTMLSlotElement;
-  @query("modal-window")
-  private accessor _modalWindow!: ModalWindow;
+    div .entry-content {
+      display: flex;
+      flex-direction: column;
+    }
 
-  getValue(): string {
-    // Converts values into a string and returns it.
-    return this._entries.map((entry) => entry.entryData).toString();
+    div .entry-container {
+      display: flex;
+      flex-direction: row;
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+      width: auto;
+      padding: 10px;
+    }
+      
+    div .member-headers {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      width: auto;
+      padding: 2px 10px;
+      
+      & span {
+        flex: 1 1 0;
+        width: auto;
+        padding: 5px;
+      }
+    }
+  `;
+
+  @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
+  @property({ type: Boolean, reflect: true }) accessor disabled: boolean = false;
+  @property({ type: String }) accessor name: string = "";
+  @property({ type: String }) accessor id: string = "";
+  @property({ type: String })
+    // accessor value: string = "";
+  get value(): string {
+    return this.getValue();
   }
-
-  checkValidity(): boolean {
-    // Currently a prototype, will need to be updated.
-    if (this.required && this._entries.length === 0) {
-      return false;
-    } else {
-      return true;
+  set value(value: string) {
+    this._value = JSON.parse(value);
+    if (this._value.length > 0) {
+      this._value.forEach(item => {
+        this.entryDiv.appendChild(this.elementFromObject(item));
+      })
     }
   }
-
-  displayError(message: string): void {
-    // TODO Implement this function
+  @property({ type: String, noAccessor: true, attribute: "display-members" })
+  set members(value: string) {
+    this._displayMembers = JSON.parse(value);
+  }
+  get members() {
+    return JSON.stringify(this._displayMembers);
   }
 
-  clearError(): void {
-    // TODO Implement this function
-  }
+  @query("modal-window") accessor modal: ModalWindow;
+  @query("#entriesDiv") accessor entryDiv: HTMLDivElement;
+
+  _displayMembers: { [key: string]: string };
+  _editing: boolean = false;
+  _value: ModalReturn[] = [];
 
   constructor() {
-    // Initialize the entries array
     super();
-    this._entries = [];
   }
 
   protected render(): HTMLTemplateResult {
-    return html`
-      <!-- Button allows user to add an entry -->
-      <modal-window @submit=${this.addEntry}>
-        <!-- These slots reflect the modal window slots -->
-        <!-- TODO Is there a more efficient way of doing this? -->
-        <slot name="modalHeader" slot="header">
-          <!-- This slot will contain the header for the modal -->
-        </slot>
-        <slot name="modalQuestions" slot="content">
-          <!-- This slot will contain the questions for the modal -->
-        </slot>
-      </modal-window>
-      <div class="container">
-        <p>Start entry element:</p>
-        <slot name="entries"></slot>
-        <action-button @click=${this.showModal}>Add</action-button>
+    return html`<div>
+      <div>
+        <!-- The modal window should go here. We'll need to open that later. -->
+        <modal-window>
+          <slot name="modal-header" slot="header"></slot>
+          <slot></slot>
+        </modal-window>
       </div>
-    `;
+      <div class="header">
+        <!-- The element header will go here. -->
+        <slot name="header"></slot>
+      </div>
+      <div class="member-headers">
+        <!-- Display the row headers here. -->
+        ${Object.entries(this._displayMembers).map(
+          ([key, value]) => html`<span><b>${key}</b></span>`
+        )}
+      </div>
+      <div><hr></div>
+      <div id="entriesDiv" class="entry-content">
+        <!-- The custom entry elements will be put here. Not sure if that's going to be created as a slot yet. -->
+        <slot name="entries"></slot>
+      </div>
+      <div class="center-all">
+        <action-button id="btnCreateEntry" @click=${this.createElement} ?disabled=${this.disabled}>Add</action-button>
+      </div>
+    </div>`;
   }
 
-  private showModal() {
-    this._modalWindow.showModal();
+  async editEntry(entry: CustomEntry) {
+    // Allows editing of a currently displayed CustomEntry.
+    // Marked async in the hopes of making more elements asynchronous.
+    this._editing = true;
+    this.modal.setQuestionValues(entry.displayObject);
+    const response = await this.modal.showModalAsync();
+    if (response != null) {
+      entry.displayObject = response;
+    }
+    this._editing = false;
   }
 
-  private addEntry(event: CustomEvent): void {
-    // Create an entry HTMLElement
-    const entry = document.createElement("custom-entry") as CustomEntry;
+  async createElement(): Promise<void> {
+    // this.modal.showModal();
+    let response = await this.modal.showModalAsync();
+    if (response != null) {
+      this.entryDiv.appendChild(this.elementFromObject(response));
+    }
+  }
 
-    // Make a new FormEntry object and store in the array.
-    const entryObject: FormEntry = {
-      baseElement: entry,
-      entryData: event.detail,
-    };
-    this._entries.push(entryObject);
+  elementFromObject(obj: ModalReturn): CustomEntry {
+    let entryElement = new CustomEntry(this._displayMembers, obj);
+    entryElement.addEventListener("delete", (e) => entryElement.remove());
+    entryElement.addEventListener("click", async (_) => await this.editEntry(entryElement));
+    return entryElement;
+  }
 
-    // Give the new element some content.
-    // How can this use an unknown object to display information?
-    const entryContent = document.createElement("p");
-    entryContent.textContent = JSON.stringify(event.detail);
-    entry.appendChild(entryContent);
+  checkValidity(): boolean {
+    return true;  // this element doesn't need to be filled in.
+  }
 
-    // Add the element to the DOM.
-    this._entriesSlot.appendChild(entry);
+  clearError(): void {
+  }
+
+  displayError(message: string): void {
+  }
+
+  getValue(): string {
+    // Returns the values associated with all the currently displayed entry elements.
+    const rVal: ModalReturn[] = [];
+    if (this.entryDiv) {
+      this.entryDiv.querySelectorAll<CustomEntry>("custom-entry").forEach(
+        (entry: CustomEntry) => {
+          // add the displayed object into the array
+          rVal.push(entry.displayObject);
+        }
+      )
+    }
+
+    return JSON.stringify(rVal);
   }
 }
 
@@ -114,25 +166,77 @@ export class CustomEntry extends LitElement {
   // This element will handle the entry elements within the multi-entry element.
   // I'm not sure if this is needed just yet.
 
-  static styles: CSSResultGroup = css`
-    div .container {
-      display: flex;
-      flex-direction: row;
+  static styles = css`
+    :host {
+      pointer-events: none;
     }
-
-    slot {
+    .entry-container {
+      margin: 5px;
       display: flex;
       flex-direction: row;
-      gap: 10px;
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+      width: auto;
+      padding: 10px;
+      pointer-events: inherit;
+      
+      &:hover {
+        box-shadow: rgba(0, 0, 0, 0.6) 0 0 8px;
+      }
+
+      & div {
+        pointer-events: inherit;
+        flex: 1 1 0;
+        display: flex;
+          
+        & div {
+          flex: 1 1 0;
+          padding: 5px;
+          pointer-events: all;
+          cursor: pointer;
+        }
+      }
+      
+      & span {
+        justify-content: center;
+        align-content: center;
+        width: auto;
+        font-size: 14pt;
+        pointer-events: all;
+        cursor: pointer;
+      }
     }
   `;
 
+  @property({ attribute: "display-members" })
+    accessor displayMembers: { [key: string]: string };
+  @property()
+    accessor displayObject: ModalReturn;
+
+  constructor(displayMembers: { [p: string]: string }, displayObject: ModalReturn) {
+    super();
+
+    console.log(displayObject);
+
+    this.displayMembers = displayMembers;
+    this.displayObject = displayObject;
+  }
+
+  sendDeleteEvent(e: Event) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dispatchEvent(new Event("delete"));
+  }
+
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container">
-        <slot>
-          <!-- Any display information about this entry goes here. -->
-        </slot>
+      <div class="entry-container">
+        <div>
+          ${Object.entries(this.displayMembers).map(([_, displayMember]) => 
+            html`<div class="display-value">${this.displayObject[displayMember]}</div>`
+          )}
+        </div>
+        <span @click="${this.sendDeleteEvent}">&#10006;</span>
       </div>
     `;
   }
