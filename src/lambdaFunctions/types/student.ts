@@ -38,6 +38,10 @@ export type WorkExperience = {
 
 }
 
+export type ExtracurricularActivities = {
+
+}
+
 /**
  *  Details about the students university
  */
