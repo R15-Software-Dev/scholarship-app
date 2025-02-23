@@ -100,7 +100,7 @@ export class ModalWindow extends LitElement {
         id="modal-container"
       >
         <div class="modal">
-          <form @submit=${this.saveEvent}>
+          <form>
             <slot name="header"> </slot>
             <slot></slot>
             <action-button id="cancel" @click=${this.cancelEvent}>Cancel</action-button>
@@ -120,18 +120,34 @@ export class ModalWindow extends LitElement {
     this._modalVisible = false;
   }
 
+  async showModalAsync(): Promise<ModalReturn> {
+    // Show the modal and wait for the submission event.
+
+    this.showModal();
+    return new Promise(
+      resolve => {
+        this._form.onsubmit = (e) => {
+          const response = this.saveEvent(e);
+          if (response != null) {
+            this._form.onsubmit = null;
+            this.hideModal();
+            this.clearInformation();
+            resolve(response);
+          }
+        }
+      }
+    );
+  }
+
   // Clears any entries made in the modal
   cancelEvent() {
     // Goes through each slot and replaces with empty string
-    this.questions.forEach((question) => {
-      question.input.value = "";
-    });
     this.hideModal(); // Hides modal after resetting form
     this.clearInformation();
   }
 
   // Method will be triggered upon clicking the 'Save' button
-  saveEvent(event: SubmitEvent) {
+  saveEvent(event: SubmitEvent): ModalReturn {
     event.preventDefault(); // Prevents any default form submissions
 
     if (this.reportValidity()) {
@@ -140,14 +156,10 @@ export class ModalWindow extends LitElement {
 
       // Hide modal
       this.hideModal();
-      this.clearInformation();
 
-      // Add data to event, then allow the event to bubble
-      this.dispatchEvent(
-        new CustomEvent("submit", {detail: data, bubbles: true}),
-      );
+      return data;
     } else {
-      this.reportValidity();
+      return null;
     }
   }
 
@@ -156,6 +168,7 @@ export class ModalWindow extends LitElement {
     const returnValue: ModalReturn = {};
     // Loop collecting data
     this.questions.forEach((question) => {
+      console.log(question.input.name);
       returnValue[question.input.name] = question.input.getValue(); // Add input information to formData
     });
     return returnValue;
@@ -189,5 +202,17 @@ export class ModalWindow extends LitElement {
       question.input.value = "";
       question.input.clearError();
     });
+  }
+
+  setQuestionValues(obj: ModalReturn) {
+    // Sets the values of the questions within the modal window.
+    // Logs errors but skips questions that do not match.
+    this.questions.forEach((question) => {
+      try {
+        question.input.value = obj[question.input.name];
+      } catch (e) {
+        console.error(e);
+      }
+    })
   }
 }

@@ -59,6 +59,7 @@ export class MultiEntry extends LitElement implements InputElement {
   @query("#entriesDiv") accessor entryDiv: HTMLDivElement;
 
   _displayMembers: { [key: string]: string };
+  _editing: boolean = false;
 
   constructor() {
     super();
@@ -68,7 +69,7 @@ export class MultiEntry extends LitElement implements InputElement {
     return html`<div>
       <div>
         <!-- The modal window should go here. We'll need to open that later. -->
-        <modal-window @submit=${this.modalWindow_submit}>
+        <modal-window>
           <slot name="modal-header" slot="header"></slot>
           <slot></slot>
         </modal-window>
@@ -94,17 +95,26 @@ export class MultiEntry extends LitElement implements InputElement {
     </div>`;
   }
 
-  modalWindow_submit(e: CustomEvent) {
-    // Create the new entry within the entry div.
-    let entry = e.detail;
-    console.log(entry);
-    let entryElement = new CustomEntry(this._displayMembers, entry);
-    this.entryDiv.appendChild(entryElement);
+  async editEntry(entry: CustomEntry) {
+    // Allows editing of a currently displayed CustomEntry.
+    // Marked async in the hopes of making more elements asynchronous.
+    this._editing = true;
+    this.modal.setQuestionValues(entry.displayObject);
+    const response = await this.modal.showModalAsync();
+    if (response != null) {
+      entry.displayObject = response;
+    }
+    this._editing = false;
   }
 
-  createElement(): void {
-    this.modal.showModal();
-    console.log("Showed modal window.");
+  async createElement(): Promise<void> {
+    // this.modal.showModal();
+    let response = await this.modal.showModalAsync();
+    if (response != null) {
+      let entryElement = new CustomEntry(this._displayMembers, response);
+      this.entryDiv.appendChild(entryElement);
+      entryElement.onclick = async (_) => await this.editEntry(entryElement);
+    }
   }
 
   checkValidity(): boolean {
@@ -164,6 +174,8 @@ export class CustomEntry extends LitElement {
 
   constructor(displayMembers: { [p: string]: string }, displayObject: ModalReturn) {
     super();
+
+    console.log(displayObject);
 
     this.displayMembers = displayMembers;
     this.displayObject = displayObject;

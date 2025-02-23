@@ -231,7 +231,14 @@ export class Checkbox extends LitElement implements InputElement {
 
   @property({type: Boolean, reflect: true}) accessor required: boolean = false;
   @property({type: Boolean, reflect: true}) accessor disabled: boolean = false;
-  @property({type: String, reflect: true}) accessor value: string = "";
+  @property({type: String, reflect: true})
+    // accessor value: string = "";
+  get value(): string {
+    return this.getValue();
+  }
+  set value(newValue: string | string[]) {
+    this.checkValue(newValue);
+  }
   @property({type: String, reflect: true}) accessor name: string = "";
   @property({type: String}) accessor inputType: string = "checkbox"; //default type is checkbox if undefined
   @property({type: String}) radioOptions: string = '[]'; // Receive the radio button options as a JSON string
@@ -372,8 +379,7 @@ export class Checkbox extends LitElement implements InputElement {
     }
   }
 
-
-  private optionSelect(event: Event) {
+  private optionSelect() {
     // If this element is disabled, do nothing.
     if (this.disabled) return;
     // Reset selectedOptions array
@@ -397,21 +403,29 @@ export class Checkbox extends LitElement implements InputElement {
   checkValue(value: string | string[]): void {
     // Run almost the same code as optionSelect()
     // Check the option that matches the value of the string
+    if (typeof value == "string" && value.includes('[') && value.includes(']')) {
+      // console.log("Parsing value");
+      value = JSON.parse(value.toString());  // this turns into a string[]
+      // console.log("New value: ");
+      // console.log(value);
+    }
     this._checkboxList.forEach(checkbox => {
-      console.log(`Checking checkbox ${checkbox.value} against ${value}`);
+      // console.log(`Checking checkbox ${checkbox.value} against ${value}`);
       if (typeof value === "string") {
-        if (value === checkbox.value) {
+        if (value == checkbox.value) {
           checkbox.checked = true;
           this.selectedCheckbox.push(checkbox.value);
           return;
         }
       } else {
         if (value.includes(checkbox.value)) {
-          checkbox.checked = false;
+          checkbox.checked = true;
           this.selectedCheckbox.push(checkbox.value);
         }
       }
     });
+    // Refresh list of selected elements.
+    this.optionSelect();
     this.dispatchEvent(new Event("change"));
   }
 
