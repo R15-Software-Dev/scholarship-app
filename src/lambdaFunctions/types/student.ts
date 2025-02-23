@@ -34,6 +34,10 @@ export type CommunityInvolvement = {
 
 }
 
+export type WorkExperience = {
+
+}
+
 /**
  *  Details about the students university
  */
