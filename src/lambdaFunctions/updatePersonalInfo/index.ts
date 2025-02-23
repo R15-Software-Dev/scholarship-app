@@ -5,20 +5,21 @@ const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
  * Creates and or updates a record in the student applications table in DynamoDB
- * @param event - A personal info object
+ * @param {AWSRequest} event - Request that contains a personal info object.
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const studentInfo: StudentPersonalInfo = JSON.parse(event.body);
 
-  // Create variable for the student table IDs corresponding cookie
+  // Get the student email from the passed cookie
+  const studentEmail = event.headers.Cookie.match(/studentEmail=([^;]*)/)[1];
 
   // Create a command to update everything that may be entered in the personal info form
   const command = new UpdateItemCommand({
     TableName: "student-applications",
     Key: {
-      //Key
+      studentEmail: {S: studentEmail}
     },
     ExpressionAttributeNames: {
       "#studentFirstName": "studentFirstName",
