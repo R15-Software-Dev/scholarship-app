@@ -107,7 +107,7 @@ export class MultiEntry extends LitElement implements InputElement {
   }
 
   checkValidity(): boolean {
-    return false;
+    return true;  // this element doesn't need to be filled in.
   }
 
   clearError(): void {
