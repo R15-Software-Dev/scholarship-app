@@ -4,8 +4,8 @@ import { AWSRequest, AWSResponse} from "./../types/types";
 const client = new DynamoDBClient({ region: "us-east-1" });
 
 /**
- * Creates and or updates a record in the ___ table in DynamoDB
- * @param event -
+ * Creates and or updates a record in the student applications table in DynamoDB
+ * @param event - A personal info object
  * @returns DynamoDB response object
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
