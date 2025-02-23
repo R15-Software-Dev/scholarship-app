@@ -42,7 +42,26 @@ export type FamilyInfo = {
  *  Academic honors information
  */
 export type AcademicHonors = {
+  
+}
 
+/**
+ *  Details about the students university
+ */
+export type UniversityDetails = {
+  universityDetails: string;
+  universityName: string;
+  universityState: string;
+  universityCity: string;
+  universityZipCode: string;
+  studentsMajor: string;
+  studentStudyField: string;
+  studentCareer: string;
+  universityAcceptance: string;
+  tuitionCost: string;
+  roomBoard: string;
+  travelCosts?: string;
+  miscCosts?: string;
 }
 
 export type InstitutionalResources = {
