@@ -38,6 +38,7 @@ export type FamilyInfo = {
   familyChurchMember: string;
 }
 
+
 /**
  *  Details about the students university
  */
@@ -55,5 +56,11 @@ export type UniversityDetails = {
   roomBoard: string;
   travelCosts?: string;
   miscCosts?: string;
+}
+
+export type InstitutionalResources = {
+  grantsAwarded?: string;
+  totalSelfHelp?: string;
+  loansValue?: string;
 
 }
