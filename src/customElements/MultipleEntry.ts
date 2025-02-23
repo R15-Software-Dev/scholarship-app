@@ -32,10 +32,10 @@ export class MultiEntry extends LitElement implements InputElement {
       flex-direction: row;
       flex-wrap: nowrap;
       width: auto;
-      padding: 5px;
+      padding: 2px 10px;
       
-      & div {
-        flex-grow: 1;
+      & span {
+        flex: 1 1 0;
         width: auto;
         padding: 5px;
       }
@@ -60,15 +60,6 @@ export class MultiEntry extends LitElement implements InputElement {
 
   _displayMembers: { [key: string]: string };
 
-  // This element will function in a specific way:
-  // The user will click an "Add" button
-  // A modal window will appear (or so I think right now)
-  // When submitted successfully, the entry object will be created.
-  // Entries have a "data" field that stores an object with a field [string]: string
-  // Entries will accept an array of field values that it will query from the data object to display
-  // Displayed entries will be editable through an edit button of some sort.
-  // The rest should be fairly self-explanatory.
-
   constructor() {
     super();
   }
@@ -88,7 +79,7 @@ export class MultiEntry extends LitElement implements InputElement {
       <div class="member-headers">
         <!-- Display the row headers here. -->
         ${Object.entries(this._displayMembers).map(
-          ([key, value]) => html`<div class="multi-headers">${key}</div>`
+          ([key, value]) => html`<span><b>${key}</b></span>`
         )}
       </div>
       <div><hr></div>
@@ -106,12 +97,7 @@ export class MultiEntry extends LitElement implements InputElement {
     // Create the new entry within the entry div.
     let entry = e.detail;
     console.log(entry);
-    let entryElement = document.createElement('custom-entry') as CustomEntry;
-    Object.entries(this._displayMembers).forEach(([key, value]) => {
-      // Create a new display value in our entry
-      const objectValue = entry[value];
-      entryElement.innerHTML += `<div>${objectValue}</div>`
-    });
+    let entryElement = new CustomEntry(this._displayMembers, entry);
     this.entryDiv.appendChild(entryElement);
   }
 
@@ -131,7 +117,16 @@ export class MultiEntry extends LitElement implements InputElement {
   }
 
   getValue(): string {
-    return "";
+    // Returns the values associated with all the currently displayed entry elements.
+    const rVal: ModalReturn[] = [];
+    this.entryDiv.querySelectorAll<CustomEntry>("custom-entry").forEach(
+      (entry: CustomEntry) => {
+        // add the displayed object into the array
+        rVal.push(entry.displayObject);
+      }
+    )
+
+    return JSON.stringify(rVal);
   }
 }
 
@@ -141,7 +136,7 @@ export class CustomEntry extends LitElement {
   // I'm not sure if this is needed just yet.
 
   static styles = css`
-    div {
+    .entry-container {
       margin: 5px;
       display: flex;
       flex-direction: row;
@@ -153,27 +148,32 @@ export class CustomEntry extends LitElement {
       &:hover {
         box-shadow: rgba(0, 0, 0, 0.6) 0 0 8px;
       }
-    }
 
-    slot {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
+      & div {
+        flex: 1 1 0;
+        padding: 5px;
+      }
     }
   `;
 
-  constructor(displayMembers: string[], displayObject: ModalReturn) {
+  @property({ attribute: "display-members" })
+    accessor displayMembers: { [key: string]: string };
+  @property()
+    accessor displayObject: ModalReturn;
+
+  constructor(displayMembers: { [p: string]: string }, displayObject: ModalReturn) {
     super();
 
-    // TODO Create divs for displayed members here
+    this.displayMembers = displayMembers;
+    this.displayObject = displayObject;
   }
 
   protected render(): HTMLTemplateResult {
     return html`
       <div class="entry-container">
-        <slot>
-          <!-- Any display information about this entry goes here. -->
-        </slot>
+        ${Object.entries(this.displayMembers).map(([_, displayMember]) => 
+          html`<div class="display-value">${this.displayObject[displayMember]}</div>`
+        )}
       </div>
     `;
   }
