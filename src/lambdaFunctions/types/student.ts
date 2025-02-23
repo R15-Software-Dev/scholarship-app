@@ -13,8 +13,8 @@ export type StudentInfo = {
   studentPhoneNumber: string;
   studentEmail: string;
   unweightedGPA: string;
-  readingScoreSAT?: number;
-  mathScoreSAT?: number;
+  readingScoreSAT: number;
+  mathScoreSAT: number;
   highScoreACT?: number;
   attendBAS: string;
 }
