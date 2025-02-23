@@ -12,7 +12,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
 
   const institutionalInfo: InstitutionalResources = JSON.parse(event.body);
 
-  // Create variable for the student table IDs corresponding cookie
+  // Get student email from the passed cookie header
   const studentEmail = event.headers.Cookie.match(/studentEmail=([^;]*)/)[1];
 
   // Create a command to update everything that may be entered in the institutional resources form
