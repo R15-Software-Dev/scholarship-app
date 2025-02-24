@@ -404,12 +404,11 @@ export class Checkbox extends LitElement implements InputElement {
     // Run almost the same code as optionSelect()
     // Check the option that matches the value of the string
     if (typeof value == "string" && value.includes('[') && value.includes(']')) {
-      // console.log("Parsing value");
       value = JSON.parse(value.toString());  // this turns into a string[]
-      // console.log("New value: ");
-      // console.log(value);
     }
     this._checkboxList.forEach(checkbox => {
+      // Clear the checkbox first
+      checkbox.checked = false
       // console.log(`Checking checkbox ${checkbox.value} against ${value}`);
       if (typeof value === "string") {
         if (value == checkbox.value) {
