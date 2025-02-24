@@ -48,7 +48,7 @@ export class ModalWindow extends LitElement {
       position: fixed;
       opacity: 0;
       pointer-events: none;
-      top: 0;
+      top: 50px;
       left: 0;
       height: 100vh;
       width: 100vw;
