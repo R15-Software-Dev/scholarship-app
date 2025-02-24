@@ -309,7 +309,40 @@
           id="athleticParticipationForm"
           action=""
           method="">
+        <multi-entry
+            name="athleticParticipationMultiEntry"
+            display-members='{"Sport name":"sport"}'>
+          <h1 slot="modal-header">Add Sport</h1>
+          <form-question>
+            <h3 slot="header">Name of sport</h3>
+            <outlined-text-field
+                id="sportInput"
+                name="sport"
+                type="text"
+                placeholder="Input a sport"
+                required>
+            </outlined-text-field>
+          </form-question>
 
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Specify any special achievements</h3>
+            <outlined-text-field
+                id="sportAchievementsInput"
+                name="sportAchievements"
+                type="text"
+                placeholder="Enter special achievements (if any)">
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
       </form-section>
 
     </tab-panel>
