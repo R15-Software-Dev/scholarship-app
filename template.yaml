@@ -333,33 +333,39 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
+  uploadFafsaReport:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to upload their FAFSA SAR to the application.
+      CodeUri: src/lambdaFunctions/uploadFafsaReport
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/fafsa
+            Method: post
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref StudentFafsaBucket
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref StudentFafsaBucket
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-s3"
+          - "aws-lambda"
+        EntryPoints:
+          - index.ts
 
-  # Define provider login webpage endpoint
-#  getProviderWebpages:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      Description: Gets and returns the scholarship provider webpage.
-#      CodeUri: src/lambdaFunctions/getProviderWebpages
-#      Handler: index.handler
-#      Runtime: nodejs20.x
-#      Events:
-#        GetRequest:
-#          Type: Api
-#          Properties:
-#            RestApiId: !Ref ScholarshipApi
-#            Path: /providers/{proxy+}
-#            Method: get
-#            Auth:
-#              Authorizer: NONE
-#    Metadata:
-#      BuildMethod: esbuild
-#      BuildProperties:
-#        Minify: true
-#        Target: "es2020"
-#        External:
-#          - "@aws-sdk/client-s3"
-#        EntryPoints:
-#          - index.ts
+  StudentFafsaBucket:
+    Type: AWS::S3::Bucket
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
