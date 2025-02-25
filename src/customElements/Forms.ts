@@ -11,6 +11,15 @@ import { InputElement } from "./InputElement";
 import { ActionButton } from "./ActionButton";
 import { MultiEntry } from "./MultipleEntry";
 
+// Utility function to check if a string is valid Base64
+function isBase64(str: string): boolean {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (e) {
+    return false;
+  }
+}
+
 @customElement("form-question")
 export class FormQuestion extends LitElement {
   static styles: CSSResultGroup = css`
@@ -50,6 +59,23 @@ export class FormQuestion extends LitElement {
   get input(): InputElement {
     return this._inputList[0];
   }
+
+  // Method to process the input value as a file or regular value
+  processInputValue(): FormDataEntryValue {
+    const value = this.input.getValue();
+    if (isBase64(value)) {
+      const byteCharacters = atob(value);
+      const byteArrays = new Uint8Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArrays[i] = byteCharacters.charCodeAt(i);
+      }
+      const blob = new Blob([byteArrays]);
+      return new File([blob], "uploaded_file", { type: "application/octet-stream" });
+    } else {
+      return value;
+    }
+  }
+
 
   protected render(): HTMLTemplateResult {
     // This element MUST be used within a FormSection or HTMLFormElement.
