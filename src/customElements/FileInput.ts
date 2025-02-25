@@ -16,8 +16,7 @@ export class FileInput extends LitElement {
       display: block;
     }
 
-    input,
-    label {
+    input {
       margin: 0.4rem 0;
     }
   `;
@@ -25,7 +24,6 @@ export class FileInput extends LitElement {
   protected render(): HTMLTemplateResult {
     return html `
       <div>
-        <label for="avatar">Upload PDF File</label>
         <input type="file" id="fileUpload" name="fileUpload" accept=".pdf" />
       </div>
 
