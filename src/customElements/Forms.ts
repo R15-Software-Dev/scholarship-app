@@ -62,18 +62,21 @@ export class FormQuestion extends LitElement {
 
   // Method to process the input value as a file or regular value
   processInputValue(): FormDataEntryValue {
-    const value = this.input.getValue();
-    if (isBase64(value)) {
-      const byteCharacters = atob(value);
-      const byteArrays = new Uint8Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteArrays[i] = byteCharacters.charCodeAt(i);
+    let value = this.input.getValue();
+    if (typeof value === "string" && value.startsWith("data:")) {
+      // Extract the base64 part after the comma
+      const base64String = value.split(",")[1];
+      if (base64String && isBase64(base64String)) {
+        const byteCharacters = atob(base64String);
+        const byteArrays = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteArrays[i] = byteCharacters.charCodeAt(i);
+        }
+        const blob = new Blob([byteArrays], { type: "application/pdf" }); // Use correct MIME type
+        return new File([blob], "uploaded_file.pdf", { type: "application/pdf" });
       }
-      const blob = new Blob([byteArrays]);
-      return new File([blob], "uploaded_file", { type: "application/octet-stream" });
-    } else {
-      return value;
     }
+    return value; // Return as-is if not base64
   }
 
 
