@@ -119,7 +119,6 @@
       <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
       <c-tab panel-id="institutionalResourcesPanel">Institutional Resources</c-tab>
       <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
-      <c-tab panel-id="testPanel">Testing</c-tab>
     </tab-bar>
   </div>
 
@@ -147,7 +146,7 @@
           <outlined-text-field
             id="studentLastNameInput"
             name="studentLastName"
-            type="test"
+            type="text"
             placeholder="Enter your last name"
             required>
           </outlined-text-field>
@@ -287,6 +286,255 @@
               required>
           </check-box>
         </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="academicHonorsPanel">
+      <form-section
+          header="Academic Honors"
+          name="academicHonors"
+          id="academicHonorsForm"
+          action=""
+          method="">
+        <form-question>
+          <h3 slot="header">List your academic honors separated by commas (High Honors/National Honors societies/etc.)</h3>
+          <outlined-text-field
+              id="listAcademicHonorsInput"
+              name="listAcademicHonors"
+              type="text"
+              placeholder="List academic honors">
+          </outlined-text-field>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="athleticParticipationPanel">
+      <form-section
+          header="Athletic Participation"
+          name="athleticParticipation"
+          id="athleticParticipationForm"
+          action=""
+          method="">
+        <multi-entry
+            name="athleticParticipationMultiEntry"
+            display-members='{"Sport name":"sport"}'>
+          <h1 slot="modal-header">Add Sport</h1>
+          <form-question>
+            <h3 slot="header">Name of sport</h3>
+            <outlined-text-field
+                id="sportInput"
+                name="sport"
+                type="text"
+                placeholder="Input a sport"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                id="sportParticipatedInput"
+                name="sportParticipated"
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Specify any special achievements</h3>
+            <outlined-text-field
+                id="sportAchievementsInput"
+                name="sportAchievements"
+                type="text"
+                placeholder="Enter special achievements (if any)">
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="communityInvolvementPanel">
+      <form-section
+          header="Community Involvement"
+          name="communityInvolvement"
+          id="communityInvolvementForm"
+          action=""
+          method="">
+        <multi-entry
+            name="communityInvolvementMultiEntry"
+            display-members='{"Activity Name":"activity","Activity Hours":"activityHours"}'>
+          <h1 slot="modal-header">Add activity</h1>
+          <form-question>
+            <h3 slot="header">Name of activity</h3>
+            <outlined-text-field
+                id="activityInput"
+                name="activity"
+                type="text"
+                placeholder="Input an activity"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                id="activityParticipatedInput"
+                name="activityParticipated"
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Number of hours participated in a year</h3>
+            <outlined-text-field
+                id="activityHoursInput"
+                name="activityHours"
+                type="number"
+                placeholder="Enter number of hours"
+                required>
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="studentWorkExperiencePanel">
+      <form-section
+          header="Work Experience"
+          name="workExperience"
+          id="workExperienceForm"
+          action=""
+          method="">
+        <multi-entry
+            name="workExperienceMultiEntry"
+            display-members='{"Job Title":"jobTitle","Start Date":"jobStartDate","End Date":"jobEndDate"}'>
+          <h1 slot="modal-header">Add a work experience</h1>
+          <form-question>
+            <h3 slot="header">Job title</h3>
+            <outlined-text-field
+                id="jobTitleInput"
+                name="jobTitle"
+                type="text"
+                placeholder="Enter job title"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Student's employer</h3>
+            <outlined-text-field
+                id="studentEmployerInput"
+                name="studentEmployer"
+                type="text"
+                placeholder="Enter your employer"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Approximate start date (MM/DD/YY)</h3>
+            <outlined-text-field
+                id="jobStartDateInput"
+                name="jobStartDate"
+                type="text"
+                placeholder="Enter your approximate start date"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Approximate end date (MM/DD/YY)</h3>
+            <outlined-text-field
+                id="jobEndDateInput"
+                name="jobEndDate"
+                type="text"
+                placeholder="Enter your approximate end date"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Approximate number of hours worked per week</h3>
+            <outlined-text-field
+                id="weeklyWorkHoursInput"
+                name="weeklyWorkHours"
+                type="number"
+                placeholder="Enter a number"
+                required>
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="extracurricularActivitiesPanel">
+      <form-section
+          header="Extracurricular Activities"
+          name="extracurricularActivities"
+          id="extracurricularActivitiesForm"
+          action=""
+          method="">
+        <multi-entry
+            name="extracurricularMultiEntry"
+            display-members='{"Activity Name":"extraActivity","Weeks Participated":"extraWeeksParticipated"}'>
+          <h1 slot="modal-header">Add an activity</h1>
+          <form-question>
+            <h3 slot="header">Name of activity</h3>
+            <outlined-text-field
+                id="extraActivityInput"
+                name="extraActivity"
+                type="text"
+                placeholder="Input an activity"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                id="extraActivityParticipatedInput"
+                name="extraActivityParticipated"
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Number of hours per week spent on this activity</h3>
+            <outlined-text-field
+                id="extraActivityHoursInput"
+                name="extraActivityHours"
+                type="number"
+                placeholder="Enter number of hours"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Number of weeks participated</h3>
+            <outlined-text-field
+                id="extraWeeksParticipatedInput"
+                name="extraWeeksParticipated"
+                type="number"
+                placeholder="Enter number of weeks"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+            <form-question>
+              <h3 slot="header">Specify any special involvement</h3>
+              <outlined-text-field
+                  id="extraSpecialInvolvementInput"
+                  name="extraSpecialInvolvement"
+                  type="text"
+                  placeholder="Enter special involvement">
+              </outlined-text-field>
+          </form-question>
+        </multi-entry>
       </form-section>
     </tab-panel>
 
