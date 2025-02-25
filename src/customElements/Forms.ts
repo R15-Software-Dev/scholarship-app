@@ -222,7 +222,7 @@ export class FormSection extends LitElement {
 
         if (submittable) {
           this._questions.forEach((question) => {
-            formData.set(question.input.name, question.input.getValue());
+            formData.set(question.input.name, question.processInputValue());
           });
         }
       }
