@@ -10,3 +10,4 @@ import "./MultipleEntry";
 import "./Ripple";
 import "./Tabs";
 import "./TextField";
+import "./FileInput.ts";
