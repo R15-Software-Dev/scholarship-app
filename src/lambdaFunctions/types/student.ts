@@ -47,7 +47,11 @@ export type WorkExperience = {
 }
 
 export type ExtracurricularActivities = {
-
+  extraActivity: string;
+  extraActivityParticipated: string;
+  extraActivityHours: number;
+  extraWeeksParticipated: number;
+  extraSpecialInvolvement?: string;
 }
 
 /**
