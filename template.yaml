@@ -333,7 +333,7 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
-  uploadFafsaReport:
+  studentUploadFafsaReport:
     Type: AWS::Serverless::Function
     Properties:
       Description: Allows a student to upload their FAFSA SAR to the application.
@@ -365,8 +365,6 @@ Resources:
           - "aws-lambda"
         EntryPoints:
           - index.ts
-
-
   # Student API's
   studentUpdatePersonalInfo:
     Type: AWS::Serverless::Function
