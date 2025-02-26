@@ -347,6 +347,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/fafsa
             Method: post
+            Auth:
+              Authorizer: NONE
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref StudentFafsaBucket
@@ -433,6 +435,8 @@ Resources:
       # The name of the stage - this typically would change when you deploy
       # from the dev to production stages.
       StageName: dev
+      BinaryMediaTypes:
+        - multipart~1form-data
       # Define the authorizers that are available
       Auth:
         # Tell SAM that this is the authorizer to always use, unless overridden.

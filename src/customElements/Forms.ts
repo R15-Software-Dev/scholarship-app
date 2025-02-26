@@ -90,6 +90,7 @@ export class FormQuestion extends LitElement {
           <slot name="header">
             <h2>No question header found</h2>
           </slot>
+          <slot name="desc"></slot>
         </label>
 
         <!-- This is where our input element will go -->
@@ -227,6 +228,7 @@ export class FormSection extends LitElement {
             if (question.input instanceof FileInput) {
               const fileInput = question.input as FileInput;
               formData.set(fileInput.name, fileInput.file);
+              multipart = true;
             } else {
               formData.set(question.input.name, question.processInputValue());
             }
@@ -235,8 +237,6 @@ export class FormSection extends LitElement {
       }
 
       if (submittable) {
-        console.log("information to submit: ")
-        console.log(formData);
         fetch(this.action, {
           method: this.method,
           body: (multipart) ? formData : JSON.stringify(Object.fromEntries(formData)),
