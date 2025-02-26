@@ -1,17 +1,9 @@
-import {
-  LitElement,
-  html,
-  css,
-  CSSResultGroup,
-  HTMLTemplateResult,
-} from "lit-element";
-import {
-  customElement,
-  state
-} from "lit-element/decorators.js";
+import {customElement, property, query} from "lit/decorators.js";
+import {InputElement} from "./InputElement";
+import {css, CSSResultGroup, html, HTMLTemplateResult, LitElement} from "lit";
 
 @customElement("file-input")
-export class FileInput extends LitElement {
+export class FileInput extends LitElement implements InputElement {
   static styles: CSSResultGroup = css`
       label {
           display: block;
@@ -22,27 +14,14 @@ export class FileInput extends LitElement {
       }
   `;
 
-  @state()
-  private fileString: string | null = null;
 
-  private handleFileChange(e: Event): void {
-    const input = e.target as HTMLInputElement;
-    const file = input.files?.[0];
-
-    if (file && file.type === "application/pdf") {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.fileString = reader.result as string;
-        console.log("Base64 String:", this.fileString);
-      };
-      reader.readAsDataURL(file); // Converts to base64 string
-    } else {
-      console.warn("Please upload a valid PDF file.");
-    }
-  }
-
-  public getValue(): string | null {
-    return this.fileString;
+  @query("input")
+    protected accessor fileInput: HTMLInputElement | null;
+  @property({ type: File })
+  get file(): File | null {
+    if (this.fileInput)
+      return this.fileInput.files[0];
+    else return null;
   }
 
   protected render(): HTMLTemplateResult {
@@ -53,8 +32,31 @@ export class FileInput extends LitElement {
           id="fileUpload"
           name="fileUpload"
           accept=".pdf"
-          @change="${this.handleFileChange}" />
+          ?disabled="${this.disabled}"/>
       </div>
     `;
+  }
+
+  @property({ type: Boolean, reflect: true })
+    accessor disabled: boolean;
+  @property({ type: String })
+    accessor name: string;
+  @property({ type: Boolean, reflect: true })
+    accessor required: boolean;
+  @property({ type: String, reflect: true })
+    accessor value: string = "";
+
+  checkValidity(): boolean {
+    return true;  // for now, always valid
+  }
+
+  clearError(): void {
+  }
+
+  displayError(message: string): void {
+  }
+
+  getValue(): string {
+    return JSON.stringify(this.fileInput);
   }
 }

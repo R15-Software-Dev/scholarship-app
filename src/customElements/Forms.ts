@@ -10,6 +10,7 @@ import { classMap } from "lit/directives/class-map.js";
 import { InputElement } from "./InputElement";
 import { ActionButton } from "./ActionButton";
 import { MultiEntry } from "./MultipleEntry";
+import {FileInput} from "./FileInput";
 
 // Utility function to check if a string is valid Base64
 function isBase64(str: string): boolean {
@@ -197,6 +198,7 @@ export class FormSection extends LitElement {
   handleForm(event: SubmitEvent): void {
     let submittable = true;
     let formData = new FormData();
+    let multipart: boolean = false;
 
     event.preventDefault();
     this.disableForm();
@@ -208,13 +210,10 @@ export class FormSection extends LitElement {
           formData.set(entry.name, entry.getValue());
         });
       } else {
-        // build general question data.
-        // Clears error messages when input is valid
-        this._questions.forEach((question) => question.input.clearError());
-
         // First check if values are valid by calling checkValidity on
         // all the form's inputs.
         this._questions.forEach((question) => {
+          question.input.clearError();
           // Check validity of questions.
           if (!question.checkValidity()) {
             console.log(`Question ${question.input.name} is not valid.`);
@@ -225,17 +224,22 @@ export class FormSection extends LitElement {
 
         if (submittable) {
           this._questions.forEach((question) => {
-            formData.set(question.input.name, question.processInputValue());
+            if (question.input instanceof FileInput) {
+              const fileInput = question.input as FileInput;
+              formData.set(fileInput.name, fileInput.file);
+            } else {
+              formData.set(question.input.name, question.processInputValue());
+            }
           });
         }
       }
 
       if (submittable) {
         console.log("information to submit: ")
-        console.log(Object.fromEntries(formData));
+        console.log(formData);
         fetch(this.action, {
           method: this.method,
-          body: JSON.stringify(Object.fromEntries(formData.entries())),
+          body: (multipart) ? formData : JSON.stringify(Object.fromEntries(formData)),
         })
           .then((response) => response.json)
           .then((data) => {
