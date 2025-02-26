@@ -23,23 +23,23 @@ export type StudentPersonalInfo = {
  *  Academic honors information
  */
 export type AcademicHonors = {
-  
+  listAcademicHonors?: string;
 }
 
 export type AthleticParticipation = {
-  
+  athleticParticipation: string;
 }
 
 export type CommunityInvolvement = {
-
+  communityInvolvement: string;
 }
 
 export type WorkExperience = {
-
+  workExperience: string;
 }
 
 export type ExtracurricularActivities = {
-
+  extracurricularActivities: string;
 }
 
 /**
