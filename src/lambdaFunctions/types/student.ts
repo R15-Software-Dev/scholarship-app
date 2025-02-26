@@ -27,7 +27,9 @@ export type AcademicHonors = {
 }
 
 export type AthleticParticipation = {
-  
+  sportInput: string;
+  sportParticipatedInput: string;
+  sportAchievements?: string;
 }
 
 export type CommunityInvolvement = {
