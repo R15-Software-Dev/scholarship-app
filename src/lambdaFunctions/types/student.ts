@@ -33,7 +33,9 @@ export type AthleticParticipation = {
 }
 
 export type CommunityInvolvement = {
-
+  activity: string;
+  activityParticipated: string;
+  activityHours: number;
 }
 
 export type WorkExperience = {
