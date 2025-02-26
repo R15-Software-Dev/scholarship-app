@@ -22,18 +22,12 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
-      "#activity": "activity",
-      "#activityParticipated": "activityParticipated",
-      "#activityHours": "activityHours"
+      "#communityInvolvement": "communityInvolvement"
     },
     ExpressionAttributeValues: {
-      ":activity": {S: communityInfo.activity},
-      ":activityParticipated": {S: communityInfo.activityParticipated},
-      ":activityHours": {N: communityInfo.activityHours.toString()}
+      ":communityInvolvement": {S: communityInfo.communityInvolvement}
     },
-    UpdateExpression: "SET #activity = :activity," +
-      "#activityParticipated = :activityParticipated," +
-      "#activityHours = :activityHours"
+    UpdateExpression: "SET #communityInvolvement = :communityInvolvement"
   });
 
   try {
