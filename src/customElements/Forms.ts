@@ -10,6 +10,16 @@ import { classMap } from "lit/directives/class-map.js";
 import { InputElement } from "./InputElement";
 import { ActionButton } from "./ActionButton";
 import { MultiEntry } from "./MultipleEntry";
+import {FileInput} from "./FileInput";
+
+// Utility function to check if a string is valid Base64
+function isBase64(str: string): boolean {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (e) {
+    return false;
+  }
+}
 
 @customElement("form-question")
 export class FormQuestion extends LitElement {
@@ -51,6 +61,26 @@ export class FormQuestion extends LitElement {
     return this._inputList[0];
   }
 
+  // Method to process the input value as a file or regular value
+  processInputValue(): FormDataEntryValue {
+    let value = this.input.getValue();
+    if (typeof value === "string" && value.startsWith("data:")) {
+      // Extract the base64 part after the comma
+      const base64String = value.split(",")[1];
+      if (base64String && isBase64(base64String)) {
+        const byteCharacters = atob(base64String);
+        const byteArrays = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteArrays[i] = byteCharacters.charCodeAt(i);
+        }
+        const blob = new Blob([byteArrays], { type: "application/pdf" }); // Use correct MIME type
+        return new File([blob], "uploaded_file.pdf", { type: "application/pdf" });
+      }
+    }
+    return value; // Return as-is if not base64
+  }
+
+
   protected render(): HTMLTemplateResult {
     // This element MUST be used within a FormSection or HTMLFormElement.
     return html`
@@ -60,6 +90,7 @@ export class FormQuestion extends LitElement {
           <slot name="header">
             <h2>No question header found</h2>
           </slot>
+          <slot name="desc"></slot>
         </label>
 
         <!-- This is where our input element will go -->
@@ -168,6 +199,7 @@ export class FormSection extends LitElement {
   handleForm(event: SubmitEvent): void {
     let submittable = true;
     let formData = new FormData();
+    let multipart: boolean = false;
 
     event.preventDefault();
     this.disableForm();
@@ -179,13 +211,10 @@ export class FormSection extends LitElement {
           formData.set(entry.name, entry.getValue());
         });
       } else {
-        // build general question data.
-        // Clears error messages when input is valid
-        this._questions.forEach((question) => question.input.clearError());
-
         // First check if values are valid by calling checkValidity on
         // all the form's inputs.
         this._questions.forEach((question) => {
+          question.input.clearError();
           // Check validity of questions.
           if (!question.checkValidity()) {
             console.log(`Question ${question.input.name} is not valid.`);
@@ -196,17 +225,21 @@ export class FormSection extends LitElement {
 
         if (submittable) {
           this._questions.forEach((question) => {
-            formData.set(question.input.name, question.input.getValue());
+            if (question.input instanceof FileInput) {
+              const fileInput = question.input as FileInput;
+              formData.set(fileInput.name, fileInput.file);
+              multipart = true;
+            } else {
+              formData.set(question.input.name, question.processInputValue());
+            }
           });
         }
       }
 
       if (submittable) {
-        console.log("information to submit: ")
-        console.log(Object.fromEntries(formData));
         fetch(this.action, {
           method: this.method,
-          body: JSON.stringify(Object.fromEntries(formData.entries())),
+          body: (multipart) ? formData : JSON.stringify(Object.fromEntries(formData)),
         })
           .then((response) => response.json)
           .then((data) => {
