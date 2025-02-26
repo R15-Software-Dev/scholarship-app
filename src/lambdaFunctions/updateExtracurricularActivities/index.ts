@@ -27,7 +27,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     ExpressionAttributeValues: {
       ":extracurricularActivities": {S: extracurricularInfo.extracurricularActivities},
     },
-    UpdateExpression: "SET #extracurricularActivities = :extracurricularActivities,"
+    UpdateExpression: "SET #extracurricularActivities = :extracurricularActivities"
   });
 
   try {
