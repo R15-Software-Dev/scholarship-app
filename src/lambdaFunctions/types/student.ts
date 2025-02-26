@@ -27,31 +27,19 @@ export type AcademicHonors = {
 }
 
 export type AthleticParticipation = {
-  sport: string;
-  sportParticipated: string;
-  sportAchievements?: string;
+  athleticParticipation: string;
 }
 
 export type CommunityInvolvement = {
-  activity: string;
-  activityParticipated: string;
-  activityHours: number;
+  communityInvolvement: string;
 }
 
 export type WorkExperience = {
-  jobTitle: string;
-  studentEmployer: string;
-  jobStartDate: string;
-  jobEndDate: string;
-  weeklyWorkHours: number;
+  workExperience: string;
 }
 
 export type ExtracurricularActivities = {
-  extraActivity: string;
-  extraActivityParticipated: string;
-  extraActivityHours: number;
-  extraWeeksParticipated: number;
-  extraSpecialInvolvement?: string;
+  extracurricularActivities: string;
 }
 
 /**
