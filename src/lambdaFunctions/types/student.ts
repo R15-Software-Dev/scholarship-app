@@ -23,7 +23,7 @@ export type StudentPersonalInfo = {
  *  Academic honors information
  */
 export type AcademicHonors = {
-  
+  listAcademicHonors?: string;
 }
 
 export type AthleticParticipation = {
