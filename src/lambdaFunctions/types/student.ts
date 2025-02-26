@@ -39,7 +39,11 @@ export type CommunityInvolvement = {
 }
 
 export type WorkExperience = {
-
+  jobTitle: string;
+  studentEmployer: string;
+  jobStartDate: string;
+  jobEndDate: string;
+  weeklyWorkHours: number;
 }
 
 export type ExtracurricularActivities = {
