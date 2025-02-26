@@ -22,17 +22,17 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
-      "#sportInput": "sportInput",
-      "#sportParticipatedInput": "sportParticipatedInput",
+      "#sport": "sport",
+      "#sportParticipated": "sportParticipated",
       "#sportAchievements": "sportAchievements"
     },
     ExpressionAttributeValues: {
-      ":sportInput": {S: athleticInfo.sportInput},
-      ":sportParticipatedInput": {S: athleticInfo.sportParticipatedInput},
+      ":sport": {S: athleticInfo.sport},
+      ":sportParticipated": {S: athleticInfo.sportParticipated},
       ":sportAchievements": {S: athleticInfo.sportAchievements}
     },
-    UpdateExpression: "SET #sportInput = :sportInput," +
-      "#sportParticipatedInput = :sportParticipatedInput," +
+    UpdateExpression: "SET #sport = :sport," +
+      "#sportParticipated = :sportParticipated," +
       "#sportAchievements = :sportAchievements"
   });
 

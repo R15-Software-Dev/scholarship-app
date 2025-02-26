@@ -27,8 +27,8 @@ export type AcademicHonors = {
 }
 
 export type AthleticParticipation = {
-  sportInput: string;
-  sportParticipatedInput: string;
+  sport: string;
+  sportParticipated: string;
   sportAchievements?: string;
 }
 
