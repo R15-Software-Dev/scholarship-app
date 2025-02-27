@@ -22,13 +22,12 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
-
+      "#workExperience": "workExperience"
     },
     ExpressionAttributeValues: {
-
+      ":workExperience": {S: workInfo.workExperience}
     },
-    UpdateExpression: "SET"
-
+    UpdateExpression: "SET #workExperience = :workExperience"
   });
 
   try {
