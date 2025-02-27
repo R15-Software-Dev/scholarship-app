@@ -85,3 +85,7 @@ export type InstitutionalResources = {
   totalSelfHelp?: string;
   loansValue?: string;
 }
+
+export type StudentEssays = {
+
+}
