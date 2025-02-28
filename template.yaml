@@ -333,7 +333,7 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
-  uploadFafsaReport:
+  studentUploadFafsaReport:
     Type: AWS::Serverless::Function
     Properties:
       Description: Allows a student to upload their FAFSA SAR to the application.
@@ -363,6 +363,239 @@ Resources:
         External:
           - "@aws-sdk/client-s3"
           - "aws-lambda"
+        EntryPoints:
+          - index.ts
+  # Student API's
+  studentUpdatePersonalInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their personal information.
+      CodeUri: src/lambdaFunctions/updatePersonalInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/personal-info
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateFamilyInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their family's information.
+      CodeUri: src/lambdaFunctions/updateFamilyInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/family-info
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateInstResources:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their university's resource information.
+      CodeUri: src/lambdaFunctions/updateInstitutionalResources
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/inst-resources
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateAcademicHonors:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their academic honors.
+      CodeUri: src/lambdaFunctions/updateAcademicHonors
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/honors
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateAthleticParticipation:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their sports information.
+      CodeUri: src/lambdaFunctions/updateAthleticParticipation
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/sports
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateCommunityInvolvement:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their community involvement.
+      CodeUri: src/lambdaFunctions/updateCommunityInvolvement
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/community-involvement
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateWorkExperience:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their work experience.
+      CodeUri: src/lambdaFunctions/updateWorkExperience
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/work-experience
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateExtracurricularActivities:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their extracurriculars.
+      CodeUri: src/lambdaFunctions/updateExtracurricularActivities
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/extracurriculars
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
 
@@ -425,8 +658,6 @@ Resources:
           - "@aws-sdk/client-secrets-manager"
         EntryPoints:
           - index.ts
-
-  # Define the S3 bucket for the website here (future update)
 
   # Define the API Gateway endpoints
   ScholarshipApi:
