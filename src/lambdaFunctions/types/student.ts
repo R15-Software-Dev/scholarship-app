@@ -55,10 +55,10 @@ export type UniversityDetails = {
   studentStudyField: string;
   studentCareer: string;
   universityAcceptance: string;
-  tuitionCost: string;
-  roomBoard: string;
-  travelCosts?: string;
-  miscCosts?: string;
+  tuitionCost: number;
+  roomBoard: number;
+  travelCosts?: number;
+  miscCosts?: number;
 }
 
 /**
@@ -81,7 +81,12 @@ export type FamilyInfo = {
 }
 
 export type InstitutionalResources = {
-  grantsAwarded?: string;
-  totalSelfHelp?: string;
-  loansValue?: string;
+  grantsAwarded?: number;
+  totalSelfHelp?: number;
+  loansValue?: number;
 }
+
+export type Student = StudentPersonalInfo & AcademicHonors
+  & AthleticParticipation & CommunityInvolvement & WorkExperience
+  & ExtracurricularActivities & UniversityDetails & FamilyInfo
+  & InstitutionalResources;
