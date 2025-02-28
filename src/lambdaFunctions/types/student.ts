@@ -85,3 +85,8 @@ export type InstitutionalResources = {
   totalSelfHelp?: string;
   loansValue?: string;
 }
+
+export type Student = StudentPersonalInfo & AcademicHonors
+  & AthleticParticipation & CommunityInvolvement & WorkExperience
+  & ExtracurricularActivities & UniversityDetails & FamilyInfo
+  & InstitutionalResources;
