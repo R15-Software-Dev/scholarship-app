@@ -598,6 +598,35 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
+  readAllStudentInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets all information about the specified student, from the cookie header.
+      CodeUri: src/lambdaFunctions/readAllStudentInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/info/all
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-info
+      Environment:
+        Variables:
+          TABLE_NAME: student-info
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   StudentFafsaBucket:
     Type: AWS::S3::Bucket
@@ -631,6 +660,17 @@ Resources:
           AttributeType: S
       KeySchema:
         - AttributeName: ScholarshipID
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+  StudentApplicationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: student-applications
+      AttributeDefinitions:
+        - AttributeName: Email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Email
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
