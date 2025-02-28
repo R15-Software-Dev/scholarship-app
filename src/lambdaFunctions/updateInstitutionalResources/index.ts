@@ -27,9 +27,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#loansValue": "loansValue"
     },
     ExpressionAttributeValues: {
-      ":grantsAwarded": {S: institutionalInfo.grantsAwarded},
-      ":totalSelfHelp": {S: institutionalInfo.totalSelfHelp},
-      ":loansValue": {S: institutionalInfo.loansValue}
+      ":grantsAwarded": {N: institutionalInfo.grantsAwarded.toString()},
+      ":totalSelfHelp": {N: institutionalInfo.totalSelfHelp.toString()},
+      ":loansValue": {N: institutionalInfo.loansValue.toString()}
     },
     UpdateExpression: "SET #grantsAwarded = :grantsAwarded," +
       "#totalSelfHelp = :totalSelfHelp," +
