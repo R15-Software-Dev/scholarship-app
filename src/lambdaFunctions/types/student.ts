@@ -13,8 +13,8 @@ export type StudentPersonalInfo = {
   studentPhoneNumber: string;
   studentEmail: string;
   unweightedGPA: string;
-  readingScoreSAT: number;
-  mathScoreSAT: number;
+  readingScoreSAT?: number;
+  mathScoreSAT?: number;
   highScoreACT?: number;
   attendBAS: string;
 }
@@ -53,12 +53,10 @@ export type UniversityDetails = {
   universityZipCode: string;
   studentsMajor: string;
   studentStudyField: string;
-  studentCareer: string;
+  studentCareer?: string;
   universityAcceptance: string;
-  tuitionCost: number;
-  roomBoard: number;
-  travelCosts?: number;
-  miscCosts?: number;
+  tuitionCost?: number;
+  roomBoard?: number;
 }
 
 /**
@@ -80,13 +78,6 @@ export type FamilyInfo = {
   familyChurchMember: string;
 }
 
-export type InstitutionalResources = {
-  grantsAwarded?: number;
-  totalSelfHelp?: number;
-  loansValue?: number;
-}
-
 export type Student = StudentPersonalInfo & AcademicHonors
   & AthleticParticipation & CommunityInvolvement & WorkExperience
-  & ExtracurricularActivities & UniversityDetails & FamilyInfo
-  & InstitutionalResources;
+  & ExtracurricularActivities & UniversityDetails & FamilyInfo;

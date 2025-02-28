@@ -117,7 +117,6 @@
       <c-tab panel-id="extracurricularActivitiesPanel">Extracurricular Activities</c-tab>
       <c-tab panel-id="universityDetailsPanel">University Details</c-tab>
       <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
-      <c-tab panel-id="institutionalResourcesPanel">Institutional Resources</c-tab>
       <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
     </tab-bar>
   </div>
@@ -244,29 +243,27 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">SAT Reading high score</h3>
+          <h3 slot="header">SAT Reading high score (Optional)</h3>
           <outlined-text-field
             id="readingScoreSATInput"
             name="readingScoreSAT"
             type="number"
-            placeholder="Enter SAT reading high score"
-            required>
+            placeholder="Enter SAT reading high score">
           </outlined-text-field>
         </form-question>
 
         <form-question>
-          <h3 slot="header">SAT Math high score</h3>
+          <h3 slot="header">SAT Math high score (Optional)</h3>
           <outlined-text-field
             id="mathScoreSATInput"
             name="mathScoreSAT"
             type="number"
-            placeholder="Enter SAT math high score"
-            required>
+            placeholder="Enter SAT math high score">
           </outlined-text-field>
         </form-question>
 
         <form-question>
-          <h3 slot="header">ACT high score</h3>
+          <h3 slot="header">ACT high score (Optional)</h3>
           <outlined-text-field
             id="highScoreACTInput"
             name="highScoreACT"
@@ -629,13 +626,12 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Career student intends to pursue</h3>
+          <h3 slot="header">Career student intends to pursue (Optional)</h3>
           <outlined-text-field
               id="studentCareerInput"
               name="studentCareer"
               type="text"
-              placeholder="Enter career"
-              required>
+              placeholder="Enter career">
           </outlined-text-field>
         </form-question>
 
@@ -652,34 +648,10 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Tuition cost</h3>
+          <h3 slot="header">Tuition cost (Optional)</h3>
           <outlined-text-field
               id="tuitionCostInput"
               name="tuitionCost"
-              type="number"
-              placeholder="Enter an amount"
-              prefix-text="$"
-              required>
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">Room & board cost</h3>
-          <outlined-text-field
-              id="roomBoardInput"
-              name="roomBoard"
-              type="number"
-              placeholder="Enter an amount"
-              prefix-text="$"
-              required>
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">Travel costs</h3>
-          <outlined-text-field
-              id="travelCostsInput"
-              name="travelCosts"
               type="number"
               placeholder="Enter an amount"
               prefix-text="$">
@@ -687,10 +659,10 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Miscellaneous costs</h3>
+          <h3 slot="header">Room & board cost (Optional)</h3>
           <outlined-text-field
-              id="miscCostsInput"
-              name="miscCosts"
+              id="roomBoardInput"
+              name="roomBoard"
               type="number"
               placeholder="Enter an amount"
               prefix-text="$">
@@ -801,7 +773,7 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 2 name</h3>
+          <h3 slot="header">Parent/Guardian 2 name (Optional)</h3>
           <outlined-text-field
             id="guardianTwoNameInput"
             name="guardianTwoName"
@@ -811,7 +783,7 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 2 relationship</h3>
+          <h3 slot="header">Parent/Guardian 2 relationship (Optional)</h3>
           <drop-down
               id="guardianTwoRelationInput"
               name="guardianTwoRelation"
@@ -829,7 +801,7 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 2 occupation (Enter N/A if not applicable)</h3>
+          <h3 slot="header">Parent/Guardian 2 occupation (Enter N/A if not applicable, Optional)</h3>
           <outlined-text-field
             id="guardianTwoOccupationInput"
             name="guardianTwoOccupation"
@@ -839,7 +811,7 @@
         </form-question>
 
         <form-question>
-          <h3 slot="header">Parent/Guardian 2 employer (Enter N/A if not applicable)</h3>
+          <h3 slot="header">Parent/Guardian 2 employer (Enter N/A if not applicable, Optional)</h3>
           <outlined-text-field
             id="guardianTwoEmployerInput"
             name="guardianTwoEmployer"
@@ -882,46 +854,6 @@
                 name="familyChurchMember"
                 required>
               </check-box>
-        </form-question>
-      </form-section>
-    </tab-panel>
-
-    <tab-panel id="institutionalResourcesPanel">
-      <form-section
-        header="Institutional Resources"
-        name="institutionalResources"
-        id="institutionalResourcesForm"
-        action="/students/inst-resources"
-        method="post">
-
-        <form-question>
-          <h3 slot="header">Total value of grants awarded (scholarships/awards)</h3>
-          <outlined-text-field
-              id="grantsAwardedInput"
-              name="grantsAwarded"
-              type="number"
-              placeholder="Enter a value">
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">Total value of self-help (Federal work study)</h3>
-          <outlined-text-field
-              id="totalSelfHelpInput"
-              name="totalSelfHelp"
-              type="number"
-              placeholder="Enter a value">
-          </outlined-text-field>
-        </form-question>
-
-        <form-question>
-          <h3 slot="header">Total value of loans available</h3>
-          <outlined-text-field
-              id="loansValueInput"
-              name="loansValue"
-              type="number"
-              placeholder="Enter a value">
-          </outlined-text-field>
         </form-question>
       </form-section>
     </tab-panel>
