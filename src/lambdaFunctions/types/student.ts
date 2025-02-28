@@ -53,12 +53,10 @@ export type UniversityDetails = {
   universityZipCode: string;
   studentsMajor: string;
   studentStudyField: string;
-  studentCareer: string;
+  studentCareer?: string;
   universityAcceptance: string;
-  tuitionCost: number;
-  roomBoard: number;
-  travelCosts?: number;
-  miscCosts?: number;
+  tuitionCost?: number;
+  roomBoard?: number;
 }
 
 /**
