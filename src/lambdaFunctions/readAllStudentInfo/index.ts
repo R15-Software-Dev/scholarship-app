@@ -111,10 +111,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     studentCareer: dbitem?.studentCareer?.S ?? null,
     //@ts-ignore
     universityAcceptance: dbitem?.universityAcceptance?.SS ?? null,
-    tuitionCost: dbitem?.tuitionCost?.S ?? null,
-    roomBoard: dbitem?.roomBoard?.S ?? null,
-    travelCosts: dbitem?.travelCosts?.S ?? null,
-    miscCosts: dbitem?.miscCosts?.S ?? null,
+    tuitionCost: checkNullOrNumber(dbitem?.tuitionCost?.N ?? null),
+    roomBoard: checkNullOrNumber(dbitem?.roomBoard?.N ?? null),
+    travelCosts: checkNullOrNumber(dbitem?.travelCosts?.N ?? null),
+    miscCosts: checkNullOrNumber(dbitem?.miscCosts?.N ?? null),
     numChildTotal: dbitem?.numChildTotal?.S ?? null,
     numChildAttendCollege: dbitem?.numChildAttendCollege?.S ?? null,
     guardianOneName: dbitem?.guardianOneName?.S ?? null,
@@ -131,9 +131,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     armedServiceMember: dbitem?.armedServiceMember?.SS ?? null,
     //@ts-ignore
     familyChurchMember: dbitem?.familyChurchMember?.SS ?? null,
-    grantsAwarded: dbitem?.grantsAwarded?.S ?? null,
-    totalSelfHelp: dbitem?.totalSelfHelp?.S ?? null,
-    loansValue: dbitem?.loansValue?.S ?? null
+    grantsAwarded: checkNullOrNumber(dbitem?.grantsAwarded?.N ?? null),
+    totalSelfHelp: checkNullOrNumber(dbitem?.totalSelfHelp?.N ?? null),
+    loansValue: checkNullOrNumber(dbitem?.loansValue?.N ?? null)
   }
 
   // Return the information
