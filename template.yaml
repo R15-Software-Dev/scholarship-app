@@ -382,10 +382,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -411,10 +411,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -440,10 +440,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -469,10 +469,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -498,10 +498,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -527,10 +527,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -556,10 +556,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -585,10 +585,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -614,10 +614,10 @@ Resources:
             Method: post
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: student-info
+            TableName: student-applications
       Environment:
         Variables:
-          TABLE_NAME: student-info
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
