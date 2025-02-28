@@ -606,12 +606,12 @@ Resources:
       Handler: index.handler
       Runtime: nodejs20.x
       Events:
-        PostRequest:
+        GetRequest:
           Type: Api
           Properties:
             RestApiId: !Ref ScholarshipApi
             Path: /students/info/all
-            Method: post
+            Method: get
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
