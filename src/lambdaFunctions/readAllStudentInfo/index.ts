@@ -49,8 +49,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       "universityAcceptance",
       "tuitionCost",
       "roomBoard",
-      "travelCosts",
-      "miscCosts",
       "numChildTotal",
       "numChildAttendCollege",
       "guardianOneName",
@@ -64,9 +62,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       "familyPEAMember",
       "armedServiceMember",
       "familyChurchMember",
-      "grantsAwarded",
-      "totalSelfHelp",
-      "loansValue"
     ]
   });
 
@@ -135,8 +130,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       universityAcceptance: dbitem?.universityAcceptance?.SS ?? null,
       tuitionCost: checkNullOrNumber(dbitem?.tuitionCost?.N ?? null),
       roomBoard: checkNullOrNumber(dbitem?.roomBoard?.N ?? null),
-      travelCosts: checkNullOrNumber(dbitem?.travelCosts?.N ?? null),
-      miscCosts: checkNullOrNumber(dbitem?.miscCosts?.N ?? null),
       numChildTotal: dbitem?.numChildTotal?.S ?? null,
       numChildAttendCollege: dbitem?.numChildAttendCollege?.S ?? null,
       guardianOneName: dbitem?.guardianOneName?.S ?? null,
@@ -153,9 +146,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       armedServiceMember: dbitem?.armedServiceMember?.SS ?? null,
       //@ts-ignore
       familyChurchMember: dbitem?.familyChurchMember?.SS ?? null,
-      grantsAwarded: checkNullOrNumber(dbitem?.grantsAwarded?.N ?? null),
-      totalSelfHelp: checkNullOrNumber(dbitem?.totalSelfHelp?.N ?? null),
-      loansValue: checkNullOrNumber(dbitem?.loansValue?.N ?? null)
     }
 
     // Return the information
