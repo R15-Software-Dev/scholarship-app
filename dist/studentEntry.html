@@ -88,6 +88,16 @@
       width: 70px;
       height: 70px;
     }
+
+    .form-container {
+      border-radius: 7px;
+      background-color: inherit;
+      box-shadow: 0 0 6px rgb(173, 170, 179);
+      padding: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 800px;
+    }
   </style>
 
   <body>
@@ -118,6 +128,7 @@
       <c-tab panel-id="universityDetailsPanel">University Details</c-tab>
       <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
       <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
+      <c-tab panel-id="scholarEssayPanel">Scholarship Essays</c-tab>
     </tab-bar>
   </div>
 
@@ -872,5 +883,17 @@
         </form-question>
       </form-section>
     </tab-panel>
+
+    <tab-panel id="scholarEssayPanel">
+      <div class="form-container">
+        <p align="center">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeD8f50XwVtGycjIy3wuB0lkDwxydsIIbaxma--_bTECd0v0A/viewform?embedded=true" width="800" height="430" frameborder="" marginheight="0" marginwidth="0">Loading…</iframe>
+        </p>
+      </div>
+    </tab-panel>
   </body>
+
+  <script>
+
+  </script>
 </html>
