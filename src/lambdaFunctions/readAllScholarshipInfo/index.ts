@@ -88,7 +88,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     scholarshipSponsor: dbitem?.scholarshipSponsor?.S ?? null,
     scholarshipNumAwards: checkNullOrNumber(dbitem?.scholarshipNumAwards?.N ?? null),
     scholarshipAwardsTotal: checkNullOrNumber(dbitem?.scholarshipAwardsTotal?.N ?? null),
-    scholarshipAmountPerAward: checkNullOrNumber(dbitem?.scholarshipAmountPerAward?.S ?? null),
+    scholarshipAmountPerAward: checkNullOrNumber(dbitem?.scholarshipAmountPerAward?.N ?? null),
     //@ts-ignore
     studentAidReport: dbitem?.studentAidReport?.SS ?? null,
     //@ts-ignore
