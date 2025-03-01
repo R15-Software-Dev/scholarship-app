@@ -33,8 +33,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#universityAcceptance": "universityAcceptance",
       "#tuitionCost": "tuitionCost",
       "#roomBoard": "roomBoard",
-      "#travelCosts": "travelCosts",
-      "#miscCosts": "miscCosts"
     },
     ExpressionAttributeValues: {
       ":universityDetails": {S: universityInfo.universityDetails},
@@ -48,8 +46,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":universityAcceptance": {SS: JSON.parse(universityInfo.universityAcceptance)},
       ":tuitionCost": {N: universityInfo.tuitionCost.toString()},
       ":roomBoard": {N: universityInfo.roomBoard.toString()},
-      ":travelCosts": {N: universityInfo.travelCosts.toString()},
-      ":miscCosts": {N: universityInfo.miscCosts.toString()}
     },
     UpdateExpression: "SET #universityDetails = :universityDetails," +
       "#universityName = :universityName," +
@@ -61,9 +57,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#studentCareer = :studentCareer," +
       "#universityAcceptance = :universityAcceptance," +
       "#tuitionCost = :tuitionCost," +
-      "#roomBoard = :roomBoard," +
-      "#travelCosts = :travelCosts," +
-      "#miscCosts = :miscCosts"
+      "#roomBoard = :roomBoard,"
   });
 
   try {

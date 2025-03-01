@@ -424,35 +424,6 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
-  studentUpdateInstResources:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: Allows a student to update their university's resource information.
-      CodeUri: src/lambdaFunctions/updateInstitutionalResources
-      Handler: index.handler
-      Runtime: nodejs20.x
-      Events:
-        PostRequest:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ScholarshipApi
-            Path: /students/inst-resources
-            Method: post
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: student-applications
-      Environment:
-        Variables:
-          TABLE_NAME: student-applications
-    Metadata:
-      BuildMethod: esbuild
-      BuildProperties:
-        Minify: true
-        Target: "es2020"
-        External:
-          - "@aws-sdk/client-dynamodb"
-        EntryPoints:
-          - index.ts
   studentUpdateAcademicHonors:
     Type: AWS::Serverless::Function
     Properties:
