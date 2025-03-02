@@ -22,7 +22,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
-      "#extracurricularActivity": "#extracurricularActivity"
+      "#extracurricularActivities": "#extracurricularActivities"
     },
     ExpressionAttributeValues: {
       ":extracurricularActivities": {S: extracurricularInfo.extracurricularActivities},
