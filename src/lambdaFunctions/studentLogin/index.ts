@@ -1,5 +1,6 @@
 ﻿import {APIGatewayProxyEvent, APIGatewayProxyResult, Handler} from "aws-lambda";
 import {CognitoIdentityProviderClient, DescribeUserPoolClientCommand} from "@aws-sdk/client-cognito-identity-provider";
+import {importJWK, jwtVerify} from "jose";
 
 
 const idpClient = new CognitoIdentityProviderClient({ region: "us-east-1" });
@@ -17,6 +18,13 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         ClientId: process.env.COGNITO_CLIENT_ID
       }));
 
+      const publicFetch = await fetch(
+        process.env.COGNITO_JWK_URL, {
+          method: "GET"
+        }).then(res => res.json());
+      console.log(publicFetch.keys[0]);
+      const publicKey = await importJWK(publicFetch.keys[0]);
+
       await fetch(process.env.COGNITO_AUTH_URL, {
         method: "POST",
         headers: {
@@ -31,7 +39,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         }).toString()
       })
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
           if (data.error) {
             console.error(data.error);
             reject({
@@ -45,11 +53,17 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
             let authCookie = `authToken=${data.access_token}; Secure; HttpOnly`;
             let idCookie = `idToken=${data.id_token}; Secure; HttpOnly`;
             let refreshCookie = `refreshToken=${data.refresh_token}; Secure; HttpOnly`;
+
+            // Get the user's email address.
+            const {payload, protectedHeader} = await jwtVerify(data.id_token, publicKey);
+            // This is set as the studentEmail cookie as the rest of our APIs already check for this.
+            let userCookie = `studentEmail=${payload["cognito:username"]}; Secure; HttpOnly`;
+
             console.log(data);
             resolve({
               statusCode: 200,
               multiValueHeaders: {
-                "Set-Cookie": [authCookie, idCookie, refreshCookie]
+                "Set-Cookie": [authCookie, idCookie, refreshCookie, userCookie]
               },
               body: JSON.stringify({
                 access_token: authCookie,

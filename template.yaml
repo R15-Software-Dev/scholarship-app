@@ -641,11 +641,14 @@ Resources:
         Variables:
           COGNITO_AUTH_URL: https://us-east-1lfjuy5zam.auth.us-east-1.amazoncognito.com/oauth2/token
           COGNITO_CLIENT_ID: 4bi5clfnmk0qflgvqd8aetok86
+          COGNITO_JWK_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Lfjuy5zaM/.well-known/jwks.json
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
         Target: "es2020"
+        External:
+          - "@aws-sdk/client-cognito-identity-provider"
         EntryPoints:
           - index.ts
 
