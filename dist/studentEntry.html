@@ -135,7 +135,6 @@
     <tab-panel id="personalInformationPanel">
       <form-section
         header="Personal Information"
-        name="personalInfo"
         id="personalInformationForm"
         action="/students/personal-info"
         method="post">
@@ -300,7 +299,6 @@
     <tab-panel id="academicHonorsPanel">
       <form-section
           header="Academic Honors"
-          name="academicHonors"
           id="academicHonorsForm"
           action="/students/honors"
           method="post">
@@ -319,12 +317,11 @@
     <tab-panel id="athleticParticipationPanel">
       <form-section
           header="Athletic Participation"
-          name="athleticParticipation"
           id="athleticParticipationForm"
           action="/students/sports"
           method="post">
         <multi-entry
-            id="athleticParticipationMultiEntry"
+            id="athleticParticipationInput"
             name="athleticParticipation"
             display-members='{"Sport name":"sport"}'>
           <h1 slot="modal-header">Add Sport</h1>
@@ -366,12 +363,11 @@
     <tab-panel id="communityInvolvementPanel">
       <form-section
           header="Community Involvement"
-          name="communityInvolvement"
           id="communityInvolvementForm"
           action="/students/community-involvement"
           method="post">
         <multi-entry
-            id="communityInvolvementMultiEntry"
+            id="communityInvolvementInput"
             name="communityInvolvement"
             display-members='{"Activity Name":"activity","Activity Hours":"activityHours"}'>
           <h1 slot="modal-header">Add activity</h1>
@@ -414,12 +410,11 @@
     <tab-panel id="studentWorkExperiencePanel">
       <form-section
           header="Work Experience"
-          name="workExperience"
           id="workExperienceForm"
           action="/students/work-experience"
           method="post">
         <multi-entry
-            id="workExperienceMultiEntry"
+            id="workExperienceInput"
             name="workExperience"
             display-members='{"Job Title":"jobTitle","Start Date":"jobStartDate","End Date":"jobEndDate"}'>
           <h1 slot="modal-header">Add a work experience</h1>
@@ -484,12 +479,11 @@
     <tab-panel id="extracurricularActivitiesPanel">
       <form-section
           header="Extracurricular Activities"
-          name="extracurricularActivities"
           id="extracurricularActivitiesForm"
           action="/students/extracurriculars"
           method="post">
         <multi-entry
-            id="extracurricularActivitiesMultiEntry"
+            id="extracurricularActivitiesInput"
             name="extracurricularActivities"
             display-members='{"Activity Name":"extraActivity","Weeks Participated":"extraWeeksParticipated"}'>
           <h1 slot="modal-header">Add an activity</h1>
@@ -553,7 +547,6 @@
     <tab-panel id="universityDetailsPanel">
       <form-section
         header="University Details"
-        name="universityDetails"
         id="universityDetailsForm"
         action="/student/uni-details"
         method="post">
@@ -686,7 +679,6 @@
 
       <form-section
         header="Family Information"
-        name="familyInfo"
         id="familyInfoForm"
         action="/students/family-info"
         method="post">
@@ -872,7 +864,6 @@
     <tab-panel id="fafsaPanel">
       <form-section
         header="FAFSA Information"
-        name="fafsaInformation"
         id="fafsaInformationForm"
         action="/students/fafsa"
         method="post">
