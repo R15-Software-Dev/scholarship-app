@@ -6,46 +6,46 @@ import {css, CSSResultGroup, html, HTMLTemplateResult, LitElement} from "lit";
 @customElement("multi-entry")
 export class MultiEntry extends LitElement implements InputElement {
   static styles?: CSSResultGroup = css`
-      div .center-all {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-      }
+    div .center-all {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
 
-      div .entry-content {
-          display: flex;
-          flex-direction: column;
-      }
+    div .entry-content {
+      display: flex;
+      flex-direction: column;
+    }
 
-      div .entry-container {
-          display: flex;
-          flex-direction: row;
-          border-radius: 6px;
-          box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
-          width: auto;
-          padding: 10px;
-      }
+    div .entry-container {
+      display: flex;
+      flex-direction: row;
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+      width: auto;
+      padding: 10px;
+    }
 
-      div .member-headers {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          width: auto;
-          padding: 6px 14px;
-          background-color: var(--theme-primary-color); /* Dark red background */
-          border-radius: 8px; /* Rounded edges */
-          margin: 5px 0; /* Added some vertical spacing */
+    div .member-headers {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      width: auto;
+      padding: 6px 14px;
+      background-color: var(--theme-primary-color); /* Dark red background */
+      border-radius: 8px; /* Rounded edges */
+      margin: 5px 0; /* Added some vertical spacing */
 
-          & span {
-              flex: 1 1 0;
-              width: auto;
-              padding: 8px;
-              color: white; /* White text for the headers */
-              font-weight: bold; /* Keep the bold styling from the template */
-              font-size: 16px;
-          }
+      & span {
+        flex: 1 1 0;
+        width: auto;
+        padding: 8px;
+        color: white; /* White text for the headers */
+        font-weight: bold; /* Keep the bold styling from the template */
+        font-size: 16px;
       }
+    }
   `;
 
   @property({ type: Boolean, reflect: true }) accessor required: boolean = false;
