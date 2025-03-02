@@ -25,7 +25,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#listAcademicHonors" : "listAcademicHonors"
     },
     ExpressionAttributeValues: {
-      "listAcademicHonors": {S: academicInfo.listAcademicHonors}
+      ":listAcademicHonors": {S: academicInfo.listAcademicHonors}
     },
     UpdateExpression: "SET #listAcademicHonors = :listAcademicHonors"
   });
