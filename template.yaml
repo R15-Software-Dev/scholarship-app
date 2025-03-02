@@ -748,8 +748,7 @@ Resources:
           studentAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
             Identity:
-              Header: Cookie
-              ValidationExpression: .*authToken=([^;]+).*
+              Header: Authorization
       # Set up the CORS settings - these can be overridden, but it's a pain.
       Cors:
         AllowMethods: "'POST, GET, OPTIONS'"

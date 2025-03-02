@@ -237,9 +237,17 @@ export class FormSection extends LitElement {
       }
 
       if (submittable) {
+        // Check if there is an idToken cookie.
+        let idToken = "";
+        if (document.cookie.match(/.*idToken=([^;]+).*/))
+          idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
+
         fetch(this.action, {
           method: this.method,
           body: (multipart) ? formData : JSON.stringify(Object.fromEntries(formData)),
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          }
         })
           .then((response) => response.json)
           .then((data) => {
