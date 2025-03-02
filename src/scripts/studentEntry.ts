@@ -14,9 +14,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       })
     });
 
+    // Check for id token
+    let idToken = "";
+    if (document.cookie.match(/.*idToken=([^;]+).*/))
+      idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
+
     // Initialize form.
     await fetch("/students/info/all", {
-      method: "GET"
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${idToken}`
+      }
     })
       .then(async res => await res.json() as Student)
       .then(json => {

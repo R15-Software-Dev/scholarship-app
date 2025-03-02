@@ -51,7 +51,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
           } else {
             // Build the response which contains the cookies.
             let authCookie = `authToken=${data.access_token}; Secure; HttpOnly`;
-            let idCookie = `idToken=${data.id_token}; Secure; HttpOnly`;
+            let idCookie = `idToken=${data.id_token}; Secure`;
             let refreshCookie = `refreshToken=${data.refresh_token}; Secure; HttpOnly`;
 
             // Get the user's email address.
