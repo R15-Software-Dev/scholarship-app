@@ -348,7 +348,7 @@ Resources:
             Path: /students/fafsa
             Method: post
             Auth:
-              Authorizer: NONE
+              Authorizer: studentAuthorizer
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref StudentFafsaBucket
@@ -380,6 +380,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/personal-info
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -409,6 +411,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/family-info
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -438,6 +442,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/honors
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -467,6 +473,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/sports
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -496,6 +504,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/community-involvement
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -525,6 +535,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/work-experience
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -554,6 +566,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/extracurriculars
             Method: post
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -583,6 +597,8 @@ Resources:
             RestApiId: !Ref ScholarshipApi
             Path: /students/info/all
             Method: get
+            Auth:
+              Authorizer: studentAuthorizer
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
@@ -596,6 +612,40 @@ Resources:
         Target: "es2020"
         External:
           - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentLogin:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Exchanges a user's authorization code for a token.
+      CodeUri: src/lambdaFunctions/studentLogin
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/login
+            Method: post
+            Auth:
+              Authorizer: NONE
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Action:
+              - cognito-idp:DescribeUserPoolClient
+              - cognito-idp:ListUserPools
+            Resource: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
+      Environment:
+        Variables:
+          COGNITO_AUTH_URL: https://us-east-1lfjuy5zam.auth.us-east-1.amazoncognito.com/oauth2/token
+          COGNITO_CLIENT_ID: 4bi5clfnmk0qflgvqd8aetok86
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
         EntryPoints:
           - index.ts
 
@@ -690,6 +740,11 @@ Resources:
             FunctionArn: !GetAtt providerAuthorizer.Arn
             Identity:
               # Tell the authorizer to check for a cookie with this regex pattern.
+              Header: Cookie
+              ValidationExpression: .*authToken=([^;]+).*
+          studentAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
+            Identity:
               Header: Cookie
               ValidationExpression: .*authToken=([^;]+).*
       # Set up the CORS settings - these can be overridden, but it's a pain.
