@@ -26,18 +26,24 @@ export class MultiEntry extends LitElement implements InputElement {
       width: auto;
       padding: 10px;
     }
-      
+
     div .member-headers {
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
       width: auto;
-      padding: 2px 10px;
-      
+      padding: 6px 14px;
+      background-color: var(--theme-primary-color); /* Dark red background */
+      border-radius: 8px; /* Rounded edges */
+      margin: 5px 0; /* Added some vertical spacing */
+
       & span {
         flex: 1 1 0;
         width: auto;
-        padding: 5px;
+        padding: 8px;
+        color: white; /* White text for the headers */
+        font-weight: bold; /* Keep the bold styling from the template */
+        font-size: 16px;
       }
     }
   `;
@@ -97,7 +103,6 @@ export class MultiEntry extends LitElement implements InputElement {
           ([key, value]) => html`<span><b>${key}</b></span>`
         )}
       </div>
-      <div><hr></div>
       <div id="entriesDiv" class="entry-content">
         <!-- The custom entry elements will be put here. Not sure if that's going to be created as a slot yet. -->
         <slot name="entries"></slot>
