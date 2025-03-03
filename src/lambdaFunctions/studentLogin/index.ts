@@ -54,7 +54,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
             let idCookie = `idToken=${data.id_token}; Secure`;
             let refreshCookie = `refreshToken=${data.refresh_token}; Secure; HttpOnly`;
 
-            // Get the user's email address.
+            // Get the user's username.
             const {payload, protectedHeader} = await jwtVerify(data.id_token, publicKey);
             // This is set as the studentEmail cookie as the rest of our APIs already check for this.
             let userCookie = `studentEmail=${payload["cognito:username"]}; Secure; HttpOnly`;
@@ -63,10 +63,10 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
             resolve({
               statusCode: 200,
               multiValueHeaders: {
-                "Set-Cookie": [authCookie, idCookie, refreshCookie, userCookie]
+                "Set-Cookie": [authCookie, refreshCookie, userCookie]
               },
               body: JSON.stringify({
-                id_token: data.id_token  // client should store in memory/temp cookie
+                id_token: idCookie  // client should store in memory/temp cookie
               })
             });
           }
