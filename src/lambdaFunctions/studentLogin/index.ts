@@ -66,9 +66,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
                 "Set-Cookie": [authCookie, idCookie, refreshCookie, userCookie]
               },
               body: JSON.stringify({
-                access_token: authCookie,
-                refresh_token: refreshCookie,
-                id_token: idCookie
+                id_token: data.id_token  // client should store in memory/temp cookie
               })
             });
           }

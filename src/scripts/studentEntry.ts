@@ -7,17 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Log in user.
     const authCode = new URLSearchParams(window.location.search).get("code");
-    await fetch("/students/login", {
+    const loginResponse = await fetch("/students/login", {
       method: "POST",
       body: JSON.stringify({
         code: authCode
       })
-    });
+    }).then(response => response.json());
 
     // Check for id token
-    let idToken = "";
-    if (document.cookie.match(/.*idToken=([^;]+).*/))
-      idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
+    let idToken = loginResponse.id_token;
+    document.cookie = `idToken=${idToken}; Secure`;
 
     // Initialize form.
     await fetch("/students/info/all", {
