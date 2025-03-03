@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).then(response => response.json());
 
     // Check for id token
-    let idToken = loginResponse.id_token;
-    document.cookie = `idToken=${idToken}; Secure`;
+    document.cookie = loginResponse.id_token;
+    const idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
 
     // Initialize form.
     await fetch("/students/info/all", {
