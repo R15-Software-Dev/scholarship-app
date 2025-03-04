@@ -1,7 +1,17 @@
 import {Student} from "../lambdaFunctions/types/types";
 import {InputElement} from "../customElements/InputElement";
 
+function redirectToLogin() {
+  window.location.href =
+    "https://us-east-1lfjuy5zam.auth.us-east-1.amazoncognito.com/login?client_id=4bi5clfnmk0qflgvqd8aetok86&redirect_uri=https%3A%2F%2Fd141lbmc73edje.cloudfront.net%2FstudentEntry.html&response_type=code&scope=email+openid+profile";
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  $("form-section").on("unauthorized", event => {
+    // Redirect to the login page. This is annoying, but it'll work for now.
+    redirectToLogin();
+  });
+
   const loader = $(".loader");
   loader.show();
   try {
@@ -15,8 +25,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).then(response => response.json());
 
     // Check for id token
+    let idToken = "";
     document.cookie = loginResponse.id_token;
-    const idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
+    if (document.cookie.includes("idToken")) {
+      idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
+    } else {
+      redirectToLogin();
+    }
 
     // Initialize form.
     await fetch("/students/info/all", {
@@ -40,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     console.log(err);
   } finally {
-    console.log("hiding loader");
     loader.fadeOut("fast");
   }
 });

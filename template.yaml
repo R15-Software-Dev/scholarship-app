@@ -651,6 +651,34 @@ Resources:
           - "@aws-sdk/client-cognito-identity-provider"
         EntryPoints:
           - index.ts
+  studentUpdateUniversityDetails:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a user to set their university details.
+      CodeUri: src/lambdaFunctions/updateUniversityDetails
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/uni-details
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   StudentFafsaBucket:
     Type: AWS::S3::Bucket
