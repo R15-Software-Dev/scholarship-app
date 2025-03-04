@@ -57,7 +57,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#studentCareer = :studentCareer," +
       "#universityAcceptance = :universityAcceptance," +
       "#tuitionCost = :tuitionCost," +
-      "#roomBoard = :roomBoard,"
+      "#roomBoard = :roomBoard"
   });
 
   try {
