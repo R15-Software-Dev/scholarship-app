@@ -46,10 +46,10 @@ export type ExtracurricularActivities = {
  *  Details about the students university
  */
 export type UniversityDetails = {
-  universityDetails: string;
-  universityName: string;
-  universityState: string;
-  universityCity: string;
+  universityDetails?: string;
+  universityName?: string;
+  universityState?: string;
+  universityCity?: string;
   universityZipCode: string;
   studentsMajor: string;
   studentStudyField: string;
