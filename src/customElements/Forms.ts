@@ -249,12 +249,21 @@ export class FormSection extends LitElement {
             Authorization: `Bearer ${idToken}`
           }
         })
-          .then((response) => response.json)
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              if (response.status == 401)
+                this.dispatchEvent(new Event("unauthorized", {bubbles: true, composed: true}));
+              throw new Error(response.statusText);
+            }
+          })
           .then((data) => {
             console.log("Success: " + data);
             this.dispatchEvent(new Event("submit-complete", {bubbles: true, composed: true}));
             this._checkShown = true;
           })
+          .catch(err => console.error(err))
       }
     } catch (e) {
       console.error(`An error occurred: ${e}`);
