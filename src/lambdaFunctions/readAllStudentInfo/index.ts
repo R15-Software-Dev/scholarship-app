@@ -29,6 +29,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       "studentPhoneNumber",
       "studentEmail",
       "unweightedGPA",
+      "weightedGPA",
       "readingScoreSAT",
       "mathScoreSAT",
       "highScoreACT",
