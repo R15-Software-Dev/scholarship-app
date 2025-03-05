@@ -17,7 +17,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }, {} as Record<string, string>);
 
         const boy = Busboy({headers: lowerHeaders});
-        const studentUser = event.headers.Cookie.match(/.*studentEmail=[^;]*/)[1];
+        const studentUser = event.headers.Cookie.match(/studentEmail=([^;]*)/)[1];
         let _buffer: Buffer | null = null;
         let _fileName = `${studentUser}_fafsaSubmission.pdf`;
         let _contentType = "";
