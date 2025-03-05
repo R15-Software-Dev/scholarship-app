@@ -38,7 +38,6 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       "communityInvolvement",
       "workExperience",
       "extracurricularActivities",
-      "universityDetails",
       "universityName",
       "universityState",
       "universityCity",
