@@ -1,9 +1,11 @@
 ﻿import { Handler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {DynamoDBClient, UpdateItemCommand} from "@aws-sdk/client-dynamodb";
 import Busboy from "busboy";
 
 
 const s3client = new S3Client({});
+const dbclient = new DynamoDBClient({});
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   return new Promise<APIGatewayProxyResult>((resolve, reject) => {
@@ -15,7 +17,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }, {} as Record<string, string>);
 
         const boy = Busboy({headers: lowerHeaders});
-        const studentUser = event.headers.Cookie.match(/.*studentEmail=[^;]*/);
+        const studentUser = event.headers.Cookie.match(/.*studentEmail=[^;]*/)[1];
         let _buffer: Buffer | null = null;
         let _fileName = `${studentUser}_fafsaSubmission.pdf`;
         let _contentType = "";
@@ -61,9 +63,32 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
               Body: _buffer,
               ContentType: _contentType
             });
+            const dbcommand: UpdateItemCommand = new UpdateItemCommand({
+              TableName: process.env.TABLE_NAME,
+              Key: {
+                Email: { S: studentUser }
+              },
+              ExpressionAttributeNames: {
+                "#studentFafsaKey": "studentFafsaKey"
+              },
+              ExpressionAttributeValues: {
+                ":studentFafsaKey": { S: _fileName }
+              },
+              UpdateExpression: "SET #studentFafsaKey = :studentFafsaKey"
+            });
 
             try {
               await s3client.send(command);
+            } catch (error) {
+              console.log("S3 Client error: ", error);
+              reject({
+                statusCode: 500,
+                body: JSON.stringify(error)
+              })
+            }
+            
+            try {
+              await dbclient.send(dbcommand);
               resolve({
                 statusCode: 200,
                 body: JSON.stringify({
@@ -73,7 +98,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 })
               });
             } catch (error) {
-              console.log("S3 Client error: ", error);
+              console.error("Dynamo client error: ", error);
               reject({
                 statusCode: 500,
                 body: JSON.stringify(error)

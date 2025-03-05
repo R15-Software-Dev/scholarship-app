@@ -352,9 +352,12 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: r15-student-data
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
       Environment:
         Variables:
           BUCKET_NAME: r15-student-data
+          TABLE_NAME: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -362,6 +365,7 @@ Resources:
         Target: "es2020"
         External:
           - "@aws-sdk/client-s3"
+          - "@aws-sdk/client-dynamodb"
           - "aws-lambda"
         EntryPoints:
           - index.ts
