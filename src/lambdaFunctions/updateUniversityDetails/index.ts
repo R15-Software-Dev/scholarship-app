@@ -22,7 +22,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       Email: {S: studentEmail}
     },
     ExpressionAttributeNames: {
-      "#universityDetails": "universityDetails",
       "#universityName": "universityName",
       "#universityState": "universityState",
       "#universityCity": "universityCity",
@@ -35,7 +34,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#roomBoard": "roomBoard",
     },
     ExpressionAttributeValues: {
-      ":universityDetails": {S: universityInfo.universityDetails},
       ":universityName": {S: universityInfo.universityName},
       ":universityState": {S: universityInfo.universityState},
       ":universityCity": {S: universityInfo.universityCity},
@@ -47,8 +45,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":tuitionCost": {N: universityInfo.tuitionCost.toString()},
       ":roomBoard": {N: universityInfo.roomBoard.toString()},
     },
-    UpdateExpression: "SET #universityDetails = :universityDetails," +
-      "#universityName = :universityName," +
+    UpdateExpression: "SET #universityName = :universityName," +
       "#universityState = :universityState," +
       "#universityCity = :universityCity," +
       "#universityZipCode = :universityZipCode," +
