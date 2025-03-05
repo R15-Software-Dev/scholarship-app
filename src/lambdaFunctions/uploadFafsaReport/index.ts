@@ -15,15 +15,15 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }, {} as Record<string, string>);
 
         const boy = Busboy({headers: lowerHeaders});
+        const studentUser = event.headers.Cookie.match(/.*studentEmail=[^;]*/);
         let _buffer: Buffer | null = null;
-        let _fileName = "";
+        let _fileName = `${studentUser}_fafsaSubmission.pdf`;
         let _contentType = "";
 
         // This event fires when the busboy finds a file in the body stream.
         boy.on("file", (fieldName, fileStream, info) => {
           console.log("Running file event.")
           const {filename, encoding, mimeType} = info;
-          _fileName = filename;
           _contentType = mimeType;
 
           const chunks: Buffer[] = [];
@@ -57,7 +57,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
           } else {
             const command: PutObjectCommand = new PutObjectCommand({
               Bucket: process.env.BUCKET_NAME,
-              Key: _fileName,
+              Key: `fafsaSubmission/${_fileName}`,
               Body: _buffer,
               ContentType: _contentType
             });

@@ -351,10 +351,10 @@ Resources:
               Authorizer: studentAuthorizer
       Policies:
         - S3CrudPolicy:
-            BucketName: !Ref StudentFafsaBucket
+            BucketName: r15-student-data
       Environment:
         Variables:
-          BUCKET_NAME: !Ref StudentFafsaBucket
+          BUCKET_NAME: r15-student-data
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -679,9 +679,6 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
-
-  StudentFafsaBucket:
-    Type: AWS::S3::Bucket
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
