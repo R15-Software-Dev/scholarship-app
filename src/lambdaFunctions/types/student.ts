@@ -13,6 +13,7 @@ export type StudentPersonalInfo = {
   studentPhoneNumber: string;
   studentEmail: string;
   unweightedGPA: string;
+  weightedGPA: string;
   readingScoreSAT?: number;
   mathScoreSAT?: number;
   highScoreACT?: number;
