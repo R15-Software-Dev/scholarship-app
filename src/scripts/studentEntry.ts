@@ -29,8 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.cookie = loginResponse.id_token;
     if (document.cookie.includes("idToken")) {
       idToken = document.cookie.match(/.*idToken=([^;]+).*/)[1];
-    } else {
-      redirectToLogin();
     }
 
     // Initialize form.
@@ -40,7 +38,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         Authorization: `Bearer ${idToken}`
       }
     })
-      .then(async res => await res.json() as Student)
+      .then(async res => {
+        if (res.ok) {
+          return await res.json() as Student
+        } else {
+          if (res.status == 401) {
+            redirectToLogin();
+          }
+        }
+      })
       .then(json => {
         Object.entries(json).forEach(([key, value]) => {
           if (value) {
