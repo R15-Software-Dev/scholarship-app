@@ -251,8 +251,19 @@
             id="unweightedGPAInput"
             name="unweightedGPA"
             type="text"
-            placeholder="Enter your GPA"
+            placeholder="Enter your unweighted GPA"
             required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Weighted GPA</h3>
+          <outlined-text-field
+              id="weightedGPAInput"
+              name="weightedGPA"
+              type="text"
+              placeholder="Enter your weighted GPA"
+              required>
           </outlined-text-field>
         </form-question>
 
@@ -552,50 +563,46 @@
       <form-section
         header="University Details"
         id="universityDetailsForm"
-        action="/student/uni-details"
+        action="/students/uni-details"
         method="post">
 
         <form-question>
-          <h3 slot="header">University Name</h3>
+          <h3 slot="header">University Name (optional)</h3>
           <outlined-text-field
               id="universityNameInput"
               name="universityName"
               type="text"
-              placeholder="Enter the university name"
-              required>
+              placeholder="Enter the university name">
           </outlined-text-field>
         </form-question>
 
         <form-question>
-          <h3 slot="header"> University State</h3>
+          <h3 slot="header"> University State (optional)</h3>
           <outlined-text-field
               id="universityStateInput"
               name="universityState"
               type="text"
-              placeholder="Enter the universities state"
-              required>
+              placeholder="Enter the universities state">
           </outlined-text-field>
         </form-question>
 
         <form-question>
-          <h3 slot="header">University City</h3>
+          <h3 slot="header">University City (optional)</h3>
           <outlined-text-field
               id="universityCityInput"
               name="universityCity"
               type="text"
-              placeholder="Enter the universities city"
-              required>
+              placeholder="Enter the university's city">
           </outlined-text-field>
         </form-question>
 
         <form-question>
-          <h3 slot="header">University Zip Code</h3>
+          <h3 slot="header">University Zip Code (optional)</h3>
           <outlined-text-field
               id="universityZipCodeInput"
               name="universityZipCode"
               type="text"
-              placeholder="Enter the zip code"
-              required>
+              placeholder="Enter the zip code">
           </outlined-text-field>
         </form-question>
 
@@ -872,7 +879,7 @@
         action="/students/fafsa"
         method="post">
         <form-question>
-          <h3 slot="header">Upload your FAFSA SAR.</h3>
+          <h3 slot="header">Upload your FAFSA Submission Summary here.</h3>
           <p slot="desc">This file should be formatted as a PDF, and is not required for all scholarships. Click submit when finished.</p>
           <file-input></file-input>
         </form-question>

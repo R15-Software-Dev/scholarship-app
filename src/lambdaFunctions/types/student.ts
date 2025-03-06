@@ -13,6 +13,7 @@ export type StudentPersonalInfo = {
   studentPhoneNumber: string;
   studentEmail: string;
   unweightedGPA: string;
+  weightedGPA: string;
   readingScoreSAT?: number;
   mathScoreSAT?: number;
   highScoreACT?: number;
@@ -46,11 +47,10 @@ export type ExtracurricularActivities = {
  *  Details about the students university
  */
 export type UniversityDetails = {
-  universityDetails: string;
-  universityName: string;
-  universityState: string;
-  universityCity: string;
-  universityZipCode: string;
+  universityName?: string;
+  universityState?: string;
+  universityCity?: string;
+  universityZipCode?: string;
   studentsMajor: string;
   studentStudyField: string;
   studentCareer?: string;

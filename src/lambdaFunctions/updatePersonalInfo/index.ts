@@ -32,6 +32,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#studentPhoneNumber": "studentPhoneNumber",
       "#studentEmail": "studentEmail",
       "#unweightedGPA": "unweightedGPA",
+      "#weightedGPA": "weightedGPA",
       "#readingScoreSAT": "readingScoreSAT",
       "#mathScoreSAT": "mathScoreSAT",
       "#highScoreACT": "highScoreACT",
@@ -48,6 +49,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":studentPhoneNumber": {S: studentInfo.studentPhoneNumber},
       ":studentEmail": {S: studentInfo.studentEmail},
       ":unweightedGPA": {S: studentInfo.unweightedGPA},
+      ":weightedGPA": {S: studentInfo.weightedGPA},
       ":readingScoreSAT": {N: studentInfo.readingScoreSAT.toString()},
       ":mathScoreSAT": {N: studentInfo.mathScoreSAT.toString()},
       ":highScoreACT": {N: studentInfo.highScoreACT.toString()},
@@ -63,6 +65,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#studentPhoneNumber = :studentPhoneNumber," +
       "#studentEmail = :studentEmail," +
       "#unweightedGPA = :unweightedGPA," +
+      "#weightedGPA = :weightedGPA," +
       "#readingScoreSAT = :readingScoreSAT," +
       "#mathScoreSAT = :mathScoreSAT," +
       "#highScoreACT = :highScoreACT," +
