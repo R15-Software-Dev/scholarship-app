@@ -3,6 +3,14 @@ import {AWSRequest, AWSResponse, UniversityDetails } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
+function checkString(str: string): string {
+  if(str != "") {
+    return str;
+  } else {
+    return "0";
+  }
+}
+
 /**
  * Creates and or updates a record in the student applications table in DynamoDb
  * @param {AWSRequest} event - Request that contains a university details object.
@@ -42,8 +50,8 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":studentStudyField": {S: universityInfo.studentStudyField},
       ":studentCareer": {S: universityInfo.studentCareer},
       ":universityAcceptance": {SS: JSON.parse(universityInfo.universityAcceptance)},
-      ":tuitionCost": {N: universityInfo.tuitionCost.toString()},
-      ":roomBoard": {N: universityInfo.roomBoard.toString()},
+      ":tuitionCost": {N: checkString(universityInfo.tuitionCost.toString())},
+      ":roomBoard": {N: checkString(universityInfo.roomBoard.toString())},
     },
     UpdateExpression: "SET #universityName = :universityName," +
       "#universityState = :universityState," +
