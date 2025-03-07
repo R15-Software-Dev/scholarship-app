@@ -5,10 +5,8 @@ const client = new DynamoDBClient({ region: "us-east-1" });
 
 function checkString(str: string): string {
   if(str != "") {
-    console.log(str);
     return str;
   } else {
-    console.log("0");
     return "0";
   }
 }
