@@ -3,6 +3,16 @@ import {AWSRequest, AWSResponse, StudentPersonalInfo } from "./../types/types";
 
 const client = new DynamoDBClient({ region: "us-east-1" });
 
+function checkString(str: string): string {
+  if(str != "") {
+    console.log(str);
+    return str;
+  } else {
+    console.log("0");
+    return "0";
+  }
+}
+
 /**
  * Creates and or updates a record in the student applications table in DynamoDB
  * @param {AWSRequest} event - Request that contains a personal info object.
@@ -50,9 +60,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       ":studentEmail": {S: studentInfo.studentEmail},
       ":unweightedGPA": {S: studentInfo.unweightedGPA},
       ":weightedGPA": {S: studentInfo.weightedGPA},
-      ":readingScoreSAT": {N: studentInfo.readingScoreSAT.toString()},
-      ":mathScoreSAT": {N: studentInfo.mathScoreSAT.toString()},
-      ":highScoreACT": {N: studentInfo.highScoreACT.toString()},
+      ":readingScoreSAT": {N: checkString(studentInfo.readingScoreSAT.toString())},
+      ":mathScoreSAT": {N: checkString(studentInfo.mathScoreSAT.toString())},
+      ":highScoreACT": {N: checkString(studentInfo.highScoreACT.toString())},
       ":attendBAS": {SS: JSON.parse(studentInfo.attendBAS)}
     },
     UpdateExpression: "SET #studentFirstName = :studentFirstName," +
@@ -71,7 +81,6 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       "#highScoreACT = :highScoreACT," +
       "#attendBAS = :attendBAS"
   });
-
 
   try {
     // Send the command
