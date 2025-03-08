@@ -3,7 +3,7 @@ import {ActionButton} from "../customElements/ActionButton";
 
 $(function() {
   // Redirect to closedForm.html
-  // window.location.replace("closedForm.html");
+  window.location.replace("closedForm.html");
 
   const allQuestionsGlobal = document.querySelectorAll('form-question') as NodeListOf<FormQuestion>;
   // We will need to get the values for the form submission manually
