@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const targetDate = new Date('2025-03-27T14:05:00');
   // Get current date
   const currentDate = new Date();
-  console.log(currentDate);
   // Compare dates
   if (currentDate > targetDate) {
     window.location.replace("closedForm.html");
