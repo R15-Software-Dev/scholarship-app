@@ -37,18 +37,26 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.22.0",
     "@jest/globals": "^29.7.0",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.30",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
     "bcryptjs": "^2.4.3",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.25.1",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
     "husky": "^9.1.7",
     "terser-webpack-plugin": "^5.3.10",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript-eslint": "^8.26.1"
   },
   "config": {
     "commitizen": {
