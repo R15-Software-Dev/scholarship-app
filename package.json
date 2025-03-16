@@ -10,7 +10,8 @@
     "start-server": "node expressRun.mjs",
     "test": "jest",
     "installGlobals": "npm install & npm install -g esbuild",
-    "newPasswordHash": "node ./src/lambdaFunctions/providerRegistration/newPasswordTemp.mjs"
+    "newPasswordHash": "node ./src/lambdaFunctions/providerRegistration/newPasswordTemp.mjs",
+    "prepare": "husky"
   },
   "author": "Lucas Vas",
   "license": "ISC",
@@ -44,6 +45,7 @@
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.25.1",
+    "husky": "^9.1.7",
     "terser-webpack-plugin": "^5.3.10",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2"
