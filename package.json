@@ -22,7 +22,6 @@
     "@aws-sdk/client-ses": "^3.738.0",
     "@types/aws-lambda": "^8.10.147",
     "busboy": "^1.6.0",
-    "esbuild": "^0.24.0",
     "esbuild-loader": "^4.2.2",
     "express": "^4.21.2",
     "express-http-proxy": "^2.1.1",
@@ -44,7 +43,7 @@
     "bcryptjs": "^2.4.3",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.1",
     "terser-webpack-plugin": "^5.3.10",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2"
