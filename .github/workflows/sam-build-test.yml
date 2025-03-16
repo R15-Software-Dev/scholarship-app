@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install global dependencies
+        run: |
+          npm run installGlobals
+
       - name: Build AWS SAM Template
         run: |
           sam build
