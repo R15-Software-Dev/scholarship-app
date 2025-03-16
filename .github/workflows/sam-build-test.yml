@@ -1,0 +1,16 @@
+﻿name: Build with AWS SAM
+
+on:
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build AWS SAM Template
+        run: |
+          sam build
