@@ -12,6 +12,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     redirectToLogin();
   });
 
+  // Redirect user to closed form page after form due date
+  const targetDate = new Date('2025-03-27T14:05:00');
+  // Get current date
+  const currentDate = new Date();
+  // Compare dates
+  if (currentDate > targetDate) {
+    window.location.replace("closedForm.html");
+  }
+
   const loader = $(".loader");
   loader.show();
   try {
