@@ -1,28 +1,78 @@
 import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
-import { AWSRequest, AWSResponse } from "../../types/types";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import {AWSRequest, AWSResponse} from "../../types/aws";
 
 const handler = require("./../index").handler;
 
-// Test an input to a function
-test("throws error with no object", async () => {
-  await expect(handler()).rejects.toThrow();
-});
-
-test("throws error with empty object", async () => {
-  await expect(handler({})).rejects.toThrow();
-});
-
-test("throws error with incorrect input", async () => {
-  const badRequest: AWSRequest = {
+const getRequest = (overrides: any): APIGatewayProxyEvent => {
+  const defaultEvent: APIGatewayProxyEvent = {
+    headers: {},
+    multiValueHeaders: {},
+    httpMethod: "POST",
+    pathParameters: {},
+    isBase64Encoded: false,
+    path: "/providers/registration",
+    queryStringParameters: {},
+    multiValueQueryStringParameters: {},
+    resource: "",
+    stageVariables: {},
+    requestContext: {
+      accountId: "",
+      apiId: "",
+      authorizer: null,
+      protocol: "",
+      httpMethod: "",
+      identity: {
+        accessKey: null,
+        accountId: null,
+        apiKey: null,
+        apiKeyId: null,
+        caller: null,
+        clientCert: null,
+        cognitoAuthenticationProvider: null,
+        cognitoAuthenticationType: null,
+        cognitoIdentityId: null,
+        cognitoIdentityPoolId: null,
+        principalOrgId: null,
+        sourceIp: "",
+        user: null,
+        userAgent: null,
+        userArn: null
+      },
+      path: "",
+      stage: "",
+      requestId: "",
+      requestTimeEpoch: 0,
+      resourceId: "",
+      resourcePath: ""
+    },
     body: JSON.stringify({
       email: ""
     })
   };
 
-  await expect(handler(badRequest)).rejects.toThrow();
-  await expect(handler({ email: "hello@gmail.com", password: "" })).rejects.toThrow();
-  await expect(handler({ email: "", password: "blahblahblah" })).rejects.toThrow();
-  await expect(handler({})).rejects.toThrow();
+  return {...defaultEvent, ...overrides};
+}
+
+test("throws error with no object", async () => {
+  await expect(handler()).rejects.toThrow();
+});
+
+test("throws error with empty object", async () => {
+  await expect(handler({})).resolves.toHaveProperty("statusCode", 400);
+});
+
+test("throws error with incorrect input", async () => {
+  const badRequest = getRequest({
+    body: JSON.stringify({
+      email: ""
+    })
+  });
+
+  await expect(handler(badRequest)).resolves.toHaveProperty("statusCode", 400);
+  await expect(handler({ email: "hello@gmail.com", password: "" })).resolves.toHaveProperty("statusCode", 400);
+  await expect(handler({ email: "", password: "blahblahblah" })).resolves.toHaveProperty("statusCode", 400);
+  await expect(handler({})).resolves.toHaveProperty("statusCode", 400);
 });
 
 test("returns 'Provider registered successfully' with correct input", async () => {
