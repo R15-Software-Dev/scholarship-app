@@ -1,6 +1,5 @@
 import * as esbuild from 'esbuild';
 
-
 // Create run configuration for build
 /** @type {esbuild.BuildOptions} */
 const buildConfig = {
@@ -11,7 +10,10 @@ const buildConfig = {
     "./src/scripts/index.js",
     "./src/scripts/stickyScrolling.js",
     "./src/scripts/providerLogin.ts",
-    "./src/scripts/switchTab.ts"
+    "./src/scripts/switchTab.ts",
+    "./src/scripts/passwordReset.ts",
+    "./src/scripts/studentEntry.ts",
+    "./src/scripts/testpdf.ts"
   ],
   outdir: "./dist/bundles",
   outExtension: {
@@ -20,7 +22,8 @@ const buildConfig = {
   format: "esm",
   minify: true,
   bundle: true,
-  target: "es2020"
+  target: "es2022",
+  platform: "node"
 };
 
 console.log("running build");

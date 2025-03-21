@@ -86,9 +86,9 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     eligibilityOther: dbitem?.eligibilityOther?.S ?? null,
     scholarshipTitle: dbitem?.scholarshipTitle?.S ?? null,
     scholarshipSponsor: dbitem?.scholarshipSponsor?.S ?? null,
-    scholarshipNumAwards: Number(dbitem?.scholarshipNumAwards?.N ?? null),
-    scholarshipAwardsTotal: Number(dbitem?.scholarshipAwardsTotal?.N ?? null),
-    scholarshipAmountPerAward: Number(dbitem?.scholarshipAmountPerAward?.N ?? null),
+    scholarshipNumAwards: checkNullOrNumber(dbitem?.scholarshipNumAwards?.N ?? null),
+    scholarshipAwardsTotal: checkNullOrNumber(dbitem?.scholarshipAwardsTotal?.N ?? null),
+    scholarshipAmountPerAward: checkNullOrNumber(dbitem?.scholarshipAmountPerAward?.N ?? null),
     //@ts-ignore
     studentAidReport: dbitem?.studentAidReport?.SS ?? null,
     //@ts-ignore
@@ -113,4 +113,10 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
     statusCode: 200,
     body: JSON.stringify(response)
   }
+}
+
+function checkNullOrNumber(num: string | null): number | null {
+  if (Number(num ?? null) === 0)
+    return null;
+  else return Number(num);
 }

@@ -333,33 +333,356 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
-
-  # Define provider login webpage endpoint
-#  getProviderWebpages:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      Description: Gets and returns the scholarship provider webpage.
-#      CodeUri: src/lambdaFunctions/getProviderWebpages
-#      Handler: index.handler
-#      Runtime: nodejs20.x
-#      Events:
-#        GetRequest:
-#          Type: Api
-#          Properties:
-#            RestApiId: !Ref ScholarshipApi
-#            Path: /providers/{proxy+}
-#            Method: get
-#            Auth:
-#              Authorizer: NONE
-#    Metadata:
-#      BuildMethod: esbuild
-#      BuildProperties:
-#        Minify: true
-#        Target: "es2020"
-#        External:
-#          - "@aws-sdk/client-s3"
-#        EntryPoints:
-#          - index.ts
+  studentUploadFafsaReport:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to upload their FAFSA SAR to the application.
+      CodeUri: src/lambdaFunctions/uploadFafsaReport
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/fafsa
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - S3CrudPolicy:
+            BucketName: r15-student-data
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          BUCKET_NAME: r15-student-data
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-s3"
+          - "@aws-sdk/client-dynamodb"
+          - "aws-lambda"
+        EntryPoints:
+          - index.ts
+  # Student API's
+  studentUpdatePersonalInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their personal information.
+      CodeUri: src/lambdaFunctions/updatePersonalInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/personal-info
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateFamilyInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their family's information.
+      CodeUri: src/lambdaFunctions/updateFamilyInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/family-info
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateAcademicHonors:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their academic honors.
+      CodeUri: src/lambdaFunctions/updateAcademicHonors
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/honors
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateAthleticParticipation:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their sports information.
+      CodeUri: src/lambdaFunctions/updateAthleticParticipation
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/sports
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateCommunityInvolvement:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their community involvement.
+      CodeUri: src/lambdaFunctions/updateCommunityInvolvement
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/community-involvement
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateWorkExperience:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their work experience.
+      CodeUri: src/lambdaFunctions/updateWorkExperience
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/work-experience
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentUpdateExtracurricularActivities:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a student to update their extracurriculars.
+      CodeUri: src/lambdaFunctions/updateExtracurricularActivities
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/extracurriculars
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  readAllStudentInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets all information about the specified student, from the cookie header.
+      CodeUri: src/lambdaFunctions/readAllStudentInfo
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/info/all
+            Method: get
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  studentLogin:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Exchanges a user's authorization code for a token.
+      CodeUri: src/lambdaFunctions/studentLogin
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/login
+            Method: post
+            Auth:
+              Authorizer: NONE
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Action:
+              - cognito-idp:DescribeUserPoolClient
+              - cognito-idp:ListUserPools
+            Resource: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
+      Environment:
+        Variables:
+          COGNITO_AUTH_URL: https://us-east-1lfjuy5zam.auth.us-east-1.amazoncognito.com/oauth2/token
+          COGNITO_CLIENT_ID: 4bi5clfnmk0qflgvqd8aetok86
+          COGNITO_JWK_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Lfjuy5zaM/.well-known/jwks.json
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-cognito-identity-provider"
+        EntryPoints:
+          - index.ts
+  studentUpdateUniversityDetails:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows a user to set their university details.
+      CodeUri: src/lambdaFunctions/updateUniversityDetails
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        PostRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /students/uni-details
+            Method: post
+            Auth:
+              Authorizer: studentAuthorizer
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
@@ -392,6 +715,17 @@ Resources:
         - AttributeName: ScholarshipID
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
+  StudentApplicationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: student-applications
+      AttributeDefinitions:
+        - AttributeName: Email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Email
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
 
   #Define the custom authorizer function
   providerAuthorizer:
@@ -418,8 +752,6 @@ Resources:
         EntryPoints:
           - index.ts
 
-  # Define the S3 bucket for the website here (future update)
-
   # Define the API Gateway endpoints
   ScholarshipApi:
     Type: AWS::Serverless::Api
@@ -427,6 +759,8 @@ Resources:
       # The name of the stage - this typically would change when you deploy
       # from the dev to production stages.
       StageName: dev
+      BinaryMediaTypes:
+        - multipart~1form-data
       # Define the authorizers that are available
       Auth:
         # Tell SAM that this is the authorizer to always use, unless overridden.
@@ -440,6 +774,10 @@ Resources:
               # Tell the authorizer to check for a cookie with this regex pattern.
               Header: Cookie
               ValidationExpression: .*authToken=([^;]+).*
+          studentAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
+            Identity:
+              Header: Authorization
       # Set up the CORS settings - these can be overridden, but it's a pain.
       Cors:
         AllowMethods: "'POST, GET, OPTIONS'"

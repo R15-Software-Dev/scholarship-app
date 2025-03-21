@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+  <script src="./bundles/customElements/customElements.bundle.js" type="module"></script>
+  <script src="./bundles/scripts/studentEntry.bundle.js" defer></script>
+  <script src="./bundles/scripts/tabs.bundle.js" defer></script>
+  <script src="./bundles/scripts/stickyScrolling.bundle.js" defer></script>
+  <script src="./bundles/scripts/switchTab.bundle.js" defer></script>
+  <title>R15 Student Information Form</title>
+</head>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .banner-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      transition: box-shadow 0.3s; /* Add shadow transition */
+      &.sticky-shadow {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);  /* Add shadow when sticky */
+        transition: box-shadow 0.3s; /* Add shadow transition */
+      }
+    }
+
+    .banner {
+      height: 80px;
+      background-color: var(--theme-primary-color); /* Dark red */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px 5px;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 75px;
+      height: 70px;
+      margin-right: 10px; /* Space between logo and text */
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .banner-text h1 {
+      margin: 0;
+      font-size: 18px;
+      color: white; /* White text for contrast */
+      text-align: left;
+    }
+
+    .text-box {
+      position: absolute; /* Keep it in the center regardless of other content */
+      left: 50%;
+      transform: translateX(-50%); /* Center it horizontally */
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .text-box h1 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--theme-primary-color); /* Match banner color for contrast */
+      text-align: center;
+    }
+
+    .right-logo {
+      width: 70px;
+      height: 70px;
+    }
+
+    .form-container {
+      border-radius: 7px;
+      background-color: inherit;
+      box-shadow: 0 0 6px rgb(173, 170, 179);
+      padding: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 800px;
+    }
+  </style>
+
+  <body>
+    <div class="loader">
+      <img src="./images/loading_animation.gif" alt="Loading..." />
+    </div>
+
+    <div class="banner-sticky">
+    <div class="banner">
+      <div class="left-section">
+        <div class="logo left-logo">
+          <img src="./images/PHS_Stacked_Acronym.png" alt="Left Logo">
+        </div>
+        <div class="banner-text">
+          <h1>Student Information Form</h1>
+        </div>
+      </div>
+      <div class="text-box">
+        <h1>Submission Date: 3/27/25</h1>
+      </div>
+      <div class="logo right-logo">
+        <img src="./images/R15_logo_colorMatchWhite.png" alt="Right Logo">
+      </div>
+    </div>
+    <tab-bar>
+      <c-tab active panel-id="personalInformationPanel">Personal Info</c-tab>
+      <c-tab panel-id="academicHonorsPanel">Academic Honors</c-tab>
+      <c-tab panel-id="athleticParticipationPanel">Athletic Participation</c-tab>
+      <c-tab panel-id="communityInvolvementPanel">Community Involvement</c-tab>
+      <c-tab panel-id="studentWorkExperiencePanel">Work Experience</c-tab>
+      <c-tab panel-id="extracurricularActivitiesPanel">Extracurricular Activities</c-tab>
+      <c-tab panel-id="universityDetailsPanel">Post-Secondary Education</c-tab>
+      <c-tab panel-id="familyInformationPanel">Family Info</c-tab>
+      <c-tab panel-id="fafsaPanel">FAFSA Form</c-tab>
+      <c-tab panel-id="scholarEssayPanel">Scholarship Essays</c-tab>
+    </tab-bar>
+  </div>
+
+    <tab-panel id="personalInformationPanel">
+      <form-section
+        header="Personal Information"
+        id="personalInformationForm"
+        action="/students/personal-info"
+        method="post">
+
+        <form-question>
+          <h3 slot="header"> First Name </h3>
+          <outlined-text-field
+            id="studentFirstNameInput"
+            name="studentFirstName"
+            type="text"
+            placeholder="Enter your first name"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header"> Last Name </h3>
+          <outlined-text-field
+            id="studentLastNameInput"
+            name="studentLastName"
+            type="text"
+            placeholder="Enter your last name"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header"> Student ID Number</h3>
+          <outlined-text-field
+            id="studentIDNumberInput"
+            name="studentIDNumber"
+            type="number"
+            placeholder="Enter your student ID"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header"> Date of Birth (MM/DD/YYYY)</h3>
+          <outlined-text-field
+            id="studentBirthDateInput"
+            name="studentBirthDate"
+            type="text"
+            placeholder="Enter your date of birth"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Select gender</h3>
+          <check-box inputType="radio"
+           radioOptions=
+           '["Male",
+            "Female",
+             "Prefer not to answer"]'
+           id="studentGenderInput"
+           name="studentGender"
+           required>
+          </check-box>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Current street address</h3>
+          <outlined-text-field
+            id="streetAddressInput"
+            name="streetAddress"
+            type="text"
+            placeholder="Enter your current address"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Current town</h3>
+          <check-box inputType="radio"
+           radioOptions=
+            '["Southbury",
+            "Middlebury"]'
+           id="studentTownInput"
+           name="studentTown"
+           required>
+          </check-box>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Preferred phone number</h3>
+          <outlined-text-field
+            id="studentPhoneNumberInput"
+            name="studentPhoneNumber"
+            type="tel"
+            placeholder="Enter your phone number"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Preferred email address</h3>
+          <outlined-text-field
+            id="studentEmailInput"
+            name="studentEmail"
+            type="email"
+            placeholder="Enter your email"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Unweighted GPA</h3>
+          <outlined-text-field
+            id="unweightedGPAInput"
+            name="unweightedGPA"
+            type="text"
+            placeholder="Enter your unweighted GPA"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Weighted GPA</h3>
+          <outlined-text-field
+              id="weightedGPAInput"
+              name="weightedGPA"
+              type="text"
+              placeholder="Enter your weighted GPA"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">SAT Reading score (Optional)</h3>
+          <outlined-text-field
+            id="readingScoreSATInput"
+            name="readingScoreSAT"
+            type="number"
+            placeholder="Enter SAT reading score">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">SAT Math score (Optional)</h3>
+          <outlined-text-field
+            id="mathScoreSATInput"
+            name="mathScoreSAT"
+            type="number"
+            placeholder="Enter SAT math score">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">ACT score (Optional)</h3>
+          <outlined-text-field
+            id="highScoreACTInput"
+            name="highScoreACT"
+            type="number"
+            placeholder="Enter ACT score">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Did you attend the Region 15 BAS (Before and After School) program for a minimum of one year?</h3>
+          <check-box inputType="radio"
+            radioOptions=
+             '["Yes",
+              "No"]'
+              id="attendBASInput"
+              name="attendBAS"
+              required>
+          </check-box>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="academicHonorsPanel">
+      <form-section
+          header="Academic Honors"
+          id="academicHonorsForm"
+          action="/students/honors"
+          method="post">
+        <form-question>
+          <h3 slot="header">List your academic honors separated by commas (High Honors/National Honors societies/etc.)</h3>
+          <outlined-text-field
+              id="listAcademicHonorsInput"
+              name="listAcademicHonors"
+              type="text"
+              placeholder="List academic honors">
+          </outlined-text-field>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="athleticParticipationPanel">
+      <form-section
+          header="Athletic Participation"
+          id="athleticParticipationForm"
+          action="/students/sports"
+          method="post">
+        <multi-entry
+            id="athleticParticipationInput"
+            name="athleticParticipation"
+            display-members='{"Sport name":"sport"}'>
+          <h1 slot="modal-header">Add Sport</h1>
+          <form-question>
+            <h3 slot="header">Name of sport</h3>
+            <outlined-text-field
+                id="sportInput"
+                name="sport"
+                type="text"
+                placeholder="Input a sport"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                id="sportParticipatedInput"
+                name="sportParticipated"
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Specify any special achievements</h3>
+            <outlined-text-field
+                id="sportAchievementsInput"
+                name="sportAchievements"
+                type="text"
+                placeholder="Enter special achievements (if any)">
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="communityInvolvementPanel">
+      <form-section
+          header="Community Involvement"
+          id="communityInvolvementForm"
+          action="/students/community-involvement"
+          method="post">
+        <multi-entry
+            id="communityInvolvementInput"
+            name="communityInvolvement"
+            display-members='{"Activity Name":"activity","Activity Hours":"activityHours"}'>
+          <h1 slot="modal-header">Add activity</h1>
+          <form-question>
+            <h3 slot="header">Name of activity</h3>
+            <outlined-text-field
+                id="activityInput"
+                name="activity"
+                type="text"
+                placeholder="Input an activity"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                id="activityParticipatedInput"
+                name="activityParticipated"
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Number of hours participated in a year</h3>
+            <outlined-text-field
+                id="activityHoursInput"
+                name="activityHours"
+                type="number"
+                placeholder="Enter number of hours"
+                required>
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="studentWorkExperiencePanel">
+      <form-section
+          header="Work Experience"
+          id="workExperienceForm"
+          action="/students/work-experience"
+          method="post">
+        <multi-entry
+            id="workExperienceInput"
+            name="workExperience"
+            display-members='{"Job Title":"jobTitle","Start Date":"jobStartDate","End Date":"jobEndDate"}'>
+          <h1 slot="modal-header">Add a work experience</h1>
+          <form-question>
+            <h3 slot="header">Job title</h3>
+            <outlined-text-field
+                id="jobTitleInput"
+                name="jobTitle"
+                type="text"
+                placeholder="Enter job title"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Student's employer</h3>
+            <outlined-text-field
+                id="studentEmployerInput"
+                name="studentEmployer"
+                type="text"
+                placeholder="Enter your employer"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Approximate start date (MM/YY)</h3>
+            <outlined-text-field
+                id="jobStartDateInput"
+                name="jobStartDate"
+                type="text"
+                placeholder="Enter your approximate start date"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Approximate end date, enter N/A if still employed (MM/YY)</h3>
+            <outlined-text-field
+                id="jobEndDateInput"
+                name="jobEndDate"
+                type="text"
+                placeholder="Enter your approximate end date">
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Approximate number of hours worked per week</h3>
+            <outlined-text-field
+                id="weeklyWorkHoursInput"
+                name="weeklyWorkHours"
+                type="number"
+                placeholder="Enter a number"
+                required>
+            </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="extracurricularActivitiesPanel">
+      <form-section
+          header="Extracurricular Activities"
+          id="extracurricularActivitiesForm"
+          action="/students/extracurriculars"
+          method="post">
+        <multi-entry
+            id="extracurricularActivitiesInput"
+            name="extracurricularActivities"
+            display-members='{"Activity Name":"extraActivity","Weeks Participated":"extraWeeksParticipated"}'>
+          <h1 slot="modal-header">Add an activity</h1>
+          <form-question>
+            <h3 slot="header">Name of activity</h3>
+            <outlined-text-field
+                id="extraActivityInput"
+                name="extraActivity"
+                type="text"
+                placeholder="Input an activity"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Grades participated</h3>
+            <check-box
+                inputType="checkbox"
+                checkboxOptions='["9th", "10th", "11th", "12th"]'
+                id="extraActivityParticipatedInput"
+                name="extraActivityParticipated"
+                required>
+            </check-box>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Number of hours per week spent on this activity</h3>
+            <outlined-text-field
+                id="extraActivityHoursInput"
+                name="extraActivityHours"
+                type="number"
+                placeholder="Enter number of hours"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+          <form-question>
+            <h3 slot="header">Number of weeks participated</h3>
+            <outlined-text-field
+                id="extraWeeksParticipatedInput"
+                name="extraWeeksParticipated"
+                type="number"
+                placeholder="Enter number of weeks"
+                required>
+            </outlined-text-field>
+          </form-question>
+
+            <form-question>
+              <h3 slot="header">Specify any special involvement (i.e. any leadership positions)</h3>
+              <outlined-text-field
+                  id="extraSpecialInvolvementInput"
+                  name="extraSpecialInvolvement"
+                  type="text"
+                  placeholder="Enter special involvement">
+              </outlined-text-field>
+          </form-question>
+        </multi-entry>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="universityDetailsPanel">
+      <form-section
+        header="Post-Secondary Education"
+        id="universityDetailsForm"
+        action="/students/uni-details"
+        method="post">
+
+        <form-question>
+          <h3 slot="header">College/University Name (Optional)</h3>
+          <outlined-text-field
+              id="universityNameInput"
+              name="universityName"
+              type="text"
+              placeholder="Enter the university name">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">College/University State (Optional)</h3>
+          <outlined-text-field
+              id="universityStateInput"
+              name="universityState"
+              type="text"
+              placeholder="Enter the university's state">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">College/University City (Optional)</h3>
+          <outlined-text-field
+              id="universityCityInput"
+              name="universityCity"
+              type="text"
+              placeholder="Enter the university's city">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">College/University Zip Code (optional)</h3>
+          <outlined-text-field
+              id="universityZipCodeInput"
+              name="universityZipCode"
+              type="text"
+              placeholder="Enter the zip code">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Intended major</h3>
+          <outlined-text-field
+              id="studentsMajorInput"
+              name="studentsMajor"
+              type="text"
+              placeholder="Enter students intended major"
+              required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Intended field of study</h3>
+          <drop-down
+              id="studentStudyFieldInput"
+              name="studentStudyField"
+              placeholder="Select your field of study"
+              required>
+            <option value="AG">Agriculture</option>
+            <option value="ARTS">Arts (Music/Arts/Performance/Composition/Cinema)</option>
+            <option value="BUSN">Business (Business/Finance/Accounting/Marketing)</option>
+            <option value="Comm">Communications (General/Journalism/Advertising)</option>
+            <option value="COMSERV">Community Services (General/Criminal Justice/Exercise Sci/Social Work)</option>
+            <option value="COMPMATH">Computers & Math (General/CS/CIS/IS/MIS/Cybersecurity)</option>
+            <option value="ENGRTECH">Engineering & Technology (General/Ag/Civil/Chem/Computer/Industrial/Aero)</option>
+            <option value="EDU">Education (General/Special/Childhood/Physical/Social Sciences)</option>
+            <option value="HEALTHSCI">Health Sciences & Services(Nursing/Dental/Radiology/Pre-med/Veterinary)</option>
+            <option value="LANGHUMAN">Language & Humanities (General/Literature/Philosophy/Religion)</option>
+            <option value="NTRLSCI">Natural Sciences (Animal/Bio/Chem/Phys/Geo)</option>
+            <option value="CONSTR">Repair & Construction (Fire/Construction MGMT/HVAC/Auto)</option>
+            <option value="SOCIAL">Social Sciences (Psychology,Sociology/Criminology/Political Sci/History)</option>
+            <option value="UNDECIDED">Undecided</option>
+          </drop-down>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Intended Career (Optional)</h3>
+          <outlined-text-field
+              id="studentCareerInput"
+              name="studentCareer"
+              type="text"
+              placeholder="Enter career">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Has the student received acceptance from the college/university?</h3>
+          <check-box inputType="radio"
+            radioOptions=
+              '["Yes",
+              "No"]'
+             id="universityAcceptanceInput"
+             name="universityAcceptance"
+             required>
+          </check-box>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Tuition cost (Optional)</h3>
+          <outlined-text-field
+              id="tuitionCostInput"
+              name="tuitionCost"
+              type="number"
+              placeholder="Enter an amount"
+              prefix-text="$">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Room & board cost (Optional)</h3>
+          <outlined-text-field
+              id="roomBoardInput"
+              name="roomBoard"
+              type="number"
+              placeholder="Enter an amount"
+              prefix-text="$">
+          </outlined-text-field>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="familyInformationPanel">
+
+      <form-section
+        header="Family Information"
+        id="familyInfoForm"
+        action="/students/family-info"
+        method="post">
+
+        <form-question>
+          <h3 slot="header">Number of children in family (Including yourself)</h3>
+          <drop-down
+            id="numChildrenTotalInput"
+            name="numChildTotal"
+            placeholder="Select a number"
+            required>
+            <option value="one">1</option>
+            <option value="two">2</option>
+            <option value="three">3</option>
+            <option value="four">4</option>
+            <option value="five">5</option>
+            <option value="six">6</option>
+            <option value="seven">7</option>
+            <option value="eight">8</option>
+            <option value="nine">9</option>
+            <option value="ten">10</option>
+          </drop-down>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Number of children attending college simultaneously (Including yourself)</h3>
+          <drop-down
+            id="numChildAttendCollegeInput"
+            name="numChildAttendCollege"
+            placeholder="Select a number"
+            required>
+            <option value="one">1</option>
+            <option value="two">2</option>
+            <option value="three">3</option>
+            <option value="four">4</option>
+            <option value="five">5</option>
+            <option value="six">6</option>
+            <option value="seven">7</option>
+            <option value="eight">8</option>
+            <option value="nine">9</option>
+            <option value="ten">10</option>
+          </drop-down>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 1 name</h3>
+          <outlined-text-field
+            id="guardianOneNameInput"
+            name="guardianOneName"
+            type="text"
+            placeholder="Enter guardians name"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 1 relationship</h3>
+          <drop-down
+            id="guardianOneRelationInput"
+            name="guardianOneRelation"
+            placeholder="Select your guardians relationship to you"
+            required>
+            <option value="mother">Mother</option>
+            <option value="father">Father</option>
+            <option value="grandmother">Grandmother</option>
+            <option value="grandfather">Grandfather</option>
+            <option value="aunt">Aunt</option>
+            <option value="uncle">Uncle</option>
+            <option value="godmother">Godmother</option>
+            <option value="godfather">Godfather</option>
+            <option value="other">Other</option>
+          </drop-down>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 1 occupation (Enter N/A if not applicable)</h3>
+          <outlined-text-field
+            id="guardianOneOccupationInput"
+            name="guardianOneOccupation"
+            type="text"
+            placeholder="Enter your guardians occupation"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 1 employer (Enter N/A if not applicable)</h3>
+          <outlined-text-field
+            id="guardianOneEmployerInput"
+            name="guardianOneEmployer"
+            type="text"
+            placeholder="Enter your guardians employer"
+            required>
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 2 name (Optional)</h3>
+          <outlined-text-field
+            id="guardianTwoNameInput"
+            name="guardianTwoName"
+            type="text"
+            placeholder="Enter your second guardians name">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 2 relationship (Optional)</h3>
+          <drop-down
+              id="guardianTwoRelationInput"
+              name="guardianTwoRelation"
+              placeholder="Select your guardians relationship to you">
+            <option value="mother">Mother</option>
+            <option value="father">Father</option>
+            <option value="grandmother">Grandmother</option>
+            <option value="grandfather">Grandfather</option>
+            <option value="aunt">Aunt</option>
+            <option value="uncle">Uncle</option>
+            <option value="godmother">Godmother</option>
+            <option value="godfather">Godfather</option>
+            <option value="other">Other</option>
+          </drop-down>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 2 occupation (Enter N/A if not applicable, Optional)</h3>
+          <outlined-text-field
+            id="guardianTwoOccupationInput"
+            name="guardianTwoOccupation"
+            type="text"
+            placeholder="Enter your guardians occupation">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Parent/Guardian 2 employer (Enter N/A if not applicable, Optional)</h3>
+          <outlined-text-field
+            id="guardianTwoEmployerInput"
+            name="guardianTwoEmployer"
+            type="text"
+            placeholder="Enter your guardians employer">
+          </outlined-text-field>
+        </form-question>
+
+        <form-question>
+          <h3 slot="header">Is a member of your family a current Pomperaug Education Association (PEA) member?</h3>
+            <check-box inputType="radio"
+              radioOptions=
+                '["Yes",
+                  "No"]'
+              id="familyPEAMemberInput"
+              name="familyPEAMember"
+              required>
+            </check-box>
+        </form-question>
+
+          <form-question>
+            <h3 slot="header">Is a member of your family a current or veteran member of the armed services?</h3>
+            <check-box inputType="radio"
+               radioOptions=
+                 '["Yes",
+                  "No"]'
+               id="armedServiceMemberInput"
+               name="armedServiceMember"
+               required>
+            </check-box>
+          </form-question>
+
+            <form-question>
+              <h3 slot="header">Are you the child or grand-child of a member of the Knights of Columbus or a member or parishioner of Mid-South Catholic Church?</h3>
+              <check-box inputType="radio"
+                radioOptions=
+                  '["Yes",
+                  "No"]'
+                id="familyChurchMemberInput"
+                name="familyChurchMember"
+                required>
+              </check-box>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="fafsaPanel">
+      <form-section
+        header="FAFSA Information"
+        id="fafsaInformationForm"
+        action="/students/fafsa"
+        method="post">
+        <form-question>
+          <h3 slot="header">Upload your FAFSA Submission Summary here.</h3>
+          <p slot="desc">This file should be formatted as a PDF, and is not required for all scholarships. Click submit when finished.</p>
+          <file-input></file-input>
+        </form-question>
+      </form-section>
+    </tab-panel>
+
+    <tab-panel id="scholarEssayPanel">
+      <div class="form-container">
+        <p align="center">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeD8f50XwVtGycjIy3wuB0lkDwxydsIIbaxma--_bTECd0v0A/viewform?embedded=true" width="800" height="430" frameborder="" marginheight="0" marginwidth="0">Loading…</iframe>
+        </p>
+      </div>
+    </tab-panel>
+  </body>
+
+  <script>
+
+  </script>
+</html>

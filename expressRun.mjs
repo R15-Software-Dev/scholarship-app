@@ -11,6 +11,13 @@ app.use("/providers", proxy("http://localhost:3000", {
   }
 }));
 
+app.use("/students", proxy("http://localhost:3000", {
+  proxyReqPathResolver: function (req) {
+    console.log(req.originalUrl);
+    return req.originalUrl;
+  }
+}));
+
 // Serve static files from the dist directory
 app.use(express.static('dist'));
 
