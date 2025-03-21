@@ -10,10 +10,6 @@ import { SignJWT } from "jose";
 import { v4 as uuidv4 } from "uuid";
 import * as bcrypt from "bcryptjs";
 
-// Create a DynamoDB client
-const client = new DynamoDBClient({ region: "us-east-1" });
-// Create a Secrets Manager client
-const secretsClient = new SecretsManagerClient({ region: "us-east-1" });
 
 /**
  * Registers a provider in the database
@@ -22,6 +18,12 @@ const secretsClient = new SecretsManagerClient({ region: "us-east-1" });
  * @returns A success message or an error
  */
 export async function handler(event: AWSRequest): Promise<AWSResponse> {
+  // Create a DynamoDB client
+  const client = new DynamoDBClient({ region: "us-east-1", endpoint: "http://localhost:8000" });
+  // Create a Secrets Manager client
+  const secretsClient = new SecretsManagerClient({ region: "us-east-1" });
+
+
   // Parse into a ProviderRegInfo object - ensure that email and password are not empty strings
   let eventBody: ProviderRegInfo = {
     email: "",
@@ -113,7 +115,7 @@ export async function handler(event: AWSRequest): Promise<AWSResponse> {
       })
     }
   } catch (e) {
-    // console.error(e);
+    console.error(e);
     return {
       statusCode: 500,
       body: JSON.stringify({

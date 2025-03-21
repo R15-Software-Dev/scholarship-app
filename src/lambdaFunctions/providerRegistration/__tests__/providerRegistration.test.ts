@@ -1,8 +1,9 @@
-import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, DeleteItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {AWSRequest, AWSResponse} from "../../types/aws";
 
 const handler = require("./../index").handler;
+const client = new DynamoDBClient({ endpoint: "http://localhost:8000" })
 
 const getRequest = (overrides: any): APIGatewayProxyEvent => {
   const defaultEvent: APIGatewayProxyEvent = {
@@ -75,7 +76,7 @@ test("throws error with incorrect input", async () => {
   await expect(handler({})).resolves.toHaveProperty("statusCode", 400);
 });
 
-test("returns 'Provider registered successfully' with correct input", async () => {
+test("user is saved with correct input", async () => {
   const request: AWSRequest = {
     body: JSON.stringify({
       email: "testuser@nodejstesting.com",
@@ -84,17 +85,17 @@ test("returns 'Provider registered successfully' with correct input", async () =
     httpMethod: "POST"
   };
 
-  const expectedResponse: AWSResponse = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Provider registered successfully"
-    })
-  };
-
-  await expect(handler(request)).resolves.toStrictEqual(expectedResponse);
+  await expect(handler(request)).resolves.toHaveProperty("statusCode", 200);
+  await expect(client.send(new GetItemCommand({
+    TableName: "scholarship-providers",
+    Key: {
+      "Email": { S: "testuser@nodejstesting.com" }
+    }
+  })))
+    .resolves.toHaveProperty("Item.Email.S", "testuser@nodejstesting.com");
 
   // Delete the created user
-  await new DynamoDBClient({ region: "us-east-1" }).send(new DeleteItemCommand({
+  await client.send(new DeleteItemCommand({
     TableName: "scholarship-providers",
     Key: {
       Email: { S: "testuser@nodejstesting.com" }
