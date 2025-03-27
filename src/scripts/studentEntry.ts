@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Redirect user to closed form page after form due date
-  const targetDate = new Date('2025-03-27T14:05:00');
+  const targetDate = new Date('2025-03-27T14:30:00');
   // Get current date
   const currentDate = new Date();
   // Compare dates
