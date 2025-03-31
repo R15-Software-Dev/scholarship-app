@@ -64,6 +64,13 @@ export const handler: Handler = async (
             });
           }
         });
+    } else {
+      resolve({
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Missing path parameters",
+        }),
+      });
     }
   });
 };
