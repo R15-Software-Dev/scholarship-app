@@ -37,6 +37,8 @@ export const handler: Handler = async (
               statusCode: 200,
               body: JSON.stringify(dbresponse.Item),
             });
+          } else {
+            throw new ResourceNotFoundException({$metadata: undefined, message: "Database returned null"});
           }
         })
         .catch((e) => {
