@@ -1,4 +1,4 @@
-﻿name: Release
+name: Release
 
 on:
   push:
@@ -12,19 +12,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: '0'
+          fetch-depth: "0"
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: "20.x"
 
       - name: Install dependencies
         run: |
           npm install
 
+      # Use our preset environment variables to get a JWT for our Github App
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.RELEASEBOT_ID }}
+          private-key: ${{ secrets.RELEASEBOT_SECRET }}
+
       - name: Create release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Uses the token that we got in the beginning to authenticate as our Github App
+          # This should allow us to still run other workflows; using secrets.GITHUB_TOKEN disables this functionality
+          # for security reasons.
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           npx semantic-release
+
+      # Right now, I'm just hoping that this works. I have no way of knowing until a release is created.
+      - name: Merge changes to develop branch
+        run: |
+          git fetch origin develop
+          git checkout develop
+          git merge origin/main --no-ff -m "Merge main into develop (post release)"
+          git push origin develop
