@@ -41,23 +41,178 @@ getImage("/images/R15_logo.png", (imageString) => {
       {text: "(203) 262 3200", alignment: "center", style: ['headerThree']},
       {text: " ", lineHeight: 4, style: ['headerThree']},
       {image: imageString, height: 300, width: 300, alignment: "center", pageBreak: "after" },
+
+
+      {text: "Student Information", bold: true, style:['headerTwo'], margin:[0, 20, 0, 10]},
+
+      {text: "Student Name:",  bold: true, margin: [0, 0, 0, 10]},
+      {
+        columns: [
+          {text: "Student ID #:",  bold: true},
+          {text: "DOB:",  bold: true}
+        ],
+        margin: [0, 0, 0, 10]
+      },
+      {
+        columns: [
+          {text: "Street:",  bold: true},
+          {text: "Email Address:",  bold: true},
+        ],
+        margin: [0, 0, 0, 10]
+      },
+      {
+        columns: [
+          {text: "Town:", bold: true},
+          {text: "Phone Number:",bold: true},
+        ],
+        margin: [0, 0, 0, 10]
+      },
+
+      {
+        text: [
+          { text: "High School:", bold: true },
+          { text: "Pomperaug High School" }
+        ],
+        margin: [0, 20, 0, 20]
+      },
+
+      {text: "Guardians", bold: true, style:['headerThree'], margin:[0, 10, 0, 10]},
+      {
+        columns: [
+          {text: "Parent/Guardian 1 Name:", bold: true},
+          {text: "Relationship:",bold: true},
+        ],
+        margin: [0, 0, 0, 10]
+      },
+      {
+        columns: [
+          {text: "Parent/Guardian 2 Name:", bold: true},
+          {text: "Relationship:",bold: true},
+        ],
+        margin: [0, 0, 0, 10],
+        pageBreak: "after"
+      },
+
+      // PAGE BREAK
+
+      // Academic Information
+      {text: "Academic Information", bold: true, style: ['headerTwo'], margin: [0, 20, 0, 10]},
+      {
+        stack: [
+          {text: "Unweighted GPA: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "SAT Reading: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "SAT Math: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "ACT: ", bold: true, margin: [0, 0, 0, 10]}
+        ],
+        margin: [0, 0, 0, 20]
+      },
+
+      // Academic Honors
+      {text: "Academic Honors", bold: true, style: ['headerTwo'], margin: [0, 10, 0, 10]},
+      {text: "List academic honors and awards here", margin: [0, 0, 0, 20]},
+
+      // Post-Secondary Education
+      {text: "Post-Secondary Education", bold: true, style: ['headerTwo'], margin: [0, 10, 0, 10]},
+      {
+        stack: [
+          {text: "College/University Name: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "Intended Major: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "Intended Field of Study: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "Intended Career: ", bold: true, margin: [0, 0, 0, 10]},
+          {text: "Acceptance: ", bold: true, margin: [0, 0, 0, 10]}
+        ],
+        margin: [0, 0, 0, 20],
+        pageBreak: "after"
+      },
+
+      // PAGE BREAK
+
+      // Athletic Participation
+      {text: "Athletic Participation", bold: true, style: ['headerTwo'], margin: [0, 20, 0, 10]},
       {
         layout: 'headerLineOnly',
         table: {
           headerRows: 1,
-          widths: ['*', '*', '*'],
+          widths: ['40%', '26%', '33%'],
           body: [
-            ["Stuff", "and", "things"],
-            ["Test", "value", "one"],
-            ["Test2", "value2", "two"],
+            ["Sport Name", "Grades", "Special Achievements"],
+            ["", "", ""], // Empty row as placeholder
           ]
-        }
-      }
-    ],
+        },
+        margin: [0, 0, 0, 20]
+      },
 
+      // Community Involvement
+      {text: "Community Involvement", bold: true, style: ['headerTwo'], margin: [0, 0, 0, 10]},
+      {
+        layout: 'headerLineOnly',
+        table: {
+          headerRows: 1,
+          widths: ['65%', '20%', '15%'],
+          body: [
+            ["Activity", "Grades", "Hrs/Year"],
+            ["", "", ""], // Empty row as placeholder
+          ]
+        },
+        margin: [0, 0, 0, 20]
+      },
+
+      // Work Experience
+      {text: "Work Experience", bold: true, style: ['headerTwo'], margin: [0, 0, 0, 10]},
+      {
+        layout: 'headerLineOnly',
+        table: {
+          headerRows: 1,
+          widths: ['30%', '30%', '20%', '20%'],
+          body: [
+            ["Job Title", "Employer", "Approx. Dates of Employment", "Hrs/Week"],
+            ["", "", "", ""], // Empty row as placeholder
+          ]
+        },
+        margin: [0, 0, 0, 20]
+      },
+
+      // Extracurricular Activities
+      {text: "Extracurricular Activities", bold: true, style: ['headerTwo'], margin: [0, 0, 0, 10]},
+      {
+        layout: 'headerLineOnly',
+        table: {
+          headerRows: 1,
+          widths: ['38%', '12%', '10%', '12%', '28%'],
+          body: [
+            ["Activity", "Grades", "Hrs/Week", "Weeks", "Special Involvement"],
+            ["", "", "", "", ""], // Empty row as placeholder
+          ]
+        },
+        margin: [0, 0, 0, 20]
+      },
+
+    ],
     defaultStyle: {
       lineHeight: 1.15,
       font: "Arial"
+    },
+
+    // Footer
+    footer: function(currentPage, pageCount) {
+      if (currentPage === 1) {
+        return {}; // No footer on page 1
+      }
+      return {
+        columns: [
+          {
+            text: `"First name + Last name"`,
+            alignment: 'left',
+            style: 'footerStyle'
+          },
+          {
+            text: `Page ${currentPage - 1} of ${pageCount - 1}`, // Adjusted numbering to start from 1 for page 2
+            alignment: 'right',
+            style: 'footerStyle'
+          }
+        ],
+        margin: [40, 0, 40, 0] // [left, top, right, bottom]
+      };
     },
 
     styles: {
@@ -69,7 +224,8 @@ getImage("/images/R15_logo.png", (imageString) => {
       },
       headerThree: {
         fontSize: 15
-      }
+      },
+
     }
   };
 
