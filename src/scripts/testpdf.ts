@@ -78,14 +78,14 @@ getImage("/images/R15_logo.png", (imageString) => {
 
       {text: "Guardians", bold: true, style:['headerThree'], margin:[0, 10, 0, 10]},
       {
-        columns: [
+        stack: [
           {text: "Parent/Guardian 1 Name:", bold: true},
           {text: "Relationship:",bold: true},
         ],
         margin: [0, 0, 0, 10]
       },
       {
-        columns: [
+        stack: [
           {text: "Parent/Guardian 2 Name:", bold: true},
           {text: "Relationship:",bold: true},
         ],
