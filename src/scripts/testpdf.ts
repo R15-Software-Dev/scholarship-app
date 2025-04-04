@@ -47,7 +47,7 @@ async function fetchStudentData(studentId: string): Promise<any> {
 async function generateStudentPDF() {
   try {
     // Hardcoded student ID for testing
-    const studentId = "google_113247439743075864879";
+    const studentId = "google_109534508256206924555";
 
     // Fetch student data
     const studentData = await fetchStudentData(studentId);
@@ -63,9 +63,9 @@ async function generateStudentPDF() {
       {text: "Region 15", alignment: "center", bold: true, style: ['headerThree']},
       {text: "General Scholarship Application", alignment: "center", bold: true, lineHeight: 2, style: ['headerThree']},
       {text: `${studentData.studentFirstName.S} ${studentData.studentLastName.S}`, alignment: "center", bold: true, style: ['headerOne']},
-      {text: "234 Judd Rd, Southbury CT", alignment: "center", style: ['headerTwo']},
-      {text: "kalegria@region15.org", alignment: "center", style: ['headerThree']},
-      {text: "(203) 262 3200", alignment: "center", style: ['headerThree']},
+      {text: `${studentData.streetAddress.S}`+ ", " + `${studentData.studentTown.SS}`, alignment: "center", style: ['headerTwo']},
+      {text: `${studentData.studentEmail.S}`, alignment: "center", style: ['headerThree']},
+      {text: `${studentData.studentPhoneNumber.S}`, alignment: "center", style: ['headerThree']},
       {text: " ", lineHeight: 4, style: ['headerThree']},
       {image: imageString, height: 300, width: 300, alignment: "center", pageBreak: "after" },
 
