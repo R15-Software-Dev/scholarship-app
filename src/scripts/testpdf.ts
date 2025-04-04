@@ -143,14 +143,14 @@ async function generateStudentPDF() {
         {
           text: [
             { text: "Parent/Guardian 1 Name: ", bold: true },
-            { text: studentData.guardianOneName.S}
+            { text: `${studentData.guardianOneName?.S}` || "N/A"}
           ],
           margin: [0, 0, 0, 10],
         },
         {
           text: [
             { text: "Relationship: ", bold: true },
-            { text: studentData.guardianOneRelation.S || "" }
+            { text: `${studentData.guardianOneRelation?.S}` || "N/A" }
           ],
           margin: [0, 0, 0, 20],
         },
@@ -158,14 +158,14 @@ async function generateStudentPDF() {
       {
         text: [
           { text: "Parent/Guardian 2 Name: ", bold: true },
-          { text: studentData.guardianTwoName.S}
+          { text: `${studentData.guardianTwoName?.S}` || "N/A"}
         ],
         margin: [0, 0, 0, 10],
       },
       {
         text: [
           { text: "Relationship: ", bold: true },
-          { text: studentData.guardianTwoRelation.S || "" }
+          { text: `${studentData.guardianTwoRelation?.S}` || "N/A" }
         ],
         margin: [0, 0, 0, 10],
         pageBreak: "after"
