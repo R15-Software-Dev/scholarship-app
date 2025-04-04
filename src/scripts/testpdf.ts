@@ -84,7 +84,7 @@ async function generateStudentPDF() {
           {
             text: [
               { text: "Student ID #: ", bold: true },
-              { text: studentData.studentIDNumber.N}
+              { text: `${studentData.studentIDNumber.N}`}
             ]
           },
           {
@@ -176,28 +176,72 @@ async function generateStudentPDF() {
       // Academic Information
       {text: "Academic Information", bold: true, style: ['headerTwo'], margin: [0, 20, 0, 10]},
       {
-        stack: [
-          {text: "Unweighted GPA: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "SAT Reading: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "SAT Math: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "ACT: ", bold: true, margin: [0, 0, 0, 10]}
+        text: [
+          { text: "Unweighted GPA: ", bold: true },
+          { text: `${studentData.unweightedGPA?.S}` || "N/A"}
         ],
-        margin: [0, 0, 0, 20]
+        margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "SAT Reading Score: ", bold: true },
+          { text: `${studentData.readingScoreSAT?.N}` || "N/A" }
+        ],
+        margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "SAT Math Score: ", bold: true },
+          { text: `${studentData.mathScoreSAT?.N}` || "N/A" }
+        ],
+        margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "ACT Score: ", bold: true },
+          { text: `${studentData.highScoreACT?.N}`|| "N/A" }
+        ],
+        margin: [0, 0, 0, 20],
       },
 
       // Academic Honors
       {text: "Academic Honors", bold: true, style: ['headerTwo'], margin: [0, 10, 0, 10]},
-      {text: "List academic honors and awards here", margin: [0, 0, 0, 20]},
+      {text: `${studentData.listAcademicHonors?.S || "N/A"}`, margin: [0, 0, 0, 20]},
 
       // Post-Secondary Education
       {text: "Post-Secondary Education", bold: true, style: ['headerTwo'], margin: [0, 10, 0, 10]},
       {
-        stack: [
-          {text: "College/University Name: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "Intended Major: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "Intended Field of Study: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "Intended Career: ", bold: true, margin: [0, 0, 0, 10]},
-          {text: "Acceptance: ", bold: true, margin: [0, 0, 0, 10]}
+        text: [
+          { text: "College/University Name: ", bold: true },
+          { text: `${studentData.universityName?.S}` || "N/A"}
+        ],
+          margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "Intended Major: ", bold: true },
+          { text: `${studentData.studentsMajor?.S}` || "N/A"}
+        ],
+          margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "Intended Field of Study: ", bold: true },
+          { text: `${studentData.studentStudyField?.S}` || "N/A" }
+        ],
+          margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "Intended Career: ", bold: true },
+          { text: `${studentData.studentCareer?.S}`|| "N/A" }
+        ],
+          margin: [0, 0, 0, 10],
+      },
+      {
+        text: [
+          { text: "Acceptance: ", bold: true },
+          { text: `${studentData.universityAcceptance?.S}`|| "N/A" }
         ],
         margin: [0, 0, 0, 20],
         pageBreak: "after"
