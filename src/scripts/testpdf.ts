@@ -23,19 +23,46 @@ function getImage(path: string, callback: (arg0: string) => void) {
     });
 }
 
-getImage("/images/R15_logo.png", (imageString) => {
+// Function to fetch student data
+async function fetchStudentData(studentId: string): Promise<any> {
+  try {
+    const response = await fetch(`/admin/get/student/${studentId}`, {
+      method: "GET",
+    });
 
-  // console.log(imageString);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  if (imageString == null)
-    throw new Error("Couldn't read image file, aborting.");
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Error fetching student data:", error);
+    throw error;
+  }
+}
+
+// Main function to generate PDF with student data
+async function generateStudentPDF() {
+  try {
+    // Hardcoded student ID for testing
+    const studentId = "google_113247439743075864879";
+
+    // Fetch student data
+    const studentData = await fetchStudentData(studentId);
+
+    // Get image
+    getImage("/images/R15_logo.png", (imageString) => {
+      if (imageString == null)
+        throw new Error("Couldn't read image file, aborting.");
 
   let definition: TDocumentDefinitions = {
     content: [
       {text: " ", lineHeight: 4, style: ['headerThree']},
       {text: "Region 15", alignment: "center", bold: true, style: ['headerThree']},
       {text: "General Scholarship Application", alignment: "center", bold: true, lineHeight: 2, style: ['headerThree']},
-      {text: "Kaitlyn Alegria", alignment: "center", bold: true, style: ['headerOne']},
+      {text: `${studentData.studentFirstName.S} ${studentData.studentLastName.S}`, alignment: "center", bold: true, style: ['headerOne']},
       {text: "234 Judd Rd, Southbury CT", alignment: "center", style: ['headerTwo']},
       {text: "kalegria@region15.org", alignment: "center", style: ['headerThree']},
       {text: "(203) 262 3200", alignment: "center", style: ['headerThree']},
@@ -229,6 +256,13 @@ getImage("/images/R15_logo.png", (imageString) => {
     }
   };
 
-  const generator = pdfMake.createPdf(definition, null, fonts);
-  generator.open();
-});
+      const generator = pdfMake.createPdf(definition, null, fonts);
+      generator.open();
+    });
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+  }
+}
+
+// Run with hardcoded student ID
+generateStudentPDF();
