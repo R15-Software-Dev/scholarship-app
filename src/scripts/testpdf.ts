@@ -496,6 +496,15 @@ async function generateStudentPDF() {
   };
 
       const generator = pdfMake.createPdf(definition, null, fonts);
+
+      // Create filename
+      const firstName = studentData.studentFirstName?.S || "Unknown";
+      const lastName = studentData.studentLastName?.S || "Student";
+      const fileName = `${firstName}${lastName}ScholarshipApplication.pdf`;
+
+      // Download the PDF
+      generator.download(fileName);
+      // Open PDF in new tab
       generator.open();
     });
   } catch (error) {
