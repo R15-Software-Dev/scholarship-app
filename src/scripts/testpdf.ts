@@ -118,7 +118,7 @@ async function generateStudentPDF() {
           {
             text: [
               { text: "Town: ", bold: true },
-              { text: `${studentData.studentTown.S}` || "N/A" }
+              { text: `${studentData.studentTown.SS}` || "N/A" }
             ]
           },
           {
@@ -241,7 +241,7 @@ async function generateStudentPDF() {
       {
         text: [
           { text: "Acceptance: ", bold: true },
-          { text: `${studentData.universityAcceptance?.S}`|| "N/A" }
+          { text: `${studentData.universityAcceptance?.SS}`|| "N/A" }
         ],
         margin: [0, 0, 0, 20],
         pageBreak: "after"
@@ -249,17 +249,55 @@ async function generateStudentPDF() {
 
       // PAGE BREAK
 
-      // Athletic Participation
+      // Athletic Participation["Sport Name", "Grades", "Special Achievements"],
       {text: "Athletic Participation", bold: true, style: ['headerTwo'], margin: [0, 20, 0, 10]},
       {
         layout: 'headerLineOnly',
         table: {
           headerRows: 1,
           widths: ['40%', '26%', '33%'],
-          body: [
-            ["Sport Name", "Grades", "Special Achievements"],
-            ["", "", ""], // Empty row as placeholder
-          ]
+          body: (() => {
+            // Start with the header row
+            const tableBody = [["Sports Name", "Grades", "Special Achievements"]];
+
+            // Check if athleticParticipation exists and parse it
+            let sportsData = [];
+            try {
+              if (studentData.athleticParticipation?.S) {
+                sportsData = JSON.parse(studentData.athleticParticipation.S);
+              }
+            } catch (error) {
+              console.error("Error parsing community involvement data:", error);
+            }
+
+            // If no data or parsing failed, return table with empty row
+            if (!Array.isArray(sportsData) || sportsData.length === 0) {
+              tableBody.push(["No sports listed", "", ""]);
+              return tableBody;
+            }
+
+            // Loop through each activity object and add to table
+            sportsData.forEach(sport => {
+              let grades;
+              try {
+                // Parse the grades string (stored as JSON array)
+                grades = JSON.parse(sport.sportParticipated)
+                  .map(grade => grade.replace(/"/g, '')) // Remove quotes
+                  .join(", "); // Join with comma and space
+              } catch (error) {
+                console.error("Error parsing grades:", error);
+                grades = sport.sportParticipated || ""; // Fallback to raw string
+              }
+
+              tableBody.push([
+                sport.sport || "",
+                grades,
+                sport.sportAchievements || ""
+              ]);
+            });
+
+            return tableBody;
+          })()
         },
         margin: [0, 0, 0, 20]
       },
@@ -271,10 +309,48 @@ async function generateStudentPDF() {
         table: {
           headerRows: 1,
           widths: ['65%', '20%', '15%'],
-          body: [
-            ["Activity", "Grades", "Hrs/Year"],
-            ["", "", ""], // Empty row as placeholder
-          ]
+          body: (() => {
+            // Start with the header row
+            const tableBody = [["Activity", "Grades", "Hrs/Year"]];
+
+            // Check if communityInvolvement exists and parse it
+            let involvementData = [];
+            try {
+              if (studentData.communityInvolvement?.S) {
+                involvementData = JSON.parse(studentData.communityInvolvement.S);
+              }
+            } catch (error) {
+              console.error("Error parsing community involvement data:", error);
+            }
+
+            // If no data or parsing failed, return table with empty row
+            if (!Array.isArray(involvementData) || involvementData.length === 0) {
+              tableBody.push(["No activities listed", "", ""]);
+              return tableBody;
+            }
+
+            // Loop through each activity object and add to table
+            involvementData.forEach(activity => {
+              let grades;
+              try {
+                // Parse the grades string (stored as JSON array)
+                grades = JSON.parse(activity.activityParticipated)
+                  .map(grade => grade.replace(/"/g, '')) // Remove quotes
+                  .join(", "); // Join with comma and space
+              } catch (error) {
+                console.error("Error parsing grades:", error);
+                grades = activity.activityParticipated || ""; // Fallback to raw string
+              }
+
+              tableBody.push([
+                activity.activity || "",
+                grades,
+                activity.activityHours || ""
+              ]);
+            });
+
+            return tableBody;
+          })()
         },
         margin: [0, 0, 0, 20]
       },
@@ -285,14 +361,44 @@ async function generateStudentPDF() {
         layout: 'headerLineOnly',
         table: {
           headerRows: 1,
-          widths: ['30%', '30%', '20%', '20%'],
-          body: [
-            ["Job Title", "Employer", "Approx. Dates of Employment", "Hrs/Week"],
-            ["", "", "", ""], // Empty row as placeholder
-          ]
+          widths: ['25%', '30%', '25%', '20%'],
+          body: (() => {
+            // Header row
+            const tableBody = [["Job Title", "Employer", "Approx. Dates of Employment", "Hrs/Week"]];
+
+            // Check if workExperience exists
+            let workData = []; // Empty array to parse data into
+            try {
+              if (studentData.workExperience?.S) {
+                workData = JSON.parse(studentData.workExperience.S);
+              }
+            } catch (error) {
+              console.error("Error parsing work experience data:", error);
+            }
+
+            // If there's no data or parsing failed, return empty row
+            if(!Array.isArray(workData) || workData.length === 0) {
+              tableBody.push(["No work experience listed", "", "", ""]);
+            }
+
+            // Loop through each object and add to table
+            workData.forEach(job => {
+              const employmentDates = `${job.jobStartDate || ""} - ${job.jobEndDate || ""}`;
+
+              tableBody.push([
+                job.jobTitle || "",
+                job.studentEmployer || "",
+                employmentDates,
+                job.weeklyWorkHours || ""
+              ]);
+            });
+              return tableBody;
+            })()
+          },
+          margin: [0, 0, 0, 20]
         },
-        margin: [0, 0, 0, 20]
-      },
+
+
 
       // Extracurricular Activities
       {text: "Extracurricular Activities", bold: true, style: ['headerTwo'], margin: [0, 0, 0, 10]},
@@ -300,13 +406,51 @@ async function generateStudentPDF() {
         layout: 'headerLineOnly',
         table: {
           headerRows: 1,
-          widths: ['38%', '12%', '10%', '12%', '28%'],
-          body: [
-            ["Activity", "Grades", "Hrs/Week", "Weeks", "Special Involvement"],
-            ["", "", "", "", ""], // Empty row as placeholder
-          ]
+          widths: ['35%', '17%', '10%', '10%', '28%'],
+          body:(() => {
+            // Header row
+            const tableBody = [["Activity", "Grades", "Hrs/Week", "Weeks", "Special Involvement"]];
+
+            // Check if extracurricularActivities exists
+
+            let extracurricularData = []; // Empty array to parse data into
+            try {
+              if(studentData.extracurricularActivities?.S) {
+                extracurricularData = JSON.parse(studentData.extracurricularActivities.S);
+              }
+            } catch (error) {
+              console.error("Error parsing extracurricular data:", error);
+            }
+
+            // If there's no data or parsing failed, return empty row
+            if (!Array.isArray(extracurricularData) || extracurricularData.length === 0) {
+              tableBody.push(["No extracurricular activities", "", "", "", ""])
+              return tableBody;
+            }
+
+            extracurricularData.forEach(activity => {
+              let grades;
+              try{
+                grades = JSON.parse(activity.extraActivityParticipated)
+                  .map(grade => grade.replace(/"/g, ''))
+                  .join(", ");
+              } catch (error) {
+                console.error("Error parsing grades: ", error);
+                grades = activity.extraActivityParticipated || "";
+              }
+
+              tableBody.push([
+                activity.extraActivity || "",
+                grades,
+                activity.extraActivityHours || "",
+                activity.extraWeeksParticipated || "",
+                activity.extraSpecialInvolvement || ""
+              ]);
+            });
+            return tableBody;
+          })()
         },
-        margin: [0, 0, 0, 20]
+        margin: [0, 0, 0, 40]
       },
 
     ],
