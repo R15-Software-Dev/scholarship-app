@@ -84,13 +84,13 @@ async function generateStudentPDF() {
           {
             text: [
               { text: "Student ID #: ", bold: true },
-              { text: `${studentData.studentIDNumber.N}`}
+              { text: `${studentData.studentIDNumber.N}` || ""}
             ]
           },
           {
             text: [
               { text: "DOB: ", bold: true },
-              { text: studentData.studentBirthDate.S || "" }
+              { text: `${studentData.studentBirthDate.S}` || "" }
             ]
           }
         ],
@@ -101,13 +101,13 @@ async function generateStudentPDF() {
           {
             text: [
               { text: "Street: ", bold: true },
-              { text: studentData.streetAddress.S || "N/A" }
+              { text: `${studentData.streetAddress.S}` || "N/A" }
             ]
           },
           {
             text: [
               { text: "Email Address: ", bold: true },
-              { text: studentData.studentEmail.S || "N/A" }
+              { text: `${studentData.studentEmail.S}` || "N/A" }
             ]
           }
         ],
@@ -118,13 +118,13 @@ async function generateStudentPDF() {
           {
             text: [
               { text: "Town: ", bold: true },
-              { text: studentData.studentTown.S || "N/A" }
+              { text: `${studentData.studentTown.S}` || "N/A" }
             ]
           },
           {
             text: [
               { text: "Phone Number: ", bold: true },
-              { text: studentData.studentPhoneNumber.S || "N/A" }
+              { text: `${studentData.studentPhoneNumber.S}` || "N/A" }
             ]
           }
         ],
@@ -134,7 +134,7 @@ async function generateStudentPDF() {
       {
         text: [
           { text: "High School: ", bold: true },
-          { text: studentData.highSchool?.S || "Pomperaug High School" }
+          { text: "Pomperaug High School" }
         ],
         margin: [0, 20, 0, 20]
       },
