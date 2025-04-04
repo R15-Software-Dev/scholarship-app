@@ -72,49 +72,100 @@ async function generateStudentPDF() {
 
       {text: "Student Information", bold: true, style:['headerTwo'], margin:[0, 20, 0, 10]},
 
-      {text: "Student Name:",  bold: true, margin: [0, 0, 0, 10]},
       {
-        columns: [
-          {text: "Student ID #:",  bold: true},
-          {text: "DOB:",  bold: true}
+        text: [
+          { text: "Student Name: ", bold: true },
+          { text:`${studentData.studentFirstName.S || ""} ${studentData.studentLastName.S || ""}` }
         ],
         margin: [0, 0, 0, 10]
       },
       {
         columns: [
-          {text: "Street:",  bold: true},
-          {text: "Email Address:",  bold: true},
+          {
+            text: [
+              { text: "Student ID #: ", bold: true },
+              { text: studentData.studentIDNumber.N}
+            ]
+          },
+          {
+            text: [
+              { text: "DOB: ", bold: true },
+              { text: studentData.studentBirthDate.S || "" }
+            ]
+          }
         ],
         margin: [0, 0, 0, 10]
       },
       {
         columns: [
-          {text: "Town:", bold: true},
-          {text: "Phone Number:",bold: true},
+          {
+            text: [
+              { text: "Street: ", bold: true },
+              { text: studentData.streetAddress.S || "N/A" }
+            ]
+          },
+          {
+            text: [
+              { text: "Email Address: ", bold: true },
+              { text: studentData.studentEmail.S || "N/A" }
+            ]
+          }
+        ],
+        margin: [0, 0, 0, 10]
+      },
+      {
+        columns: [
+          {
+            text: [
+              { text: "Town: ", bold: true },
+              { text: studentData.studentTown.S || "N/A" }
+            ]
+          },
+          {
+            text: [
+              { text: "Phone Number: ", bold: true },
+              { text: studentData.studentPhoneNumber.S || "N/A" }
+            ]
+          }
         ],
         margin: [0, 0, 0, 10]
       },
 
       {
         text: [
-          { text: "High School:", bold: true },
-          { text: "Pomperaug High School" }
+          { text: "High School: ", bold: true },
+          { text: studentData.highSchool?.S || "Pomperaug High School" }
         ],
         margin: [0, 20, 0, 20]
       },
 
       {text: "Guardians", bold: true, style:['headerThree'], margin:[0, 10, 0, 10]},
+        {
+          text: [
+            { text: "Parent/Guardian 1 Name: ", bold: true },
+            { text: studentData.guardianOneName.S}
+          ],
+          margin: [0, 0, 0, 10],
+        },
+        {
+          text: [
+            { text: "Relationship: ", bold: true },
+            { text: studentData.guardianOneRelation.S || "" }
+          ],
+          margin: [0, 0, 0, 20],
+        },
+
       {
-        stack: [
-          {text: "Parent/Guardian 1 Name:", bold: true},
-          {text: "Relationship:",bold: true},
+        text: [
+          { text: "Parent/Guardian 2 Name: ", bold: true },
+          { text: studentData.guardianTwoName.S}
         ],
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 10],
       },
       {
-        stack: [
-          {text: "Parent/Guardian 2 Name:", bold: true},
-          {text: "Relationship:",bold: true},
+        text: [
+          { text: "Relationship: ", bold: true },
+          { text: studentData.guardianTwoRelation.S || "" }
         ],
         margin: [0, 0, 0, 10],
         pageBreak: "after"
