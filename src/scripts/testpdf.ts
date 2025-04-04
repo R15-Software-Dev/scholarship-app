@@ -323,7 +323,7 @@ async function generateStudentPDF() {
       return {
         columns: [
           {
-            text: `"First name + Last name"`,
+            text: `${studentData.studentFirstName.S} ${studentData.studentLastName.S}`,
             alignment: 'left',
             style: 'footerStyle'
           },
