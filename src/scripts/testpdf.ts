@@ -44,11 +44,8 @@ async function fetchStudentData(studentId: string): Promise<any> {
 }
 
 // Main function to generate PDF with student data
-async function generateStudentPDF() {
+async function generateStudentPDF(studentId: string) {
   try {
-    // Hardcoded student ID for testing
-    const studentId = "google_109534508256206924555";
-
     // Fetch student data
     const studentData = await fetchStudentData(studentId);
 
@@ -503,7 +500,7 @@ async function generateStudentPDF() {
       const fileName = `${firstName}${lastName}ScholarshipApplication.pdf`;
 
       // Download the PDF
-      generator.download(fileName);
+      // generator.download(fileName);
       // Open PDF in new tab
       generator.open();
     });
@@ -512,5 +509,18 @@ async function generateStudentPDF() {
   }
 }
 
-// Run with hardcoded student ID
-generateStudentPDF();
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("generate-pdf-btn") as HTMLButtonElement;
+  button.addEventListener("click", () => {
+    const input = document.getElementById("student-id-input") as HTMLInputElement;
+    const studentId = input.value.trim(); // Get rid of white space
+
+    if (!studentId) {
+      alert("Enter a valid student ID.");
+      return;
+    }
+
+    // Run with student ID
+    generateStudentPDF(studentId);
+  });
+});
