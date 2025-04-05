@@ -13,6 +13,7 @@
     <script src="./bundles/scripts/tabs.bundle.js" defer></script>
     <script src="./bundles/scripts/stickyScrolling.bundle.js" defer></script>
     <script src="./bundles/scripts/switchTab.bundle.js" defer></script>
+    <script src="./bundles/scripts/testpdf.bundle.js" type="module"></script>
     <title>R15 Scholarship Application</title>
   </head>
 
@@ -103,6 +104,7 @@
     </div>
   </div>
   <div>
+
 <!--    <tab-col>-->
 <!--      <section-title>Users</section-title>-->
 <!--      <v-tab active panel-id = "providerUser"> Provider </v-tab>-->
@@ -111,6 +113,11 @@
 <!--      <v-tab panel-id = "scholarshipData"> Scholarship </v-tab>-->
 <!--      <v-tab panel-id = "applicationData"> Application </v-tab>-->
 <!--    </tab-col>-->
+  </div>
+
+  <div>
+    <input type="text" id="student-id-input" placeholder="Enter Student ID" />
+    <button id="generate-pdf-btn">Generate PDF</button>
   </div>
 
   <!-- User section -->
