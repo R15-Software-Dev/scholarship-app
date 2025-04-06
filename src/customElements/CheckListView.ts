@@ -8,7 +8,47 @@ type Dictionary = { [key: string]: string };
  */
 @customElement("check-list-view")
 class CheckListView extends LitElement {
-  static styles?: CSSResultGroup = css``;
+  static styles?: CSSResultGroup = css`
+      div .center-all {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+      }
+
+      div .entry-content {
+          display: flex;
+          flex-direction: column;
+      }
+
+      div .entry-container {
+          display: flex;
+          flex-direction: row;
+          border-radius: 6px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+          width: auto;
+          padding: 10px;
+      }
+
+      div .member-headers {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          width: auto;
+          padding: 6px 14px;
+          background-color: var(--theme-primary-color); /* Dark red background */
+          border-radius: 8px; /* Rounded edges */
+          margin: 5px 0; /* Added some vertical spacing */
+
+          & span {
+              flex: 1 1 0;
+              width: auto;
+              padding: 8px;
+              color: white; /* White text for the headers */
+              font-weight: bold; /* Keep the bold styling from the template */
+              font-size: 16px;
+          }
+      }`;
 
   /** Indicates whether the component is disabled. */
   @property({ type: Boolean })
@@ -82,15 +122,15 @@ class CheckListView extends LitElement {
    */
   protected override render() {
     return html`
-      <div id="header-container">
+      <div id="header-container" class="member-headers">
         <!-- This is where the headers are rendered -->
         ${Object.entries(this._displayMembers).map(([key]) => html`<div>${key}</div>`)}
       </div>
-      <div id="entry-container">
+      <div id="entry-container" class="entry-content">
         <!-- This is where the entry elements are rendered -->
-        <slot name="entries"></slot>
+        <slot name="entries" ></slot>
       </div>
-      <div id="testing-button">
+      <div id="testing-button" class="center-all">
         <!-- Just a button to test adding elements. -->
         <button @click=${this.addBlankElement}>Add Blank Element</button>
       </div>
@@ -103,16 +143,21 @@ class CheckListView extends LitElement {
 class CheckListViewEntry extends LitElement {
   static styles?: CSSResultGroup = css`
     div .content {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
+        margin: 10px;
+        display: flex;
+        flex-direction: row;
+        border-radius: 6px;
+        box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+        width: auto;
+        padding: 10px;
+        pointer-events: inherit;
 
       & .entry-content {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin-left: 5px;
       }
     }
   `;
