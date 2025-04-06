@@ -1,6 +1,6 @@
 ﻿import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "./pdf_vfs";
-import {TDocumentDefinitions} from "pdfmake/interfaces";
+import {Content, TDocumentDefinitions} from "pdfmake/interfaces";
 (<any>pdfMake).addVirtualFileSystem(pdfFonts);
 
 const fonts = {
@@ -23,7 +23,10 @@ function getImage(path: string, callback: (arg0: string) => void) {
     });
 }
 
-// Function to fetch student data
+/**
+ * Fetches student data from API
+ * @param studentId The ID of the student.
+ */
 async function fetchStudentData(studentId: string): Promise<any> {
   try {
     const response = await fetch(`/admin/get/student/${studentId}`, {
@@ -275,11 +278,11 @@ async function generateStudentPDF(studentId: string) {
 
             // Loop through each activity object and add to table
             sportsData.forEach(sport => {
-              let grades;
+              let grades: string[];
               try {
                 // Parse the grades string (stored as JSON array)
                 grades = JSON.parse(sport.sportParticipated)
-                  .map(grade => grade.replace(/"/g, '')) // Remove quotes
+                  .map((grade: string) => grade.replace(/"/g, '')) // Remove quotes
                   .join(", "); // Join with comma and space
               } catch (error) {
                 console.error("Error parsing grades:", error);
@@ -332,7 +335,7 @@ async function generateStudentPDF(studentId: string) {
               try {
                 // Parse the grades string (stored as JSON array)
                 grades = JSON.parse(activity.activityParticipated)
-                  .map(grade => grade.replace(/"/g, '')) // Remove quotes
+                  .map((grade: string) => grade.replace(/"/g, '')) // Remove quotes
                   .join(", "); // Join with comma and space
               } catch (error) {
                 console.error("Error parsing grades:", error);
@@ -379,7 +382,7 @@ async function generateStudentPDF(studentId: string) {
             }
 
             // Loop through each object and add to table
-            workData.forEach(job => {
+            workData.forEach((job: any) => {
               const employmentDates = `${job.jobStartDate || ""} - ${job.jobEndDate || ""}`;
 
               tableBody.push([
@@ -429,7 +432,7 @@ async function generateStudentPDF(studentId: string) {
               let grades;
               try{
                 grades = JSON.parse(activity.extraActivityParticipated)
-                  .map(grade => grade.replace(/"/g, ''))
+                  .map((grade: string) => grade.replace(/"/g, ''))
                   .join(", ");
               } catch (error) {
                 console.error("Error parsing grades: ", error);
@@ -457,9 +460,9 @@ async function generateStudentPDF(studentId: string) {
     },
 
     // Footer
-    footer: function(currentPage, pageCount) {
+    footer: function(currentPage, pageCount): Content {
       if (currentPage === 1) {
-        return {}; // No footer on page 1
+        return ""; // No footer on page 1
       }
       return {
         columns: [
