@@ -9,19 +9,19 @@ type Dictionary = { [key: string]: string };
 @customElement("check-list-view")
 class CheckListView extends LitElement {
   static styles?: CSSResultGroup = css`
-      div .center-all {
+      .center-all {
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 20px;
       }
 
-      div .entry-content {
+      .entry-content {
           display: flex;
           flex-direction: column;
       }
 
-      div .entry-container {
+      .entry-container {
           display: flex;
           flex-direction: row;
           border-radius: 6px;
@@ -30,15 +30,16 @@ class CheckListView extends LitElement {
           padding: 10px;
       }
 
-      div .member-headers {
+      .member-headers {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
           width: auto;
-          padding: 6px 14px;
+          padding: 10px;
           background-color: var(--theme-primary-color); /* Dark red background */
-          border-radius: 8px; /* Rounded edges */
-          margin: 5px 0; /* Added some vertical spacing */
+          color: white;
+          border-radius: 6px; /* Rounded edges */
+          margin: 10px; /* Added some vertical spacing */
 
           & span {
               flex: 1 1 0;
@@ -123,6 +124,9 @@ class CheckListView extends LitElement {
   protected override render() {
     return html`
       <div id="header-container" class="member-headers">
+        <div>
+          <input type="checkbox">
+        </div>
         <!-- This is where the headers are rendered -->
         ${Object.entries(this._displayMembers).map(([key]) => html`<div>${key}</div>`)}
       </div>
