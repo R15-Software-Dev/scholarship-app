@@ -149,3 +149,6 @@ lambdaZips/
 
 # SAM build output
 .aws-sam/
+
+# pdf font file
+./src/scripts/pdf_vfs.js
