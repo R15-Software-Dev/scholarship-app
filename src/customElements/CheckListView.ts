@@ -36,20 +36,28 @@ class CheckListView extends LitElement {
           flex-wrap: nowrap;
           width: auto;
           padding: 10px;
-          background-color: var(--theme-primary-color); /* Dark red background */
+          background-color: var(--theme-primary-color);
           color: white;
-          border-radius: 6px; /* Rounded edges */
-          margin: 10px; /* Added some vertical spacing */
+          border-radius: 6px;
+          margin: 10px;
+          align-items: center; /* Added to vertically align items */
+      }
 
-          & span {
-              flex: 1 1 0;
-              width: auto;
-              padding: 8px;
-              color: white; /* White text for the headers */
-              font-weight: bold; /* Keep the bold styling from the template */
-              font-size: 16px;
-          }
-      }`;
+      .header-space {
+          margin-left: 5px;
+          flex: 1 1 0; /* Changed from flex-grow to flex for consistent sizing */
+          padding: 5px; /* Match entry padding */
+          display: flex; /* Added for consistent layout */
+      }
+
+      .checkbox-header { /* Added for checkbox alignment */
+          width: 30px; /* Fixed width to match entry checkbox */
+          padding: 5px;
+          display: flex;
+          align-items: center;
+      }
+        
+    `;
 
   /** Indicates whether the component is disabled. */
   @property({ type: Boolean })
@@ -124,18 +132,17 @@ class CheckListView extends LitElement {
   protected override render() {
     return html`
       <div id="header-container" class="member-headers">
-        <div>
+        <div class="checkbox-header">
           <input type="checkbox">
         </div>
-        <!-- This is where the headers are rendered -->
-        ${Object.entries(this._displayMembers).map(([key]) => html`<div>${key}</div>`)}
+        ${Object.entries(this._displayMembers).map(([key]) =>
+            html`<div class="header-space"><b>${key}</b></div>`
+        )}
       </div>
       <div id="entry-container" class="entry-content">
-        <!-- This is where the entry elements are rendered -->
-        <slot name="entries" ></slot>
+        <slot name="entries"></slot>
       </div>
       <div id="testing-button" class="center-all">
-        <!-- Just a button to test adding elements. -->
         <button @click=${this.addBlankElement}>Add Blank Element</button>
       </div>
     `;
@@ -146,24 +153,42 @@ class CheckListView extends LitElement {
 @customElement("check-list-view-entry")
 class CheckListViewEntry extends LitElement {
   static styles?: CSSResultGroup = css`
-    div .content {
-        margin: 10px;
-        display: flex;
-        flex-direction: row;
-        border-radius: 6px;
-        box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
-        width: auto;
-        padding: 10px;
-        pointer-events: inherit;
-
-      & .entry-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        margin-left: 5px;
+      .content {
+          margin: 10px;
+          display: flex;
+          flex-direction: row;
+          border-radius: 6px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+          width: auto;
+          padding: 10px;
+          pointer-events: inherit;
       }
-    }
+
+      .content:hover {
+          box-shadow: rgba(0, 0, 0, 0.6) 0 0 8px;
+      }
+
+      .checkbox-container { /* Added for checkbox alignment */
+          width: 30px; /* Match header checkbox width */
+          padding: 5px;
+          display: flex;
+          align-items: center;
+      }
+
+      .entry-content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: 5px;
+          flex: 1; /* Ensure it takes remaining space */
+      }
+
+      .entry-content div {
+          flex: 1 1 0; /* Consistent sizing with headers */
+          padding: 5px;
+          display: flex;
+          align-items: center;
+      }
   `;
 
   /** The stringified display members of the parent CheckListView. */
@@ -199,10 +224,12 @@ class CheckListViewEntry extends LitElement {
       <div>
         <label>
           <div class="content">
-            <input type="checkbox" .checked=${this.selected}>
-            <div id="entry-content">
+            <div class="checkbox-container">
+              <input type="checkbox" .checked=${this.selected}>
+            </div>
+            <div class="entry-content">
               ${Object.entries(this._displayMembers).map(([displayName, memberName]) =>
-                html`<div>${displayName}: ${this.data[memberName]}</div>`
+                  html`<div>${displayName}: ${this.data[memberName]}</div>`
               )}
             </div>
           </div>
