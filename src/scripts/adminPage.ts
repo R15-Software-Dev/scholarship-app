@@ -2,6 +2,7 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "./pdf_vfs";
 import { downloadZip } from "client-zip";
 import {Content, TDocumentDefinitions} from "pdfmake/interfaces";
+import { AttributeValue } from "@aws-sdk/client-dynamodb";
 (<any>pdfMake).addVirtualFileSystem(pdfFonts);
 
 const fonts = {
@@ -13,6 +14,41 @@ const fonts = {
   }
 }
 
+// Event listener, HTML button for testing all the hardcoded values
+// Button generates blobs, zips the PDFs and downloads the zip folder
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("generate-pdf-btn") as HTMLButtonElement;
+  button.addEventListener("click", async () => {
+    try {
+      button.disabled = true;
+
+      // Generate PDF blobs
+      const pdfBlobs = await generateAllStudentPDFBlobs();
+
+      // Convert to files and zip
+      const zipBlob = await zipStudentPDFs(pdfBlobs);
+
+      // Trigger download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(zipBlob);
+      link.download = "student_applications.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      console.log("Successfully generated and zipped PDFs");
+      alert("PDFs have been zipped and downloaded");
+
+    } catch (error) {
+      console.error("Error processing PDFs:", error);
+      alert("An error occurred while processing PDFs");
+    } finally {
+      button.disabled = false;
+    }
+  });
+});
+
 /**
  * Converts first string character to uppercase and removes whitespace
  * @param str The string to capitalize and trim
@@ -23,6 +59,11 @@ function capitalizeAndTrim(str: string | undefined): string {
   return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
 }
 
+/**
+* Fetches an image from a given path and calls a callback with the image data URL.
+* @param path The path to the image.
+* @param callback The callback function to be called with the image data URL.
+*/
 function getImage(path: string, callback: (arg0: string) => void) {
   fetch(path, {
     method: "GET"
@@ -48,7 +89,7 @@ async function fetchStudentData(studentId: string): Promise<any> {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as Record<string, AttributeValue>;
     return data;
 
   } catch (error) {
@@ -58,7 +99,7 @@ async function fetchStudentData(studentId: string): Promise<any> {
 }
 
 // Main function to generate PDF with student data
-async function generateStudentPDF(studentId: string) {
+export async function generateStudentPDF(studentId: string) {
   try {
     // Fetch student data
     const studentData = await fetchStudentData(studentId);
@@ -68,7 +109,7 @@ async function generateStudentPDF(studentId: string) {
       if (imageString == null)
         throw new Error("Couldn't read image file, aborting.");
 
-      let definition: TDocumentDefinitions = {
+      const definition: TDocumentDefinitions = {
         content: [
           {text: " ", lineHeight: 4, style: ['headerThree']},
           {text: "Region 15", alignment: "center", bold: true, style: ['headerThree']},
@@ -523,34 +564,6 @@ async function generateStudentPDF(studentId: string) {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const button = document.getElementById("generate-pdf-btn") as HTMLButtonElement;
-//   button.addEventListener("click", async () => {
-//     try {
-//       // Disable button while processing
-//       button.disabled = true;
-//
-//       // Generate all PDF blobs for hardcoded student IDs
-//       const pdfBlobs = await generateAllStudentPDFBlobs();
-//
-//       // Log success or handle blobs as needed
-//       console.log("Successfully generated PDF blobs:", pdfBlobs.length);
-//
-//       // Optional: Alert user of success
-//       alert(`Successfully generated ${pdfBlobs.length} PDF blobs`);
-//
-//     } catch (error) {
-//       console.error("Error generating PDF blobs:", error);
-//       alert("An error occurred while generating PDFs");
-//     } finally {
-//       // Re-enable button
-//       button.disabled = false;
-//     }
-//   });
-// });
-
-// Blob
-
 // Hardcoded student IDs
 const studentIds = [
   "google_113247439743075864879",
@@ -571,7 +584,7 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
       const studentData = await fetchStudentData(studentId);
 
       // Return a promise that resolves with the blob
-      return new Promise<{studentId: string, blob: Blob}>((resolve, reject) => {
+      return new Promise<{studentId: string, blob: Blob, studentData: any}>((resolve, reject) => {
         // Get image
         getImage("/images/R15_logo.png", (imageString) => {
           try {
@@ -579,7 +592,7 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
               throw new Error(`Couldn't read image file for student ${studentId}`);
             }
             // PDF definition (using the same definition from your original code)
-            let definition: TDocumentDefinitions = {
+            const definition: TDocumentDefinitions = {
               content: [
                 {text: " ", lineHeight: 4, style: ['headerThree']},
                 {text: "Region 15", alignment: "center", bold: true, style: ['headerThree']},
@@ -1029,29 +1042,6 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
   }
 }
 
-// Testing
-// async function testBlobGeneration() {
-//   try {
-//     const pdfBlobs = await generateAllStudentPDFBlobs();
-//
-//     // Log results to verify
-//     pdfBlobs.forEach((pdf, index) => {
-//       console.log(`PDF ${index + 1}:`);
-//       console.log(`Student ID: ${pdf.studentId}`);
-//       console.log(`Blob size: ${pdf.blob.size} bytes`);
-//       console.log(`Blob type: ${pdf.blob.type}`);
-//     });
-//
-//     return pdfBlobs;
-//
-//   } catch (error) {
-//     console.error("Test failed:", error);
-//   }
-// }
-//
-// // Call the test function
-// testBlobGeneration();
-
 /**
  * Converts blobs to files, puts each in its own folder, and zips them
  * @param pdfBlobs Array of objects containing studentId, blob, and studentData
@@ -1076,38 +1066,3 @@ async function zipStudentPDFs(pdfBlobs: {studentId: string, blob: Blob, studentD
   const zipBlob = await downloadZip(files).blob();
   return zipBlob;
 }
-
-// Event listener, HTML button for testing all the hardcoded values
-// Button generates blobs, zips the PDFs and downloads the zip folder
-document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("generate-pdf-btn") as HTMLButtonElement;
-  button.addEventListener("click", async () => {
-    try {
-      button.disabled = true;
-
-      // Generate PDF blobs
-      const pdfBlobs = await generateAllStudentPDFBlobs();
-
-      // Convert to files and zip
-      const zipBlob = await zipStudentPDFs(pdfBlobs);
-
-      // Trigger download
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(zipBlob);
-      link.download = "student_applications.zip";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-
-      console.log("Successfully generated and zipped PDFs");
-      alert("PDFs have been zipped and downloaded");
-
-    } catch (error) {
-      console.error("Error processing PDFs:", error);
-      alert("An error occurred while processing PDFs");
-    } finally {
-      button.disabled = false;
-    }
-  });
-});
