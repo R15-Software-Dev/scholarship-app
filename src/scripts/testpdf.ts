@@ -1,5 +1,6 @@
 ﻿import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "./pdf_vfs";
+import { downloadZip } from "client-zip";
 import {Content, TDocumentDefinitions} from "pdfmake/interfaces";
 (<any>pdfMake).addVirtualFileSystem(pdfFonts);
 
@@ -1025,24 +1026,89 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
 }
 
 // Testing
-async function testBlobGeneration() {
-  try {
-    const pdfBlobs = await generateAllStudentPDFBlobs();
+// async function testBlobGeneration() {
+//   try {
+//     const pdfBlobs = await generateAllStudentPDFBlobs();
+//
+//     // Log results to verify
+//     pdfBlobs.forEach((pdf, index) => {
+//       console.log(`PDF ${index + 1}:`);
+//       console.log(`Student ID: ${pdf.studentId}`);
+//       console.log(`Blob size: ${pdf.blob.size} bytes`);
+//       console.log(`Blob type: ${pdf.blob.type}`);
+//     });
+//
+//     return pdfBlobs;
+//
+//   } catch (error) {
+//     console.error("Test failed:", error);
+//   }
+// }
+//
+// // Call the test function
+// testBlobGeneration();
 
-    // Log results to verify
-    pdfBlobs.forEach((pdf, index) => {
-      console.log(`PDF ${index + 1}:`);
-      console.log(`Student ID: ${pdf.studentId}`);
-      console.log(`Blob size: ${pdf.blob.size} bytes`);
-      console.log(`Blob type: ${pdf.blob.type}`);
-    });
+/**
+ * Converts blobs to files and zips them
+ * @param pdfBlobs Array of objects containing studentId and blob
+ * @returns Promise resolving to a zipped Blob
+ */
+async function zipStudentPDFs(pdfBlobs: {studentId: string, blob: Blob}[]): Promise<Blob> {
+  // Convert blobs to File objects
+  const files = await Promise.all(
+    pdfBlobs.map(async ({ studentId, blob }) => {
+      // Await the student data
+      const studentData = await fetchStudentData(studentId);
 
-    return pdfBlobs;
+      // Use student first and last name in file name
+      const firstName = studentData.studentFirstName?.S || "Unknown";
+      const lastName = studentData.studentLastName?.S || "Student";
+      const fileName = `${firstName}${lastName}ScholarshipApplication.pdf`;
 
-  } catch (error) {
-    console.error("Test failed:", error);
-  }
+      return new File([blob], fileName, {
+        type: "application/pdf",
+        lastModified: Date.now()
+      });
+    })
+  );
+
+  // Create zip file
+  const zipBlob = await downloadZip(files).blob();
+  return zipBlob;
 }
 
-// Call the test function
-testBlobGeneration();
+// Event listener, HTML button for testing all the hardcoded values
+// Button generates blobs, zips the PDFs and downloads the zip folder
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("generate-pdf-btn") as HTMLButtonElement;
+  button.addEventListener("click", async () => {
+    try {
+      button.disabled = true;
+
+      // Generate PDF blobs
+      const pdfBlobs = await generateAllStudentPDFBlobs();
+
+      // Convert to files and zip
+      const zipBlob = await zipStudentPDFs(pdfBlobs);
+
+      // Trigger download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(zipBlob);
+      link.download = "student_applications.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      // Popups for testing
+      console.log("Successfully generated and zipped PDFs");
+      alert("PDFs have been zipped and downloaded");
+
+    } catch (error) {
+      console.error("Error processing PDFs:", error);
+      alert("An error occurred while processing PDFs");
+    } finally {
+      button.disabled = false;
+    }
+  });
+});
