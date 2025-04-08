@@ -13,7 +13,6 @@ const buildConfig = {
     "./src/scripts/switchTab.ts",
     "./src/scripts/passwordReset.ts",
     "./src/scripts/studentEntry.ts",
-    "./src/scripts/testpdf.ts",
     "./src/scripts/adminPage.ts"
   ],
   outdir: "./dist/bundles",
