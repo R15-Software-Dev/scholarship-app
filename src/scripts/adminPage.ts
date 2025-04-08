@@ -3,6 +3,7 @@ import * as pdfFonts from "./pdf_vfs";
 import { downloadZip } from "client-zip";
 import {Content, TDocumentDefinitions} from "pdfmake/interfaces";
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { CheckListView } from "../customElements/CheckListView";  // This will work when it's put in.
 (<any>pdfMake).addVirtualFileSystem(pdfFonts);
 
 const fonts = {
@@ -47,7 +48,31 @@ document.addEventListener("DOMContentLoaded", () => {
       button.disabled = false;
     }
   });
+
+  const checkListButton = document.getElementById("generate-test") as HTMLButtonElement;
+  checkListButton.addEventListener("click", async () => {
+    const checkListView = document.getElementById("checkListView") as CheckListView;
+    checkListView.addBlankElement();
+  });
+
+  // Get all the student applications and put them into the CheckListView.
+  getAllStudentApplications().then((applications) => {
+    const checkListView = document.getElementById("check-list-view") as CheckListView;
+    applications.forEach((application) => {
+      checkListView.addNewElement(application);
+    });
+  });
 });
+
+/**
+* Fetches all student applications from the server.
+* @returns All of the valid student applications.
+*/
+async function getAllStudentApplications(): Promise<Record<string, AttributeValue>[]> {
+  const response = await fetch("/admin/get/student/all");
+  const data = await response.json();
+  return data.items;
+}
 
 /**
  * Converts first string character to uppercase and removes whitespace
@@ -79,7 +104,7 @@ function getImage(path: string, callback: (arg0: string) => void) {
  * Fetches student data from API
  * @param studentId The ID of the student.
  */
-async function fetchStudentData(studentId: string): Promise<any> {
+async function fetchStudentData(studentId: string): Promise<Record<string, AttributeValue>> {
   try {
     const response = await fetch(`/admin/get/student/${studentId}`, {
       method: "GET",
@@ -98,7 +123,11 @@ async function fetchStudentData(studentId: string): Promise<any> {
   }
 }
 
-// Main function to generate PDF with student data
+/**
+ * Generates a PDF document for a student based on their data. Automatically
+ * fetches the student's data and generates a PDF document.
+ * @param studentId The ID of the student to generate the PDF for.
+ */
 export async function generateStudentPDF(studentId: string) {
   try {
     // Fetch student data
@@ -547,24 +576,32 @@ export async function generateStudentPDF(studentId: string) {
         }
       };
 
-      // const generator = pdfMake.createPdf(definition, null, fonts);
-      //
-      // // Create filename
-      // const firstName = studentData.studentFirstName?.S || "Unknown";
-      // const lastName = studentData.studentLastName?.S || "Student";
-      // const fileName = `${firstName}${lastName}ScholarshipApplication.pdf`;
-      //
-      // // Download the PDF
-      // // generator.download(fileName);
-      // // Open PDF in new tab
-      // generator.open();
+      const generator = pdfMake.createPdf(definition, null, fonts);
+
+      // Create filename
+      const firstName = studentData.studentFirstName?.S || "Unknown";
+      const lastName = studentData.studentLastName?.S || "Student";
+      const fileName = `${firstName}${lastName}ScholarshipApplication.pdf`;
+
+      // Download the PDF
+      // generator.download(fileName);
+      // Open PDF in new tab
+      generator.open();
+      generator.getBlob((blob: Blob) => {
+        // Do something with the blob
+        // resolve({
+        //   studentId: studentId,
+        //   blob: blob,
+        //   studentData: studentData // Include studentData in the resolved object
+        // });
+      });
     });
   } catch (error) {
     console.error("Error generating PDF:", error);
   }
 }
 
-// Hardcoded student IDs
+// Hardcoded student IDs - should be replaced with workable data.
 const studentIds = [
   "google_113247439743075864879",
   "google_104614194630890037781",

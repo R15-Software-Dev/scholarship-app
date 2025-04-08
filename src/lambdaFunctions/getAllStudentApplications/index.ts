@@ -1,5 +1,5 @@
-import { Handler, APIGatewayProxyEvent, APIGatewayProxyResult, AttributeValue } from "aws-lambda";
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { Handler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { DynamoDBClient, ScanCommand, AttributeValue } from "@aws-sdk/client-dynamodb";
 
 const dbclient = new DynamoDBClient({ region: "us-east-1" });
 
@@ -25,7 +25,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     let startKey = response.LastEvaluatedKey;
 
     // This is an any type right now due to the fact that AWS doesn't like TypeScript too much.
-    const items: any[] = [];
+    const items: Record<string, AttributeValue>[] = [];
     if (response.Items) {
       response.Items.forEach((item) => {
         items.push(item);

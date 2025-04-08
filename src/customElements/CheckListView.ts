@@ -1,5 +1,6 @@
 import { LitElement, html, css, CSSResultGroup } from "lit";
 import { customElement, property, state, query, queryAll } from "lit/decorators.js";
+import { AttributeValue } from "@aws-sdk/client-dynamodb";
 
 type Dictionary = { [key: string]: string };
 
@@ -7,7 +8,7 @@ type Dictionary = { [key: string]: string };
  * A custom element that displays a list of {@link CheckListViewEntry} elements.
  */
 @customElement("check-list-view")
-class CheckListView extends LitElement {
+export class CheckListView extends LitElement {
   static styles?: CSSResultGroup = css``;
 
   /** Indicates whether the component is disabled. */
@@ -42,7 +43,7 @@ class CheckListView extends LitElement {
    * Adds a new element to the display.
    * @param elementInfo The data which the element will store and display.
    */
-  public addNewElement(elementInfo: Dictionary) {
+  public addNewElement(elementInfo: Record<string, AttributeValue>) {
     const newElement: CheckListViewEntry = new CheckListViewEntry(this._displayMembers, elementInfo);
     this.entryContainer.appendChild(newElement);
   }
@@ -52,7 +53,9 @@ class CheckListView extends LitElement {
    */
   public addBlankElement() {
     this.addNewElement({
-      testing: "Some testing information"
+      testing: {
+        S: "Some testing information"
+      }
     });
   }
 
@@ -129,7 +132,7 @@ class CheckListViewEntry extends LitElement {
 
   /** The data associated with this entry. */
   @property({ type: Object })
-    accessor data: Dictionary = {};
+    accessor data: Record<string, AttributeValue> = {};
 
   /** Indicates whether this entry is selected. */
   @property({ type: Boolean })
@@ -139,10 +142,34 @@ class CheckListViewEntry extends LitElement {
   @state()
     accessor _displayMembers: Dictionary = {};
 
-  public constructor(displayMembers: Dictionary, data: Dictionary) {
+  public constructor(displayMembers: Dictionary, data: Record<string, AttributeValue>) {
     super();
     this._displayMembers = displayMembers;
     this.data = data;
+  }
+
+  protected unwrapAttributeValue(attr: AttributeValue) {
+    if (!attr || typeof attr !== 'object') return attr;
+
+    const type = Object.keys(attr)[0] as keyof AttributeValue;
+    const value = (attr as any)[type];  // We'll use the any type for now, polish later.
+
+    switch (type) {
+      case "S":
+        return value;
+      case "N":
+        return Number(value);
+      case "BOOL":
+        return value === "true";
+      case "NULL":
+        return null;
+      case "SS":
+        return value;
+      case "NS":
+        return value.map((v: string) => Number(v));
+      default:
+        throw new Error(`Unsupported attribute type: ${type}`);
+    }
   }
 
   protected override render() {
@@ -153,7 +180,7 @@ class CheckListViewEntry extends LitElement {
             <input type="checkbox" .checked=${this.selected}>
             <div id="entry-content">
               ${Object.entries(this._displayMembers).map(([displayName, memberName]) =>
-                html`<div>${displayName}: ${this.data[memberName]}</div>`
+                html`<div>${displayName}: ${this.unwrapAttributeValue(this.data[memberName])}</div>`
               )}
             </div>
           </div>
