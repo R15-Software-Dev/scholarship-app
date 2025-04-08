@@ -13,6 +13,16 @@ const fonts = {
   }
 }
 
+/**
+ * Converts first string character to uppercase and removes whitespace
+ * @param str The string to capitalize and trim
+ * @returns The capitalize and trimmed string
+ */
+function capitalizeAndTrim(str: string | undefined): string {
+  if (!str) return "Unknown"; // Fallback for undefined or empty strings
+  return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
+}
+
 function getImage(path: string, callback: (arg0: string) => void) {
   fetch(path, {
     method: "GET"
@@ -63,7 +73,7 @@ async function generateStudentPDF(studentId: string) {
       {text: " ", lineHeight: 4, style: ['headerThree']},
       {text: "Region 15", alignment: "center", bold: true, style: ['headerThree']},
       {text: "General Scholarship Application", alignment: "center", bold: true, lineHeight: 2, style: ['headerThree']},
-      {text: `${studentData.studentFirstName.S} ${studentData.studentLastName.S}`, alignment: "center", bold: true, style: ['headerOne']},
+      {text: `${capitalizeAndTrim(studentData.studentFirstName?.S)} ${capitalizeAndTrim(studentData.studentLastName?.S)}`, alignment: "center", bold: true, style: ['headerOne']},
       {text: `${studentData.streetAddress.S}`+ ", " + `${studentData.studentTown.SS}`, alignment: "center", style: ['headerTwo']},
       {text: `${studentData.studentEmail.S}`, alignment: "center", style: ['headerThree']},
       {text: `${studentData.studentPhoneNumber.S}`, alignment: "center", style: ['headerThree']},
@@ -553,7 +563,7 @@ const studentIds = [
  * Generates PDFs for all hardcoded students and returns them as blobs
  * @returns Promise resolving to an array of objects containing studentId and blob
  */
-async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: Blob}[]> {
+async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: Blob, studentData: any}[]> {
   try {
     // Array to store all blob promises
     const pdfPromises = studentIds.map(async (studentId) => {
@@ -568,14 +578,13 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
             if (!imageString) {
               throw new Error(`Couldn't read image file for student ${studentId}`);
             }
-
             // PDF definition (using the same definition from your original code)
             let definition: TDocumentDefinitions = {
               content: [
                 {text: " ", lineHeight: 4, style: ['headerThree']},
                 {text: "Region 15", alignment: "center", bold: true, style: ['headerThree']},
                 {text: "General Scholarship Application", alignment: "center", bold: true, lineHeight: 2, style: ['headerThree']},
-                {text: `${studentData.studentFirstName.S} ${studentData.studentLastName.S}`, alignment: "center", bold: true, style: ['headerOne']},
+                {text: `${capitalizeAndTrim(studentData.studentFirstName?.S)} ${capitalizeAndTrim(studentData.studentLastName?.S)}`, alignment: "center", bold: true, style: ['headerOne']},
                 {text: `${studentData.streetAddress.S}`+ ", " + `${studentData.studentTown.SS}`, alignment: "center", style: ['headerTwo']},
                 {text: `${studentData.studentEmail.S}`, alignment: "center", style: ['headerThree']},
                 {text: `${studentData.studentPhoneNumber.S}`, alignment: "center", style: ['headerThree']},
@@ -999,15 +1008,13 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
             };
 
             const generator = pdfMake.createPdf(definition, null, fonts);
-
-            // Get blob from PDF generator
             generator.getBlob((blob: Blob) => {
               resolve({
                 studentId: studentId,
-                blob: blob
+                blob: blob,
+                studentData: studentData // Include studentData in the resolved object
               });
             });
-
           } catch (error) {
             reject(new Error(`Error generating PDF for ${studentId}: ${error}`));
           }
@@ -1015,10 +1022,7 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
       });
     });
 
-    // Wait for all PDFs to be generated and return the results
-    const pdfBlobs = await Promise.all(pdfPromises);
-    return pdfBlobs;
-
+    return await Promise.all(pdfPromises);
   } catch (error) {
     console.error("Error generating student PDF blobs:", error);
     throw error;
@@ -1049,30 +1053,26 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
 // testBlobGeneration();
 
 /**
- * Converts blobs to files and zips them
- * @param pdfBlobs Array of objects containing studentId and blob
+ * Converts blobs to files, puts each in its own folder, and zips them
+ * @param pdfBlobs Array of objects containing studentId, blob, and studentData
  * @returns Promise resolving to a zipped Blob
  */
-async function zipStudentPDFs(pdfBlobs: {studentId: string, blob: Blob}[]): Promise<Blob> {
-  // Convert blobs to File objects
-  const files = await Promise.all(
-    pdfBlobs.map(async ({ studentId, blob }) => {
-      // Await the student data
-      const studentData = await fetchStudentData(studentId);
+async function zipStudentPDFs(pdfBlobs: {studentId: string, blob: Blob, studentData: any}[]): Promise<Blob> {
+  const files = pdfBlobs.map(({ blob, studentData }) => {
+    const firstName = capitalizeAndTrim(studentData.studentFirstName?.S )|| "Unknown";
+    const lastName = capitalizeAndTrim(studentData.studentLastName?.S) || "Student";
+    const folderName = `${lastName}${firstName}`;
+    const fileName = `${lastName}${firstName}ScholarshipApplication.pdf`;
 
-      // Use student first and last name in file name
-      const firstName = studentData.studentFirstName?.S || "Unknown";
-      const lastName = studentData.studentLastName?.S || "Student";
-      const fileName = `${firstName}${lastName}ScholarshipApplication.pdf`;
-
-      return new File([blob], fileName, {
+    return {
+      name: `${folderName}/${fileName}`,
+      input: new File([blob], fileName, {
         type: "application/pdf",
         lastModified: Date.now()
-      });
-    })
-  );
+      })
+    };
+  });
 
-  // Create zip file
   const zipBlob = await downloadZip(files).blob();
   return zipBlob;
 }
@@ -1100,7 +1100,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
 
-      // Popups for testing
       console.log("Successfully generated and zipped PDFs");
       alert("PDFs have been zipped and downloaded");
 
