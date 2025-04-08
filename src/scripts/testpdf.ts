@@ -1,4 +1,4 @@
-﻿import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "./pdf_vfs";
 import { downloadZip } from "client-zip";
 import {Content, TDocumentDefinitions} from "pdfmake/interfaces";
@@ -438,7 +438,6 @@ async function generateStudentPDF(studentId: string) {
               tableBody.push(["No extracurricular activities", "", "", "", ""])
               return tableBody;
             }
-
             extracurricularData.forEach(activity => {
               let grades;
               try{
