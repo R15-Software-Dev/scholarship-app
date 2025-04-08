@@ -708,6 +708,32 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
+  getStudentApplications:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows an admin to get all applications for a student.
+      CodeUri: src/lambdaFunctions/getAllStudentApplications
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: ScholarshipApi
+            Path: /admin/get/student/all
+            Method: get
+            Auth:
+              Authorizer: NONE
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
