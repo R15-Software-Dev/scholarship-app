@@ -49,15 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const checkListButton = document.getElementById("generate-test") as HTMLButtonElement;
-  checkListButton.addEventListener("click", async () => {
-    const checkListView = document.getElementById("checkListView") as CheckListView;
-    checkListView.addBlankElement();
-  });
-
   // Get all the student applications and put them into the CheckListView.
   getAllStudentApplications().then((applications) => {
-    const checkListView = document.getElementById("check-list-view") as CheckListView;
+    console.log("Adding student applications to CheckListView");
+    console.log("Application data: ");
+    console.log(applications);
+    const checkListView = document.getElementById("checkListView") as CheckListView;
     applications.forEach((application) => {
       checkListView.addNewElement(application);
     });
@@ -128,7 +125,7 @@ async function fetchStudentData(studentId: string): Promise<Record<string, Attri
  * fetches the student's data and generates a PDF document.
  * @param studentId The ID of the student to generate the PDF for.
  */
-export async function generateStudentPDF(studentId: string) {
+async function generateStudentPDF(studentId: string) {
   try {
     // Fetch student data
     const studentData = await fetchStudentData(studentId);

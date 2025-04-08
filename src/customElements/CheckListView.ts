@@ -45,6 +45,7 @@ export class CheckListView extends LitElement {
    */
   public addNewElement(elementInfo: Record<string, AttributeValue>) {
     const newElement: CheckListViewEntry = new CheckListViewEntry(this._displayMembers, elementInfo);
+    console.log("Adding element with data: ", elementInfo);
     this.entryContainer.appendChild(newElement);
   }
 
