@@ -2,6 +2,7 @@ import { Handler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { ResourceNotFoundException } from "@aws-sdk/client-cognito-identity-provider";
+import { Readable } from "stream";
 
 const s3Client = new S3Client({});
 const dynamoClient = new DynamoDBClient({ region: "us-east-1" });
@@ -56,23 +57,21 @@ export const handler: Handler = async (
 
     const s3Response = await s3Client.send(s3Command);
 
+    // const thing = await s3Response.Body.transformToString();
+
     // Convert the stream to base64
-    const chunks: Buffer[] = [];
-    const stream = s3Response.Body as ReadableStream;
-    for await (const chunk of stream) {
-      chunks.push(Buffer.from(chunk));
-    }
-    const buffer = Buffer.concat(chunks);
-    const base64Data = buffer.toString('base64');
+    // const buffer = await streamToBuffer(s3Response.Body.transformToWebStream());
+    const buffer = Buffer.from(await s3Response.Body.transformToByteArray());
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${fileName}"`,
+        'Content-Disposition': `inline; filename="${fileName}"`,
+        'Content-Length': Buffer.byteLength(buffer)
       },
       isBase64Encoded: true,
-      body: base64Data
+      body: buffer.toString('base64')
     };
 
   } catch (error) {
@@ -96,3 +95,17 @@ export const handler: Handler = async (
     };
   }
 };
+
+
+const streamToBuffer = async (stream: ReadableStream): Promise<Buffer> => {
+  return new Promise(async (resolve, reject) => {
+    const chunks: any[] = [];
+    // stream.on('data', (chunk: any) => chunks.push(chunk));
+    // stream.on('end', () => resolve(Buffer.concat(chunks)));
+    // stream.on('error', reject);
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    resolve(Buffer.concat(chunks));
+  })
+}
