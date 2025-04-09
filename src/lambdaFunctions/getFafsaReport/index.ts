@@ -18,13 +18,13 @@ export const handler: Handler = async (
       };
     }
 
-    const studentId = event.pathParameters.studentId;
+    const Email = event.pathParameters.studentId;
 
     // Get the student record from DynamoDB
     const dbCommand = new GetItemCommand({
       TableName: process.env.TABLE_NAME || "student-applications",
       Key: {
-        Email: { S: studentId }
+        Email: { S: Email }
       }
     });
 
@@ -50,7 +50,7 @@ export const handler: Handler = async (
 
     // Get object from S3
     const s3Command = new GetObjectCommand({
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: "r15-student-data",
       Key: `fafsaSubmission/${fileName}`,
     });
 
