@@ -1,4 +1,5 @@
 import * as pdfMake from "pdfmake/build/pdfmake";
+// @ts-ignore
 import * as pdfFonts from "./pdf_vfs";
 import { downloadZip } from "client-zip";
 import {Content, TDocumentDefinitions} from "pdfmake/interfaces";
@@ -571,7 +572,7 @@ async function generateAllStudentPDFBlobs(): Promise<{studentId: string, blob: B
       const studentData = await fetchStudentData(studentId);
 
       // Return a promise that resolves with the blob
-      return new Promise<{studentId: string, blob: Blob}>((resolve, reject) => {
+      return new Promise<{studentId: string, blob: Blob, studentData: any}>((resolve, reject) => {
         // Get image
         getImage("/images/R15_logo.png", (imageString) => {
           try {
