@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: A serverless application that allows scholarship providers to create and manage their scholarships.
 
@@ -6,7 +6,6 @@ Description: A serverless application that allows scholarship providers to creat
 # The docs are available at https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/
 # Note that this primarily uses the AWS::Serverless::Function and AWS::Serverless::Api, which would be easily
 # findable under "How to use SAM -> The AWS SAM project -> Resources and Properties"
-
 
 Globals:
   Function:
@@ -636,11 +635,11 @@ Resources:
               Authorizer: NONE
       Policies:
         - Statement:
-          - Effect: Allow
-            Action:
-              - cognito-idp:DescribeUserPoolClient
-              - cognito-idp:ListUserPools
-            Resource: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
+            - Effect: Allow
+              Action:
+                - cognito-idp:DescribeUserPoolClient
+                - cognito-idp:ListUserPools
+              Resource: arn:aws:cognito-idp:us-east-1:582555552507:userpool/us-east-1_Lfjuy5zaM
       Environment:
         Variables:
           COGNITO_AUTH_URL: https://us-east-1lfjuy5zam.auth.us-east-1.amazoncognito.com/oauth2/token
@@ -683,6 +682,90 @@ Resources:
           - "@aws-sdk/client-dynamodb"
         EntryPoints:
           - index.ts
+  getStudentById:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows an admin to get all information about a student by their login id.
+      CodeUri: src/lambdaFunctions/getStudentById
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: ScholarshipApi
+            Path: /admin/get/student/{studentid+}
+            Method: get
+            Auth:
+              Authorizer: NONE
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+  getStudentApplications:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Allows an admin to get all applications for a student.
+      CodeUri: src/lambdaFunctions/getAllStudentApplications
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId:
+              Ref: ScholarshipApi
+            Path: /admin/get/student/all
+            Method: get
+            Auth:
+              Authorizer: NONE
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+
+  adminGetFafsaReport:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Retrieves FAFSA report for a specified student by student ID.
+      CodeUri: src/lambdaFunctions/getFafsaReport
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /admin/get/fafsa/{studentId+}
+            Method: get
+            Auth:
+              Authorizer: NONE
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
 
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
@@ -694,14 +777,14 @@ Resources:
         # We don't need to define any other attributes, only these.
         - AttributeName: Email
           AttributeType: S
-#        - AttributeName: SampleKey
-#          AttributeType: N
+      #        - AttributeName: SampleKey
+      #          AttributeType: N
       KeySchema:
         # Tell AWS which one of the keys is what.
         - AttributeName: Email
           KeyType: HASH
-#        - AttributeName: SampleKey
-#          KeyType: SORT
+      #        - AttributeName: SampleKey
+      #          KeyType: SORT
       # ALWAYS use PAY_PER_REQUEST for billing mode.
       BillingMode: PAY_PER_REQUEST
   ScholarshipInfoTable:
@@ -783,7 +866,6 @@ Resources:
         AllowMethods: "'POST, GET, OPTIONS'"
         AllowOrigin: "'*'"
         MaxAge: "'300'"
-
 
 Outputs:
   scholarshipEligibilityApi:
