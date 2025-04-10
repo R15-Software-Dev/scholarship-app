@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start-api": "sam build & sam local start-api",
-    "build": "npm run generateFonts && ts-node esbuildRun.mts",
+    "build": "npm run generateFonts && node esbuildRun.mjs",
     "start": "npm run build && npm run start-server",
-    "start-server": "node expressRun.mjs",
+    "start-server": "tsx expressRun.ts",
     "test": "jest",
     "installGlobals": "npm install & npm install -g esbuild",
     "newPasswordHash": "node ./src/lambdaFunctions/providerRegistration/newPasswordTemp.mjs",
@@ -51,8 +51,7 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.22.0",
     "@jest/globals": "^29.7.0",
-    "@types/express": "^5.0.1",
-    "@types/express-http-proxy": "^1.6.6",
+    "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.30",
     "@types/pdfmake": "^0.2.11",
@@ -68,7 +67,6 @@
     "terser-webpack-plugin": "^5.3.10",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.3",
     "typescript-eslint": "^8.26.1"
   },
   "config": {
