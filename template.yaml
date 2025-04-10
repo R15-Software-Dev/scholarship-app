@@ -754,6 +754,8 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: student-applications
+        - S3CrudPolicy:
+            BucketName: r15-student-data
       Environment:
         Variables:
           TABLE_NAME: student-applications

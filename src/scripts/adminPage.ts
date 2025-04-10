@@ -1,3 +1,4 @@
+import { Buffer } from "buffer/index";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "./pdf_vfs";
 import {downloadZip} from "client-zip";
@@ -15,11 +16,17 @@ const fonts = {
   }
 }
 
+type StudentDataBlob = {
+  blob: Blob,
+  studentData: Record<string, AttributeValue>
+}
+
 // Event listener, HTML button for testing all the hardcoded values
 // Button generates blobs, zips the PDFs and downloads the zip folder
 document.addEventListener("DOMContentLoaded", () => {
   const button = document.getElementById("generate-pdf-btn") as HTMLButtonElement;
   const checklist = document.getElementById("checkListView") as CheckListView;
+  const includeFafsaCheck = document.getElementById('includeFafsaCheck') as HTMLInputElement;
   button.addEventListener("click", async () => {
     try {
       console.log("beginning pdf generation");
@@ -31,9 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       console.log(`Found ${entries.length} entries`);
+      console.log(`Including FAFSA information: ${includeFafsaCheck.checked}`);
 
       // Convert to files and zip
-      const zipBlob = await zipStudentPDFs(entries, false);
+      const zipBlob = await zipStudentPDFs(entries, includeFafsaCheck.checked);
 
       // Trigger download
       const link = document.createElement("a");
@@ -132,11 +140,8 @@ async function fetchStudentData(studentId: string): Promise<Record<string, Attri
  * @param studentId The ID of the student to generate the PDF for.
  */
 async function generateStudentPDF(studentData: Record<string, AttributeValue>, includeFafsa: boolean):
-  Promise<{
-    blob: Blob,
-    studentData: Record<string, AttributeValue>
-  }> {
-  return new Promise<{blob: Blob, studentData: Record<string, AttributeValue>}>(async (resolve, reject) => {
+  Promise<StudentDataBlob> {
+  return new Promise<StudentDataBlob>(async (resolve, reject) => {
     try {
       // Get image
       getImage("/images/R15_logo.png", (imageString) => {
@@ -593,34 +598,93 @@ async function generateStudentPDF(studentData: Record<string, AttributeValue>, i
 }
 
 /**
+ * Get the specified student's FAFSA document from our S3 bucket.
+ * @param studentData The student to get the data for.
+ */
+async function getStudentFafsa(studentData: Record<string, AttributeValue>): Promise<StudentDataBlob> {
+  return new Promise<StudentDataBlob>(async (resolve, reject) => {
+    if (studentData.studentFafsaKey.S) {
+      console.log(`Student ${studentData.studentFirstName.S} ${studentData.studentLastName.S} (${studentData.Email.S}) has FAFSA key ${studentData.studentFafsaKey.S}`);
+      await fetch(`/admin/get/fafsa/${studentData.Email.S}`)
+        .then(async res => {
+          if (!res.ok) {
+            console.error(`Error ${res.status} while getting student data for student ID ${studentData.Email.S}`);
+            resolve({blob: null, studentData});
+          } else {
+            console.log("valid request, continuing");
+            let base64string = await res.text();
+            base64string = base64string.trim().replace(/\s/g, "");
+
+            // The data body will be a file in base64 format.
+            // We need to convert this into a blob, then return it.
+            // Supposedly this is very easy, but this is javascript so nothing ever is.
+            console.info(base64string);
+            const byteCharacters = atob(base64string);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+
+            const result = {blob: new Blob([byteArray], {type: "application/pdf"}), studentData};
+            console.log(`PDF return for ${studentData.studentFirstName.S}:`);
+            console.log(result);
+            resolve(result);
+          }
+        })
+        .catch(e => {
+          console.error("Exception in FAFSA fetch: " + e);
+        })
+    } else {
+      console.warn(`Couldn't find FAFSA key.`);
+      resolve({blob: null, studentData});
+    }
+  });
+}
+
+/**
  * Converts blobs to files, puts each in its own folder, and zips them
- * @param pdfBlobs Array of objects containing studentId, blob, and studentData
- * @returns Promise resolving to a zipped Blob
+ * @param studentData The array of student data to process.
+ * @param includeFafsa Indicates whether to get and package FAFSA information.
+ * @returns Promise resolving to a zipped Blob.
  */
 async function zipStudentPDFs(studentData: Record<string, AttributeValue>[], includeFafsa: boolean): Promise<Blob> {
-  const promises: Promise<{blob: Blob, studentData: Record<string, AttributeValue>}>[] = [];
-  studentData.map((student) => {
-    promises.push(generateStudentPDF(student, includeFafsa));
-  });
+  try {
+    const promises: Promise<StudentDataBlob>[] = [];
+    studentData.map((student) => {
+      promises.push(generateStudentPDF(student, includeFafsa));
+      if (includeFafsa)
+        promises.push(getStudentFafsa(student));
+    });
 
-  const pdfBlobs = await Promise.all(promises);
+    const pdfBlobs = await Promise.all(promises);
 
-  const files = pdfBlobs.map(({blob, studentData}) => {
-    const firstName = capitalizeAndTrim(studentData.studentFirstName?.S )|| "Student";
-    const lastName = capitalizeAndTrim(studentData.studentLastName?.S) || "Unknown";
-    const folderName = `${lastName}${firstName}`;
-    const fileName = `${lastName}${firstName}ScholarshipApplication.pdf`;
+    console.log(`total blobs:`);
+    console.log(pdfBlobs);
 
-    console.log(`Setting up file with path ${folderName}/${fileName} for zipping`);
+    const files = pdfBlobs
+      .map((entry) => {
+        console.log(entry);
+        const firstName = capitalizeAndTrim(entry.studentData?.studentFirstName?.S) || "Student";
+        const lastName = capitalizeAndTrim(entry.studentData?.studentLastName?.S) || "Unknown";
+        const folderName = `${lastName}${firstName}`;
+        const fileName = `${lastName}${firstName}ScholarshipApplication.pdf`;
 
-    return {
-      name: `${folderName}/${fileName}`,
-      input: new File([blob], fileName, {
-        type: "application/pdf",
-        lastModified: Date.now()
-      })
-    };
-  });
+        console.log(`Setting up file with path ${folderName}/${fileName} for zipping`);
 
-  return await downloadZip(files).blob();
+        if (!entry.blob) return;
+
+        return {
+          name: `${folderName}/${fileName}`,
+          input: new File([entry.blob], fileName, {
+            type: "application/pdf",
+            lastModified: Date.now()
+          })
+        };
+      });
+
+    return await downloadZip(files).blob();
+  } catch (e) {
+    console.error("Error in zipStudentPDFs: " + e);
+  }
 }

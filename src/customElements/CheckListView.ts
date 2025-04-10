@@ -81,6 +81,9 @@ export class CheckListView extends LitElement {
   @query("#entry-container")
     accessor entryContainer: HTMLDivElement;
 
+  @query("#check-all-box")
+    accessor checkAllBox: HTMLInputElement;
+
   @queryAll("check-list-view-entry")
     accessor entryElements: Array<CheckListViewEntry>;
 
@@ -129,6 +132,12 @@ export class CheckListView extends LitElement {
     });
   }
 
+  protected checkboxClick() {
+    this.entryElements.forEach(element => {
+      element.selected = this.checkAllBox.checked;
+    });
+  }
+
   /**
    * Renders the element.
    * @category Rendering
@@ -136,8 +145,8 @@ export class CheckListView extends LitElement {
   protected override render() {
     return html`
       <div id="header-container" class="member-headers">
-        <div class="checkbox-header">
-          <input type="checkbox">
+        <div class="checkbox-header" @click="${this.checkboxClick}">
+          <input id="check-all-box" type="checkbox">
         </div>
         ${Object.entries(this._displayMembers).map(([key]) =>
             html`<div class="header-space"><b>${key}</b></div>`
@@ -210,7 +219,7 @@ export class CheckListViewEntry extends LitElement {
     accessor data: Record<string, AttributeValue> = {};
 
   /** Indicates whether this entry is selected. */
-  @property({ type: Boolean })
+  @property({ type: Boolean, reflect: true })
     accessor selected: boolean = false;
 
   /** The display members of this entry. */
@@ -261,7 +270,7 @@ export class CheckListViewEntry extends LitElement {
         <label @click="${this.handleClick}">
           <div class="content">
             <div class="checkbox-container">
-              <input type="checkbox" ?checked=${this.selected}>
+              <input type="checkbox" .checked="${this.selected}">
             </div>
             <div class="entry-content">
               ${Object.entries(this._displayMembers).map(([displayName, memberName]) =>
