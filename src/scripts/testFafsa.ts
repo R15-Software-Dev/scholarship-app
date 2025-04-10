@@ -1,4 +1,4 @@
-import JSZip from "jszip";
+// import JSZip from "jszip";
 async function fetchAndDownloadFafsaPDF(): Promise<void> {
   const studentId = "google_113247439743075864879";
 
@@ -41,27 +41,27 @@ async function fetchAndDownloadFafsaPDF(): Promise<void> {
     }
 
     // Create ZIP
-    const zip = new JSZip();
-    zip.file(filename, pdfBlob, { binary: true });
+    // const zip = new JSZip();
+    // zip.file(filename, pdfBlob, { binary: true });
 
-    const zipBlob = await zip.generateAsync({
-      type: "blob",
-      mimeType: "application/zip" // Explicitly set ZIP MIME type
-    });
+    // const zipBlob = await zip.generateAsync({
+    //   type: "blob",
+    //   mimeType: "application/zip" // Explicitly set ZIP MIME type
+    // });
 
-    // Verify zip blob has content
-    if (zipBlob.size === 0) {
-      throw new Error('Generated empty ZIP file');
-    }
+    // // Verify zip blob has content
+    // if (zipBlob.size === 0) {
+    //   throw new Error('Generated empty ZIP file');
+    // }
 
-    const zipUrl = window.URL.createObjectURL(zipBlob);
-    const link = document.createElement('a');
-    link.href = zipUrl;
-    link.download = `${studentId}_fafsaSubmission.zip`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(zipUrl);
+    // const zipUrl = window.URL.createObjectURL(zipBlob);
+    // const link = document.createElement('a');
+    // link.href = zipUrl;
+    // link.download = `${studentId}_fafsaSubmission.zip`;
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    // window.URL.revokeObjectURL(zipUrl);
 
   } catch (error) {
     console.error(`Error processing file for ${studentId}:`, error);

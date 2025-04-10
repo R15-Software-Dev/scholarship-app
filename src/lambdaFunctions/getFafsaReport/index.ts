@@ -1,13 +1,12 @@
-import { Handler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { ResourceNotFoundException } from "@aws-sdk/client-cognito-identity-provider";
-import { Readable } from "stream";
 
 const s3Client = new S3Client({});
 const dynamoClient = new DynamoDBClient({ region: "us-east-1" });
 
-export const handler: Handler = async (
+export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
@@ -62,16 +61,17 @@ export const handler: Handler = async (
     // Convert the stream to base64
     // const buffer = await streamToBuffer(s3Response.Body.transformToWebStream());
     const buffer = Buffer.from(await s3Response.Body.transformToByteArray());
+    const bufferString = buffer.toString('base64');
+    console.log(bufferString);
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `inline; filename="${fileName}"`,
-        'Content-Length': Buffer.byteLength(buffer)
       },
       isBase64Encoded: true,
-      body: buffer.toString('base64')
+      body: bufferString
     };
 
   } catch (error) {
@@ -95,17 +95,3 @@ export const handler: Handler = async (
     };
   }
 };
-
-
-const streamToBuffer = async (stream: ReadableStream): Promise<Buffer> => {
-  return new Promise(async (resolve, reject) => {
-    const chunks: any[] = [];
-    // stream.on('data', (chunk: any) => chunks.push(chunk));
-    // stream.on('end', () => resolve(Buffer.concat(chunks)));
-    // stream.on('error', reject);
-    for await (const chunk of stream) {
-      chunks.push(chunk);
-    }
-    resolve(Buffer.concat(chunks));
-  })
-}
