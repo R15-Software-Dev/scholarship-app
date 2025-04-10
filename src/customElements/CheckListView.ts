@@ -155,9 +155,6 @@ export class CheckListView extends LitElement {
       <div id="entry-container" class="entry-content">
         <slot name="entries"></slot>
       </div>
-      <div id="testing-button" class="center-all">
-        <button @click=${this.addBlankElement}>Add Blank Element</button>
-      </div>
     `;
   }
 }
