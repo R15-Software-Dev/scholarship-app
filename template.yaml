@@ -725,6 +725,9 @@ Resources:
             Method: get
             Auth:
               Authorizer: NONE
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
