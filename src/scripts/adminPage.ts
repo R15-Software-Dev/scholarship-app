@@ -18,7 +18,8 @@ const fonts = {
 
 type StudentDataBlob = {
   blob: Blob,
-  studentData: Record<string, AttributeValue>
+  studentData: Record<string, AttributeValue>,
+  isFafsa: boolean
 }
 
 // Event listener, HTML button for testing all the hardcoded values
@@ -588,7 +589,7 @@ async function generateStudentPDF(studentData: Record<string, AttributeValue>, i
         // Open PDF in new tab
         generator.getBlob((blob: Blob) => {
           // Do something with the blob
-          resolve({ blob, studentData});
+          resolve({ blob, studentData, isFafsa: false});
         });
       });
     } catch (error) {
@@ -609,7 +610,7 @@ async function getStudentFafsa(studentData: Record<string, AttributeValue>): Pro
         .then(async res => {
           if (!res.ok) {
             console.error(`Error ${res.status} while getting student data for student ID ${studentData.Email.S}`);
-            resolve({blob: null, studentData});
+            resolve({blob: null, studentData, isFafsa: true});
           } else {
             console.log("valid request, continuing");
             let base64string = await res.text();
@@ -626,7 +627,7 @@ async function getStudentFafsa(studentData: Record<string, AttributeValue>): Pro
             }
             const byteArray = new Uint8Array(byteNumbers);
 
-            const result = {blob: new Blob([byteArray], {type: "application/pdf"}), studentData};
+            const result = {blob: new Blob([byteArray], {type: "application/pdf"}), studentData, isFafsa: true};
             console.log(`PDF return for ${studentData.studentFirstName.S}:`);
             console.log(result);
             resolve(result);
@@ -637,7 +638,7 @@ async function getStudentFafsa(studentData: Record<string, AttributeValue>): Pro
         })
     } else {
       console.warn(`Couldn't find FAFSA key.`);
-      resolve({blob: null, studentData});
+      resolve({blob: null, studentData, isFafsa: true});
     }
   });
 }
@@ -668,7 +669,12 @@ async function zipStudentPDFs(studentData: Record<string, AttributeValue>[], inc
         const firstName = capitalizeAndTrim(entry.studentData?.studentFirstName?.S) || "Student";
         const lastName = capitalizeAndTrim(entry.studentData?.studentLastName?.S) || "Unknown";
         const folderName = `${lastName}${firstName}`;
-        const fileName = `${lastName}${firstName}ScholarshipApplication.pdf`;
+        let fileName = "";
+        if (entry.isFafsa) {
+          fileName = `${lastName}${firstName}_FAFSASubmission.pdf`;
+        } else {
+          fileName = `${lastName}${firstName}ScholarshipApplication.pdf`;
+        }
 
         console.log(`Setting up file with path ${folderName}/${fileName} for zipping`);
 
