@@ -1,5 +1,6 @@
 import { LitElement, html, css, CSSResultGroup } from "lit";
 import { customElement, property, state, query, queryAll } from "lit/decorators.js";
+import {AttributeValue} from "@aws-sdk/client-dynamodb";
 
 type Dictionary = { [key: string]: string };
 
@@ -7,7 +8,7 @@ type Dictionary = { [key: string]: string };
  * A custom element that displays a list of {@link CheckListViewEntry} elements.
  */
 @customElement("check-list-view")
-class CheckListView extends LitElement {
+export class CheckListView extends LitElement {
   static styles?: CSSResultGroup = css`
       .center-all {
           display: flex;
@@ -81,7 +82,7 @@ class CheckListView extends LitElement {
     accessor entryContainer: HTMLDivElement;
 
   @queryAll("check-list-view-entry")
-    accessor entryElements: CheckListViewEntry[];
+    accessor entryElements: Array<CheckListViewEntry>;
 
   public constructor() {
     super();
@@ -93,7 +94,7 @@ class CheckListView extends LitElement {
    */
   public addNewElement(elementInfo: Record<string, AttributeValue>) {
     const newElement: CheckListViewEntry = new CheckListViewEntry(this._displayMembers, elementInfo);
-    console.log("Adding element with data: ", elementInfo);
+    // console.log("Adding element with data: ", elementInfo);
     this.entryContainer.appendChild(newElement);
   }
 
@@ -154,16 +155,16 @@ class CheckListView extends LitElement {
 
 /** The entry element for a {@link CheckListView}. */
 @customElement("check-list-view-entry")
-class CheckListViewEntry extends LitElement {
+export class CheckListViewEntry extends LitElement {
   static styles?: CSSResultGroup = css`
       .content {
-          margin: 10px;
+          margin: 2px 10px;
           display: flex;
           flex-direction: row;
           border-radius: 6px;
           box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
           width: auto;
-          padding: 10px;
+          padding: 2px 10px;
           pointer-events: inherit;
       }
 
@@ -246,17 +247,25 @@ class CheckListViewEntry extends LitElement {
     }
   }
 
+  /**
+   * Handles clicking on this element. Checks and unchecks the internal checkbox.
+   * @protected
+   */
+  protected handleClick() {
+    this.selected = !this.selected;
+  }
+
   protected override render() {
     return html`
       <div>
-        <label>
+        <label @click="${this.handleClick}">
           <div class="content">
             <div class="checkbox-container">
-              <input type="checkbox" .checked=${this.selected}>
+              <input type="checkbox" ?checked=${this.selected}>
             </div>
             <div class="entry-content">
               ${Object.entries(this._displayMembers).map(([displayName, memberName]) =>
-                html`<div>${displayName}: ${this.unwrapAttributeValue(this.data[memberName])}</div>`
+                html`<div>${this.unwrapAttributeValue(this.data[memberName])}</div>`
               )}
             </div>
           </div>

@@ -10,7 +10,7 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
     <script src="./bundles/customElements/customElements.bundle.js" type="module"></script>
-    <script src="./bundles/scripts/tabs.bundle.js" defer></script>
+<!--    <script src="./bundles/scripts/tabs.bundle.js" defer></script>-->
     <script src="./bundles/scripts/stickyScrolling.bundle.js" defer></script>
     <script src="./bundles/scripts/switchTab.bundle.js" defer></script>
     <script src="./bundles/scripts/adminPage.bundle.js"></script>
@@ -85,6 +85,10 @@
       text-align: center;
     }
 
+    .button-bar {
+      padding: 10px;
+    }
+
   </style>
 
   <body>
@@ -116,13 +120,13 @@
 <!--    </tab-col>-->
   </div>
 
-  <div>
-    <button id="generate-pdf-btn">Generate PDFs</button>
+  <div class="button-bar" id="button-bar">
+    <action-button id="generate-pdf-btn">Generate PDFs</action-button>
   </div>
 
   <check-list-view
     id="checkListView"
-    display-members='{"Student first name": "studentFirstName"}'
+    display-members='{"Student first name": "studentFirstName", "Student Last Name": "studentLastName", "Student Email": "studentEmail"}'
   ></check-list-view>
 
   <!-- User section -->
