@@ -1,6 +1,5 @@
 import { LitElement, html, css, CSSResultGroup } from "lit";
 import { customElement, property, state, query, queryAll } from "lit/decorators.js";
-import { AttributeValue } from "@aws-sdk/client-dynamodb";
 
 type Dictionary = { [key: string]: string };
 
@@ -8,8 +7,57 @@ type Dictionary = { [key: string]: string };
  * A custom element that displays a list of {@link CheckListViewEntry} elements.
  */
 @customElement("check-list-view")
-export class CheckListView extends LitElement {
-  static styles?: CSSResultGroup = css``;
+class CheckListView extends LitElement {
+  static styles?: CSSResultGroup = css`
+      .center-all {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+      }
+
+      .entry-content {
+          display: flex;
+          flex-direction: column;
+      }
+
+      .entry-container {
+          display: flex;
+          flex-direction: row;
+          border-radius: 6px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+          width: auto;
+          padding: 10px;
+      }
+
+      .member-headers {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          width: auto;
+          padding: 10px;
+          background-color: var(--theme-primary-color);
+          color: white;
+          border-radius: 6px;
+          margin: 10px;
+          align-items: center; /* Added to vertically align items */
+      }
+
+      .header-space {
+          margin-left: 5px;
+          flex: 1 1 0; /* Changed from flex-grow to flex for consistent sizing */
+          padding: 5px; /* Match entry padding */
+          display: flex; /* Added for consistent layout */
+      }
+
+      .checkbox-header { /* Added for checkbox alignment */
+          width: 30px; /* Fixed width to match entry checkbox */
+          padding: 5px;
+          display: flex;
+          align-items: center;
+      }
+        
+    `;
 
   /** Indicates whether the component is disabled. */
   @property({ type: Boolean })
@@ -86,16 +134,18 @@ export class CheckListView extends LitElement {
    */
   protected override render() {
     return html`
-      <div id="header-container">
-        <!-- This is where the headers are rendered -->
-        ${Object.entries(this._displayMembers).map(([key]) => html`<div>${key}</div>`)}
+      <div id="header-container" class="member-headers">
+        <div class="checkbox-header">
+          <input type="checkbox">
+        </div>
+        ${Object.entries(this._displayMembers).map(([key]) =>
+            html`<div class="header-space"><b>${key}</b></div>`
+        )}
       </div>
-      <div id="entry-container">
-        <!-- This is where the entry elements are rendered -->
+      <div id="entry-container" class="entry-content">
         <slot name="entries"></slot>
       </div>
-      <div id="testing-button">
-        <!-- Just a button to test adding elements. -->
+      <div id="testing-button" class="center-all">
         <button @click=${this.addBlankElement}>Add Blank Element</button>
       </div>
     `;
@@ -106,19 +156,42 @@ export class CheckListView extends LitElement {
 @customElement("check-list-view-entry")
 class CheckListViewEntry extends LitElement {
   static styles?: CSSResultGroup = css`
-    div .content {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-
-      & .entry-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+      .content {
+          margin: 10px;
+          display: flex;
+          flex-direction: row;
+          border-radius: 6px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+          width: auto;
+          padding: 10px;
+          pointer-events: inherit;
       }
-    }
+
+      .content:hover {
+          box-shadow: rgba(0, 0, 0, 0.6) 0 0 8px;
+      }
+
+      .checkbox-container { /* Added for checkbox alignment */
+          width: 30px; /* Match header checkbox width */
+          padding: 5px;
+          display: flex;
+          align-items: center;
+      }
+
+      .entry-content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: 5px;
+          flex: 1; /* Ensure it takes remaining space */
+      }
+
+      .entry-content div {
+          flex: 1 1 0; /* Consistent sizing with headers */
+          padding: 5px;
+          display: flex;
+          align-items: center;
+      }
   `;
 
   /** The stringified display members of the parent CheckListView. */
@@ -178,8 +251,10 @@ class CheckListViewEntry extends LitElement {
       <div>
         <label>
           <div class="content">
-            <input type="checkbox" .checked=${this.selected}>
-            <div id="entry-content">
+            <div class="checkbox-container">
+              <input type="checkbox" .checked=${this.selected}>
+            </div>
+            <div class="entry-content">
               ${Object.entries(this._displayMembers).map(([displayName, memberName]) =>
                 html`<div>${displayName}: ${this.unwrapAttributeValue(this.data[memberName])}</div>`
               )}
