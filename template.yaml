@@ -735,6 +735,38 @@ Resources:
         EntryPoints:
           - index.ts
 
+  adminGetFafsaReport:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Retrieves FAFSA report for a specified student by student ID.
+      CodeUri: src/lambdaFunctions/getFafsaReport
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Events:
+        GetRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ScholarshipApi
+            Path: /admin/get/fafsa/{studentId+}
+            Method: get
+            Auth:
+              Authorizer: NONE
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: student-applications
+      Environment:
+        Variables:
+          TABLE_NAME: student-applications
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        External:
+          - "@aws-sdk/client-dynamodb"
+        EntryPoints:
+          - index.ts
+
   # Define the DynamoDB tables
   ScholarshipProvidersTable:
     Type: AWS::DynamoDB::Table
