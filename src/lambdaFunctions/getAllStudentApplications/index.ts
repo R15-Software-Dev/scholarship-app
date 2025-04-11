@@ -64,6 +64,17 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
       }
     }
 
+    // Sort the array of response items.
+    items.sort((a, b) => {
+      const a_str = a.studentLastName.S.toLowerCase();
+      const b_str = b.studentLastName.S.toLowerCase();
+      if (a_str < b_str)
+        return -1;
+      if (a_str > b_str)
+        return 1;
+      return 0;
+    });
+
     return {
       statusCode: 200,
       body: JSON.stringify({ items }),
